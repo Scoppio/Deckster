@@ -1,63 +1,55 @@
-import { useState, useMemo } from 'react'
-import { FilesViewer } from './FilesViewer'
+// import { useState, useMemo } from 'react'
+import { GameArena } from './renderer/GameArena'
+import { amalia_walker_text, uw_karn_control_text, convertTextToDeck } from './commons/DeckLoader'
+import { GameStateController } from './GameStateController'
+import { Player } from './commons/Player'
 
-const fs = window.require('fs')
-const pathModule = window.require('path')
+// const fs = window.require('fs')
+// const pathModule = window.require('path')
 
-const { app } = window.require('@electron/remote')
-
-const formatSize = size => {
-  var i = Math.floor(Math.log(size) / Math.log(1024))
-  return (
-    (size / Math.pow(1024, i)).toFixed(2) * 1 +
-    ' ' +
-    ['B', 'kB', 'MB', 'GB', 'TB'][i]
-  )
-}
+// const { app } = window.require('@electron/remote')
 
 function App() {
-  const [path, setPath] = useState(app.getAppPath())
 
-  const files = useMemo(
-    () => 
-      fs
-        .readdirSync(path)
-        .map((file) => {
-          const stats = fs.statSync(pathModule.join(path, file))
-          return {
-            name: file,
-            size: stats.isFile() ? formatSize(stats.size ?? 0) : null,
-            directory: stats.isDirectory()
-          }
-        })
-        .sort((a, b) => {
-          if (a.directory === b.directory) {
-            return a.name.localeCompare(b.name);
-          }
-          return a.directory ? -1 : 1;
-        }), 
-        [path]
-  )
+  const tabIndices = {
+    playerTable: 1,
+    battlefield: 2,
+    playerStats: 3,
+    hand: 4,
+    deck: 5,
+    graveyard: 6,
+    exile: 7,
+    faceDown: 8,
+    commanderZone: 9,
+  }
+  
+  const playerA = new Player("Anna", convertTextToDeck(amalia_walker_text).deck, tabIndices)
+  const playerB = new Player("Bernard", convertTextToDeck(uw_karn_control_text).deck, {
+    ...tabIndices,
+    playerTable: tabIndices.playerTable + 10,
+    battlefield: tabIndices.battlefield + 10,
+    playerStats: tabIndices.playerStats + 10,
+    hand: tabIndices.hand + 10,
+    deck: tabIndices.deck + 10,
+    graveyard: tabIndices.graveyard + 10,
+    exile: tabIndices.exile + 10,
+    faceDown: tabIndices.faceDown + 10,
+    commanderZone: tabIndices.commanderZone + 10,
+  })
 
-  const onBack = () => setPath(pathModule.dirname(path))
-  const onOpen = folder => setPath(pathModule.join(path, folder))
+  const players = [playerA, playerB]
+  const gameState = {
+    players: players,
+    activePlayer: 0
+  }
 
-  const [searchString, setSearchString] = useState('')
-  const filteredFiles = files.filter(s => s.name.startsWith(searchString))
+  const gameStateController = new GameStateController(gameState)
+  
+  gameStateController.shuffleAllDecks()
+  gameStateController.eachPlayerDrawSeven()
 
   return (
-    <div className="container mt-2">
-      <h4>{path}</h4>
-      <div className="form-group mt-4 mb-2">
-        <input 
-          value={searchString}
-          onChange={event => setSearchString(event.target.value)}
-          className="form-control form-control-sm"
-          placeholder="File search"
-        /> 
-      </div>
-      <FilesViewer files={filteredFiles} onBack={onBack} onOpen={onOpen} />
-    </div>
+    <GameArena gameState={gameState}/>
   )
 
 }
