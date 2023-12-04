@@ -1,10 +1,10 @@
 
 export class Player {
-    constructor(name, deck, tabIndices) {
+    constructor(name, library, tabIndices) {
         this.name = name
         this.health = 20
         this.counter = 0
-        this.deck = deck
+        this.library = library
         this.hand = []
         this.battlefield = []
         this.graveyard = []

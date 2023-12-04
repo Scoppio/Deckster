@@ -1,5 +1,5 @@
-import { PlayerTable } from './PlayerTable'
-import { useEffect, useRef, useMemo, useState } from 'react';
+import { PlayerTable, OpponentTable } from './PlayerTable'
+import { useEffect, useRef, useMemo } from 'react';
 
 export const GameArena = ({gameState}) => {
 
@@ -9,7 +9,7 @@ export const GameArena = ({gameState}) => {
   const player1GraveyardRef = useRef(null);
   const player1ExileRef = useRef(null);
   const player1BattlefieldRef = useRef(null);
-  const player1DeckRef = useRef(null);
+  const player1LibraryRef = useRef(null);
   const player1FaceDownRef = useRef(null);
   const player1CommanderZoneRef = useRef(null);
 
@@ -19,7 +19,7 @@ export const GameArena = ({gameState}) => {
   const player2GraveyardRef = useRef(null);
   const player2ExileRef = useRef(null);
   const player2BattlefieldRef = useRef(null);
-  const player2DeckRef = useRef(null);
+  const player2LibraryRef = useRef(null);
   const player2FaceDownRef = useRef(null);
   const player2CommanderZoneRef = useRef(null);
   
@@ -31,7 +31,7 @@ export const GameArena = ({gameState}) => {
     graveyard: player1GraveyardRef,
     exile: player1ExileRef,
     battlefield: player1BattlefieldRef,
-    deck: player1DeckRef,
+    library: player1LibraryRef,
     faceDown: player1FaceDownRef,
     commanderZone: player1CommanderZoneRef,
   }), []);
@@ -43,95 +43,83 @@ export const GameArena = ({gameState}) => {
     graveyard: player2GraveyardRef,
     exile: player2ExileRef,
     battlefield: player2BattlefieldRef,
-    deck: player2DeckRef,
+    library: player2LibraryRef,
     faceDown: player2FaceDownRef,
     commanderZone: player2CommanderZoneRef,
   }), []);
 
-  const [isCtrlPressed, setIsCtrlPressed] = useState(false);
-  const [isAltPressed, setIsAltPressed] = useState(false);
-  const [isShiftPressed, setIsShiftPressed] = useState(false);
-  
-
   useEffect(() => {
-    const handleKeyUp = (event) => {
-      switch (event.key) {
-        case "Meta":
-        case 'Control':
-          setIsCtrlPressed(false);
-          break;
-        case 'Alt':
-        case 'Option':
-          setIsAltPressed(false);
-          break;
-        case 'Shift':
-          setIsShiftPressed(false);
-          break;
-        default:
-          break;
-      }
-    };
-
     const handleKeyDown = (event) => {
+      const isMac = window.navigator.userAgent.includes('Macintosh');
+      const isCommandKey = (isMac ? event.metaKey : event.ctrlKey) && event.shiftKey
+      const isCtrlKey = (isMac ? event.metaKey : event.ctrlKey) && !event.shiftKey
+
       switch (event.key) {
-        case "Meta":
-        case 'Control':
-          setIsCtrlPressed(true);
-          break;
-        case 'Alt':
-        case 'Option':
-          setIsAltPressed(true);
-          break;
-        case 'Shift':
-          setIsShiftPressed(true);
+        case 'a':
+          if (isCommandKey) {
+            player1References.playerStats.current.focus();
+          }
           break;
         case 'h':
-          if (isCtrlPressed && isShiftPressed) {
+          if (isCommandKey)  {
+            player1References.hand.current.focus();
+          }
+          break;
+        case 'j':
+          if (isCommandKey) {
             const firstTabElement = player1References.hand.current.querySelector('[tabIndex]');
             if (firstTabElement) {
               firstTabElement.focus();
             }
-          } else if (isCtrlPressed) {
-            player1References.hand.current.focus();
           }
           break;
         case 'e':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
             player1References.exile.current.focus();
           }
           break;
         case 'c':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
             player1References.commanderZone.current.focus();
           }
           break;
-        case 'l':
-          if (isCtrlPressed) {
-            player1References.deck.current.focus();
+        case 'i':
+          if (isCommandKey) {
+            player1References.library.current.focus();
           }
           break;
         case 'f':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
             player1References.faceDown.current.focus();
           }
           break;
         case 'b':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
             player1References.battlefield.current.focus();
           }
           break;
         case 'g':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
             player1References.graveyard.current.focus();
           }
           break;
         case '1':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
+            const firstTabElement = player1References.battlefield.current.querySelector('[tabIndex]');
+            if (firstTabElement) {
+              firstTabElement.focus();
+            }
+          } else if (isCtrlKey) {
             player1References.playerTable.current.focus();
           }
           break;
         case '2':
-          if (isCtrlPressed) {
+          if (isCommandKey) {
+            const firstTabElement = player2References.battlefield.current.querySelector('[tabIndex]');
+            if (firstTabElement) {
+              firstTabElement.focus();
+            }
+          } else if (isCtrlKey) {
             player2References.playerTable.current.focus();
           }
           break;
@@ -140,26 +128,16 @@ export const GameArena = ({gameState}) => {
       }
     }
  
-    window.addEventListener('keyup', handleKeyUp);
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [player1References, player2References, isAltPressed, setIsAltPressed, isCtrlPressed, setIsCtrlPressed, isShiftPressed, setIsShiftPressed]);
+  }, [player1References, player2References]);
 
   return (
-    <div className="container mt-2" role="main" aria-label="Game Arena">
-      <div className="row">
-        <div className="col">
-          <PlayerTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} tabindex={gameState.players[1].tabIndices.playerTable} />
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <PlayerTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} tabindex={gameState.players[0].tabIndices.playerTable} />
-        </div>
-      </div>
+    <div id="game-arena" className="container min-vh-100" role="main" aria-label="Game Arena">
+      <OpponentTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} tabindex={gameState.players[1].tabIndices.playerTable} />
+      <PlayerTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} tabindex={gameState.players[0].tabIndices.playerTable} />
     </div>
   )
 }

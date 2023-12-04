@@ -39,11 +39,11 @@ export class GameStateController {
     }
 
     shuffleDeck(playerNumber) {
-      shuffle(this.players[playerNumber].deck)
+      shuffle(this.players[playerNumber].library)
     }
   
     drawCardFromDeck(playerNumber) {
-      const card = this.players[playerNumber].deck.pop()
+      const card = this.players[playerNumber].library.pop()
       this.players[playerNumber].hand.push(card)
     }
     
