@@ -76,6 +76,21 @@ Sideboard
 1 Yasharn, Implacable Earth
 1 Haywire Mite`
 
+function randomCost() {
+  const costs = ['w', 'u', 'r', 'b', 'g'];
+  const result = [];
+  const colorlessCost = Math.floor(Math.random() * 4) + 1; // Generate colorless cost between 1 and 4
+  result.push(`{${colorlessCost}}`);
+
+  const colors = Math.floor(Math.random() * 2) + 1; // Generate number of colors (1, 2, or 3)
+  for (let i = 0; i < colors; i++) {
+    const colorIndex = Math.floor(Math.random() * 4); // Select random index for color
+    result.push(`{${costs[colorIndex]}}`);
+  }
+
+  return result.join('');
+}
+
 export const convertTextToDeck = (text) => {
   const fullDeckList = text.split('\n').map((line) => {
     if (line === 'Sideboard') {
@@ -89,13 +104,15 @@ export const convertTextToDeck = (text) => {
   const nullIndex = fullDeckList.indexOf(null);
   const sideboardCards = nullIndex === -1 ? [] : fullDeckList.slice(nullIndex + 1);
   const deckCards = nullIndex === -1 ? fullDeckList : fullDeckList.slice(0, nullIndex);
-  
+  const randomType = () => ['Creature', 'Land', 'Artifact', 'Enchantment', 'Instant', 'Sorcery'][Math.floor(Math.random() * 6)]
+
   const deck = []
   for (const card of deckCards) {
     for (let i = 0; i < card.count; i++) {
       deck.push(new Card(
         card.name,
-        "{W}{U}",
+        randomCost(),
+        randomType(),
         "card text",
       ))
     }
@@ -106,7 +123,8 @@ export const convertTextToDeck = (text) => {
     for (let i = 0; i < card.count; i++) {
       sideboard.push(new Card(
         card.name,
-        "{W}{U}",
+        randomCost(),
+        randomType(),
         "card text",
       ))
     }

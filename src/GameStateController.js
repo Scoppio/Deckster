@@ -19,18 +19,19 @@ function shuffle(array) {
 }
 
 export class GameStateController {
-    constructor(gameState) {
-      this.gameState = gameState
+    constructor(players) {
+      this.players = players
+      this.activePlayer = 0
     }
   
     shuffleAllDecks() {
-      this.gameState.players.forEach((player, index) => {
+      this.players.forEach((player, index) => {
         this.shuffleDeck(index)
       })
     }
 
     eachPlayerDrawSeven() {
-      this.gameState.players.forEach((player, index) => {
+      this.players.forEach((player, index) => {
         for (let i = 0; i < 7; i++) {
           this.drawCardFromDeck(index)
         }
@@ -38,12 +39,28 @@ export class GameStateController {
     }
 
     shuffleDeck(playerNumber) {
-      shuffle(this.gameState.players[playerNumber].deck)
+      shuffle(this.players[playerNumber].deck)
     }
   
     drawCardFromDeck(playerNumber) {
-      const card = this.gameState.players[playerNumber].deck.pop()
-      this.gameState.players[playerNumber].hand.push(card)
+      const card = this.players[playerNumber].deck.pop()
+      this.players[playerNumber].hand.push(card)
     }
     
+    putRandomCardIntoBattlefield(playerNumber) {
+      const card = this.players[playerNumber].hand.pop()
+      this.players[playerNumber].battlefield.push(card)
+    }
+    
+    cardsOnTheTable(playerNumber) {
+      const numberOfCards = this.players[playerNumber].battlefield.length
+      const numberOfLands = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Land")).length
+      const numberOfCreatures = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Creature")).length
+      const numberOfPlaneswalkers = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Planeswalker")).length
+      const numberOfArtefacts = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Artefact")).length
+      const numberOfOtherCards = numberOfCards - numberOfLands - numberOfCreatures - numberOfPlaneswalkers - numberOfArtefacts
+
+      return `${numberOfCards} cards on the table, ${numberOfLands} lands, ${numberOfCreatures} creatures, ${numberOfPlaneswalkers} planeswalkers, ${numberOfArtefacts} artefacts, ${numberOfOtherCards} other cards`
+    }
+
   }

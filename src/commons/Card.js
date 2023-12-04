@@ -1,7 +1,8 @@
 export class Card {
-    constructor(name, cost, text) {
+    constructor(name, cost, type, text) {
         this.name = name
         this.cost = cost
+        this.type = type
         this.text = text
     }
 }

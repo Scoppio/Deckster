@@ -14,3 +14,18 @@ Topo - botões com funções comuns:
 No meio o battlefield
 
 pequena faixa da esquerda, coluna com a sua mão1/8 
+
+
+tab iterates on each item
+d -> draw
+
+ctrl shift h - hand
+ctrl shift e - exile
+ctrl shift c - commander
+ctrl shift l - library
+ctrl shift f - face down
+ctrl shift b - battlefield
+
+ctrl 1..6 - player -> popup for focus on each zone - h/e/c/l/f/b
+
+ctrl shift 1..6 - battlefield for player 1 to 6
