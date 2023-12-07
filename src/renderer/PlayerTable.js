@@ -42,7 +42,7 @@ PlayerTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   tabIndex: PropTypes.number.isRequired,
-};
+}
 
 export const OpponentTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, tabIndex }) => {
   return (
@@ -81,4 +81,4 @@ OpponentTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   tabIndex: PropTypes.number.isRequired,
-};
+}

@@ -146,4 +146,4 @@ export const GameArena = ({gameState}) => {
 
 GameArena.propTypes = {
   gameState: PropTypes.object.isRequired,
-};
+}

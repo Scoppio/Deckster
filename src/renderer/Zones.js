@@ -59,29 +59,29 @@ Zone.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-};
+}
 
 Graveyard.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-};
+}
 
 Exile.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-};
+}
 
 FaceDown.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-};
+}
 
 CommanderZone.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-};
+}
 

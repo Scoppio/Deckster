@@ -7,7 +7,8 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player }) => (
   <div className="row" 
     ref={playerRef.battlefield} 
     tabIndex={player.tabIndices.battlefield}
-    aria-label={player.name + " Battlefield"}
+    role="complementary"
+    aria-label={player.name + " Battlefield, " + gameState.cardsOnTheTable(playerNumber)}
     aria-description={gameState.cardsOnTheTable(playerNumber)}>
       {
         player.battlefield.map((card, index) => {
@@ -26,4 +27,4 @@ Battlefield.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-};
+}

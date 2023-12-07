@@ -13,4 +13,4 @@ export const Card = ({data, tabIndex}) => (
 Card.propTypes = {
   data: PropTypes.object.isRequired,
   tabIndex: PropTypes.number.isRequired,
-};
+}

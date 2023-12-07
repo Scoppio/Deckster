@@ -16,4 +16,4 @@ Avatar.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-};
+}
