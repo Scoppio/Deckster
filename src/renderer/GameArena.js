@@ -1,6 +1,8 @@
 import { PlayerTable, OpponentTable } from './PlayerTable'
 import { useEffect, useRef, useMemo } from 'react';
 
+import PropTypes from 'prop-types';
+
 export const GameArena = ({gameState}) => {
 
   const player1TableRef = useRef(null);
@@ -136,8 +138,12 @@ export const GameArena = ({gameState}) => {
 
   return (
     <div id="game-arena" className="container min-vh-100" role="main" aria-label="Game Arena">
-      <OpponentTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} tabindex={gameState.players[1].tabIndices.playerTable} />
-      <PlayerTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} tabindex={gameState.players[0].tabIndices.playerTable} />
+      <OpponentTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} tabIndex={gameState.players[1].tabIndices.playerTable} />
+      <PlayerTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} tabIndex={gameState.players[0].tabIndices.playerTable} />
     </div>
   )
 }
+
+GameArena.propTypes = {
+  gameState: PropTypes.object.isRequired,
+};

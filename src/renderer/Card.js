@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 
 export const Card = ({data, tabIndex}) => (
     <div className="col" 
@@ -8,3 +9,8 @@ export const Card = ({data, tabIndex}) => (
       <p>{data.text}</p>
     </div>
 )
+
+Card.propTypes = {
+  data: PropTypes.object.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+};

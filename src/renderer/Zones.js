@@ -1,4 +1,5 @@
 import Dropdown from 'react-bootstrap/Dropdown';
+import PropTypes from 'prop-types';
 
 const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
   <div className={zoneName + " row"} 
@@ -6,7 +7,7 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
     aria-labelledby={playerNumber + "-" + zoneName + "-label"}
     aria-describedby={playerNumber + "-" + zoneName + "-desc"}>
     <Dropdown>
-      <Dropdown.Toggle variant="secondary" id="dropdown-basic" ref={playerRef[zoneName]} tabindex={player.tabIndices[zoneName]}>
+      <Dropdown.Toggle variant="secondary" id="dropdown-basic" ref={playerRef[zoneName]} tabIndex={player.tabIndices[zoneName]}>
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
@@ -39,7 +40,7 @@ export const CommanderZone = ({ player, playerRef, playerNumber }) => (
     aria-describedby={playerNumber + "-commander-desc " + playerNumber + "-commander-casting-cost"}>
     <Dropdown>
       <Dropdown.Toggle variant="secondary" id="dropdown-basic" 
-      ref={playerRef.commanderZone} tabindex={player.tabIndices.commanderZone}>
+      ref={playerRef.commanderZone} tabIndex={player.tabIndices.commanderZone}>
         <span id={playerNumber + "-commander-label"}>Commander Zone</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
@@ -52,3 +53,35 @@ export const CommanderZone = ({ player, playerRef, playerNumber }) => (
     <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
   </div>
 )
+
+Zone.propTypes = {
+  zoneName: PropTypes.string.isRequired,
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+};
+
+Graveyard.propTypes = {
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+};
+
+Exile.propTypes = {
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+};
+
+FaceDown.propTypes = {
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+};
+
+CommanderZone.propTypes = {
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+};
+

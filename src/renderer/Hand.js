@@ -1,9 +1,11 @@
 import { Card } from "./Card";
 
+import PropTypes from 'prop-types';
+
 export const Hand = ({player, playerRef, playerNumber}) => (
   <div className="hand row" 
     role="complementary" 
-    tabindex={player.tabIndices.hand} 
+    tabIndex={player.tabIndices.hand} 
     ref={playerRef.hand} 
     aria-labelledby={playerNumber + "-player-hand-label"} 
     aria-describedby={playerNumber + "-hand-desc"}>
@@ -13,7 +15,7 @@ export const Hand = ({player, playerRef, playerNumber}) => (
       // for each card on player[activePlayer.battlefield] create a card <Card data={card} />
       player.hand.map((card, index) => {
         return (
-          <div className="col">
+          <div className="col" key={index}>
             <Card data={card} tabIndex={index + player.tabIndices.hand} />
           </div>
         )
@@ -21,3 +23,9 @@ export const Hand = ({player, playerRef, playerNumber}) => (
     }
   </div>
 )
+
+Hand.propTypes = {
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+};

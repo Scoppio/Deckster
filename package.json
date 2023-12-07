@@ -11,7 +11,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "license": "MIT",
@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron:serve": "concurrently -k \"cross-env BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
+    "electron:serve": "concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
     "electron:build": "electron-builder build -w",
     "electron:start": "wait-on tcp:3010 && electron ."
   },
@@ -45,7 +45,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.23.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-react": "^7.23.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

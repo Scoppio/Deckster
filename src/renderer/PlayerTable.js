@@ -3,13 +3,14 @@ import { Avatar } from './Avatar'
 import { Hand } from './Hand'
 import { Library } from './Library'
 import { Graveyard, Exile, FaceDown, CommanderZone } from './Zones'
+import PropTypes from 'prop-types';
 
-export const PlayerTable = ({gameState, playerRef, playerNumber, player, activePlayer, tabindex }) => {
+export const PlayerTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, tabIndex }) => {
   return (
     <div className="col flex-fill d-flex flex-column" role="complementary" 
-      tabindex={tabindex} 
+      tabIndex={tabIndex} 
       ref={playerRef.playerTable} 
-      aria-label={activePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
+      aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
       <div className="row flex-fill">
         <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
       </div>
@@ -34,12 +35,21 @@ export const PlayerTable = ({gameState, playerRef, playerNumber, player, activeP
   )
 }
 
-export const OpponentTable = ({gameState, playerRef, playerNumber, player, activePlayer, tabindex }) => {
+PlayerTable.propTypes = {
+  gameState: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+  player: PropTypes.object.isRequired,
+  isActivePlayer: PropTypes.bool.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+};
+
+export const OpponentTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, tabIndex }) => {
   return (
     <div className="col flex-fill d-flex flex-column" role="complementary" 
-      tabindex={tabindex} 
+    tabIndex={tabIndex} 
       ref={playerRef.playerTable} 
-      aria-label={activePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
+      aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
       <div className="row flex-fill">
         <div className="col">
           <Avatar player={player} playerRef={playerRef} playerNumber={playerNumber} />
@@ -63,3 +73,12 @@ export const OpponentTable = ({gameState, playerRef, playerNumber, player, activ
     </div>
   )
 }
+
+OpponentTable.propTypes = {
+  gameState: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+  player: PropTypes.object.isRequired,
+  isActivePlayer: PropTypes.bool.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+};
