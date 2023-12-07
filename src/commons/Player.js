@@ -1,6 +1,6 @@
 
 export class Player {
-    constructor(name, library, tabIndices) {
+    constructor(name, library, tabIndices, isRemote) {
         this.name = name
         this.health = 20
         this.counter = 0
@@ -13,5 +13,6 @@ export class Player {
         this.commanderZone = []
         this.commanderExtraCastingCost = 0
         this.tabIndices = {...tabIndices}
+        this.isRemote = isRemote
     }
 }

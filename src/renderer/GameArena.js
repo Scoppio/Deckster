@@ -1,11 +1,10 @@
-import { PlayerTable, OpponentTable } from './PlayerTable'
+import { SouthTable, NorthTable } from './PlayerTable'
 import { useEffect, useRef, useMemo } from 'react';
 
 import PropTypes from 'prop-types';
 
 export const GameArena = ({gameState}) => {
 
-  const player1TableRef = useRef(null);
   const player1StatsRef = useRef(null);
   const player1HandRef = useRef(null);
   const player1GraveyardRef = useRef(null);
@@ -15,7 +14,6 @@ export const GameArena = ({gameState}) => {
   const player1FaceDownRef = useRef(null);
   const player1CommanderZoneRef = useRef(null);
 
-  const player2TableRef = useRef(null);
   const player2StatsRef = useRef(null);
   const player2HandRef = useRef(null);
   const player2GraveyardRef = useRef(null);
@@ -27,7 +25,6 @@ export const GameArena = ({gameState}) => {
   
 
   const player1References = useMemo(() => ({
-    playerTable: player1TableRef,
     playerStats: player1StatsRef,
     hand: player1HandRef,
     graveyard: player1GraveyardRef,
@@ -39,7 +36,6 @@ export const GameArena = ({gameState}) => {
   }), []);
 
   const player2References = useMemo(() => ({
-    playerTable: player2TableRef,
     playerStats: player2StatsRef,
     hand: player2HandRef,
     graveyard: player2GraveyardRef,
@@ -112,7 +108,7 @@ export const GameArena = ({gameState}) => {
               firstTabElement.focus();
             }
           } else if (isCtrlKey) {
-            player1References.playerTable.current.focus();
+            player1References.playerStats.current.focus();
           }
           break;
         case '2':
@@ -122,7 +118,7 @@ export const GameArena = ({gameState}) => {
               firstTabElement.focus();
             }
           } else if (isCtrlKey) {
-            player2References.playerTable.current.focus();
+            player2References.playerStats.current.focus();
           }
           break;
         default:
@@ -138,8 +134,32 @@ export const GameArena = ({gameState}) => {
 
   return (
     <div id="game-arena" className="container min-vh-100" role="main" aria-label="Game Arena">
-      <OpponentTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} tabIndex={gameState.players[1].tabIndices.playerTable} />
-      <PlayerTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} tabIndex={gameState.players[0].tabIndices.playerTable} />
+      <div className='row'>
+        <div className='col'>
+          <div className='row'>
+            <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
+          </div>
+          <div className='row'>
+            <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
+          </div>
+        </div>
+        {/* <div className='col'>
+          <div className='row'>
+            <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
+          </div>
+          <div className='row'>
+            <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
+          </div>
+        </div>
+        <div className='col'>
+          <div className='row'>
+            <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
+          </div>
+          <div className='row'>
+            <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
+          </div>
+        </div> */}
+      </div>
     </div>
   )
 }

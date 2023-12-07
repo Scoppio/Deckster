@@ -49,8 +49,8 @@ export const CommanderZone = ({ player, playerRef, playerNumber }) => (
         <Dropdown.Item href="#/action-3">Something else here</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
-    <p id={playerNumber + "-commander-desc"}>{player.commanderZone.length} cards</p>
-    <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+    <p><span id={playerNumber + "-commander-desc"}>{player.commanderZone.length} cards</span><br/>
+    <span id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</span></p>
   </div>
 )
 
