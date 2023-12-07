@@ -8,8 +8,8 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player }) => (
     ref={playerRef.battlefield} 
     tabIndex={player.tabIndices.battlefield}
     role="complementary"
-    aria-label={player.name + " Battlefield, " + gameState.cardsOnTheTable(playerNumber)}
-    aria-description={gameState.cardsOnTheTable(playerNumber)}>
+    aria-label={player.name + " Battlefield"}
+    aria-describedby={gameState.cardsOnTheTable(playerNumber)}>
       {
         player.battlefield.map((card, index) => {
           return (
