@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 export const Card = ({data, tabIndex}) => (
     <div className="col" 
     aria-label={data.name} 
-    aria-description={data.text}
+    aria-describedby={ "card::" + data.name }
     tabIndex={tabIndex}>
       <p>{data.name} {data.cost}</p>
-      <p>{data.text}</p>
+      <p id={"card::" + data.name}>{data.text}</p>
     </div>
 )
 

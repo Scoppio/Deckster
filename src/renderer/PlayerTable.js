@@ -9,21 +9,21 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   return (
     <div className="col flex-fill d-flex flex-column" role="complementary" 
       aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
-      <div className="row flex-fill">
+      <div className="row flex-fill" style={({height: '20vh'})}>
         <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
       </div>
-      <div className="row flex-fill">
-        <div className="col-2">
+      <div className="row flex-fill" style={({height: '30vh'})}>
+        <div className="col-2 flex-fill d-flex flex-column">
           <Avatar player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <Library player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <Graveyard player={player} playerRef={playerRef} playerNumber={playerNumber} />
         </div>
-        <div className="col-2">
+        <div className="col-3 flex-fill d-flex flex-column">
           <Exile player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <FaceDown player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <CommanderZone player={player} playerRef={playerRef} playerNumber={playerNumber} />
         </div>
-        <div className="col-8">
+        <div className="col-5 flex-fill d-flex flex-column">
           <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} />
         </div>
       </div>
@@ -43,23 +43,22 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
   return (
     <div className="col flex-fill d-flex flex-column" role="complementary" 
       aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
-      <div className="row">
-        <div className="col-2">
+      <div className="row" style={({height: '30vh'})}>
+        <div className="col-2 flex-fill d-flex flex-column">
           <Avatar player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <Library player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <Graveyard player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          
         </div>
-        <div className="col-2">
+        <div className="col-3 flex-fill d-flex flex-column">
           <Exile player={player} playerRef={playerRef} playerNumber={playerNumber} />          
           <FaceDown player={player} playerRef={playerRef} playerNumber={playerNumber} />
           <CommanderZone player={player} playerRef={playerRef} playerNumber={playerNumber} />
         </div>
-        <div className="col-7">
+        <div className="col-5 flex-fill d-flex flex-column">
           <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} />
         </div>
       </div>
-      <div className="row flex-fill">
+      <div className="row flex-fill" style={({height: '20vh'})}>
         <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
       </div>
     </div>
@@ -71,6 +70,5 @@ NorthTable.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-  isActivePlayer: PropTypes.bool.isRequired,
-  tabIndex: PropTypes.number.isRequired,
+  isActivePlayer: PropTypes.bool.isRequired
 }

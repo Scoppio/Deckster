@@ -9,8 +9,12 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
     role="complementary"
     aria-labelledby={playerNumber + "-" + zoneName + "-label"}
     aria-describedby={playerNumber + "-" + zoneName + "-desc"}>
-    <Dropdown>
-      <Dropdown.Toggle variant="secondary" id="dropdown-basic" ref={playerRef[zoneName]} tabIndex={player.tabIndices[zoneName]}>
+    <Dropdown autoClose="outside">
+      <Dropdown.Toggle 
+        variant="secondary" 
+        id="dropdown-autoclose-outside"
+        ref={playerRef[zoneName]} 
+        tabIndex={player.tabIndices[zoneName]}>
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
@@ -29,7 +33,7 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
               return null;
             }
             return (
-              <Dropdown.Item href={"#/" + gameZone}>Move all cards to {gameZoneNames[index]}</Dropdown.Item>
+              <Dropdown.Item href={"#/" + gameZone} key={index}>Move all cards to {gameZoneNames[index]}</Dropdown.Item>
             );
           }).filter(Boolean)
         }
