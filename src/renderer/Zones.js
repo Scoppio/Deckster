@@ -1,6 +1,9 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import PropTypes from 'prop-types';
 
+const gameZones = ["battlefield", "hand", "library", "graveyard", "exile", "faceDown", "commanderZone"]
+const gameZoneNames = ["Battlefield", "Hand", "Library", "Graveyard", "Exile", "Face Down", "Commander Zone"]
+
 const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
   <div className={zoneName + " row"} 
     role="complementary"
@@ -11,13 +14,34 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else here</Dropdown.Item>
+        <Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>
+        {
+          zoneName === "commanderZone" && 
+          <Dropdown.Item>Commander casting cost: {player.commanderExtraCastingCost}</Dropdown.Item> &&
+          <Dropdown.Item>Increase commander casting cost by 2</Dropdown.Item> &&
+          <Dropdown.Item>Decrease commander casting cost by 2</Dropdown.Item>
+        }
+        <Dropdown.Divider />
+        {
+          // for each zone that is not zoneName
+          gameZones.map((gameZone, index) => {
+            if (gameZone === zoneName) {
+              return null;
+            }
+            return (
+              <Dropdown.Item href={"#/" + gameZone}>Move all cards to {gameZoneNames[index]}</Dropdown.Item>
+            );
+          }).filter(Boolean)
+        }
+
+        
       </Dropdown.Menu>
     </Dropdown>
-    {/* <h3 id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</h3> */}
     <p id={playerNumber  + "-" + zoneName + "-desc"}>{player[zoneName].length} cards</p>
+    {
+      zoneName === "commanderZone" && 
+        <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+    }
   </div>
 )
 
@@ -34,24 +58,7 @@ export const FaceDown = ({ player, playerRef, playerNumber }) => (
 )
 
 export const CommanderZone = ({ player, playerRef, playerNumber }) => (
-  <div className="commander row" 
-    role="complementary" 
-    aria-labelledby={playerNumber + "-commander-label"} 
-    aria-describedby={playerNumber + "-commander-desc " + playerNumber + "-commander-casting-cost"}>
-    <Dropdown>
-      <Dropdown.Toggle variant="secondary" id="dropdown-basic" 
-      ref={playerRef.commanderZone} tabIndex={player.tabIndices.commanderZone}>
-        <span id={playerNumber + "-commander-label"}>Commander Zone</span>
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else here</Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
-    <p><span id={playerNumber + "-commander-desc"}>{player.commanderZone.length} cards</span><br/>
-    <span id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</span></p>
-  </div>
+  <Zone zoneName="commanderZone" player={player} playerRef={playerRef} playerNumber={playerNumber} />
 )
 
 Zone.propTypes = {
