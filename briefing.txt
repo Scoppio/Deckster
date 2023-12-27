@@ -1,0 +1,63 @@
+	Magic: the Gathering é um jogo de cartas com mais de 30 anos de existência e mais de 20 mil cartas diferentes publicadas. O jogo foi criado para ser jogado ao vivo em mesas reais com cartas de papel cartonado, mas tem diversas formas de ser jogado online, como o MtG Arena, o Magic Online, o Untap.in e outros. Nenhuma dessas plataformas, no entanto, é acessível e compatível com softwares leitores de tela utilizados por pessoas cegas. Esse é o objetivo deste projeto, construir um cliente utilizando Electron e algumas diretrizes de acessibilidade do WCAG-2.2 (Web Content Accessibility Guidelines) e um back end em NodeJS para coordenar toda a atividade de jogo, além de funções básicas de login e perfil de usuário. Arquivos com todos os dados de todas as cartas do jogo, incluindo suas artes, serão fornecidos no início do projeto.
+
+Descrição do Jogo
+
+	Uma Partida é uma sessão com um número de Jogadores entre 2 e 6. Cada jogador começa com 40 pontos de vida e tem um deck com um número de cartas que pode variar de 40 até qualquer valor arbitrário, que aqui trataremos como 999 para fins de praticidade. O Deck de cada Jogador é formado pelas lista de Cartas que ele iinforma antes da Partida começar, e pode ou não ser igual ao de outro Jogador. Uma Carta é um objeto com cerca de uma dúzia de informações importantes que o Jogador consulta constantemente durante a partida. Além disso cada Carta também tem propriedades que indicam seu estado em jogo, como tapped que indica que ela está deitada de lado ou flipped que indica que ela está com o verso virado para cima. Cartas também precisam poder receber diferentes tipos de anotação em jogo, como a quantidade de algum contador que possa ser colocado sobre ela.
+
+	Ao iniciar uma Partida, o Deck de cada Jogador é embaralhado e ele compra sua Mão inicial comprando as 7 cartas do topo do Deck, que a partir de agora vai ser a Zona chamada de Grimório. Então uma Partida tem um número entre 2 e 6 Jogadores, e cada Jogador tem 7 Zonas que são simplesmente listas de Cartas. Todo o jogo consiste em declarar ações, e toda ação consiste ou em mover uma ou mais Cartas de uma Zona para outra, ou modificar propriedades simples em Cartas (como marcar se ela está virada ou desvirada) e Jogadores (como marcar seus pontos de vida atuais). Toda ação tomada fica registrada em um log na parte inferior da tela que também serve como chat entre os Jogadores. Existem ações mais simples como Comprar Carta, que movem a Carta do topo do Grimório para a Mão, e outras mais detalhadas como selecionar um número arbitrário de Cartas em sua Mão e enviá-las em ordem aleatória ou decidida pelo Jogador para o topo ou para o fundo do Grimório, por exemplo, mas no fim tudo no jogo é mover ou alterar propriedades de Cartas e Jogadores. Uma lista de funções será fornecida, mas o dev pode esperar algo como uma ou duas dúzias de funções como as exemplificadas para Cartas e no máximo uma dúzia de funções para Jogadores.
+
+Layout
+
+A tela de uma Partida é dividida em 5 cortes horizontais.
+
+- A faixa do topo, ocupando 5% da altura de janela, é uma barra de botões com atalhos para funções básicas como Sair, Novo Jogo, Passar Turno, Avançar Fase, Retroceder Fase, Pontos de Vida, etc.
+
+- Logo abaixo dela fica a área de jogo, dividida em retângulos representando a mesa de cada Jogador. No canto superior esquerdo de cada retângulo fica um quadrado com o avatar daquele Jogador, e no restante do espaço ficarão as Cartas que ele colocar na Zona de Battlefield. As outras Zonas de cada Jogador não ficam exibidas constantemente, sendo preciso clicar no avatar do Jogador e então escolher em um menu a Zona a ser visualizada, que é exibida em um popup descartável.. A área de jogo é dividida da seguinte forma: toda a metade inferior disponível é o retângulo do Battlefield do Jogador ativo no client, enquanto a metade superior é dividida entre seus oponentes, que podem ser de 1 até 5. Os retângulos de cada Jogador precisarão ter barra de scroll down, pois uma Partida frequentemente acumula muitas cartas no Battlefield.
+
+- Abaixo da área de jogo vem uma caixa de chat e log de ações tomadas em jogo. Toda movimentação ou alteração de estado em jogo fica registrada no log/chat. O log precisa ter barra de rolagem, mas a área de exibição de texto dele pode ser de apenas três linhas tamanho 12, com mais uma linha embaixo para o campo de entrada de texto. A entrada de texto é single line, então Enter envia o texto, portanto não é preciso um botão Enviar.
+
+- Logo abaixo da caixa de chat/log, ocupando uns 15% da altura da janela, fica o exibidor da Mão do Jogador ativo no client. A Mão exibe Cartas lado a lado, e deve ter a possibilidade de barra de rolagem lateral pois muitos Decks se dedicam a comprar muitas Cartas e ter mãos enormes.
+
+- Logo abaixo da Mão do Jogador fica a última faixa com a altura de uma linha de texto tamanho 14. Ela contém uma barra de status informando seu nome, o nome do seu Deck, a contagem de turnos da Partida, seus Pontos de Vida e outras informações básicas para consulta rápida.
+
+Funcionamento
+
+	Os jogadores acessam o site da tabletop, fazem login com username e senha, e então são recebidos em uma página de boas-vindas com duas tabelas, "Partidas" e "Meus Decks". A tabela de Partidas exibe mesas de jogo que estejam abertas aguardando jogadores e, logo abaixo, mesas de jogo já em andamento que podem ser acessadas em modo espectador. Junto a essa tabela, há um link para Nova Mesa. A tabela "Meus Decks" exibe links para todos os Decks que o Jogador tenha salvos em sua conta. Um deck é uma string dividida em linhas com cada linha sendo a quantidade e o nome de cada Carta, como em "1 Forest", "4 Arbor Elf" ou "1 Fireball". Na linha de cada Deck deve haver o nome do Deck e links para Exibir (mostra sua lista em forma de texto), Editar (mostra sua lista em uma caixa de texto editável com botão Salvar) ou Remover. Junto a essa tabela, há um link para Novo Deck, que simplesmente abre uma caixa de texto onde o deck todo pode ser colado e salvo.
+
+	Ao clicar em Nova Mesa, um diálogo com as configurações desejadas para a nova Partida é exibido. Deve-se informar o Nome da Mesa e o Número de Jogadores, e então clicar em Criar. O Jogador que criou a mesa aguarda a entrada do Número de Jogadores definido e então a Partida tem início, com o jogo sorteando automaticamente alguém para começar e anunciando o resultado no chat/log.
+
+	Dentro de jogo, toda a interação se dá clicando com o botão esquerdo. Pode-se interagir com os botões de ações rápidas da barra superior, com o avatar de cada Jogador em seu retângulo de Battlefield para acessar suas informações e ver suas Zonas como Cemitério e Exílio, e com as Cartas em sua Mão, em seu retângulo de jogo, seu Cemitério e em quaisquer outras Zonas de acesso público.
+
+	As Zonas de cada Jogador são Mão, Battlefield, Grimório, Cemitério, Exílio, Exílio Virada, e Comando. As Zonas por padrão públicas para todos verem são o Battlefield (que fica exibido o tempo todo no seu retângulo), o Cemitério, o Exílio e o Comando, que são exibidas em um popup descartável ao se clicar em sua opção no menu do avatar daquele Jogador. Sempre que um Jogador olha em seu próprio Grimório, isso é anunciado no chat-/log, as Cartas do Grimório são exibidas em lista (certamente com scroll por serem muitas) na ordem em que se encontravam, com um botão para serem reordenadas em ordem alfabética para facilitar buscas. Quando o Jogador fecha o popup de exibição de seu próprio Grimório, o jogo automaticamente embaralha o Grimório. Isso não acontece com nenhuma outra Zona.
+
+	Se um Jogador clica no menu de avatar de um oponente e tenta acessar uma de suas Zonas que não sejam públicas, como o Grimório ou a Mão, seu dono recebe uma caixa de diálogo de questão informando que o oponente quer olhar sua Mão, por exemplo, e podendo permitir ou negar.
+
+	Ao se parar o mouse sobre uma Carta, a arte completa da carta aparece ao lado do cursor para leitura facilitada. Ao se clicar na Carta, um menu de contexto surge com ações. As ações disponíveis dependem de em qual Zona a Carta está agora, conforme abaixo:
+
+Na mão: 
+No Grimório: 
+No Battlefield: 
+No Cemitério: 
+No Exílio: 
+No Exílio Virada: 
+No Comando: 
+
+	Logo abaixo do avatar de cada Jogador em seu retângulo de jogo, um número exibe seus pontos de vida atuais. Ao clicar no seu próprio avatar, surge um menu de contexto com as seguintes opções:
+
+- Grimório: Sub-menu com as opções: 
+
+Acessibilidade
+
+	Um leitor de tela é um software que navega o sistema operacional e apps através do teclado e anuncia informações dos objetos navegados e das ações realizadas. No Windows, o leitor de tela que será usado pelo público-alvo é o NVDA (Non Visual Desktop Access), um software de código aberto desenvolvido na maior parte por devs cegos e distribuído gratuitamente.
+
+	Fazer com que um app Electron seja acessível é relativamente fácil graças aos recursos de acessibilidade do HTML. A seguir estão as medidas que precisam ser tomadas para garantir a plena igualdade de operação do jogo por parte de usuários cegos com o NVDA:
+
+- Todo o app precisa ser operável estritamente pelo teclado. Pode-se fazer tudo com o mouse, e os Jogadores que enxergam irão certamente preferir o mouse, mas isso tem que ser absolutamente opcional, com o acesso por teclado bastando para fazer absolutamente tudo. Em conteúdos HTML, a navegação por teclado utilizando Tab e setas para mover o foco e Enter para ativar é a mais recomendada e a que deve ser utilizada. Um indicador visual de foco, como um simples contorno, deve permitir saber onde na tela está o cursor de navegação do teclado. Supondo a utilização do objeto canvas para as áreas de exibição de Cartas, será necessário implementar manualmente uma navegação utilizando setas e Enter, além de realizar alguns pequenos ajustes uma vez que o objeto canvas não é nativamente acessível.
+
+- Propriedades da categoria ARIA (Accessible Rich Internet Applications) devem ser utilizadas para comunicar ao leitor de tela as mudanças de objeto em foco e outras informações da tela. Um modo relativamente simples de resolver a comunicação com o leitor de tela é criar uma div invisível com a propriedade aria-live e atualizar o conteúdo dessa div com o que se deseja que o leitor fale. Quando uma região do HTML é marcada como aria-live, o leitor de tela automaticamente lê seu conteúdo sempre que este for atualizado. Assim, quando o foco da navegação por teclado em tela entra em um objeto, seja uma Carta ou um item de menu, basta copiar seu nome (ou uma representação textual mais legível e acessível do objeto) para o div aria-live invisível, e o NVDA irá lê-lo automaticamente.
+
+- Testes de usuário. Muitos pequenos detalhes podem criar uma acessibilidade com defeitos de uso, e a única maneira de garantir a compatibilidade completa é realizando testes a cada etapa de desenvolvimento com um usuário que tenha deficiência visual e utilize regularmente o NVDA. No caso deste projeto, o contratante, pessoa cega e com experiência em consultoria de acessibilidade digital, se dispõe a cumprir esse papel e oferecer feedback até que a interação esteja correta.
+
+- Uma série de teclas de atalho utilizando Control e Control+Alt definidas em uma lista, que simplesmente automatizam o acesso a algumas funções ou informações de jogo visíveis em tela, como por exemplo Control+1, Control+2, Control+3, etc, para mover o foco de navegação diretamente para o avatar do Jogador número 1, 2 ou 3 da Partida; ou então Control+H para mover o foco de navegação para minha Mão; ou Control+Alt+E para Passar o Turno para o próximo Jogador.
+
+- Sempre que o chat/log é atualizado, o leitor de tela deve ler a atualização. Todas as entradas do chat/log devem estar em uma caixa de texto somente leitura que o leitor de tela possa revisar usando as setas do teclado.
