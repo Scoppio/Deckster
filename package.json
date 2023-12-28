@@ -5,19 +5,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlaskit/css-reset": "^6.6.2",
     "@electron/remote": "^2.1.0",
+    "assert": "^2.1.0",
     "bootstrap": "^5.3.2",
     "electron": "^27.1.2",
+    "mana-font": "^1.15.9",
+    "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
+    "styled-components": "^6.1.6",
     "web-vitals": "^2.1.4"
   },
   "license": "MIT",
   "main": "main.js",
   "homepage": "./",
+  "resolve": {
+    "fallback": {
+      "path": false
+    }
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

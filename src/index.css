@@ -24,3 +24,15 @@ code {
 .icon-file {
   width: 0.75em;
 }
+
+p {
+  margin-bottom: 5px;
+}
+ 
+.ftb-inner-margin {
+  margin: 5px 1px;
+}
+
+.fbi-left p:first-of-type {
+  margin-bottom: 1px;
+}
