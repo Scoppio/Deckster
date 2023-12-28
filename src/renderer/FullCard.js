@@ -194,9 +194,6 @@ const FBIright = style.div`
   top: 6px;
 `
 
-const PaintBrush = style.img`
-`
-
 export const FullCard = ({data, tabIndex, scale}) => (
   <CardContainer scale={scale} tabIndex={tabIndex}>
     <CardBackground>
