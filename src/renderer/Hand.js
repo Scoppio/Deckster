@@ -1,25 +1,21 @@
-// import { Card } from "./Card";
-import { FullCard } from "./FullCard";
+import { FullCard, MiniCard } from "./FullCard";
 
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import style from 'styled-components'
 import PropTypes from 'prop-types';
 
-const HandContainer = style.div`
+
+const CardHolder = style.div`
+  padding: 8px;
   display: flex;
-  height: ${prop => prop.scale * 750}px;
-  width: ${prop => prop.scale * 550}px;
+  flex-direction: row;
 `
 
 const cardScale = 0.5;
 
-export const Hand = ({player, playerRef, playerNumber}) => {
-  
-  const onDragEnd = () => {
-    // TODO: implement
-  }
 
+export const HiddenHand = ({player, playerRef, playerNumber}) => {
   return (
     <div className="hand col" 
       role="complementary" 
@@ -29,24 +25,30 @@ export const Hand = ({player, playerRef, playerNumber}) => {
       aria-describedby={playerNumber + "-hand-desc"}>
       <h2 id={playerNumber + "-player-hand-label"}>Hand</h2>
       <p id={playerNumber + "-hand-desc"}>{player.hand.length} cards</p>
-      <DragDropContext
-        onDragEnd={onDragEnd}
-      >
-        <div className="row" style={{height: cardScale * 750, width: cardScale * 550}}>
-        {
-          player.hand.map((card, index) => {
-            if (player.isRemote) {
-              return null;
-            }
-            return (
-              <HandContainer key={index} scale={cardScale}>
-                <FullCard data={card} tabIndex={index + player.tabIndices.hand} scale={cardScale} />
-              </HandContainer>
-            )
-          })
-        }
-        </div>
-      </DragDropContext>
+    </div>
+  )
+}
+
+export const Hand = ({player, playerRef, playerNumber}) => {
+  
+  const onDragEnd = () => { }
+
+  return (
+    <div
+      role="complementary" 
+      tabIndex={player.tabIndices.hand} 
+      ref={playerRef.hand} 
+      aria-labelledby={playerNumber + "-player-hand-label"} 
+      aria-describedby={playerNumber + "-hand-desc"}>
+      <h2 id={playerNumber + "-player-hand-label"}>Hand</h2>
+      <p id={playerNumber + "-hand-desc"}>{player.hand.length} cards</p>
+      <div className="row" style={{height: cardScale * 750}}>
+        <DragDropContext
+          onDragEnd={onDragEnd}
+        >   
+          <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} playerNumber={playerNumber} />
+        </DragDropContext>
+      </div>
     </div>
   )
 }
@@ -55,4 +57,19 @@ Hand.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
+}
+
+export const ShownHand = ({playerNumber, cards, tabIndex}) => {
+  return (
+   <div style={{height: cardScale * 750, width: "100%"}}>
+    <Droppable droppableId={playerNumber * 891678 + ""} direction="horizontal">
+      {(provided) => (
+        <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
+          {cards.map((card, idx) => <FullCard key={card._uid} idx={idx} data={card} tabIndex={idx + tabIndex} scale={cardScale} />)}
+          {provided.placeholder}
+        </CardHolder>
+      )}
+    </Droppable>
+   </div>
+  )
 }

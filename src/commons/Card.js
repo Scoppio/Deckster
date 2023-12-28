@@ -1,5 +1,6 @@
 export class Card {
     constructor(name, cost, type, text) {
+        this._uid = Math.floor(Math.random() * 1000000) + ""
         this.name = name
         this.cost = cost
         this.type = type

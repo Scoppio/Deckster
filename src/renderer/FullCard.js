@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import style from 'styled-components'
 import holofoilTexture from '../images/holofoil-texture.webp';
 import greenBackground from '../images/green-background.webp';
+import { Draggable } from 'react-beautiful-dnd';
 
 
 const CardContainer = style.div`
@@ -194,42 +195,92 @@ const FBIright = style.div`
   top: 6px;
 `
 
-export const FullCard = ({data, tabIndex, scale}) => (
-  <CardContainer scale={scale} tabIndex={tabIndex}>
-    <CardBackground>
-      <CardFrame>
-        <FrameHeader>
-          <Name>{data.name}</Name>
-          <ManaIcon>{data.cost}</ManaIcon>
-        </FrameHeader>
-        <FrameArt src={data.artUrl} alt={data.artAlt} aria-describedby={ data.artAlt }/>
-        <FrameTypeLine>
-          <Type>{data.type}</Type>
-          <SetIcon src={data.setIconUrl} alt={data.setAlt} aria-describedby={ data.setAlt }/>
-        </FrameTypeLine>
-        <FrameTextBox>
-          <Description aria-describedby={data.description}>{data.description}</Description>
-          <ExtraDescription aria-describedby={data.extraDescription}>{data.extraDescription}</ExtraDescription>
-          <FlavourText aria-describedby={data.flavourText}>{data.flavourText}</FlavourText>
-        </FrameTextBox>
-        <FrameBottomInfo className="inner-margin">
-          <FBIleft>
-            <p>{data.cardInfo}</p>
-            <p>{data.author}</p>
-          </FBIleft>
-          <FBIcenter/>
-          <FBIright>
-            {data.copyRight}
-          </FBIright>
-        </FrameBottomInfo>
-      </CardFrame>
-    </CardBackground>
-
-  </CardContainer>
+export const FullCard = ({idx, data, tabIndex, scale}) => (
+  <Draggable draggableId={data._uid} index={idx} key={data._uid}>
+    {provided => (
+      <CardContainer 
+        scale={scale} 
+        tabIndex={tabIndex} 
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}
+        >
+        <CardBackground>
+          <CardFrame>
+            <FrameHeader>
+              <Name>{data.name}</Name>
+              <ManaIcon>{data.cost}</ManaIcon>
+            </FrameHeader>
+            <FrameArt src={data.artUrl} alt={data.artAlt} aria-describedby={ data.artAlt }/>
+            <FrameTypeLine>
+              <Type>{data.type}</Type>
+              <SetIcon src={data.setIconUrl} alt={data.setAlt} aria-describedby={ data.setAlt }/>
+            </FrameTypeLine>
+            <FrameTextBox>
+              <Description aria-describedby={data.description}>{data.description}</Description>
+              <ExtraDescription aria-describedby={data.extraDescription}>{data.extraDescription}</ExtraDescription>
+              <FlavourText aria-describedby={data.flavourText}>{data.flavourText}</FlavourText>
+            </FrameTextBox>
+            <FrameBottomInfo className="inner-margin">
+              <FBIleft>
+                <p>{data.cardInfo}</p>
+                <p>{data.author}</p>
+              </FBIleft>
+              <FBIcenter/>
+              <FBIright>
+                {data.copyRight}
+              </FBIright>
+            </FrameBottomInfo>
+          </CardFrame>
+        </CardBackground>
+      </CardContainer>
+    )}
+  </Draggable>
 )
 
 FullCard.propTypes = {
+  idx: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
   tabIndex: PropTypes.number.isRequired,
   scale: PropTypes.number.isRequired,
+}
+
+
+const Container = style.div`
+  display: flex;
+  flex-direction: row;
+  border: 1px solid lightgrey;
+  padding: 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+`
+
+export const MiniCard = ({idx, data, tabIndex, scale}) => (
+  <Draggable draggableId={data._uid} index={idx} key={data._uid}>
+    {provided => (
+      <Container 
+        scale={scale} 
+        tabIndex={tabIndex} 
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}
+        >
+          <div 
+            aria-label={data.name}
+            aria-describedby={ "card::" + data.name }
+            tabIndex={tabIndex}>
+            <p>{data.name} {data.cost}</p>
+            <p id={"card::" + data.name}>{data.text}</p>
+          </div>
+
+        </Container>
+        )}
+    </Draggable>
+)
+
+MiniCard.propTypes = {
+  idx: PropTypes.number.isRequired,
+  data: PropTypes.object.isRequired,
+  scale: PropTypes.number.isRequired,
+  tabIndex: PropTypes.number.isRequired,
 }
