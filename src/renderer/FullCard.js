@@ -7,18 +7,17 @@ import { Draggable } from 'react-beautiful-dnd';
 
 const CardContainer = style.div`
   border: 1px solid black;
-  width: 500px;
-  height: 700px;
+  width: ${props => 500 * props.scale}px;
+  height: ${props => 700 * props.scale}px;
   margin: 0 auto;
   border-radius: 25px;
   box-sizing: border-box;
   box-shadow: -8px 9px 16px -3px gray;
   background: #171314;
-  transform: translate(${props => (props.scale * 500 - 500)/2}px, ${props => (props.scale * 700 - 700)/2}px) scale(${props => props.scale});
 `
 
 const CardBackground = style.div`
-  height: 600px;
+  height: 100%;
   margin: 20px 20px 0 20px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;

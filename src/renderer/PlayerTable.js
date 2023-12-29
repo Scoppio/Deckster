@@ -25,7 +25,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         </div>
         <div className='col-8'></div>
       </div>
-      <div className="row" style={({height: '15vh'})}>
+      <div className="row" style={({height: '25vh'})}>
         <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} />
       </div>
     </div>
@@ -60,7 +60,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
           <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
         </div>
       </div>
-      <div className="row flex-fill" style={({height: '30vh'})}>
+      <div className="row flex-fill" style={({height: '20vh'})}>
         <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
       </div>
     </div>

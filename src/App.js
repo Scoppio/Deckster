@@ -1,13 +1,12 @@
 // import { useState, useMemo } from 'react'
 
-import { GameArena } from './renderer/GameArena'
-import { amalia_walker_text, uw_karn_control_text, convertTextToDeck } from './commons/DeckLoader'
-import { GameStateController } from './controllers/GameStateController'
-import { Player } from './commons/Player'
+import { GameArena } from 'renderer/GameArena'
+import { amalia_walker_text, uw_karn_control_text, convertTextToDeck } from 'commons/DeckLoader'
+import { GameStateController } from 'controllers/GameStateController'
+import { Player } from 'commons/Player'
 import '@atlaskit/css-reset'
-import 'mana-font/css/mana.css';
+import 'mana-font/css/mana.css'
 
-import { DragDropContext } from "react-beautiful-dnd";
 
 function App() {
 
@@ -56,4 +55,4 @@ function App() {
 
 }
 
-export default App;
+export default App
