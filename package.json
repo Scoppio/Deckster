@@ -29,7 +29,7 @@
     }
   },
   "build": {
-    "appId": "com.example.yourapp",
+    "appId": "com.deckster.app",
     "directories": {
       "output": "dist"
     },

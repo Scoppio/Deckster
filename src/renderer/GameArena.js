@@ -49,8 +49,8 @@ export const GameArena = ({gameState}) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       const isMac = window.navigator.userAgent.includes('Macintosh');
-      const isCommandKey = (isMac ? event.metaKey : event.ctrlKey) && event.shiftKey
       const isCtrlKey = (isMac ? event.metaKey : event.ctrlKey) && !event.shiftKey
+      const isCommandKey = (isMac ? (isMac ? event.metaKey : event.ctrlKey) && event.shiftKey : isCtrlKey )
 
       switch (event.key) {
         case 'a':
@@ -76,7 +76,7 @@ export const GameArena = ({gameState}) => {
             player1References.exile.current.focus();
           }
           break;
-        case 'c':
+        case 'd':
           if (isCommandKey) {
             player1References.commanderZone.current.focus();
           }
@@ -103,20 +103,22 @@ export const GameArena = ({gameState}) => {
           break;
         case '1':
           if (isCommandKey) {
-            const firstTabElement = player1References.battlefield.current.querySelector('[tabIndex]');
-            if (firstTabElement) {
-              firstTabElement.focus();
-            }
+            player1References.playerStats.current.focus();
+            // const firstTabElement = player1References.battlefield.current.querySelector('[tabIndex]');
+            // if (firstTabElement) {
+            //   firstTabElement.focus();
+            // }
           } else if (isCtrlKey) {
             player1References.playerStats.current.focus();
           }
           break;
         case '2':
           if (isCommandKey) {
-            const firstTabElement = player2References.battlefield.current.querySelector('[tabIndex]');
-            if (firstTabElement) {
-              firstTabElement.focus();
-            }
+            player2References.playerStats.current.focus();
+            // const firstTabElement = player2References.battlefield.current.querySelector('[tabIndex]');
+            // if (firstTabElement) {
+            //   firstTabElement.focus();
+            // }
           } else if (isCtrlKey) {
             player2References.playerStats.current.focus();
           }

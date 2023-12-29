@@ -198,12 +198,13 @@ export const FullCard = ({idx, data, tabIndex, scale}) => (
   <Draggable draggableId={data._uid} index={idx} key={data._uid}>
     {provided => (
       <CardContainer 
-        scale={scale} 
-        tabIndex={tabIndex} 
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         ref={provided.innerRef}
-        >
+        scale={scale} 
+        tabIndex={tabIndex}
+        aria-roledescription="Card"
+        aria-describedby={`${data.name} ${data.cost} ${data.type} ${data.description} ${data.extraDescription}`}>
         <CardBackground>
           <CardFrame>
             <FrameHeader>
