@@ -1,4 +1,4 @@
-import { FullCard, MiniCard } from "./FullCard";
+import { FullCard } from "./FullCard";
 
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 

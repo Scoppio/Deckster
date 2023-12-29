@@ -1,9 +1,11 @@
 {
   "name": "deckster",
   "productName": "Deckster",
+  "author": "Lucas",
   "description": "A deck building game",
   "version": "0.1.0",
   "private": true,
+  "main": "public/electron.js",
   "dependencies": {
     "@atlaskit/css-reset": "^6.6.2",
     "@electron/remote": "^2.1.0",
@@ -20,35 +22,36 @@
     "web-vitals": "^2.1.4"
   },
   "license": "MIT",
-  "main": "./src/index.js",
-  "type": "commonjs",
   "homepage": "./",
+  "resolve": {
+    "fallback": {
+      "path": false
+    }
+  },
+  "build": {
+    "appId": "com.example.yourapp",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "public/**/*",
+      "src/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "extends": null,
+    "asar": true
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
     "electron:serve": "concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
     "electron:build": "electron-builder build -w",
-    "electron:start": "wait-on tcp:3010 && electron .",
-    "electron:pack": "electron-builder build --em.main=build/electron.js"
-  },
-  "build": {
-    "files": [
-      "./build/**/*",
-      "./public/*",
-      "package.json",
-      "node_modules/**/*"
-    ],
-    "extraMetadata": {
-      "main": "./build/electron.js"
-    },
-    "appId": "vtt.deckster.app",
-    "mac": {
-      "category": "public.app-category.games"
-    }
+    "electron:start": "wait-on tcp:3010 && electron ."
   },
   "eslintConfig": {
     "extends": [
@@ -69,7 +72,6 @@
     ]
   },
   "devDependencies": {
-    "electron": "^27.1.2",
     "@babel/core": "^7.23.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-react": "^7.23.3",
@@ -78,7 +80,6 @@
     "@testing-library/user-event": "^13.5.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "electron-builder": "^24.9.1",
     "prettier": "^3.1.0",
     "wait-on": "^7.2.0"
   }
