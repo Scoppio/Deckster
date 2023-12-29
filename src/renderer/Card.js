@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import style from 'styled-components'
 
-
 const Container = style.div`
   border: 1px solid lightgrey;
   padding: 8px;
@@ -9,10 +8,10 @@ const Container = style.div`
   margin-left: 8px;
 `
 
-export const Card = ({data, tabIndex}) => (
+export const Card = ({data, index, tabIndex}) => (
   <Container>
-    <div className="col" 
-    aria-label={data.name} 
+    <div className="col"
+    aria-label={data.name}
     aria-describedby={ "card::" + data.name }
     tabIndex={tabIndex}>
       <p>{data.name} {data.cost}</p>
@@ -23,5 +22,6 @@ export const Card = ({data, tabIndex}) => (
 
 Card.propTypes = {
   data: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
   tabIndex: PropTypes.number.isRequired,
 }

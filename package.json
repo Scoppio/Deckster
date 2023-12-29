@@ -1,15 +1,16 @@
 {
   "name": "deckster",
   "productName": "Deckster",
+  "author": "Lucas",
   "description": "A deck building game",
   "version": "0.1.0",
   "private": true,
+  "main": "public/electron.js",
   "dependencies": {
     "@atlaskit/css-reset": "^6.6.2",
     "@electron/remote": "^2.1.0",
     "assert": "^2.1.0",
     "bootstrap": "^5.3.2",
-    "electron": "^27.1.2",
     "mana-font": "^1.15.9",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
@@ -21,12 +22,27 @@
     "web-vitals": "^2.1.4"
   },
   "license": "MIT",
-  "main": "main.js",
   "homepage": "./",
   "resolve": {
     "fallback": {
       "path": false
     }
+  },
+  "build": {
+    "appId": "com.example.yourapp",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "public/**/*",
+      "src/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "extends": null,
+    "asar": true
   },
   "scripts": {
     "start": "react-scripts start",
