@@ -1,6 +1,6 @@
 import { FullCard } from "./FullCard";
 
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
 
 import style from 'styled-components'
 import PropTypes from 'prop-types';
@@ -30,8 +30,6 @@ export const HiddenHand = ({player, playerRef, playerNumber}) => {
 }
 
 export const Hand = ({player, playerRef, playerNumber}) => {
-  
-  const onDragEnd = () => { }
 
   return (
     <div
@@ -43,11 +41,8 @@ export const Hand = ({player, playerRef, playerNumber}) => {
       <h2 id={playerNumber + "-player-hand-label"}>Hand</h2>
       <p id={playerNumber + "-hand-desc"}>{player.hand.length} cards</p>
       <div className="row" style={{height: cardScale * 750}}>
-        <DragDropContext
-          onDragEnd={onDragEnd}
-        >   
-          <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} playerNumber={playerNumber} />
-        </DragDropContext>
+        
+        <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} playerNumber={playerNumber} />
       </div>
     </div>
   )
@@ -62,7 +57,7 @@ Hand.propTypes = {
 export const ShownHand = ({playerNumber, cards, tabIndex}) => {
   return (
    <div style={{height: cardScale * 750, width: "100%"}}>
-    <Droppable droppableId={playerNumber * 891678 + ""} direction="horizontal">
+    <Droppable droppableId={`${playerNumber}-hand`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
           {cards.map((card, idx) => <FullCard key={card._uid} idx={idx} data={card} tabIndex={idx + tabIndex} scale={cardScale} />)}

@@ -1,7 +1,7 @@
 // import { useState, useMemo } from 'react'
 
 import { GameArena } from './renderer/GameArena'
-import { amalia_walker_text, uw_karn_control_text, convertTextToDeck } from './commons/DeckLoader'
+import { pirate_blender_text, uw_shirokai_text, convertTextToDeck } from './commons/DeckLoader'
 import { GameStateController } from './controllers/GameStateController'
 import { Player } from './commons/Player'
 import '@atlaskit/css-reset'
@@ -21,8 +21,8 @@ function App() {
     commanderZone: 9000,
   }
   
-  const playerA = new Player("Anna", convertTextToDeck(amalia_walker_text).deck, tabIndices, false)
-  const playerB = new Player("Bernard", convertTextToDeck(uw_karn_control_text).deck, {
+  const playerA = new Player("Anna", convertTextToDeck(pirate_blender_text).deck, tabIndices, false)
+  const playerB = new Player("Bernard", convertTextToDeck(uw_shirokai_text).deck, {
     ...tabIndices,
     battlefield: tabIndices.battlefield + 10000,
     playerStats: tabIndices.playerStats + 10000,

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import style from 'styled-components'
 import holofoilTexture from '../images/holofoil-texture.webp';
-import greenBackground from '../images/green-background.webp';
 import { Draggable } from 'react-beautiful-dnd';
 
 
@@ -25,7 +24,7 @@ const CardBackground = style.div`
   border-bottom-right-radius: 8%;
   background-color: #bbb;
   z-index: 0;
-  background-image: url(${greenBackground});
+  background: ${props => props.color};
   background-repeat: no-repeat;
   background-size: cover;
 `
@@ -205,7 +204,7 @@ export const FullCard = ({idx, data, tabIndex, scale}) => (
         tabIndex={tabIndex}
         aria-roledescription="Card"
         aria-describedby={`${data.name} ${data.cost} ${data.type} ${data.description} ${data.extraDescription}`}>
-        <CardBackground>
+        <CardBackground color={data.color}>
           <CardFrame>
             <FrameHeader>
               <Name>{data.name}</Name>
