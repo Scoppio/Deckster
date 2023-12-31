@@ -5,3 +5,7 @@
 In the project directory, you can run:
 
 ### `yarn electron:serve`
+
+### `yarn build`
+
+### `yarn electron:build`
