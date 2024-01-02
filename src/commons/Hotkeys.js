@@ -35,26 +35,34 @@ Outras funções de jogo como Tap/Untap, Declare as Attacking/Blocking, Scry, Ro
 
 class MacKeys {
     isCtrlKey = (event, key, func) => {
-        if ((event.metaKey && !event.shiftKey) && (event.key === key))
+        if ((event.metaKey && !event.shiftKey) && (event.key === key)){
+            event.preventDefault()
             func()
+        }
     }
 
     isCtrlShiftdKey = (event, key, func) => {
-        if ((event.metaKey && event.shiftKey) && (event.key === key))
+        if ((event.metaKey && event.shiftKey) && (event.key === key)){
+            event.preventDefault()
             func()
+        }
     }
 }
 
 
 class WindowsKeys {
     isCtrlKey = (event, key, func) => {
-        if ((event.ctrlKey && !event.shiftKey) && (event.key === key))
+        if ((event.ctrlKey && !event.shiftKey) && (event.key === key)){
+            event.preventDefault()
             func()
+        }
     }
 
     isCtrlShiftdKey = (event, key, func) => {
-        if ((event.ctrlKey && event.shiftKey) && (event.key === key))
+        if ((event.ctrlKey && event.shiftKey) && (event.key === key)){
+            event.preventDefault()
             func()
+        }
     }
     
 }

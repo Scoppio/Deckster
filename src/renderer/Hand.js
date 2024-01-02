@@ -1,5 +1,4 @@
-import { FullCard } from "./FullCard";
-
+import { FullCard, ImgCard } from "./FullCard";
 import { Droppable } from "react-beautiful-dnd";
 
 import style from 'styled-components'
@@ -60,7 +59,7 @@ export const ShownHand = ({playerNumber, cards, tabIndex}) => {
     <Droppable droppableId={`${playerNumber}-hand`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
-          {cards.map((card, idx) => <FullCard key={card._uid} idx={idx} card={card} tabIndex={idx + tabIndex} scale={cardScale} />)}
+          {cards.map((card, idx) => <ImgCard key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} scale={cardScale} />)}
           {provided.placeholder}
         </CardHolder>
       )}

@@ -208,7 +208,7 @@ export const FullCard = ({idx, card, tabIndex, scale}) => (
         scale={scale} 
         tabIndex={tabIndex}
         aria-roledescription="Card"
-        aria-describedby={`${card.name} ${card.mana_cost} ${card.type_line} ${card.oracle_text} ${card.power !== null ? card.power + "/" + card.toughness : ""}${card.loyalty !== null ? card.loyalty + " loyalty" : ""}`}>
+        aria-describedby={`${card.card_name} ${card.mana_cost} ${card.type_line} ${card.oracle_text} ${card.power !== null ? card.power + "/" + card.toughness : ""}${card.loyalty !== null ? card.loyalty + " loyalty" : ""}`}>
         <CardBackground color={card.color_identity ? (card.color_identity.length > 1 ? 'gold' : CardColors[card.color_identity[0]]) : 'grey'}>
           <CardFrame>
             <FrameHeader>
@@ -273,11 +273,11 @@ export const MiniCard = ({idx, card, tabIndex, scale}) => (
         >
           <div 
             aria-label={card.name}
-            aria-describedby={ "card::" + card.name }
+            aria-describedby={ "card::name::" + card.name + " card::type::" + card.name + " card::text::" + card.name }
             tabIndex={tabIndex}>
-            <p>{card.name} {card.mana_cost}</p>
-            <p>{card.name} {card.type_line}</p>
-            <p id={"card::" + card.name}>{card.oracle_text}</p>
+            <p id={"card::name::" + card.name}>{card.name} {card.mana_cost}</p>
+            <p id={"card::type::" + card.name}>{card.type_line}</p>
+            <p id={"card::text::" + card.name}>{card.oracle_text}</p>
           </div>
 
         </Container>
@@ -289,5 +289,53 @@ MiniCard.propTypes = {
   idx: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
   scale: PropTypes.number.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+}
+
+
+const CardImg = style.img`
+  height: 100%;
+  width: 100%;
+`
+
+const HiddenText = style.div`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+`
+// key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} scale={cardScale} 
+export const ImgCard = ({idx, card, size, tabIndex, scale}) => (
+  <Draggable draggableId={card._uid} index={idx} key={card._uid}>
+    {provided => (
+      <Container 
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}
+        tabIndex={tabIndex} 
+        scale={1.0}
+        >
+        <HiddenText>
+          <div>{card.aria_description}</div>
+        </HiddenText>
+        <HiddenText>
+          <div>{card.type_line + ", "}</div>
+          <div>{card.card_read_oracle_text}</div>
+        </HiddenText>
+        <CardImg src={card.image_uris[size]} alt={card.name} />
+        
+      </Container>
+    )}
+  </Draggable>
+)
+
+ImgCard.propTypes = {
+  card : PropTypes.object.isRequired,
+  size : PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   tabIndex: PropTypes.number.isRequired,
 }

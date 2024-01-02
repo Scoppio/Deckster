@@ -53,14 +53,14 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlKeyCommand('5', () => {player5References.playerStats.current.focus()})
   hotkeys.registerCtrlKeyCommand('6', () => {player6References.playerStats.current.focus()})
 
-  hotkeys.registerCtrlKeyCommand('a', () => {player1References.hand.current.focus()})
+  hotkeys.registerCtrlKeyCommand('e', () => {player1References.hand.current.focus()})
   hotkeys.registerCtrlKeyCommand('s', () => {player1References.battlefield.current.focus()})
   hotkeys.registerCtrlKeyCommand('d', () => {player1References.library.current.focus()})
   hotkeys.registerCtrlKeyCommand('f', () => {player1References.graveyard.current.focus()})
   hotkeys.registerCtrlKeyCommand('q', () => {player1References.exile.current.focus()})
   hotkeys.registerCtrlKeyCommand('w', () => {player1References.faceDown.current.focus()})
-  hotkeys.registerCtrlKeyCommand('e', () => {player1References.commanderZone.current.focus()})
-  hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
+  hotkeys.registerCtrlKeyCommand('b', () => {player1References.commanderZone.current.focus()})
+  // hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
   
   hotkeys.registerCtrlShiftKeyCommand('z', () => {gameState.moveSelectedToHand()})
   hotkeys.registerCtrlShiftKeyCommand('x', () => {gameState.moveSelectedToGraveyard()})

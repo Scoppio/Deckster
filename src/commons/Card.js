@@ -34,6 +34,10 @@ export class Card {
         return this.card_produced_mana !== null
     }
 
+    get is_two_sided() {
+        return this.card_faces !== undefined
+    }
+
     get is_land() {
         return this.card_type_line.includes("Land")
     }
@@ -71,63 +75,128 @@ export class Card {
     }
 
     get card_keywords() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.keywords
         }
         return this.card_faces[this.card_face].keywords || []
     }
 
     get card_cmc() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.cmc
         }
         return this.card_faces[this.card_face].cmc || 0
     }
 
     get card_mana_cost() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.mana_cost
         }
         return this.card_faces[this.card_face].mana_cost
     }
 
     get card_produced_mana() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.produced_mana
         }
         return this.card_faces[this.card_face].produced_mana
     }
 
     get card_name() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.name
         }
         return this.card_faces[this.card_face].name
     }
 
     get card_type_line() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.type_line
         }
         return this.card_faces[this.card_face].type_line
     }
 
     get card_loaylty() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.loyalty
         }
         return this.card_faces[this.card_face].loyalty
     }
 
     get card_oracle_text() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.oracle_text
         }
         return this.card_faces[this.card_face].oracle_text
     }
     
+    read_text(txt) {
+        if (txt === null) {
+            return null
+        }
+        txt = txt.replace(/\{(\d+)\}/g, (match, p1) => `${p1} colorless `);
+        txt = txt.replace(/\{T\}/g, "tap ")
+        txt = txt.replace(/\{Q\}/g, "untap ")
+
+        txt = txt.replace(/(\{W\})+/g, (match) => {
+            const count = match.split('{W}').length - 1;
+            return `${count} white${count > 1 ? 's' : ''} `;
+          });
+        txt = txt.replace(/(\{U\})+/g, (match) => {
+            const count = match.split('{U}').length - 1;
+            return `${count} blue${count > 1 ? 's' : ''} `;
+          }
+        );
+        txt = txt.replace(/(\{B\})+/g, (match) => {
+            const count = match.split('{B}').length - 1;
+            return `${count} black${count > 1 ? 's' : ''} `;
+          }
+        );
+        txt = txt.replace(/(\{R\})+/g, (match) => {
+            const count = match.split('{R}').length - 1;
+            return `${count} red${count > 1 ? 's' : ''} `;
+          }
+        );
+        txt = txt.replace(/(\{G\})+/g, (match) => {
+            const count = match.split('{G}').length - 1;
+            return `${count} green${count > 1 ? 's' : ''} `;
+          }
+        );
+        
+        txt = txt.replace(/\{2\/W\}/g, "2 colorless or 1 white ")
+        txt = txt.replace(/\{2\/U\}/g, "2 colorless or 1 blue ")
+        txt = txt.replace(/\{2\/B\}/g, "2 colorless or 1 black ")
+        txt = txt.replace(/\{2\/R\}/g, "2 colorless or 1 red ")
+        txt = txt.replace(/\{2\/G\}/g, "2 colorless or 1 green ")
+        txt = txt.replace(/\{W\/U\}/g, "white or blue ")
+        txt = txt.replace(/\{W\/B\}/g, "white or black ")
+        txt = txt.replace(/\{U\/B\}/g, "blue or black ")
+        txt = txt.replace(/\{U\/R\}/g, "blue or red ")
+        txt = txt.replace(/\{B\/R\}/g, "black or red ")
+        txt = txt.replace(/\{B\/G\}/g, "black or green ")
+        txt = txt.replace(/\{R\/G\}/g, "red or green ")
+        txt = txt.replace(/\{R\/W\}/g, "red or white ")
+        txt = txt.replace(/\{G\/W\}/g, "green or white ")
+        txt = txt.replace(/\{G\/U\}/g, "green or blue ")
+        txt = txt.replace(/\{W\/P\}/g, "white or 2 life ")
+        txt = txt.replace(/\{U\/P\}/g, "blue or 2 life ")
+        txt = txt.replace(/\{B\/P\}/g, "black or 2 life ")
+        txt = txt.replace(/\{R\/P\}/g, "red or 2 life ")
+        txt = txt.replace(/\{G\/P\}/g, "green or 2 life ")
+        
+        return txt
+    }
+
+    get card_read_mana_cost() {
+        return this.read_text(this.mana_cost)
+    }
+
+    get card_read_oracle_text() {
+        return this.read_text(this.oracle_text)
+    }   
+
     get power_toughness() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             if (this.power === null || this.toughness === null) {
                 return null
             }
@@ -137,28 +206,28 @@ export class Card {
     }
 
     get card_image_uris() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.image_uris
         }
         return this.card_faces[this.card_face].image_uris
     }
 
     get card_flavor_text() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.flavor_text
         }
         return this.card_faces[this.card_face].flavor_text
     }
 
     get card_printed_text() {
-        if (this.card_faces === undefined) {
+        if (this.card_faces === null) {
             return this.printed_text
         }
         return this.card_faces[this.card_face].printed_text
     }
 
     get aria_description() {
-        return `${this.card_name}, ${this.card_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty !== null ? `, ${this.card_loyalty} loyalty` : "")
+        return `${this.card_name}, ${this.card_read_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
     }
     
 }

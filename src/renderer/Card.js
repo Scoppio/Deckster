@@ -13,6 +13,21 @@ const CardImg = style.img`
   width: 100%;
 `
 
+const CardContainer = style.div`
+`
+
+const HiddenText = style.div`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+`
+
+
 export const Card = ({card, index, tabIndex}) => (
   <Container>
     <div className="col"
@@ -33,9 +48,3 @@ Card.propTypes = {
   index: PropTypes.number.isRequired,
   tabIndex: PropTypes.number.isRequired,
 }
-
-export const ImgCard = ({card, size, index, tabIndex}) => (
-  <CardImg src={card.image_uris[size]} 
-      tabIndex={tabIndex} 
-      aria-describedby={`${card.name}, ${card.type_line}, ${card.oracle_text}`} />
-  )

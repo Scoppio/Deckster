@@ -1,6 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
-import { MiniCard } from "./FullCard";
+import { MiniCarda, ImgCard } from "./FullCard";
 import PropTypes from 'prop-types';
 
 import style from 'styled-components'
@@ -41,7 +41,7 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player }) => (
     <Droppable droppableId={`${playerNumber}-battlefield`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
-          {player.battlefield.map((card, idx) => <MiniCard key={card._uid} idx={idx} card={card} tabIndex={idx + player.tabIndices.battlefield} scale={1.0} />)}
+          {player.battlefield.map((card, idx) => <ImgCard key={card._uid} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.battlefield} scale={1.0} />)}
           {provided.placeholder}
         </CardHolder>
       )}
