@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import style from 'styled-components'
-import holofoilTexture from '../images/holofoil-texture.webp';
+import holofoilTexture from '../resources/frames/holofoil-texture.webp';
 import { Draggable } from 'react-beautiful-dnd';
 
 
@@ -155,9 +155,6 @@ const FlavourText = style.p`
   padding: 10px 0;
 `
 
-const ExtraDescription = style.p`
-`
-
 const FrameBottomInfo = style.div`
   color: white;
   display: flex;
@@ -193,8 +190,16 @@ const FBIright = style.div`
   top: 6px;
 `
 
-export const FullCard = ({idx, data, tabIndex, scale}) => (
-  <Draggable draggableId={data._uid} index={idx} key={data._uid}>
+const CardColors = {
+  'W': 'white',
+  'U': 'blue',
+  'B': 'black',
+  'R': 'red',
+  'G': 'green'
+}
+
+export const FullCard = ({idx, card, tabIndex, scale}) => (
+  <Draggable draggableId={card._uid} index={idx} key={card._uid}>
     {provided => (
       <CardContainer 
         {...provided.draggableProps}
@@ -203,31 +208,33 @@ export const FullCard = ({idx, data, tabIndex, scale}) => (
         scale={scale} 
         tabIndex={tabIndex}
         aria-roledescription="Card"
-        aria-describedby={`${data.name} ${data.cost} ${data.type} ${data.description} ${data.extraDescription}`}>
-        <CardBackground color={data.color}>
+        aria-describedby={`${card.name} ${card.mana_cost} ${card.type_line} ${card.oracle_text} ${card.power !== null ? card.power + "/" + card.toughness : ""}${card.loyalty !== null ? card.loyalty + " loyalty" : ""}`}>
+        <CardBackground color={card.color_identity ? (card.color_identity.length > 1 ? 'gold' : CardColors[card.color_identity[0]]) : 'grey'}>
           <CardFrame>
             <FrameHeader>
-              <Name>{data.name}</Name>
-              <ManaIcon>{data.cost}</ManaIcon>
+              <Name>{card.name}</Name>
+              <ManaIcon>{card.mana_cost}</ManaIcon>
             </FrameHeader>
-            <FrameArt src={data.artUrl} alt={data.artAlt} aria-describedby={ data.artAlt }/>
+            <FrameArt src={card.image_uris["art_crop"]}/>
             <FrameTypeLine>
-              <Type>{data.type}</Type>
-              <SetIcon src={data.setIconUrl} alt={data.setAlt} aria-describedby={ data.setAlt }/>
+              <Type>{card.type_line}</Type>
+              <SetIcon src={card.setIconUrl} alt={card.setAlt} aria-describedby={ card.setAlt }/>
             </FrameTypeLine>
             <FrameTextBox>
-              <Description aria-describedby={data.description}>{data.description}</Description>
-              <ExtraDescription aria-describedby={data.extraDescription}>{data.extraDescription}</ExtraDescription>
-              <FlavourText aria-describedby={data.flavourText}>{data.flavourText}</FlavourText>
+              <Description aria-describedby={card.oracle_text}>{card.oracle_text}</Description>
+              <FlavourText aria-describedby={card.flavor_text}>{card.flavor_text}</FlavourText>
             </FrameTextBox>
             <FrameBottomInfo className="inner-margin">
               <FBIleft>
-                <p>{data.cardInfo}</p>
-                <p>{data.author}</p>
+                <p>{card.artist}</p>
               </FBIleft>
               <FBIcenter/>
               <FBIright>
-                {data.copyRight}
+                if (card.power !== null) {
+                  <p>{card.power}/{card.toughness}</p>
+                } else if (card.loyalty !== null) {
+                  <p>{card.loyalty}</p>
+                }
               </FBIright>
             </FrameBottomInfo>
           </CardFrame>
@@ -254,8 +261,8 @@ const Container = style.div`
   margin-left: 8px;
 `
 
-export const MiniCard = ({idx, data, tabIndex, scale}) => (
-  <Draggable draggableId={data._uid} index={idx} key={data._uid}>
+export const MiniCard = ({idx, card, tabIndex, scale}) => (
+  <Draggable draggableId={card._uid} index={idx} key={card._uid}>
     {provided => (
       <Container 
         scale={scale} 
@@ -265,11 +272,12 @@ export const MiniCard = ({idx, data, tabIndex, scale}) => (
         ref={provided.innerRef}
         >
           <div 
-            aria-label={data.name}
-            aria-describedby={ "card::" + data.name }
+            aria-label={card.name}
+            aria-describedby={ "card::" + card.name }
             tabIndex={tabIndex}>
-            <p>{data.name} {data.cost}</p>
-            <p id={"card::" + data.name}>{data.text}</p>
+            <p>{card.name} {card.mana_cost}</p>
+            <p>{card.name} {card.type_line}</p>
+            <p id={"card::" + card.name}>{card.oracle_text}</p>
           </div>
 
         </Container>

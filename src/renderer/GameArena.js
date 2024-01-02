@@ -1,28 +1,20 @@
 import { SouthTable, NorthTable } from './PlayerTable'
 import { useEffect, useRef, useMemo } from 'react';
+import { HotKeys } from '../commons/Hotkeys';
 
 import PropTypes from 'prop-types';
 
 export const GameArena = ({gameState}) => {
 
-  const player1StatsRef = useRef(null);
-  const player1HandRef = useRef(null);
-  const player1GraveyardRef = useRef(null);
-  const player1ExileRef = useRef(null);
-  const player1BattlefieldRef = useRef(null);
-  const player1LibraryRef = useRef(null);
-  const player1FaceDownRef = useRef(null);
-  const player1CommanderZoneRef = useRef(null);
-
-  const player2StatsRef = useRef(null);
-  const player2HandRef = useRef(null);
-  const player2GraveyardRef = useRef(null);
-  const player2ExileRef = useRef(null);
-  const player2BattlefieldRef = useRef(null);
-  const player2LibraryRef = useRef(null);
-  const player2FaceDownRef = useRef(null);
-  const player2CommanderZoneRef = useRef(null);
-  
+  const player1StatsRef = useRef(null)
+  const player1HandRef = useRef(null)
+  const player1GraveyardRef = useRef(null)
+  const player1ExileRef = useRef(null)
+  const player1BattlefieldRef = useRef(null)
+  const player1LibraryRef = useRef(null)
+  const player1FaceDownRef = useRef(null)
+  const player1CommanderZoneRef = useRef(null)
+  const player1SideboardRef = useRef(null)
 
   const player1References = useMemo(() => ({
     playerStats: player1StatsRef,
@@ -33,106 +25,71 @@ export const GameArena = ({gameState}) => {
     library: player1LibraryRef,
     faceDown: player1FaceDownRef,
     commanderZone: player1CommanderZoneRef,
-  }), []);
+    sideboard: player1SideboardRef,
+  }), [])
 
-  const player2References = useMemo(() => ({
-    playerStats: player2StatsRef,
-    hand: player2HandRef,
-    graveyard: player2GraveyardRef,
-    exile: player2ExileRef,
-    battlefield: player2BattlefieldRef,
-    library: player2LibraryRef,
-    faceDown: player2FaceDownRef,
-    commanderZone: player2CommanderZoneRef,
-  }), []);
+  const player2StatsRef = useRef(null)
+  const player2References = useMemo(() => ({playerStats: player2StatsRef}), [])
+
+  const player3StatsRef = useRef(null)
+  const player3References = useMemo(() => ({playerStats: player3StatsRef}), [])
+
+  const player4StatsRef = useRef(null)
+  const player4References = useMemo(() => ({playerStats: player4StatsRef}), [])
+
+  const player5StatsRef = useRef(null)
+  const player5References = useMemo(() => ({playerStats: player5StatsRef}), [])
+
+  const player6StatsRef = useRef(null)
+  const player6References = useMemo(() => ({playerStats: player6StatsRef}), [])
+
+  const hotkeys = useMemo(() => (new HotKeys(gameState, player1References, player2References, player3References, player4References, player5References, player6References)), 
+    [gameState, player1References, player2References, player3References, player4References, player5References, player6References]);
+
+  hotkeys.registerCtrlKeyCommand('1', () => {player1References.playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('2', () => {player2References.playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('3', () => {player3References.playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('4', () => {player4References.playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('5', () => {player5References.playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('6', () => {player6References.playerStats.current.focus()})
+
+  hotkeys.registerCtrlKeyCommand('a', () => {player1References.hand.current.focus()})
+  hotkeys.registerCtrlKeyCommand('s', () => {player1References.battlefield.current.focus()})
+  hotkeys.registerCtrlKeyCommand('d', () => {player1References.library.current.focus()})
+  hotkeys.registerCtrlKeyCommand('f', () => {player1References.graveyard.current.focus()})
+  hotkeys.registerCtrlKeyCommand('q', () => {player1References.exile.current.focus()})
+  hotkeys.registerCtrlKeyCommand('w', () => {player1References.faceDown.current.focus()})
+  hotkeys.registerCtrlKeyCommand('e', () => {player1References.commanderZone.current.focus()})
+  hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
+  
+  hotkeys.registerCtrlShiftKeyCommand('z', () => {gameState.moveSelectedToHand()})
+  hotkeys.registerCtrlShiftKeyCommand('x', () => {gameState.moveSelectedToGraveyard()})
+  hotkeys.registerCtrlShiftKeyCommand('c', () => {gameState.moveSelectedToExile()})
+  hotkeys.registerCtrlShiftKeyCommand('v', () => {gameState.moveSelectedToLibrary()})
+  hotkeys.registerCtrlShiftKeyCommand('b', () => {gameState.moveSelectedToCommandZone()})
+  hotkeys.registerCtrlShiftKeyCommand('j', () => {gameState.tapUntapSelected()})
+  hotkeys.registerCtrlShiftKeyCommand('l', () => {gameState.declareAttacking()})
+  hotkeys.registerCtrlShiftKeyCommand('u', () => {gameState.declareBlocking()})
+  hotkeys.registerCtrlShiftKeyCommand('i', () => {gameState.scry()})
+  hotkeys.registerCtrlShiftKeyCommand('p', () => {gameState.addCounterOnSelected()})
+  hotkeys.registerCtrlShiftKeyCommand('m', () => {gameState.removeCounterOnSelected()})
+  hotkeys.registerCtrlShiftKeyCommand('comma', () => {gameState.untapAll()})
+  hotkeys.registerCtrlShiftKeyCommand('period', () => {gameState.drawCard()})
+  hotkeys.registerCtrlShiftKeyCommand('slash', () => {gameState.passTurn()})
+  hotkeys.registerCtrlShiftKeyCommand('numpadadd', () => {gameState.addLife()})
+  hotkeys.registerCtrlShiftKeyCommand('numpadsubtract', () => {gameState.removeLife()})
+  hotkeys.registerCtrlShiftKeyCommand('numpadmultiply', () => {gameState.setLife()})
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      const isMac = window.navigator.userAgent.includes('Macintosh');
-      const isCtrlKey = (isMac ? event.metaKey : event.ctrlKey) && !event.shiftKey
-      const isCommandKey = (isMac ? (isMac ? event.metaKey : event.ctrlKey) && event.shiftKey : isCtrlKey )
-
-      switch (event.key) {
-        case 'a':
-          if (isCommandKey) {
-            player1References.playerStats.current.focus();
-          }
-          break;
-        case 'h':
-          if (isCommandKey)  {
-            player1References.hand.current.focus();
-          }
-          break;
-        case 'j':
-          if (isCommandKey) {
-            const firstTabElement = player1References.hand.current.querySelector('[tabIndex]');
-            if (firstTabElement) {
-              firstTabElement.focus();
-            }
-          }
-          break;
-        case 'e':
-          if (isCommandKey) {
-            player1References.exile.current.focus();
-          }
-          break;
-        case 'd':
-          if (isCommandKey) {
-            player1References.commanderZone.current.focus();
-          }
-          break;
-        case 'i':
-          if (isCommandKey) {
-            player1References.library.current.focus();
-          }
-          break;
-        case 'f':
-          if (isCommandKey) {
-            player1References.faceDown.current.focus();
-          }
-          break;
-        case 'b':
-          if (isCommandKey) {
-            player1References.battlefield.current.focus();
-          }
-          break;
-        case 'g':
-          if (isCommandKey) {
-            player1References.graveyard.current.focus();
-          }
-          break;
-        case '1':
-          if (isCommandKey) {
-            player1References.playerStats.current.focus();
-            // const firstTabElement = player1References.battlefield.current.querySelector('[tabIndex]');
-            // if (firstTabElement) {
-            //   firstTabElement.focus();
-            // }
-          } else if (isCtrlKey) {
-            player1References.playerStats.current.focus();
-          }
-          break;
-        case '2':
-          if (isCommandKey) {
-            player2References.playerStats.current.focus();
-            // const firstTabElement = player2References.battlefield.current.querySelector('[tabIndex]');
-            // if (firstTabElement) {
-            //   firstTabElement.focus();
-            // }
-          } else if (isCtrlKey) {
-            player2References.playerStats.current.focus();
-          }
-          break;
-        default:
-          break;
-      }
+      hotkeys.handleKeyDown(event);
     }
- 
+
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [player1References, player2References]);
+    }
+  }, [hotkeys]);
 
   return (
     <div id="game-arena" className="container min-vh-100" role="main" aria-label="Game Arena">

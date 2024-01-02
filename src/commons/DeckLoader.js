@@ -1,203 +1,170 @@
 import { Card } from '../commons/Card'
 
-export const uw_shirokai_text = `1 Shorikai, Genesis Engine
-1 Adarkar Wastes
-1 An Offer You Can't Refuse
-1 Ancient Tomb
+export const tyranid_swarm = `1 Aberrant
+1 Abundance
+1 Acolyte Hybrid
+1 Aetherize
 1 Arcane Signet
-1 Aven Mindcensor
-1 Blind Obedience
-1 Borne Upon a Wind
-1 Cephalid Coliseum
-1 Chrome Mox
-1 City of Brass
-1 City of Traitors
+1 Ash Barrens
+1 Atalan Jackal
+1 Biophagus
+1 Bone Sabres
+1 Bred for the Hunt
+1 Broodlord
+1 Cave of Temptation
+1 Cinder Glade
+1 Clamavus
 1 Command Tower
-1 Counterbalance
-1 Cyclonic Rift
-1 Delay
-1 Dig Through Time
-1 Displacer Kitten
-1 Dramatic Reversal
-1 Drannith Magistrate
-1 Dress Down
-1 Enlightened Tutor
-1 Esper Sentinel
-1 Fellwar Stone
-1 Fierce Guardianship
-1 Flooded Strand
-1 Flusterstorm
-1 Forbidden Orchard
-1 Force of Negation
-1 Force of Will
-1 Gemstone Caverns
-1 Grafdigger's Cage
-1 Grand Abolisher
-1 Grim Monolith
-1 Hallowed Fountain
-1 Hullbreaker Horror
-1 Humility
-1 Imposter Mech
-1 Intuition
-1 Isochron Scepter
-1 Jeweled Lotus
-1 Long-Term Plans
-1 Lotus Petal
-1 Mana Confluence
-1 Mana Crypt
-1 Mana Drain
-1 Mana Vault
-1 Manifold Key
-1 March of Otherworldly Light
-1 March of Swirling Mist
-1 Marsh Flats
-1 Mental Misstep
-1 Minamo, School at Water's Edge
-1 Mindbreak Trap
-1 Mirror of Fate
-1 Misty Rainforest
-1 Mox Diamond
-1 Mox Opal
-1 Muddle the Mixture
-1 Mystic Remora
-1 Mystic Sanctuary
-1 Mystical Tutor
-1 Oswald Fiddlebender
-1 Otawara, Soaring City
-1 Out of Time
-1 Pact of Negation
-1 Phyrexian Metamorph
-1 Polluted Delta
-1 Portable Hole
-1 Ranger-Captain of Eos
-1 Rhystic Study
-1 Scalding Tarn
-1 Sea of Clouds
-1 Sevinne's Reclamation
-1 Silence
-1 Skullclamp
-4 Snow-Covered Island
-1 Snow-Covered Plains
+1 Cultivate
+1 Death's Presence
+1 Deathleaper, Terror Weapon
+1 Evolving Wilds
+1 Exocrine
+1 Exotic Orchard
+1 Explore
+1 Farseek
+8 Forest
+1 Frontier Bivouac
+1 Game Trail
+1 Gargoyle Flock
+1 Genestealer Locus
+1 Genestealer Patriarch
+1 Ghyrson Starn, Kelermorph
+1 Goliath Truck
+1 Hardened Scales
+1 Harrow
+1 Haruspex
+1 Herald's Horn
+1 Hierophant Bio-Titan
+1 Hormagaunt Horde
+1 Hull Breach
+1 Icon of Ancestry
+1 Inspiring Call
+7 Island
+1 Lictor
+1 Magus Lucea Kane
+1 Malanthrope
+1 Mawloc
+7 Mountain
+1 New Horizons
+1 Nexos
+1 Old One Eye
+1 Opal Palace
+1 Overgrowth
+1 Path of Ancestry
+1 Purestrain Genestealer
+1 Rampant Growth
+1 Ravener
+1 Rugged Highlands
+1 Screamer-Killer
+1 Shadow in the Warp
 1 Sol Ring
-1 Sonic Screwdriver
-1 Soul Partition
-1 Step Through
-1 Stern Scolding
-1 Swan Song
-1 Swords to Plowshares
-1 Talisman of Progress
-1 Teferi, Time Raveler
-1 Tezzeret the Seeker
-1 Thassa's Oracle
-1 The One Ring
-1 Transmute Artifact
-1 Tundra
-1 Unwinding Clock
-1 Urza's Saga
-1 Vanquish the Horde
-1 Whir of Invention
-1 Windswept Heath`
+1 Sporocyst
+1 Starstorm
+1 Temple of Abandon
+1 Temple of Epiphany
+1 Temple of Mystery
+1 Termagant Swarm
+1 Terramorphic Expanse
+1 Tervigon
+1 The First Tyrannic War
+1 The Red Terror
+1 The Swarmlord
+1 Thornwood Falls
+1 Toxicrene
+1 Trygon Prime
+1 Tyranid Harridan
+1 Tyranid Invasion
+1 Tyranid Prime
+1 Tyrant Guard
+1 Unclaimed Territory
+1 Venomthrope
+1 Winged Hive Tyrant
+1 Zoanthrope`
 
-export const pirate_blender_text = `1 Dargo, the Shipwrecker
-1 Ikra Shidiqi, the Usurper
-1 Abrupt Decay
-1 Ad Nauseam
-1 Altar of Dementia
-1 Ancient Tomb
+export const forces_of_imperium = `1 And They Shall Know No Fear
+1 Arcane Sanctum
 1 Arcane Signet
-1 Arid Mesa
-1 Assassin's Trophy
-1 Autumn's Veil
-1 Badlands
-1 Bayou
-1 Beseech the Mirror
-1 Birds of Paradise
-1 Birgi, God of Storytelling
-1 Birthing Pod
-1 Blood Crypt
-1 Bloodstained Mire
-1 Boseiju, Who Endures
-1 Burnt Offering
-1 Cabal Ritual
-1 Chain of Smog
-1 Chrome Mox
-1 City of Brass
-1 City of Traitors
+1 Arco-Flagellant
+1 Ash Barrens
+1 Assault Intercessor
+1 Bastion Protector
+1 Belisarius Cawl
+1 Birth of the Imperium
+1 Callidus Assassin
+1 Celestine, the Living Saint
+1 Choked Estuary
+1 Collective Effort
 1 Command Tower
-1 Culling Ritual
-1 Culling the Weak
-1 Dark Ritual
-1 Deathrite Shaman
-1 Defense Grid
-1 Demonic Tutor
-1 Diabolic Intent
-1 Dockside Extortionist
-1 Eldritch Evolution
-1 Elves of Deep Shadow
-1 Elvish Spirit Guide
-1 Fellwar Stone
-1 Final Fortune
-1 Forbidden Orchard
-1 Fyndhorn Elves
-1 Gamble
-1 Gemstone Caverns
-1 Gemstone Mine
-1 Gilded Goose
-1 Greater Good
-1 Grim Monolith
-1 Guttural Response
-1 Hope of Ghirapur
-1 Ignoble Hierarch
-1 Imperial Seal
-1 Jeweled Lotus
-1 Lightning Bolt
-1 Lion's Eye Diamond
-1 Lotus Petal
-1 Luxury Suite
-1 Mana Confluence
-1 Mana Crypt
-1 Mana Vault
-1 Marsh Flats
-1 Misty Rainforest
-1 Mox Diamond
-1 Mox Opal
-1 Necropotence
-1 Noxious Revival
-1 Orcish Bowmasters
-1 Orcish Lumberjack
-1 Overgrown Tomb
-1 Pattern of Rebirth
-1 Polluted Delta
-1 Praetor's Grasp
-1 Pyroblast
-1 Ragavan, Nimble Pilferer
-1 Razaketh, the Foulblooded
-1 Reanimate
-1 Red Elemental Blast
-1 Rite of Flame
-1 Sacrifice
-1 Scalding Tarn
-1 Simian Spirit Guide
+1 Commander's Sphere
+1 Commissar Severina Raine
+1 Company Commander
+1 Cybernetica Datasmith
+1 Darkwater Catacombs
+1 Defenders of Humanity
+1 Deny the Witch
+1 Deploy to the Front
+1 Dismal Backwater
+1 Entrapment Maneuver
+1 Epistolary Librarian
+1 Everflowing Chalice
+1 Evolving Wilds
+1 Exotic Orchard
+1 Exterminatus
+1 Fell the Mighty
+1 For the Emperor!
+1 Grey Knight Paragon
+1 Hour of Reckoning
+1 Inquisitor Eisenhorn
+1 Inquisitor Greyfax
+1 Inquisitorial Rosette
+5 Island
+1 Knight Paladin
+1 Launch the Fleet
+1 Marneus Calgar
+1 Martial Coup
+1 Memorial to Glory
+1 Mind Stone
+1 Mortify
+1 Neyam Shai Murad
+1 Path of Ancestry
+8 Plains
+1 Port Town
+1 Prairie Stream
+1 Primaris Chaplain
+1 Primaris Eliminator
+1 Reaver Titan
+1 Reconnaissance Mission
+1 Redemptor Dreadnought
+1 Sanguinary Priest
+1 Scoured Barrens
+1 Sicarian Infiltrator
+1 Sister Hospitaller
+1 Sister Repentia
+1 Sister of Silence
+1 Skullclamp
+1 Skycloud Expanse
 1 Sol Ring
-1 Stomping Ground
-1 Taiga
-1 Tainted Pact
-1 Talisman of Indulgence
-1 Talisman of Resilience
-1 The One Ring
-1 Tinder Wall
-1 Underworld Breach
-1 Vampiric Tutor
-1 Veil of Summer
-1 Verdant Catacombs
-1 Wheel of Fortune
-1 Windswept Heath
-1 Wishclaw Talisman
-1 Witherbloom Apprentice
-1 Wooded Foothills
-1 Worldly Tutor
-1 Xantid Swarm
-1 Yawgmoth's Will`
+1 Space Marine Devastator
+1 Space Marine Scout
+1 Sunken Hollow
+7 Swamp
+1 Swords to Plowshares
+1 Talisman of Dominance
+1 Talisman of Hierarchy
+1 Talisman of Progress
+1 Terramorphic Expanse
+1 The Flesh Is Weak
+1 The Golden Throne
+1 Thunderhawk Gunship
+1 Thunderwolf Cavalry
+1 Tranquil Cove
+1 Triumph of Saint Katherine
+1 Ultramarines Honour Guard
+1 Utter End
+1 Vanguard Suppressor
+1 Vexilus Praetor
+1 Zephyrim`
 
 function randomCost() {
   const costs = ['w', 'u', 'r', 'b', 'g'];
@@ -236,4 +203,31 @@ export const convertTextToDeck = (text) => {
   }
   
   return { deck, commanders }
+}
+
+export const fetchDeck = async (deck_id) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/vtt/deck/${deck_id}`, { mode: 'cors' });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    const commanders = [];
+    for (const card_quantity of data["commanders"]) {
+      for (let i = 0; i < card_quantity.quantity; i++) {
+        commanders.push(new Card(card_quantity.card));
+      }
+    }
+
+    const deck = [];
+    for (const card_quantity of data["mainboard"]) {
+      for (let i = 0; i < card_quantity.quantity; i++) {
+        deck.push(new Card(card_quantity.card));
+      }
+    }
+    return { deck, commanders };
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }

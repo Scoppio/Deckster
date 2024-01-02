@@ -1,7 +1,4 @@
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-
+const { app, BrowserWindow } = require("electron");
 const path = require('path');
 const url = require('url');
 const isDev = app.isPackaged ? false : require('electron-is-dev');

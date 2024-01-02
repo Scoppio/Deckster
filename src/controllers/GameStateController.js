@@ -54,13 +54,108 @@ export class GameStateController {
     
     cardsOnTheTable(playerNumber) {
       const numberOfCards = this.players[playerNumber].battlefield.length
-      const numberOfLands = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Land")).length
-      const numberOfCreatures = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Creature")).length
-      const numberOfPlaneswalkers = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Planeswalker")).length
-      const numberOfArtefacts = this.players[playerNumber].battlefield.filter((card) => card.type.includes("Artefact")).length
+      const numberOfLands = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Land")).length
+      const numberOfCreatures = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Creature")).length
+      const numberOfPlaneswalkers = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Planeswalker")).length
+      const numberOfArtefacts = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Artefact")).length
       const numberOfOtherCards = numberOfCards - numberOfLands - numberOfCreatures - numberOfPlaneswalkers - numberOfArtefacts
 
       return `${numberOfCards} cards on the table, ${numberOfLands} lands, ${numberOfCreatures} creatures, ${numberOfPlaneswalkers} planeswalkers, ${numberOfArtefacts} artefacts, ${numberOfOtherCards} other cards`
     }
 
+    moveSelectedToHand(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].selected.pop()
+      this.players[playerNumber].hand.push(card)
+    }
+
+    moveSelectedToGraveyard(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].selected.pop()
+      this.players[playerNumber].graveyard.push(card)
+    }
+
+    moveSelectedToExile(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].selected.pop()
+      this.players[playerNumber].exile.push(card)
+    }
+
+    moveSelectedToLibrary(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].selected.pop()
+      this.players[playerNumber].library.push(card)
+    }
+
+    moveSelectedToCommandZone(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].selected.pop()
+      this.players[playerNumber].commanderZone.push(card)
+    }
+
+    tapUntapSelected(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].selected.pop()
+      card.tapped = !card.tapped
+      this.players[playerNumber].battlefield.push(card)
+    }
+
+    scry(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].library.pop()
+      this.players[playerNumber].library.push(card)
+    }
+
+    addCounterOnSelected(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].battlefield.pop()
+      card.counters = card.counters + 1
+      this.players[playerNumber].battlefield.push(card)
+    }
+
+    removeCounterOnSelected(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      const card = this.players[playerNumber].battlefield.pop()
+      card.counters = card.counters - 1
+      this.players[playerNumber].battlefield.push(card)
+    }
+
+    untapAll(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      this.players[playerNumber].battlefield.forEach((card) => {
+        card.tapped = false
+      })
+    }
+
+    drawCard(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      this.drawCardFromDeck(playerNumber)
+    }
+
+    passTurn() {
+      this.activePlayer = (this.activePlayer + 1) % this.players.length
+    }
+
+    addLife(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      this.players[playerNumber].life = this.players[playerNumber].life + 1
+    }
+
+    removeLife(playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      this.players[playerNumber].life = this.players[playerNumber].life - 1
+    }
+
+    setLife(value, playerNumber) {
+      playerNumber = playerNumber || this.activePlayer
+      this.players[playerNumber].life = value
+    }
+
+    getActivePlayer() {
+      return this.players[this.activePlayer]
+    }
+
+    getActivePlayerName() {
+      return this.getActivePlayer().name
+    }
   }

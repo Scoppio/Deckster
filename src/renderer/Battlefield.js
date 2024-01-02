@@ -23,7 +23,7 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player }
         player.battlefield.map((card, index) => {
           return (
             <div className="col" key={index}>
-              <Card data={card} index={index} tabIndex={index + player.tabIndices.battlefield} />
+              <Card card={card} index={index} tabIndex={index + player.tabIndices.battlefield} />
             </div>
           )
         })
@@ -41,7 +41,7 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player }) => (
     <Droppable droppableId={`${playerNumber}-battlefield`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
-          {player.battlefield.map((card, idx) => <MiniCard key={card._uid} idx={idx} data={card} tabIndex={idx + player.tabIndices.battlefield} scale={1.0} />)}
+          {player.battlefield.map((card, idx) => <MiniCard key={card._uid} idx={idx} card={card} tabIndex={idx + player.tabIndices.battlefield} scale={1.0} />)}
           {provided.placeholder}
         </CardHolder>
       )}

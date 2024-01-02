@@ -1,7 +1,8 @@
 // import { useState, useMemo } from 'react'
 
 import { GameArena } from './renderer/GameArena'
-import { pirate_blender_text, uw_shirokai_text, convertTextToDeck } from './commons/DeckLoader'
+import { tyranid_swarm, forces_of_imperium, convertTextToDeck, fetchDeck } from './commons/DeckLoader'
+import { useState, useEffect } from 'react'
 import { GameStateController } from './controllers/GameStateController'
 import { Player } from './commons/Player'
 import '@atlaskit/css-reset'
@@ -9,7 +10,6 @@ import 'mana-font/css/mana.css'
 
 
 function App() {
-
   const tabIndices = {
     playerStats: 1000,
     battlefield: 2000,
@@ -19,35 +19,54 @@ function App() {
     exile: 7000,
     faceDown: 8000,
     commanderZone: 9000,
+  } 
+
+  const [players, setPlayers] = useState([])
+  const [gameStateController, setGameStateController] = useState(null)
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      const deckA = await fetchDeck(46)
+      const deckB = await fetchDeck(47)
+
+      const playerA = new Player("Anna", deckA, tabIndices, false)
+      const playerB = new Player("Bernard", deckB, {
+        ...tabIndices,
+        battlefield: tabIndices.battlefield + 10000,
+        playerStats: tabIndices.playerStats + 10000,
+        hand: tabIndices.hand + 10000,
+        library: tabIndices.library + 10000,
+        graveyard: tabIndices.graveyard + 10000,
+        exile: tabIndices.exile + 10000,
+        faceDown: tabIndices.faceDown + 10000,
+        commanderZone: tabIndices.commanderZone + 10000,
+      }, true)
+
+      setPlayers([playerA, playerB])
+    }
+
+    fetchPlayers()
+  }, [])
+
+  useEffect(() => {
+    if (players.length > 0) {
+      const gameState = new GameStateController(players)
+      gameState.shuffleAllDecks()
+      gameState.eachPlayerDrawSeven()
+      gameState.putRandomCardIntoBattlefield(0)
+      gameState.putRandomCardIntoBattlefield(0)
+      gameState.putRandomCardIntoBattlefield(0)
+      gameState.putRandomCardIntoBattlefield(1)
+      gameState.putRandomCardIntoBattlefield(1)
+      gameState.putRandomCardIntoBattlefield(1)
+      gameState.putRandomCardIntoBattlefield(1)
+      setGameStateController(gameState)
+    }
+  }, [players])
+
+  if (!gameStateController) {
+    return <div>Loading...</div>
   }
-  
-  const playerA = new Player("Anna", convertTextToDeck(pirate_blender_text).deck, tabIndices, false)
-  const playerB = new Player("Bernard", convertTextToDeck(uw_shirokai_text).deck, {
-    ...tabIndices,
-    battlefield: tabIndices.battlefield + 10000,
-    playerStats: tabIndices.playerStats + 10000,
-    hand: tabIndices.hand + 10000,
-    library: tabIndices.library + 10000,
-    graveyard: tabIndices.graveyard + 10000,
-    exile: tabIndices.exile + 10000,
-    faceDown: tabIndices.faceDown + 10000,
-    commanderZone: tabIndices.commanderZone + 10000,
-  }, true)
-
-  const players = [playerA, playerB]
-  
-  const gameStateController = new GameStateController(players)
-  
-  gameStateController.shuffleAllDecks()
-  gameStateController.eachPlayerDrawSeven()
-  gameStateController.putRandomCardIntoBattlefield(0)
-  gameStateController.putRandomCardIntoBattlefield(0)
-  gameStateController.putRandomCardIntoBattlefield(0)
-
-  gameStateController.putRandomCardIntoBattlefield(1)
-  gameStateController.putRandomCardIntoBattlefield(1)
-  gameStateController.putRandomCardIntoBattlefield(1)
-  gameStateController.putRandomCardIntoBattlefield(1)
 
   return (
     <GameArena gameState={gameStateController}/>
@@ -55,4 +74,4 @@ function App() {
 
 }
 
-export default App;
+export default App

@@ -11,6 +11,7 @@
 # production
 /build
 /dist
+/src/resources
 
 # misc
 .DS_Store

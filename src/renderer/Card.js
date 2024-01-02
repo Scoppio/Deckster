@@ -8,14 +8,17 @@ const Container = style.div`
   margin-left: 8px;
 `
 
-export const Card = ({data, index, tabIndex}) => (
+export const Card = ({card, index, tabIndex}) => (
   <Container>
     <div className="col"
-    aria-label={data.name}
-    aria-describedby={ "card::" + data.name }
+    aria-label={card.name}
+    aria-describedby={ "card::" + card.id }
     tabIndex={tabIndex}>
-      <p>{data.name} {data.cost}</p>
-      <p id={"card::" + data.name}>{data.text}</p>
+      <h2>{card.name} {card.mana_cost}</h2>
+      <p id={"card::" + card.id}>{card.text}</p>
+      <p id={"card::" + card.id + "::type"}>{card.type_line}</p>
+      <p id={"card::" + card.id}>{card.oracle_text}</p>
+      <p id={"card::" + card.id + "::power-toughness"}>{card.power}/{card.toughness}</p>
     </div>
   </Container>
 )

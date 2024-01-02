@@ -60,7 +60,7 @@ export const ShownHand = ({playerNumber, cards, tabIndex}) => {
     <Droppable droppableId={`${playerNumber}-hand`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
-          {cards.map((card, idx) => <FullCard key={card._uid} idx={idx} data={card} tabIndex={idx + tabIndex} scale={cardScale} />)}
+          {cards.map((card, idx) => <FullCard key={card._uid} idx={idx} card={card} tabIndex={idx + tabIndex} scale={cardScale} />)}
           {provided.placeholder}
         </CardHolder>
       )}
