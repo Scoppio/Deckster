@@ -1,3 +1,5 @@
+import emptyAvatar from '../resources/images/bubbly_cat.jpg';
+
 
 export class Player {
     constructor(name, library, health, tabIndices, isRemote) {
@@ -16,5 +18,6 @@ export class Player {
         this.selectedCards = []
         this.tabIndices = {...tabIndices}
         this.isRemote = isRemote
+        this.avatar = emptyAvatar
     }
 }

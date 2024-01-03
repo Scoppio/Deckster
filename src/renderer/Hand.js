@@ -1,9 +1,9 @@
 import { ImgCard } from "./FullCard";
 import { Droppable } from "react-beautiful-dnd";
-
+import FuckedCardBack from "../resources/cards/mtgcardback.png"
 import style from 'styled-components'
 import PropTypes from 'prop-types';
-
+import Row from 'react-bootstrap/Row';
 
 const CardHolder = style.div`
   padding: 8px;
@@ -11,8 +11,13 @@ const CardHolder = style.div`
   flex-direction: row;
 `
 
-const cardScale = 1;
-
+const CardBackImg = ({scale}) => {
+  return (
+    <img src={FuckedCardBack} //"https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card" 
+      alt="card back" 
+      style={{height: `${scale}%`}} />
+  )
+}
 
 export const HiddenHand = ({player, playerRef, playerNumber}) => {
   return (
@@ -22,8 +27,9 @@ export const HiddenHand = ({player, playerRef, playerNumber}) => {
       ref={playerRef.hand} 
       aria-labelledby={playerNumber + "-player-hand-label"} 
       aria-describedby={playerNumber + "-hand-desc"}>
-      <h2 id={playerNumber + "-player-hand-label"}>Hand</h2>
-      <p id={playerNumber + "-hand-desc"}>{player.hand.length} cards</p>
+      <div className="col" style={{height: "300px"}}>
+        {player.hand.map((card, idx) => <CardBackImg key={card._uid} scale={30} />)}
+      </div>
     </div>
   )
 }
@@ -35,14 +41,10 @@ export const Hand = ({player, playerRef, playerNumber}) => {
       role="complementary" 
       tabIndex={player.tabIndices.hand} 
       ref={playerRef.hand} 
-      aria-labelledby={playerNumber + "-player-hand-label"} 
-      aria-describedby={playerNumber + "-hand-desc"}>
-      <h2 id={playerNumber + "-player-hand-label"}>Hand</h2>
-      <p id={playerNumber + "-hand-desc"}>{player.hand.length} cards</p>
-      <div className="row" style={{height: "300px"}}>
-        
+      aria-describedby={`${player.hand.length} cards`}>
+      <Row>
         <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} playerNumber={playerNumber} />
-      </div>
+      </Row>
     </div>
   )
 }
@@ -55,11 +57,11 @@ Hand.propTypes = {
 
 export const ShownHand = ({playerNumber, cards, tabIndex}) => {
   return (
-   <div style={{width: "100%"}}>
+   <div style={{background: "grey"}}>
     <Droppable droppableId={`${playerNumber}-hand`} direction="horizontal">
       {(provided) => (
-        <CardHolder {...provided.droppableProps} ref={provided.innerRef}>
-          {cards.map((card, idx) => <ImgCard key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} scale={cardScale} />)}
+        <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: "15vh"}}>
+          {cards.map((card, idx) => <ImgCard key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} cardHeight={100} />)}
           {provided.placeholder}
         </CardHolder>
       )}

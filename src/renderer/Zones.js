@@ -9,12 +9,12 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
     role="complementary"
     aria-labelledby={playerNumber + "-" + zoneName + "-label"}
     aria-describedby={playerNumber + "-" + zoneName + "-desc"}>
-    <Dropdown autoClose="outside">
+    <Dropdown autoClose="outside" >
       <Dropdown.Toggle 
         variant="secondary" 
         id="dropdown-autoclose-outside"
         ref={playerRef[zoneName]} 
-        tabIndex={player.tabIndices[zoneName]}>
+        tabIndex={player.tabIndices[zoneName]} size="sm">
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
@@ -48,13 +48,13 @@ const TheCommanderZone = ({ zoneName, player, playerRef, playerNumber }) => (
     role="complementary"
     aria-labelledby={playerNumber + "-" + zoneName + "-label"}
     aria-describedby={playerNumber + "-" + zoneName + "-desc"}>
-    <Dropdown autoClose="outside">
+    <Dropdown autoClose="outside" >
       <Dropdown.Toggle 
         variant="secondary" 
         id="dropdown-autoclose-outside"
         ref={playerRef[zoneName]} 
-        tabIndex={player.tabIndices[zoneName]}>
-        <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
+        tabIndex={player.tabIndices[zoneName]} size="sm">
+        <span id={playerNumber + "-" + zoneName + "-label"}>commander</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>
@@ -97,6 +97,17 @@ export const FaceDown = ({ player, playerRef, playerNumber }) => (
 export const CommanderZone = ({ player, playerRef, playerNumber }) => (
   <TheCommanderZone zoneName="commanderZone" player={player} playerRef={playerRef} playerNumber={playerNumber} />
 )
+
+
+export const PlayerHandZone = ({ player, playerRef, playerNumber }) => (
+  <Zone zoneName="hand" player={player} playerRef={playerRef} playerNumber={playerNumber} />
+)
+
+PlayerHandZone.propTypes = {
+  player: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+}
 
 Zone.propTypes = {
   zoneName: PropTypes.string.isRequired,

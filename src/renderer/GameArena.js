@@ -1,6 +1,9 @@
 import { SouthTable, NorthTable } from './PlayerTable'
+import { GameStateBoard } from './GameStateBoard'
 import { useEffect, useRef, useMemo } from 'react';
 import { HotKeys } from '../commons/Hotkeys';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import PropTypes from 'prop-types';
 
@@ -92,34 +95,19 @@ export const GameArena = ({gameState}) => {
   }, [hotkeys]);
 
   return (
-    <div id="game-arena" className="container min-vh-100" role="main" aria-label="Game Arena">
-      <div className='row'>
-        <div className='col'>
-          <div className='row'>
-            <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
-          </div>
-          <div className='row'>
-            <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
-          </div>
-        </div>
-        {/* <div className='col'>
-          <div className='row'>
-            <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
-          </div>
-          <div className='row'>
-            <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
-          </div>
-        </div>
-        <div className='col'>
-          <div className='row'>
-            <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
-          </div>
-          <div className='row'>
-            <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
-          </div>
-        </div> */}
-      </div>
-    </div>
+    <Row>
+      <Col>
+        <Row>
+          <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
+        </Row>
+        <Row>
+          <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
+        </Row>
+      </Col>
+      <Col md="auto" style={({backgroundColor: "green"})}>
+        <GameStateBoard gameState={gameState} playerRef={player1References} />
+      </Col>
+    </Row>
   )
 }
 

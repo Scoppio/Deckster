@@ -298,6 +298,7 @@ MiniCard.propTypes = {
 
 
 const CardImg = style.img`
+height: ${props => props.cardHeight}%;
 `
 
 const HiddenText = style.div`
@@ -310,7 +311,8 @@ const HiddenText = style.div`
   clip: rect(0, 0, 0, 0);
   border: 0;
 `
-export const ImgCard = ({idx, card, size, tabIndex, scale}) => {
+
+export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {provided => (
@@ -327,7 +329,7 @@ export const ImgCard = ({idx, card, size, tabIndex, scale}) => {
             <div>{card.type_line + ", "}</div>
             <div>{card.card_read_oracle_text}</div>
           </HiddenText>
-          <CardImg src={card.image_uris ? card.image_uris[size] : emptyCard} alt={card.name} />
+          <CardImg src={card.card_image_uris ? card.card_image_uris[size] : emptyCard} alt={card.name} cardHeight={cardHeight}/>
           
         </SlimContainer>
       )}

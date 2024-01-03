@@ -7,7 +7,7 @@ import { GameStateController } from './controllers/GameStateController'
 import { Player } from './commons/Player'
 import '@atlaskit/css-reset'
 import 'mana-font/css/mana.css'
-
+import {RemoveScrollBar} from 'react-remove-scroll-bar';
 
 function App() {
 
@@ -70,7 +70,10 @@ function App() {
   }
 
   return (
-    <GameArena gameState={gameStateController}/>
+    <div>
+      <RemoveScrollBar />
+      <GameArena gameState={gameStateController}/>
+    </div>
   )
 
 }

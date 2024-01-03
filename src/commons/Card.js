@@ -186,7 +186,7 @@ export class Card {
 
     get card_name_with_mana_cost() {
         if (this.is_two_sided) {
-            return this.card_faces[0].name + " " + this.card_faces[0].mana_cost + " // " + this.card_faces[1].name + " " + this.card_faces[1].mana_cost
+            return this.card_faces[0].name + " " + (this.card_faces[0].mana_cost === null || this.card_faces[0].mana_cost === undefined ? "" : this.card_faces[0].mana_cost) + " // " + this.card_faces[1].name + " " + (this.card_faces[1].mana_cost === null || this.card_faces[1].mana_cost === undefined ? "" : this.card_faces[1].mana_cost)
         }
         return this.card_name + (this.card_mana_cost !== null ? ` (${this.card_mana_cost})` : "")
     }

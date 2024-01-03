@@ -1,10 +1,12 @@
 import { Battlefield, StaticBattlefield } from './Battlefield'
-import { Avatar } from './Avatar'
+import { PlayerBar } from './PlayerBar'
 import { Hand, HiddenHand } from './Hand'
-import { Library } from './Library'
-import { Graveyard, Exile, FaceDown, CommanderZone } from './Zones'
 import { DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 
 export const SouthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
   const onDragStart = (start, provided) => {
@@ -140,6 +142,12 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   
   }
 
+  const nPlayers = gameState.players.length
+
+  const height = `${100 / nPlayers}%`
+  const battlefieldHeight = `${100 / nPlayers * 0.7}%`
+  const handHeight = `${100 / nPlayers * 0.3}%`
+
   return (
     <div className="col flex-fill d-flex flex-column" role="complementary" 
       aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
@@ -147,25 +155,19 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
       >   
-        <div className="row flex-fill" style={({height: '15vh'})}>
-          <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
-        </div>
-        <div className="row flex-fill" style={({height: '20vh'})}>
-          <div className="col-1 flex-fill d-flex flex-column">
-            <Avatar player={player} playerRef={playerRef} playerNumber={playerNumber} />
-            <Library player={player} playerRef={playerRef} playerNumber={playerNumber} />
-            <Graveyard player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          </div>
-          <div className="col-1 flex-fill d-flex flex-column">
-            <Exile player={player} playerRef={playerRef} playerNumber={playerNumber} />
-            <FaceDown player={player} playerRef={playerRef} playerNumber={playerNumber} />
-            <CommanderZone player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          </div>
-          <div className='col-8'></div>
-        </div>
-        <div className="row" style={({height: '25vh'})}>
-          <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} />
-        </div>
+        <Row>
+          <Col md="auto">
+            <PlayerBar { ...{ player, playerRef, playerNumber } } />
+          </Col>
+          <Col>
+            <Row style={({height: '35vh'})}>
+              <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
+            </Row>
+            <Row style={({height: '15vh'})}>
+              <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} height={height}/>
+            </Row>
+          </Col>
+        </Row>
       </DragDropContext>
     </div>
   )
@@ -181,28 +183,23 @@ SouthTable.propTypes = {
 
 export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
   return (
-    <div className="col flex-fill d-flex flex-column" role="complementary" 
-      aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
-      <div className="row" style={({height: '20vh'})}>
-        <div className="col-1 flex-fill d-flex flex-column">
-          <Avatar player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          <Library player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          <Graveyard player={player} playerRef={playerRef} playerNumber={playerNumber} />
-        </div>
-        <div className="col-1 flex-fill d-flex flex-column">
-          <Exile player={player} playerRef={playerRef} playerNumber={playerNumber} />          
-          <FaceDown player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          <CommanderZone player={player} playerRef={playerRef} playerNumber={playerNumber} />
-        </div>
-        <div className='col-1'></div>
-        <div className="col-6 flex-fill d-flex flex-column">
-          <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
-        </div>
-      </div>
-      <div className="row flex-fill" style={({height: '20vh'})}>
-        <StaticBattlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
-      </div>
-    </div>
+    <Container fluid>
+      <Row>
+      <Col md="auto">
+        <PlayerBar { ...{ player, playerRef, playerNumber } } />
+      </Col>
+      <Col>
+        <Row style={({height: '10vh', background: 'grey'})}>
+          <Col>
+            <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
+          </Col>
+        </Row>
+        <Row style={({height: '40vh', background: 'gold'})}>
+          <StaticBattlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
+        </Row>
+      </Col>
+    </Row>
+    </Container>
   )
 }
 
