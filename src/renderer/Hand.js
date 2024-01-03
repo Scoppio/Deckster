@@ -1,4 +1,4 @@
-import { FullCard, ImgCard } from "./FullCard";
+import { ImgCard } from "./FullCard";
 import { Droppable } from "react-beautiful-dnd";
 
 import style from 'styled-components'

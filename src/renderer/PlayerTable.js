@@ -38,7 +38,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         break;
     }
     
-    player.selectedCard.push(card);
+    player.selectedCards.push(card);
   }
 
   const onDragEnd = (result, provided) => {
@@ -90,8 +90,8 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       
       if (card === null) return
 
-      player.selectedCard.remove(card);
-
+      player.selectedCards = player.selectedCards.filter(item => item._uid !== card._uid);
+      
       switch (destinationZone) {
         case `${playerNumber}-hand`:
           player.hand.splice(destinationIndex, 0, card);

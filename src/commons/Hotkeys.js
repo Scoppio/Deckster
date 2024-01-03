@@ -80,7 +80,6 @@ class HotkeysChooser {
 
 export class HotKeys {
     constructor(gameController, player1References, player2References, player3References, player4References, player5References, player6References) {
-        const isMac = window.navigator.userAgent.includes('Macintosh');
         this.gameController = gameController
         this.player1References = player1References
         this.player2References = player2References
