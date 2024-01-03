@@ -10,16 +10,6 @@ import 'mana-font/css/mana.css'
 
 
 function App() {
-  const tabIndices = {
-    playerStats: 1000,
-    battlefield: 2000,
-    hand: 4000,
-    library: 5000,
-    graveyard: 6000,
-    exile: 7000,
-    faceDown: 8000,
-    commanderZone: 9000,
-  } 
 
   const [players, setPlayers] = useState([])
   const [gameStateController, setGameStateController] = useState(null)
@@ -28,6 +18,17 @@ function App() {
     const fetchPlayers = async () => {
       const deckA = loadDeck(46) // await fetchDeck(46)
       const deckB = loadDeck(47) // await fetchDeck(47)
+
+      const tabIndices = {
+        playerStats: 1000,
+        battlefield: 2000,
+        hand: 4000,
+        library: 5000,
+        graveyard: 6000,
+        exile: 7000,
+        faceDown: 8000,
+        commanderZone: 9000,
+      } 
 
       const playerA = new Player("Anna", deckA, 40, tabIndices, false)
       const playerB = new Player("Bernard", deckB, 40, {

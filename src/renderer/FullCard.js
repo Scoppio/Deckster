@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import style from 'styled-components'
 import holofoilTexture from '../resources/frames/holofoil-texture.webp';
 import { Draggable } from 'react-beautiful-dnd';
+import emptyCard from '../resources/cards/empty_card.png';
 
 
 const CardContainer = style.div`
@@ -309,29 +310,30 @@ const HiddenText = style.div`
   clip: rect(0, 0, 0, 0);
   border: 0;
 `
-
-export const ImgCard = ({idx, card, size, tabIndex, scale}) => (
-  <Draggable draggableId={card._uid} index={idx} key={card._uid}>
-    {provided => (
-      <SlimContainer 
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={provided.innerRef}
-        tabIndex={tabIndex}
-        >
-        <HiddenText>
-          <div>{card.aria_description}</div>
-        </HiddenText>
-        <HiddenText>
-          <div>{card.type_line + ", "}</div>
-          <div>{card.card_read_oracle_text}</div>
-        </HiddenText>
-        <CardImg src={card.image_uris[size]} alt={card.name} />
-        
-      </SlimContainer>
-    )}
-  </Draggable>
-)
+export const ImgCard = ({idx, card, size, tabIndex, scale}) => {
+  return (
+    <Draggable draggableId={card._uid} index={idx} key={card._uid}>
+      {provided => (
+        <SlimContainer 
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          tabIndex={tabIndex}
+          >
+          <HiddenText>
+            <div>{card.aria_description}</div>
+          </HiddenText>
+          <HiddenText>
+            <div>{card.type_line + ", "}</div>
+            <div>{card.card_read_oracle_text}</div>
+          </HiddenText>
+          <CardImg src={card.image_uris ? card.image_uris[size] : emptyCard} alt={card.name} />
+          
+        </SlimContainer>
+      )}
+    </Draggable>
+  );
+}
 
 ImgCard.propTypes = {
   card : PropTypes.object.isRequired,
@@ -342,20 +344,22 @@ ImgCard.propTypes = {
 }
 
 
-export const StaticImgCard = ({card, size, tabIndex, scale}) => (
-  <SlimContainer 
-    tabIndex={tabIndex}
-    >
-    <HiddenText>
-      <div>{card.aria_description}</div>
-    </HiddenText>
-    <HiddenText>
-      <div>{card.type_line + ", "}</div>
-      <div>{card.card_read_oracle_text}</div>
-    </HiddenText>
-    <CardImg src={card.image_uris[size]} alt={card.name} />
-  </SlimContainer>
-)
+export const StaticImgCard = ({card, size, tabIndex, scale}) => {
+  return (
+    <SlimContainer 
+      tabIndex={tabIndex}
+      >
+      <HiddenText>
+        <div>{card.aria_description}</div>
+      </HiddenText>
+      <HiddenText>
+        <div>{card.card_type_line + ", "}</div>
+        <div>{card.card_read_oracle_text}</div>
+      </HiddenText>
+      <CardImg src={card.card_image_uris ? card.card_image_uris[size] : emptyCard} alt={card.card_name_with_mana_cost} />
+    </SlimContainer>
+  )
+}
 
 StaticImgCard.propTypes = {
   card : PropTypes.object.isRequired,

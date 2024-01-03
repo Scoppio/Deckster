@@ -30,12 +30,18 @@ export class Card {
         this.card_face = this.card_face === 0 ? 1 : 0
     }
 
+    get current_face() {
+        if (!this.is_two_sided)
+            return this.card_faces[this.card_face]
+        return this
+    }
+
     get produces_mana() {
         return this.card_produced_mana !== null
     }
 
     get is_two_sided() {
-        return this.card_faces !== undefined
+        return this.card_faces !== undefined && this.card_faces !== null && this.card_faces.length > 1
     }
 
     get is_land() {
@@ -75,59 +81,59 @@ export class Card {
     }
 
     get card_keywords() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.keywords
         }
-        return this.card_faces[this.card_face].keywords || []
+        return this.current_face.keywords || []
     }
 
     get card_cmc() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.cmc
         }
-        return this.card_faces[this.card_face].cmc || 0
+        return this.current_face.cmc || 0
     }
 
     get card_mana_cost() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.mana_cost
         }
-        return this.card_faces[this.card_face].mana_cost
+        return this.current_face.mana_cost
     }
 
     get card_produced_mana() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.produced_mana
         }
-        return this.card_faces[this.card_face].produced_mana
+        return this.current_face.produced_mana
     }
 
     get card_name() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.name
         }
-        return this.card_faces[this.card_face].name
+        return this.current_face.name
     }
 
     get card_type_line() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.type_line
         }
-        return this.card_faces[this.card_face].type_line
+        return this.current_face.type_line
     }
 
     get card_loaylty() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.loyalty
         }
-        return this.card_faces[this.card_face].loyalty
+        return this.current_face.loyalty
     }
 
     get card_oracle_text() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.oracle_text
         }
-        return this.card_faces[this.card_face].oracle_text
+        return this.current_face.oracle_text
     }
     
     read_text(txt) {
@@ -140,46 +146,53 @@ export class Card {
     }
 
     get card_read_mana_cost() {
-        return this.read_text(this.mana_cost)
+        return this.read_text(this.card_mana_cost)
     }
 
     get card_read_oracle_text() {
-        return this.read_text(this.oracle_text)
+        return this.read_text(this.card_oracle_text)
     }   
 
     get power_toughness() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             if (this.power === null || this.toughness === null) {
                 return null
             }
             return this.power + "/" + this.toughness
         }
-        return this.card_faces[this.card_face].power + "/" + this.card_faces[this.card_face].toughness
+        return this.current_face.power + "/" + this.current_face.toughness
     }
 
     get card_image_uris() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.image_uris
         }
-        return this.card_faces[this.card_face].image_uris
+        return this.current_face.image_uris
     }
 
     get card_flavor_text() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.flavor_text
         }
-        return this.card_faces[this.card_face].flavor_text
+        return this.current_face.flavor_text
     }
 
     get card_printed_text() {
-        if (this.card_faces === null) {
+        if (!this.is_two_sided) {
             return this.printed_text
         }
-        return this.card_faces[this.card_face].printed_text
+        return this.current_face.printed_text
+    }
+
+    get card_name_with_mana_cost() {
+        if (this.is_two_sided) {
+            return this.card_faces[0].name + " " + this.card_faces[0].mana_cost + " // " + this.card_faces[1].name + " " + this.card_faces[1].mana_cost
+        }
+        return this.card_name + (this.card_mana_cost !== null ? ` (${this.card_mana_cost})` : "")
     }
 
     get aria_description() {
-        return `${this.card_name}, ${this.card_read_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
+        return `${this.card_name_with_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
     }
     
 }

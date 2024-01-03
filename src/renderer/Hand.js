@@ -39,7 +39,7 @@ export const Hand = ({player, playerRef, playerNumber}) => {
       aria-describedby={playerNumber + "-hand-desc"}>
       <h2 id={playerNumber + "-player-hand-label"}>Hand</h2>
       <p id={playerNumber + "-hand-desc"}>{player.hand.length} cards</p>
-      <div className="row" style={{height: cardScale * 750}}>
+      <div className="row" style={{height: "300px"}}>
         
         <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} playerNumber={playerNumber} />
       </div>
