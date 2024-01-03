@@ -3,7 +3,7 @@
   "productName": "Deckster",
   "author": "Lucas",
   "description": "A deck building game",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "main": "public/electron.js",
   "dependencies": {
