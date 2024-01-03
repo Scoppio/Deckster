@@ -54,13 +54,13 @@ export class GameStateController {
     
     cardsOnTheTable(playerNumber) {
       const numberOfCards = this.players[playerNumber].battlefield.length
-      const numberOfLands = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Land")).length
-      const numberOfCreatures = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Creature")).length
-      const numberOfPlaneswalkers = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Planeswalker")).length
-      const numberOfArtefacts = this.players[playerNumber].battlefield.filter((card) => card.type_line.includes("Artefact")).length
+      const numberOfLands = this.players[playerNumber].battlefield.filter((card) => card.is_land).length
+      const numberOfCreatures = this.players[playerNumber].battlefield.filter((card) => card.is_creature).length
+      const numberOfPlaneswalkers = this.players[playerNumber].battlefield.filter((card) => card.is_planeswalker).length
+      const numberOfArtefacts = this.players[playerNumber].battlefield.filter((card) => card.is_artefact).length
       const numberOfOtherCards = numberOfCards - numberOfLands - numberOfCreatures - numberOfPlaneswalkers - numberOfArtefacts
 
-      return `${numberOfCards} cards on the table, ${numberOfLands} lands, ${numberOfCreatures} creatures, ${numberOfPlaneswalkers} planeswalkers, ${numberOfArtefacts} artefacts, ${numberOfOtherCards} other cards`
+      return `${this.players[playerNumber].name} battlefield, ${numberOfCards} cards, ${numberOfLands} lands, ${numberOfCreatures} creatures, ${numberOfPlaneswalkers} planeswalkers, ${numberOfArtefacts} artefacts, ${numberOfOtherCards} other cards`
     }
 
     moveSelectedToHand(playerNumber) {

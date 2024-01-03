@@ -32,11 +32,10 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player }
 
 export const Battlefield = ({ gameState, playerRef, playerNumber, player }) => (
   <div className="row" 
-    ref={playerRef.battlefield} 
-    tabIndex={player.tabIndices.battlefield}
     role="complementary"
     aria-label={player.name + " Battlefield"}
-    aria-describedby={gameState.cardsOnTheTable(playerNumber)}>
+    ref={playerRef.battlefield} 
+    tabIndex={player.tabIndices.battlefield}>
     <Droppable droppableId={`${playerNumber}-battlefield`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>

@@ -147,17 +147,29 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   const height = `${100 / nPlayers}%`
   const battlefieldHeight = `${100 / nPlayers * 0.7}%`
   const handHeight = `${100 / nPlayers * 0.3}%`
+  const poisonCounters = player.counters?.["poison"] ?? 0;
+  const energyCounters = player.counters?.["energy"] ?? 0;
+  const otherCounters = player.counters?.["other"] ?? 0;
 
   return (
-    <div className="col flex-fill d-flex flex-column" role="complementary" 
-      aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
+    <div className="col flex-fill d-flex flex-column" aria-describedby={`${player.name} ${isActivePlayer ? "active player" : "non-active player"} / 
+    ${player.health} life, 
+    ${poisonCounters} poison, 
+    ${energyCounters} energy, 
+    ${otherCounters} other counter,
+    ${player.hand.length} in hand,
+    ${player.graveyard.length} in graveyard,
+    ${player.library.length} in library,
+    ${player.exile.length} in exile,
+    ${player.faceDown.length} face down,
+    ${player.commanderZone.length} in command`}>
       <DragDropContext
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
       >   
         <Row>
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber } } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
           </Col>
           <Col>
             <Row style={({height: '35vh'})}>
@@ -182,11 +194,16 @@ SouthTable.propTypes = {
 }
 
 export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
+  
+  const poisonCounters = player.counters?.["poison"] ?? 0;
+  const energyCounters = player.counters?.["energy"] ?? 0;
+  const otherCounters = player.counters?.["other"] ?? 0;
+
   return (
     <Container fluid>
       <Row>
       <Col md="auto">
-        <PlayerBar { ...{ player, playerRef, playerNumber } } />
+        <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
       </Col>
       <Col>
         <Row style={({height: '10vh', background: 'grey'})}>

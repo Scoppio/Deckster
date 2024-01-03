@@ -57,20 +57,28 @@ export const GenericCounter = ({ value, color, aria_description }) =>{
   )
 }
 
-export const PlayerBar = ({ player, playerRef, playerNumber }) => {
+export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer }) => {
   const poisonCounters = player.counters?.["poison"] ?? 0;
   const energyCounters = player.counters?.["energy"] ?? 0;
   const otherCounters = player.counters?.["other"] ?? 0;
 
   return (
-    <PlayerContainer width={10} height={50} role="complementary" 
-    tabIndex={player.tabIndices.playerStats} 
-    ref={playerRef.playerStats} 
-    aria-labelledby={playerNumber + "-player-name-label"} 
-    aria-describedby={playerNumber + "-health-desc " +  playerNumber + "-counter-desc"}>
+      <PlayerContainer width={10} height={50} role="complementary"
+        aria-label={`${player.name} ${isActivePlayer ? "[A-P]" : " [N-A-P]"} ${player.health} life, 
+        ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""}
+        ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
+        ${(otherCounters > 0) ? otherCounters + " other counter, " : ""}
+        ${player.hand.length} in hand,
+        ${player.graveyard.length} in graveyard,
+        ${player.library.length} in library,
+        ${player.commanderZone.length} in command,
+        ${player.exile.length} in exile,
+        ${player.faceDown.length} face down.`}
+        tabIndex={player.tabIndices.playerStats} 
+      ref={playerRef.playerStats}>
       <Container fluid>
         <Row>
-          <Col md="auto">
+          <Col md="auto" >
             <PlayerAvatarImg src={player.avatar} alt={player.name} />
             <Row><GenericCounter value={poisonCounters} color={"green"} aria_description={`${poisonCounters} poison`} /></Row>
             <Row><GenericCounter value={energyCounters} color={"blue"} aria_description={`${energyCounters} energy`} /></Row>
