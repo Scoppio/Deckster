@@ -134,56 +134,8 @@ export class Card {
         if (txt === null) {
             return null
         }
-        txt = txt.replace(/\{(\d+)\}/g, (match, p1) => `${p1} colorless `);
         txt = txt.replace(/\{T\}/g, "tap ")
-        txt = txt.replace(/\{Q\}/g, "untap ")
-
-        txt = txt.replace(/(\{W\})+/g, (match) => {
-            const count = match.split('{W}').length - 1;
-            return `${count} white${count > 1 ? 's' : ''} `;
-          });
-        txt = txt.replace(/(\{U\})+/g, (match) => {
-            const count = match.split('{U}').length - 1;
-            return `${count} blue${count > 1 ? 's' : ''} `;
-          }
-        );
-        txt = txt.replace(/(\{B\})+/g, (match) => {
-            const count = match.split('{B}').length - 1;
-            return `${count} black${count > 1 ? 's' : ''} `;
-          }
-        );
-        txt = txt.replace(/(\{R\})+/g, (match) => {
-            const count = match.split('{R}').length - 1;
-            return `${count} red${count > 1 ? 's' : ''} `;
-          }
-        );
-        txt = txt.replace(/(\{G\})+/g, (match) => {
-            const count = match.split('{G}').length - 1;
-            return `${count} green${count > 1 ? 's' : ''} `;
-          }
-        );
-        
-        txt = txt.replace(/\{2\/W\}/g, "2 colorless or 1 white ")
-        txt = txt.replace(/\{2\/U\}/g, "2 colorless or 1 blue ")
-        txt = txt.replace(/\{2\/B\}/g, "2 colorless or 1 black ")
-        txt = txt.replace(/\{2\/R\}/g, "2 colorless or 1 red ")
-        txt = txt.replace(/\{2\/G\}/g, "2 colorless or 1 green ")
-        txt = txt.replace(/\{W\/U\}/g, "white or blue ")
-        txt = txt.replace(/\{W\/B\}/g, "white or black ")
-        txt = txt.replace(/\{U\/B\}/g, "blue or black ")
-        txt = txt.replace(/\{U\/R\}/g, "blue or red ")
-        txt = txt.replace(/\{B\/R\}/g, "black or red ")
-        txt = txt.replace(/\{B\/G\}/g, "black or green ")
-        txt = txt.replace(/\{R\/G\}/g, "red or green ")
-        txt = txt.replace(/\{R\/W\}/g, "red or white ")
-        txt = txt.replace(/\{G\/W\}/g, "green or white ")
-        txt = txt.replace(/\{G\/U\}/g, "green or blue ")
-        txt = txt.replace(/\{W\/P\}/g, "white or 2 life ")
-        txt = txt.replace(/\{U\/P\}/g, "blue or 2 life ")
-        txt = txt.replace(/\{B\/P\}/g, "black or 2 life ")
-        txt = txt.replace(/\{R\/P\}/g, "red or 2 life ")
-        txt = txt.replace(/\{G\/P\}/g, "green or 2 life ")
-        
+        txt = txt.replace(/\{Q\}/g, "untap ")        
         return txt
     }
 

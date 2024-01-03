@@ -7,15 +7,53 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 
 export const SouthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
+  const onDragStart = (start, provided) => {
+    const { source } = start;
+    const sourceZone = source.droppableId;
+    const sourceIndex = source.index;
+    let card = null
+    switch (sourceZone) {
+      case `${playerNumber}-hand`:
+        card = player.hand[sourceIndex];
+        break;
+      case `${playerNumber}-library`:
+        card = player.library[sourceIndex];
+        break;
+      case `${playerNumber}-graveyard`:
+        card = player.graveyard[sourceIndex];
+        break;
+      case `${playerNumber}-exile`:
+        card = player.exile[sourceIndex];
+        break;
+      case `${playerNumber}-battlefield`:
+        card = player.battlefield[sourceIndex];
+        break;
+      case `${playerNumber}-face-down`:
+        card = player.faceDown[sourceIndex];
+        break;
+      case `${playerNumber}-commander-zone`:
+        card = player.commanderZone[sourceIndex];
+        break;
+      default:
+        break;
+    }
+    
+    player.selectedCard.push(card);
+  }
+
   const onDragEnd = (result, provided) => {
     if (result.reason === 'DROP')
     {
       const { source, destination } = result;
+      if (destination === null) return;
+
       const sourceZone = source.droppableId;
       const destinationZone = destination.droppableId;
       const sourceIndex = source.index;
       const destinationIndex = destination.index;
+
       let card = null
+
       switch (sourceZone) {
         case `${playerNumber}-hand`:
           card = player.hand[sourceIndex];
@@ -51,6 +89,8 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       }
       
       if (card === null) return
+
+      player.selectedCard.remove(card);
 
       switch (destinationZone) {
         case `${playerNumber}-hand`:
@@ -105,6 +145,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       aria-label={isActivePlayer ? `${player.name} table, active turn` : `${player.name} table, non-active turn`}>
       <DragDropContext
         onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
       >   
         <div className="row flex-fill" style={({height: '15vh'})}>
           <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />

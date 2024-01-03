@@ -1,7 +1,7 @@
 // import { useState, useMemo } from 'react'
 
 import { GameArena } from './renderer/GameArena'
-import { tyranid_swarm, forces_of_imperium, convertTextToDeck, fetchDeck } from './commons/DeckLoader'
+import { loadDeck } from './commons/DeckLoader'
 import { useState, useEffect } from 'react'
 import { GameStateController } from './controllers/GameStateController'
 import { Player } from './commons/Player'
@@ -26,11 +26,11 @@ function App() {
 
   useEffect(() => {
     const fetchPlayers = async () => {
-      const deckA = await fetchDeck(46)
-      const deckB = await fetchDeck(47)
+      const deckA = loadDeck(46) // await fetchDeck(46)
+      const deckB = loadDeck(47) // await fetchDeck(47)
 
-      const playerA = new Player("Anna", deckA, tabIndices, false)
-      const playerB = new Player("Bernard", deckB, {
+      const playerA = new Player("Anna", deckA, 40, tabIndices, false)
+      const playerB = new Player("Bernard", deckB, 40, {
         ...tabIndices,
         battlefield: tabIndices.battlefield + 10000,
         playerStats: tabIndices.playerStats + 10000,

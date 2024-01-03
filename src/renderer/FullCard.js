@@ -15,6 +15,9 @@ const CardContainer = style.div`
   background: #171314;
 `
 
+const SlimContainer = style.div`
+`
+
 const CardBackground = style.div`
   height: 100%;
   margin: 20px 20px 0 20px;
@@ -294,8 +297,6 @@ MiniCard.propTypes = {
 
 
 const CardImg = style.img`
-  height: 100%;
-  width: 100%;
 `
 
 const HiddenText = style.div`
@@ -308,16 +309,15 @@ const HiddenText = style.div`
   clip: rect(0, 0, 0, 0);
   border: 0;
 `
-// key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} scale={cardScale} 
+
 export const ImgCard = ({idx, card, size, tabIndex, scale}) => (
   <Draggable draggableId={card._uid} index={idx} key={card._uid}>
     {provided => (
-      <Container 
+      <SlimContainer 
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         ref={provided.innerRef}
-        tabIndex={tabIndex} 
-        scale={1.0}
+        tabIndex={tabIndex}
         >
         <HiddenText>
           <div>{card.aria_description}</div>
@@ -328,7 +328,7 @@ export const ImgCard = ({idx, card, size, tabIndex, scale}) => (
         </HiddenText>
         <CardImg src={card.image_uris[size]} alt={card.name} />
         
-      </Container>
+      </SlimContainer>
     )}
   </Draggable>
 )
@@ -336,6 +336,30 @@ export const ImgCard = ({idx, card, size, tabIndex, scale}) => (
 ImgCard.propTypes = {
   card : PropTypes.object.isRequired,
   size : PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
+  idx: PropTypes.number.isRequired,
+  scale: PropTypes.number.isRequired,
   tabIndex: PropTypes.number.isRequired,
+}
+
+
+export const StaticImgCard = ({card, size, tabIndex, scale}) => (
+  <SlimContainer 
+    tabIndex={tabIndex}
+    >
+    <HiddenText>
+      <div>{card.aria_description}</div>
+    </HiddenText>
+    <HiddenText>
+      <div>{card.type_line + ", "}</div>
+      <div>{card.card_read_oracle_text}</div>
+    </HiddenText>
+    <CardImg src={card.image_uris[size]} alt={card.name} />
+  </SlimContainer>
+)
+
+StaticImgCard.propTypes = {
+  card : PropTypes.object.isRequired,
+  size : PropTypes.string.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+  scale: PropTypes.number.isRequired,
 }

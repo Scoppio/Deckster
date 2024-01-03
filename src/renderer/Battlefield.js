@@ -1,6 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { Card } from "./Card";
-import { MiniCarda, ImgCard } from "./FullCard";
+import { StaticImgCard, ImgCard } from "./FullCard";
 import PropTypes from 'prop-types';
 
 import style from 'styled-components'
@@ -22,8 +22,8 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player }
       {
         player.battlefield.map((card, index) => {
           return (
-            <div className="col" key={index}>
-              <Card card={card} index={index} tabIndex={index + player.tabIndices.battlefield} />
+            <div className="col-2" key={index}>
+              <StaticImgCard card={card} size={"small"} tabIndex={index + player.tabIndices.battlefield} scale={1.0} />
             </div>
           )
         })

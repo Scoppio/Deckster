@@ -11,7 +11,7 @@ const CardHolder = style.div`
   flex-direction: row;
 `
 
-const cardScale = 0.5;
+const cardScale = 1;
 
 
 export const HiddenHand = ({player, playerRef, playerNumber}) => {
@@ -55,7 +55,7 @@ Hand.propTypes = {
 
 export const ShownHand = ({playerNumber, cards, tabIndex}) => {
   return (
-   <div style={{height: cardScale * 750, width: "100%"}}>
+   <div style={{width: "100%"}}>
     <Droppable droppableId={`${playerNumber}-hand`} direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef}>

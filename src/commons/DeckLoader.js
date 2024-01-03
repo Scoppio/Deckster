@@ -1,4 +1,5 @@
 import { Card } from '../commons/Card'
+import {DeckB, DeckA} from '../commons/Decks'
 
 export const tyranid_swarm = `1 Aberrant
 1 Abundance
@@ -230,4 +231,23 @@ export const fetchDeck = async (deck_id) => {
   } catch (error) {
     console.error('Error:', error);
   }
+}
+
+export const loadDeck = (deck_id) => {
+  const data = deck_id === 46 ? DeckA : DeckB
+  
+  const commanders = [];
+  for (const card_quantity of data["commanders"]) {
+    for (let i = 0; i < card_quantity.quantity; i++) {
+      commanders.push(new Card(card_quantity.card));
+    }
+  }
+
+  const deck = [];
+  for (const card_quantity of data["mainboard"]) {
+    for (let i = 0; i < card_quantity.quantity; i++) {
+      deck.push(new Card(card_quantity.card));
+    }
+  }
+  return { deck, commanders };
 }
