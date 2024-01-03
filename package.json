@@ -51,7 +51,7 @@
     "eject": "react-scripts eject",
     "prebuild": "npm version minor",
     "electron:serve": "concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
-    "electron:build": "npm version minor & electron-builder build -w",
+    "electron:build": "electron-builder build -w",
     "electron:start": "wait-on tcp:3010 && electron ."
   },
   "eslintConfig": {
