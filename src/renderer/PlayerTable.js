@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 
-export const SouthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
+export const SouthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, heightVh }) => {
   const onDragStart = (start, provided) => {
     const { source } = start;
     gameState.getCardFrom(source)
@@ -58,15 +58,12 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   
   }
 
-  const nPlayers = gameState.players.length
-
-  const height = `${100 / nPlayers}%`
-  // const battlefieldHeight = `${100 / nPlayers * 0.7}%`
-  // const handHeight = `${100 / nPlayers * 0.3}%`
   const poisonCounters = player.counters?.["poison"] ?? 0;
   const energyCounters = player.counters?.["energy"] ?? 0;
   const otherCounters = player.counters?.["other"] ?? 0;
-
+  const handHeightVh = heightVh * 0.2
+  const battlefieldHeight = heightVh * 0.8
+  
   return (
     <div className="col flex-fill d-flex flex-column" aria-describedby={`${player.name} ${isActivePlayer ? "active player" : "non-active player"} / 
     ${player.health} life, 
@@ -85,14 +82,14 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       >   
         <Row>
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh} } />
           </Col>
           <Col>
-            <Row style={({height: '35vh'})}>
-              <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
+            <Row style={({height: `${battlefieldHeight}vh`})}>
+              <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} heightVh={battlefieldHeight}/>
             </Row>
-            <Row style={({height: '15vh'})}>
-              <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} height={height}/>
+            <Row style={({height: `${handHeightVh}vh`})}>
+              <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handHeightVh}/>
             </Row>
           </Col>
         </Row>
@@ -107,9 +104,12 @@ SouthTable.propTypes = {
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
+  heightVh: PropTypes.number.isRequired,
 }
 
-export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, barSide, landsOnNorth }) => {
+export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, barSide, landsOnNorth, heightVh }) => {
+  const handVh = heightVh * 0.2
+  const battlefieldVh = heightVh * 0.8
 
   return (
     <Container fluid>
@@ -117,27 +117,27 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
         {
           barSide === 'left' ? (
             <Col md="auto">
-              <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
+              <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh } } />
             </Col>
           ) : null
         }
       <Col>
         {
           landsOnNorth ?
-          (<Row style={({height: '10vh', background: 'grey'})}>
+          (<Row style={({height: `${handVh}vh`, background: 'grey'})}>
             <Col>
-              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
+              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handVh} />
             </Col>
           </Row>) : null
         }
-        <Row style={({height: '40vh', background: 'gold'})}>
-          <StaticBattlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} landsOnNorth={landsOnNorth} />
+        <Row style={({height: `${battlefieldVh}vh`, background: 'gold'})}>
+          <StaticBattlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} landsOnNorth={landsOnNorth} heightVh={battlefieldVh} />
         </Row>
         {
           !landsOnNorth ?
-          (<Row style={({height: '10vh', background: 'grey'})}>
+          (<Row style={({height: `${handVh}vh`, background: 'grey'})}>
             <Col>
-              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
+              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handVh}/>
             </Col>
           </Row>) : null
         }
@@ -145,7 +145,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
       {
         barSide === 'right' ? (
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh } } />
           </Col>
         ) : null
       }
@@ -161,5 +161,6 @@ NorthTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   barSide: PropTypes.string.isRequired,
-  landsOnNorth: PropTypes.bool.isRequired
+  landsOnNorth: PropTypes.bool.isRequired,
+  heightVh: PropTypes.number.isRequired,
 }

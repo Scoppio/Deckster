@@ -57,13 +57,13 @@ export const GenericCounter = ({ value, color, aria_description }) =>{
   )
 }
 
-export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer }) => {
+export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, heightVh }) => {
   const poisonCounters = player.counters?.["poison"] ?? 0;
   const energyCounters = player.counters?.["energy"] ?? 0;
   const otherCounters = player.counters?.["other"] ?? 0;
 
   return (
-      <PlayerContainer width={10} height={50} role="region"
+      <PlayerContainer width={10} height={heightVh} role="region"
         aria-label={`${player.name} ${isActivePlayer ? "[A-P]" : ""} ${player.health} life, 
         ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""}
         ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
