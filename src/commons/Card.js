@@ -24,14 +24,19 @@ export class Card {
         this.lang = card.lang
         this.card_faces = card.card_faces
         this.card_face = 0
+        this.tapped = false
     }
 
     changeFace() {
         this.card_face = this.card_face === 0 ? 1 : 0
     }
 
+    get is_tapped() {
+        return this.tapped
+    }
+
     get current_face() {
-        if (!this.is_two_sided)
+        if (this.is_two_sided)
             return this.card_faces[this.card_face]
         return this
     }
@@ -41,7 +46,7 @@ export class Card {
     }
 
     get is_two_sided() {
-        return this.card_faces !== undefined && this.card_faces !== null && this.card_faces.length > 1
+        return this.card_faces?.length > 1;
     }
 
     get is_land() {
@@ -193,6 +198,10 @@ export class Card {
 
     get aria_description() {
         return `${this.card_name_with_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
+    }
+
+    tap(){
+        this.tapped = !this.tapped
     }
     
 }

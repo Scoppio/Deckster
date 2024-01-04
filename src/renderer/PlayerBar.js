@@ -63,8 +63,8 @@ export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer }) =
   const otherCounters = player.counters?.["other"] ?? 0;
 
   return (
-      <PlayerContainer width={10} height={50} role="complementary"
-        aria-label={`${player.name} ${isActivePlayer ? "[A-P]" : " [N-A-P]"} ${player.health} life, 
+      <PlayerContainer width={10} height={50} role="region"
+        aria-label={`${player.name} ${isActivePlayer ? "[A-P]" : ""} ${player.health} life, 
         ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""}
         ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
         ${(otherCounters > 0) ? otherCounters + " other counter, " : ""}
@@ -110,7 +110,7 @@ PlayerBar.propTypes = {
 
 
 export const Avatar = ({ player, playerRef, playerNumber }) => (
-  <div className="player-stats" role="complementary" 
+  <div className="player-stats" role="region" 
     tabIndex={player.tabIndices.playerStats} 
     ref={playerRef.playerStats} 
     aria-labelledby={playerNumber + "-player-name-label"} 

@@ -6,7 +6,7 @@ const gameZoneNames = ["Battlefield", "Hand", "Library", "Graveyard", "Exile", "
 
 const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
   <div className={zoneName + " row"} 
-    role="complementary"
+    role="region"
     aria-labelledby={playerNumber + "-" + zoneName + "-label"}
     aria-describedby={playerNumber + "-" + zoneName + "-desc"}>
     <Dropdown autoClose="outside" >
@@ -45,7 +45,7 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
 
 const TheCommanderZone = ({ zoneName, player, playerRef, playerNumber }) => (
   <div className={zoneName + " row-flex"} 
-    role="complementary"
+    role="region"
     aria-labelledby={playerNumber + "-" + zoneName + "-label"}
     aria-describedby={playerNumber + "-" + zoneName + "-desc"}>
     <Dropdown autoClose="outside" >

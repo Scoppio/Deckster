@@ -9,7 +9,9 @@ export class Player {
         this.library = library.deck
         this.sideboard = []
         this.hand = []
-        this.battlefield = []
+        this.front_battlefield = []
+        this.back_battlefield = []
+        this.land_zone_battlefield = []
         this.graveyard = []
         this.exile = []
         this.faceDown = []

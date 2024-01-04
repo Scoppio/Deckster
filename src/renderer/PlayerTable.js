@@ -11,114 +11,30 @@ import Col from 'react-bootstrap/Col';
 export const SouthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
   const onDragStart = (start, provided) => {
     const { source } = start;
-    const sourceZone = source.droppableId;
-    const sourceIndex = source.index;
-    let card = null
-    switch (sourceZone) {
-      case `${playerNumber}-hand`:
-        card = player.hand[sourceIndex];
-        break;
-      case `${playerNumber}-library`:
-        card = player.library[sourceIndex];
-        break;
-      case `${playerNumber}-graveyard`:
-        card = player.graveyard[sourceIndex];
-        break;
-      case `${playerNumber}-exile`:
-        card = player.exile[sourceIndex];
-        break;
-      case `${playerNumber}-battlefield`:
-        card = player.battlefield[sourceIndex];
-        break;
-      case `${playerNumber}-face-down`:
-        card = player.faceDown[sourceIndex];
-        break;
-      case `${playerNumber}-commander-zone`:
-        card = player.commanderZone[sourceIndex];
-        break;
-      default:
-        break;
-    }
-    
-    player.selectedCards.push(card);
+    gameState.getCardFrom(source)
   }
 
   const onDragEnd = (result, provided) => {
+    const { source, destination } = result;
+    const sourceZone = source.droppableId;
+    let sourceName = sourceZone.split('-')[1]
+
+    if (result.reason === 'CANCEL') {
+      provided.announce(`Cancelling card movement, returning card to ${sourceName}`);
+      gameState.cancelCardMove()
+      return;
+    }
     if (result.reason === 'DROP')
     {
-      const { source, destination } = result;
-      if (destination === null) return;
+      if (destination === null) {
+        provided.announce(`Dropped in an invalid location, returning card to ${sourceName}`);
+        gameState.cancelCardMove()
+        return
+      }
 
-      const sourceZone = source.droppableId;
       const destinationZone = destination.droppableId;
-      const sourceIndex = source.index;
-      const destinationIndex = destination.index;
-
-      let card = null
-
-      switch (sourceZone) {
-        case `${playerNumber}-hand`:
-          card = player.hand[sourceIndex];
-          player.hand.splice(sourceIndex, 1);
-          break;
-        case `${playerNumber}-library`:
-          card = player.library[sourceIndex];
-          player.library.splice(sourceIndex, 1);
-          break;
-        case `${playerNumber}-graveyard`:
-          card = player.graveyard[sourceIndex];
-          player.graveyard.splice(sourceIndex, 1);
-
-          break;
-        case `${playerNumber}-exile`:
-          card = player.exile[sourceIndex];
-          player.exile.splice(sourceIndex, 1);
-          break;
-        case `${playerNumber}-battlefield`:
-          card = player.battlefield[sourceIndex];
-          player.battlefield.splice(sourceIndex, 1);
-          break;
-        case `${playerNumber}-face-down`:
-          card = player.faceDown[sourceIndex];
-          player.faceDown.splice(sourceIndex, 1);
-          break;
-        case `${playerNumber}-commander-zone`:
-          card = player.commanderZone[sourceIndex];
-          player.commanderZone.splice(sourceIndex, 1);
-          break;
-        default:
-          break;
-      }
-      
-      if (card === null) return
-
-      player.selectedCards = player.selectedCards.filter(item => item._uid !== card._uid);
-      
-      switch (destinationZone) {
-        case `${playerNumber}-hand`:
-          player.hand.splice(destinationIndex, 0, card);
-          break;
-        case `${playerNumber}-library`:
-          player.library.splice(destinationIndex, 0, card);
-          break;
-        case `${playerNumber}-graveyard`:
-          player.graveyard.splice(destinationIndex, 0, card);
-          break;
-        case `${playerNumber}-exile`:
-          player.exile.splice(destinationIndex, 0, card);
-          break;
-        case `${playerNumber}-battlefield`:
-          player.battlefield.splice(destinationIndex, 0, card);
-          break;
-        case `${playerNumber}-face-down`:
-          player.faceDown.splice(destinationIndex, 0, card);
-          break;
-        case `${playerNumber}-commander-zone`:
-          player.commanderZone.splice(destinationIndex, 0, card);
-          break;
-        default:
-          break;
-      }
+      const card = gameState.moveCardTo(source, destination)
+      provided.announce('Moved ' + card.name + ' from ' + sourceName + ' to ' + destinationZone);
     }
 
     /*
@@ -145,8 +61,8 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   const nPlayers = gameState.players.length
 
   const height = `${100 / nPlayers}%`
-  const battlefieldHeight = `${100 / nPlayers * 0.7}%`
-  const handHeight = `${100 / nPlayers * 0.3}%`
+  // const battlefieldHeight = `${100 / nPlayers * 0.7}%`
+  // const handHeight = `${100 / nPlayers * 0.3}%`
   const poisonCounters = player.counters?.["poison"] ?? 0;
   const energyCounters = player.counters?.["energy"] ?? 0;
   const otherCounters = player.counters?.["other"] ?? 0;
@@ -194,10 +110,6 @@ SouthTable.propTypes = {
 }
 
 export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
-  
-  const poisonCounters = player.counters?.["poison"] ?? 0;
-  const energyCounters = player.counters?.["energy"] ?? 0;
-  const otherCounters = player.counters?.["other"] ?? 0;
 
   return (
     <Container fluid>

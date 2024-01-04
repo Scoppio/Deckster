@@ -51,7 +51,7 @@ function App() {
 
   useEffect(() => {
     if (players.length > 0) {
-      const gameState = new GameStateController(players)
+      const gameState = new GameStateController(players, players[0])
       gameState.shuffleAllDecks()
       gameState.eachPlayerDrawSeven()
       gameState.putRandomCardIntoBattlefield(0)

@@ -22,7 +22,7 @@ const CardBackImg = ({scale}) => {
 export const HiddenHand = ({player, playerRef, playerNumber}) => {
   return (
     <div className="hand col" 
-      role="complementary" 
+      role="region" 
       tabIndex={player.tabIndices.hand} 
       ref={playerRef.hand} 
       aria-labelledby={playerNumber + "-player-hand-label"} 
@@ -38,12 +38,12 @@ export const Hand = ({player, playerRef, playerNumber}) => {
 
   return (
     <div
-      role="complementary" 
+      role="region" 
       tabIndex={player.tabIndices.hand} 
       ref={playerRef.hand} 
       aria-describedby={`${player.hand.length} cards`}>
       <Row>
-        <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} playerNumber={playerNumber} />
+        <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} />
       </Row>
     </div>
   )
@@ -55,10 +55,10 @@ Hand.propTypes = {
   playerNumber: PropTypes.number.isRequired,
 }
 
-export const ShownHand = ({playerNumber, cards, tabIndex}) => {
+export const ShownHand = ({cards, tabIndex}) => {
   return (
    <div style={{background: "grey"}}>
-    <Droppable droppableId={`${playerNumber}-hand`} direction="horizontal">
+    <Droppable droppableId="hand" direction="horizontal">
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: "15vh"}}>
           {cards.map((card, idx) => <ImgCard key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} cardHeight={100} />)}
@@ -68,4 +68,9 @@ export const ShownHand = ({playerNumber, cards, tabIndex}) => {
     </Droppable>
    </div>
   )
+}
+
+ShownHand.propTypes = {
+  cards: PropTypes.array.isRequired,
+  tabIndex: PropTypes.number.isRequired,
 }

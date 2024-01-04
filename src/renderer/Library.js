@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export const Library = ({ player, playerRef, playerNumber }) => (
   <div className="row" 
-    role="complementary"
+    role="region"
     ref={playerRef.library}
     tabIndex={player.tabIndices.library} 
     aria-labelledby={playerNumber + "-library-label"} 
