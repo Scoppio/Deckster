@@ -109,24 +109,46 @@ SouthTable.propTypes = {
   isActivePlayer: PropTypes.bool.isRequired,
 }
 
-export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer }) => {
+export const NorthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, barSide, landsOnNorth }) => {
 
   return (
     <Container fluid>
       <Row>
-      <Col md="auto">
-        <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
-      </Col>
+        {
+          barSide === 'left' ? (
+            <Col md="auto">
+              <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
+            </Col>
+          ) : null
+        }
       <Col>
-        <Row style={({height: '10vh', background: 'grey'})}>
-          <Col>
-            <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
-          </Col>
-        </Row>
+        {
+          landsOnNorth ?
+          (<Row style={({height: '10vh', background: 'grey'})}>
+            <Col>
+              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
+            </Col>
+          </Row>) : null
+        }
         <Row style={({height: '40vh', background: 'gold'})}>
-          <StaticBattlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} />
+          <StaticBattlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} landsOnNorth={landsOnNorth} />
         </Row>
+        {
+          !landsOnNorth ?
+          (<Row style={({height: '10vh', background: 'grey'})}>
+            <Col>
+              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} />
+            </Col>
+          </Row>) : null
+        }
       </Col>
+      {
+        barSide === 'right' ? (
+          <Col md="auto">
+            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer } } />
+          </Col>
+        ) : null
+      }
     </Row>
     </Container>
   )
@@ -137,5 +159,7 @@ NorthTable.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-  isActivePlayer: PropTypes.bool.isRequired
+  isActivePlayer: PropTypes.bool.isRequired,
+  barSide: PropTypes.string.isRequired,
+  landsOnNorth: PropTypes.bool.isRequired
 }

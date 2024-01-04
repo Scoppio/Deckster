@@ -11,7 +11,12 @@ const CardHolder = style.div`
   flex-direction: row;
 `
 
-export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player }) => (
+export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, landsOnNorth }) => { 
+  
+  const topPosition = landsOnNorth ? "land_zone_battlefield" : "front_battlefield";
+  const lowerPosition = landsOnNorth ? "front_battlefield" : "land_zone_battlefield";
+
+  return (
   <div className="row" 
     ref={playerRef.battlefield} 
     tabIndex={player.tabIndices.battlefield}
@@ -20,7 +25,7 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player }
     aria-describedby={gameState.cardsOnTheTable(playerNumber)}>
       <CardHolder style={{height: "13vh", padding: "2px"}}>
       {
-        player.land_zone_battlefield.map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.battlefield} cardHeight={100} />))
+        player[landsOnNorth ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.battlefield} cardHeight={100} />))
       }
       </CardHolder>
       <CardHolder style={{height: "13vh", padding: "2px"}}>
@@ -30,11 +35,11 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player }
       </CardHolder>
       <CardHolder style={{height: "13vh", padding: "2px"}}>
       {
-        player.front_battlefield.map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.battlefield} cardHeight={100} />))
+        player[landsOnNorth ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.battlefield} cardHeight={100} />))
       }
       </CardHolder>
   </div>
-)
+)}
 
 export const Battlefield = ({ gameState, playerRef, playerNumber, player }) => (
   <div className="row" 

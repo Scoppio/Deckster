@@ -64,7 +64,14 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlKeyCommand('w', () => {player1References.faceDown.current.focus()})
   hotkeys.registerCtrlKeyCommand('b', () => {player1References.commanderZone.current.focus()})
   // hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
-  
+  // shift+A: mão
+// shift+S: field
+// shift+D: library
+// shift+F: command
+// shift+Q: Grave
+// shift+W: exile
+// shift+E: facedown
+// shift+1-6: Avatar dos jogadores logo antes de seus fields.
   hotkeys.registerCtrlShiftKeyCommand('z', () => {gameState.moveSelectedToHand()})
   hotkeys.registerCtrlShiftKeyCommand('x', () => {gameState.moveSelectedToGraveyard()})
   hotkeys.registerCtrlShiftKeyCommand('c', () => {gameState.moveSelectedToExile()})
@@ -82,6 +89,14 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlShiftKeyCommand('numpadadd', () => {gameState.addLife()})
   hotkeys.registerCtrlShiftKeyCommand('numpadsubtract', () => {gameState.removeLife()})
   hotkeys.registerCtrlShiftKeyCommand('numpadmultiply', () => {gameState.setLife()})
+  // hotkeys.registerAltKeyCommand('j', () => {gameState.untapAll()})
+  // hotkeys.registerAltKeyCommand('k', () => {gameState.drawCard()})
+  // hotkeys.registerAltKeyCommand('l', () => {gameState.responseAlert()})
+  // hotkeys.registerAltKeyCommand('i', () => {gameState.responseOk()})
+  // hotkeys.registerAltKeyCommand('p', () => {gameState.passTurn()})
+  // hotkeys.registerAltKeyCommand('add', () => {gameState.addLife()})
+  // hotkeys.registerAltKeyCommand('subtract', () => {gameState.removeLife()})
+  // alt+U, +I, +O: Whatever we deem necessary
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -98,10 +113,22 @@ export const GameArena = ({gameState}) => {
     <Row>
       <Col>
         <Row>
-          <NorthTable gameState={gameState} playerRef={player2References} playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} />
+          <NorthTable barSide="left" gameState={gameState} playerRef={player2References} 
+          playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
         </Row>
         <Row>
-          <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
+          <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} 
+          player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
+        </Row>
+      </Col>
+      <Col>
+        <Row>
+          <NorthTable barSide="right" gameState={gameState} playerRef={player2References} 
+          playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+        </Row>
+        <Row>
+          <NorthTable barSide="right" gameState={gameState} playerRef={player2References} 
+          playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={false} />
         </Row>
       </Col>
       <Col md="auto" style={({backgroundColor: "green"})}>

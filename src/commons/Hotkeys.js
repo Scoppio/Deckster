@@ -47,6 +47,12 @@ class MacKeys {
             func()
         }
     }
+    isAltKey = (event, key, func) => {
+        if (event.altKey && (event.key === key)){
+            event.preventDefault()
+            func()
+        }
+    }
 }
 
 
@@ -60,6 +66,13 @@ class WindowsKeys {
 
     isCtrlShiftdKey = (event, key, func) => {
         if ((event.ctrlKey && event.shiftKey) && (event.key === key)){
+            event.preventDefault()
+            func()
+        }
+    }
+
+    isAltKey = (event, key, func) => {
+        if (event.altKey && (event.key === key)){
             event.preventDefault()
             func()
         }
@@ -92,6 +105,8 @@ export class HotKeys {
         this.macCtrlShiftKeyCommand = []
         this.ctrlKeyCommand = []
         this.ctrlShiftKeyCommand = []
+        this.altKeyCommand = []
+        this.macAltKeyCommand = []
     }
 
     registerCtrlKeyCommand = (key, func, os) => {
@@ -110,6 +125,14 @@ export class HotKeys {
         }
     }
 
+    registerAltKeyCommand = (key, func, os) => {
+        if (os === 'mac') {
+            this.macAltKeyCommand.push({key, func})
+        } else {
+            this.altKeyCommand.push({key, func})
+        }
+    }
+
     handleKeyDown = (event) => {
         if (this.isMac)
         {
@@ -120,6 +143,11 @@ export class HotKeys {
             this.macCtrlShiftKeyCommand.forEach((command) => {
                 this.k.isCtrlShiftdKey(event, command.key, command.func)
             })
+
+            this.macAltKeyCommand.forEach((command) => {
+                this.k.isAltKey(event, command.key, command.func)
+            })
+            
         } else {
             this.ctrlKeyCommand.forEach((command) => {
                 this.k.isCtrlKey(event, command.key, command.func)
@@ -127,6 +155,10 @@ export class HotKeys {
     
             this.ctrlShiftKeyCommand.forEach((command) => {
                 this.k.isCtrlShiftdKey(event, command.key, command.func)
+            })
+
+            this.altKeyCommand.forEach((command) => {
+                this.k.isAltKey(event, command.key, command.func)
             })
         }
     }
