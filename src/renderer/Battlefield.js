@@ -21,7 +21,7 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, 
     tabIndex={player.tabIndices.battlefield}
     role="region"
     aria-label={player.name + " Battlefield"}
-    aria-describedby={gameState.cardsOnTheTable(playerNumber)}>
+    aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}>
       <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
       {
         player[landsOnNorth ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.battlefield} cardHeight={100} />))

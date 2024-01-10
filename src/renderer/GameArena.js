@@ -1,7 +1,7 @@
 import { SouthTable, NorthTable } from './PlayerTable'
 import { GameStateBoard } from './GameStateBoard'
 import { useEffect, useRef, useMemo } from 'react';
-import { HotKeys } from '../commons/Hotkeys';
+import { HotKeys } from '../controllers/Hotkeys';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -46,23 +46,23 @@ export const GameArena = ({gameState}) => {
   const player6StatsRef = useRef(null)
   const player6References = useMemo(() => ({playerStats: player6StatsRef}), [])
 
-  const hotkeys = useMemo(() => (new HotKeys(gameState, player1References, player2References, player3References, player4References, player5References, player6References)), 
+  const hotkeys = useMemo(() => (new HotKeys(gameState, [player1References, player2References, player3References, player4References, player5References, player6References])), 
     [gameState, player1References, player2References, player3References, player4References, player5References, player6References]);
 
-  hotkeys.registerCtrlKeyCommand('1', () => {player1References.playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('2', () => {player2References.playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('3', () => {player3References.playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('4', () => {player4References.playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('5', () => {player5References.playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('6', () => {player6References.playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('1', () => {hotkeys.playerRefs[1].playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('2', () => {hotkeys.playerRefs[2].playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('3', () => {hotkeys.playerRefs[3].playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('4', () => {hotkeys.playerRefs[4].playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('5', () => {hotkeys.playerRefs[5].playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('6', () => {hotkeys.playerRefs[6].playerStats.current.focus()})
 
-  hotkeys.registerCtrlKeyCommand('e', () => {player1References.hand.current.focus()})
-  hotkeys.registerCtrlKeyCommand('s', () => {player1References.battlefield.current.focus()})
-  hotkeys.registerCtrlKeyCommand('d', () => {player1References.library.current.focus()})
-  hotkeys.registerCtrlKeyCommand('f', () => {player1References.graveyard.current.focus()})
-  hotkeys.registerCtrlKeyCommand('q', () => {player1References.exile.current.focus()})
-  hotkeys.registerCtrlKeyCommand('w', () => {player1References.faceDown.current.focus()})
-  hotkeys.registerCtrlKeyCommand('b', () => {player1References.commanderZone.current.focus()})
+  hotkeys.registerCtrlKeyCommand('e', () => {hotkeys.playerRefs[1].hand.current.focus()})
+  hotkeys.registerCtrlKeyCommand('s', () => {hotkeys.playerRefs[1].battlefield.current.focus()})
+  hotkeys.registerCtrlKeyCommand('d', () => {hotkeys.playerRefs[1].library.current.focus()})
+  hotkeys.registerCtrlKeyCommand('f', () => {hotkeys.playerRefs[1].graveyard.current.focus()})
+  hotkeys.registerCtrlKeyCommand('q', () => {hotkeys.playerRefs[1].exile.current.focus()})
+  hotkeys.registerCtrlKeyCommand('w', () => {hotkeys.playerRefs[1].faceDown.current.focus()})
+  hotkeys.registerCtrlKeyCommand('b', () => {hotkeys.playerRefs[1].commanderZone.current.focus()})
   // hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
   // shift+A: mão
 // shift+S: field
@@ -83,12 +83,12 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlShiftKeyCommand('i', () => {gameState.scry()})
   hotkeys.registerCtrlShiftKeyCommand('p', () => {gameState.addCounterOnSelected()})
   hotkeys.registerCtrlShiftKeyCommand('m', () => {gameState.removeCounterOnSelected()})
-  hotkeys.registerCtrlShiftKeyCommand('comma', () => {gameState.untapAll()})
-  hotkeys.registerCtrlShiftKeyCommand('period', () => {gameState.drawCard()})
-  hotkeys.registerCtrlShiftKeyCommand('slash', () => {gameState.passTurn()})
-  hotkeys.registerCtrlShiftKeyCommand('numpadadd', () => {gameState.addLife()})
-  hotkeys.registerCtrlShiftKeyCommand('numpadsubtract', () => {gameState.removeLife()})
-  hotkeys.registerCtrlShiftKeyCommand('numpadmultiply', () => {gameState.setLife()})
+  hotkeys.registerCtrlShiftKeyCommand(',', () => {gameState.untapAll()})
+  hotkeys.registerCtrlShiftKeyCommand('.', () => {gameState.drawCard()})
+  hotkeys.registerCtrlShiftKeyCommand('/', () => {gameState.passTurn()})
+  hotkeys.registerKeyCommand('+', () => {gameState.drawCard()})
+  hotkeys.registerKeyCommand('-', () => {gameState.removeLife()})
+  hotkeys.registerKeyCommand('*', () => {gameState.setLife()})
   // hotkeys.registerAltKeyCommand('j', () => {gameState.untapAll()})
   // hotkeys.registerAltKeyCommand('k', () => {gameState.drawCard()})
   // hotkeys.registerAltKeyCommand('l', () => {gameState.responseAlert()})

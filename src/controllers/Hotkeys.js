@@ -34,6 +34,13 @@ Outras funções de jogo como Tap/Untap, Declare as Attacking/Blocking, Scry, Ro
 */
 
 class MacKeys {
+    isKey = (event, key, func) => {
+        if (event.key === key){
+            event.preventDefault()
+            func()
+        }
+    }
+
     isCtrlKey = (event, key, func) => {
         if ((event.metaKey && !event.shiftKey) && (event.key === key)){
             event.preventDefault()
@@ -57,6 +64,13 @@ class MacKeys {
 
 
 class WindowsKeys {
+    isKey = (event, key, func) => {
+        if (event.key === key){
+            event.preventDefault()
+            func()
+        }
+    }
+
     isCtrlKey = (event, key, func) => {
         if ((event.ctrlKey && !event.shiftKey) && (event.key === key)){
             event.preventDefault()
@@ -92,14 +106,14 @@ class HotkeysChooser {
 }
 
 export class HotKeys {
-    constructor(gameController, player1References, player2References, player3References, player4References, player5References, player6References) {
+    constructor(gameController, playerRefs) {
         this.gameController = gameController
-        this.player1References = player1References
-        this.player2References = player2References
-        this.player3References = player3References
-        this.player4References = player4References
-        this.player5References = player5References
-        this.player6References = player6References
+        this.playerRefs = {}
+
+        playerRefs.forEach((p, idx) => {
+            this.playerRefs[idx + 1] = p
+        })
+
         this.k = new HotkeysChooser().hotkeys
         this.macCtrlKeyCommand = []
         this.macCtrlShiftKeyCommand = []
@@ -107,6 +121,16 @@ export class HotKeys {
         this.ctrlShiftKeyCommand = []
         this.altKeyCommand = []
         this.macAltKeyCommand = []
+        this.keyCommand = []
+        this.macKeyCommand = []
+    }
+
+    registerKeyCommand = (key, func, os) => {
+        if (os === 'mac') {
+            this.macKeyCommand.push({key, func})
+        } else {
+            this.keyCommand.push({key, func})
+        }
     }
 
     registerCtrlKeyCommand = (key, func, os) => {
@@ -147,6 +171,10 @@ export class HotKeys {
             this.macAltKeyCommand.forEach((command) => {
                 this.k.isAltKey(event, command.key, command.func)
             })
+
+            this.macKeyCommand.forEach((command) => {
+                this.k.isKey(event, command.key, command.func)
+            })
             
         } else {
             this.ctrlKeyCommand.forEach((command) => {
@@ -159,6 +187,10 @@ export class HotKeys {
 
             this.altKeyCommand.forEach((command) => {
                 this.k.isAltKey(event, command.key, command.func)
+            })
+
+            this.keyCommand.forEach((command) => {
+                this.k.isKey(event, command.key, command.func)
             })
         }
     }

@@ -8,6 +8,7 @@ import { Player } from './commons/Player'
 import '@atlaskit/css-reset'
 import 'mana-font/css/mana.css'
 import {RemoveScrollBar} from 'react-remove-scroll-bar';
+import { WebSocketClient } from './controllers/WebSocketClient'
 
 function App() {
 
@@ -30,8 +31,8 @@ function App() {
         commanderZone: 9000,
       } 
 
-      const playerA = new Player("Anna", deckA, 40, tabIndices, false)
-      const playerB = new Player("Bernard", deckB, 40, {
+      const playerA = new Player(1, "Anna", deckA, 40, tabIndices, true)
+      const playerB = new Player(2, "Bernard", deckB, 40, {
         ...tabIndices,
         battlefield: tabIndices.battlefield + 10000,
         playerStats: tabIndices.playerStats + 10000,
@@ -41,7 +42,7 @@ function App() {
         exile: tabIndices.exile + 10000,
         faceDown: tabIndices.faceDown + 10000,
         commanderZone: tabIndices.commanderZone + 10000,
-      }, true)
+      })
 
       setPlayers([playerA, playerB])
     }
@@ -51,16 +52,22 @@ function App() {
 
   useEffect(() => {
     if (players.length > 0) {
-      const gameState = new GameStateController(players, players[0])
-      gameState.shuffleAllDecks()
-      gameState.eachPlayerDrawSeven()
-      gameState.putRandomCardIntoBattlefield(0)
-      gameState.putRandomCardIntoBattlefield(0)
-      gameState.putRandomCardIntoBattlefield(0)
-      gameState.putRandomCardIntoBattlefield(1)
-      gameState.putRandomCardIntoBattlefield(1)
-      gameState.putRandomCardIntoBattlefield(1)
-      gameState.putRandomCardIntoBattlefield(1)
+
+      const gameState = new GameStateController()
+      gameState.registerWebSocketClient(new WebSocketClient("test"))
+
+      gameState.addPlayer(players[0], true)
+      gameState.addPlayer(players[1])
+
+      // gameState.shuffleAllDecks()
+      // gameState.eachPlayerDrawSeven()
+      // gameState.putRandomCardIntoBattlefield(0)
+      // gameState.putRandomCardIntoBattlefield(0)
+      // gameState.putRandomCardIntoBattlefield(0)
+      // gameState.putRandomCardIntoBattlefield(1)
+      // gameState.putRandomCardIntoBattlefield(1)
+      // gameState.putRandomCardIntoBattlefield(1)
+      // gameState.putRandomCardIntoBattlefield(1)
       setGameStateController(gameState)
     }
   }, [players])
