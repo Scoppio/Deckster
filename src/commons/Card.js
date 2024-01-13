@@ -159,34 +159,22 @@ export class Card {
     }   
 
     get power_toughness() {
-        if (!this.is_two_sided) {
-            if (this.power === null || this.toughness === null) {
-                return null
-            }
-            return this.power + "/" + this.toughness
+        if (this.current_face.power === null || this.current_face.toughness === null || this.current_face.power === undefined || this.current_face.toughness === undefined) {
+            return null
         }
         return this.current_face.power + "/" + this.current_face.toughness
     }
 
     get card_image_uris() {
-        if (!this.is_two_sided) {
-            return this.image_uris
-        }
         return this.current_face.image_uris
     }
 
     get card_flavor_text() {
-        if (!this.is_two_sided) {
-            return this.flavor_text
-        }
         return this.current_face.flavor_text
     }
 
     get card_printed_text() {
-        if (!this.is_two_sided) {
-            return this.printed_text
-        }
-        return this.current_face.printed_text
+        return this.current_face.printed_text.replace(/\n+/g, ' ');
     }
 
     get card_name_with_mana_cost() {

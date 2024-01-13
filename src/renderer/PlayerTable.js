@@ -65,17 +65,20 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   const battlefieldHeight = heightVh * 0.8
   
   return (
-    <div className="col flex-fill d-flex flex-column" aria-describedby={`${player.name} ${isActivePlayer ? "active player" : "non-active player"} / 
-    ${player.health} life, 
-    ${poisonCounters} poison, 
-    ${energyCounters} energy, 
-    ${otherCounters} other counter,
-    ${player.hand.length} in hand,
-    ${player.graveyard.length} in graveyard,
-    ${player.library.length} in library,
-    ${player.exile.length} in exile,
-    ${player.faceDown.length} face down,
-    ${player.commanderZone.length} in command`}>
+    <div className="col flex-fill d-flex flex-column" 
+    // role="region" 
+    // aria-label={`${player.name} ${isActivePlayer ? "active player" : "non-active player"} / 
+    // ${player.health} life,
+    // ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""} 
+    // ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
+    // ${(otherCounters > 0) ? otherCounters + " other counter, " : ""}
+    // ${player.hand.length} in hand,
+    // ${player.graveyard.length} in graveyard,
+    // ${player.library.length} in library,
+    // ${player.commanderZone.length} in command,
+    // ${player.exile.length} in exile,
+    // ${player.faceDown.length} face down.`}
+    >
       <DragDropContext
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}

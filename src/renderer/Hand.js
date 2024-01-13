@@ -1,4 +1,4 @@
-import { ImgCard } from "./FullCard";
+import { ImgCardHand } from "./FullCard";
 import { Droppable } from "react-beautiful-dnd";
 import FuckedCardBack from "../resources/cards/mtgcardback.png"
 import style from 'styled-components'
@@ -13,7 +13,7 @@ const CardHolder = style.div`
 
 const CardBackImg = ({scale}) => {
   return (
-    <img src={FuckedCardBack} //"https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card" 
+    <img src={FuckedCardBack} 
       alt="card back" 
       style={{height: `${scale}%`}} />
   )
@@ -45,15 +45,9 @@ HiddenHand.propTypes = {
 export const Hand = ({player, playerRef, playerNumber, handVh}) => {
 
   return (
-    <div
-      role="region" 
-      tabIndex={player.tabIndices.hand} 
-      ref={playerRef.hand} 
-      aria-describedby={`${player.hand.length} cards`}>
-      <Row>
-        <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh}/>
-      </Row>
-    </div>
+    <Row ref={playerRef.hand}>
+      <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
+    </Row>
   )
 }
 
@@ -64,13 +58,16 @@ Hand.propTypes = {
   handVh: PropTypes.number.isRequired,
 }
 
-export const ShownHand = ({cards, tabIndex, handVh}) => {
+export const ShownHand = ({cards, tabIndex, handVh, playerRef}) => {
+
   return (
    <div style={{background: "grey", padding: "0px"}}>
-    <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}}>
+    <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}} >
       {(provided) => (
-        <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}}>
-          {cards.map((card, idx) => <ImgCard key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex} cardHeight={100} />)}
+        <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}} 
+        tabIndex={tabIndex} role="region" aria-label={`${cards.length} cards in hand.`}
+        >
+          {cards.map((card, idx) => <ImgCardHand key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex + 1} cardHeight={100} />)}
           {provided.placeholder}
         </CardHolder>
       )}
@@ -83,4 +80,5 @@ ShownHand.propTypes = {
   cards: PropTypes.array.isRequired,
   tabIndex: PropTypes.number.isRequired,
   handVh: PropTypes.number.isRequired,
+  playerRef: PropTypes.object.isRequired,
 }

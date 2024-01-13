@@ -60,14 +60,15 @@ const HiddenText = style.div`
   border: 0;
 `
 
-
 export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
   
-  const [isTapped, setIsTapped] = useState(card.isTapped);
+  const [isTapped, setIsTapped] = useState(card.is_tapped);
   
-  const handleClick = () => {
+  isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
 
-    setIsTapped(!isTapped);
+  const handleClick = () => {
+    card.tapped = !card.is_tapped;
+    setIsTapped(card.tapped);
   }
 
   return (
@@ -81,16 +82,16 @@ export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
           onClick={handleClick}
           >
           <HiddenText>
-            <div>{card.aria_description}</div>
+            <div aria-live="assertive" aria-atomic="true">{card.aria_description} {isTapped ? ", tapped. " : ""}</div>
           </HiddenText>
           <HiddenText>
-            <div>{card.type_line + ", "}</div>
-            <div>{card.card_read_oracle_text}</div>
+            <div aria-live="polite" aria-atomic="true">{card.type_line + ", "}</div>
+            <div aria-live="polite" aria-atomic="true">{card.card_read_oracle_text}</div>
           </HiddenText>
           <img src={card.card_image_uris ? card.card_image_uris[size] : emptyCard} alt={card.name} style={{
               height: `${cardHeight}%`,
               borderRadius: '8px',
-              transform: isTapped ? 'rotate(90deg)' : 'none'
+              transform: card.tapped ? 'rotate(90deg)' : 'none'
             }} />
         </SlimContainer>
       )}
@@ -107,13 +108,48 @@ ImgCard.propTypes = {
 }
 
 
+export const ImgCardHand = ({idx, card, size, tabIndex, cardHeight}) => {
+  return (
+    <Draggable draggableId={card._uid} index={idx} key={card._uid}>
+      {provided => (
+        <SlimContainer 
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          tabIndex={tabIndex}
+          >
+          <HiddenText>
+            <div aria-live="polite" aria-atomic="true">{card.aria_description}</div>
+          </HiddenText>
+          <HiddenText>
+            <div aria-live="polite" aria-atomic="true">{card.type_line + ", "}</div>
+            <div aria-live="polite" aria-atomic="true">{card.card_read_oracle_text}</div>
+          </HiddenText>
+          <img src={card.card_image_uris ? card.card_image_uris[size] : emptyCard} alt={card.name} style={{
+              height: `${cardHeight}%`,
+              borderRadius: '8px'
+            }} />
+        </SlimContainer>
+      )}
+    </Draggable>
+  );
+}
+
+ImgCardHand.propTypes = {
+  idx: PropTypes.number.isRequired,
+  card : PropTypes.object.isRequired,
+  size : PropTypes.string.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+  cardHeight: PropTypes.number.isRequired,
+}
+
 export const StaticImgCard = ({card, size, tabIndex, cardHeight}) => {
   return (
     <SlimContainer 
       tabIndex={tabIndex}
       >
       <HiddenText>
-        <div>{card.aria_description}</div>
+        <div>{card.aria_description} {card.is_tapped ? ", tapped. " : ""}</div>
       </HiddenText>
       <HiddenText>
         <div>{card.card_type_line + ", "}</div>
@@ -122,7 +158,7 @@ export const StaticImgCard = ({card, size, tabIndex, cardHeight}) => {
       <img src={card.card_image_uris?.[size] ?? emptyCard} alt={card.card_name_with_mana_cost} style={{
     height: `${cardHeight}%`,
     borderRadius: '8px',
-    transform: card.isTapped ? 'rotate(90deg)' : 'none'
+    transform: card.is_tapped ? 'rotate(90deg)' : 'none'
   }}/>
     </SlimContainer>
   )
