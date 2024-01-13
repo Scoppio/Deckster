@@ -1,4 +1,5 @@
 import AriaHelper from './AriaHelper'
+import tiny_push_button from '../resources/sounds/tiny_push_button.wav';
 import { EventEmitter } from 'events';
 
 
@@ -66,6 +67,8 @@ export class GameStateController extends EventEmitter {
   drawCardLocal() {
     this.player.hand.push(this.player.library.pop())
     this.emit('stateChanged', this);
+    var audio = new Audio(tiny_push_button);
+    audio.play();
   }
 
   untapAllLocal() {

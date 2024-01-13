@@ -9,6 +9,9 @@ const CardHolder = style.div`
   padding: 8px;
   display: flex;
   flex-direction: row;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  width: 75vw;
 `
 
 const CardBackImg = ({scale}) => {
@@ -45,9 +48,11 @@ HiddenHand.propTypes = {
 export const Hand = ({player, playerRef, playerNumber, handVh}) => {
 
   return (
-    <Row ref={playerRef.hand}>
-      <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
-    </Row>
+    <div>
+      <Row ref={playerRef.hand}>
+        <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
+      </Row>
+    </div>
   )
 }
 
@@ -58,7 +63,7 @@ Hand.propTypes = {
   handVh: PropTypes.number.isRequired,
 }
 
-export const ShownHand = ({cards, tabIndex, handVh, playerRef}) => {
+export const ShownHand = ({cards, tabIndex, handVh}) => {
 
   return (
    <div style={{background: "grey", padding: "0px"}}>
@@ -80,5 +85,4 @@ ShownHand.propTypes = {
   cards: PropTypes.array.isRequired,
   tabIndex: PropTypes.number.isRequired,
   handVh: PropTypes.number.isRequired,
-  playerRef: PropTypes.object.isRequired,
 }
