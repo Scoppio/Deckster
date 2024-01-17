@@ -64,7 +64,7 @@ export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, hei
 
   return (
       <PlayerContainer width={10} height={heightVh} role="region"
-        aria-label={`${player.name} ${isActivePlayer ? "[A-P]" : ""} ${player.health} life, 
+        aria-label={`${player.name} ${isActivePlayer ? "active player" : ""} / ${player.health} life, 
         ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""}
         ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
         ${(otherCounters > 0) ? otherCounters + " other counter, " : ""}

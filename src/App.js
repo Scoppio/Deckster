@@ -8,62 +8,55 @@ import { Player } from './commons/Player'
 import '@atlaskit/css-reset'
 import 'mana-font/css/mana.css'
 import {RemoveScrollBar} from 'react-remove-scroll-bar';
+import { WebSocketClient } from './controllers/WebSocketClient'
 
 function App() {
 
-  const [players, setPlayers] = useState([])
   const [gameStateController, setGameStateController] = useState(null)
 
   useEffect(() => {
-    const fetchPlayers = async () => {
+    if (gameStateController) {
+      const handleStateChange = (newState) => {
+        setGameStateController(new GameStateController(newState));
+      };
+  
+      gameStateController.on('stateChanged', handleStateChange);
+      return () => {
+        // Clean up the listener when the component unmounts
+        gameStateController.off('stateChanged', handleStateChange);
+      };
+    } else {
       const deckA = loadDeck(46) // await fetchDeck(46)
       const deckB = loadDeck(47) // await fetchDeck(47)
 
       const tabIndices = {
         playerStats: 1000,
-        battlefield: 2000,
-        hand: 4000,
-        library: 5000,
-        graveyard: 6000,
-        exile: 7000,
-        faceDown: 8000,
-        commanderZone: 9000,
+        front_battlefield: 2000,
+        back_battlefield: 3000,
+        land_zone_battlefield: 4000,
+        hand: 5000,
+        library: 6000,
+        graveyard: 7000,
+        exile: 8000,
+        faceDown: 9000,
+        commanderZone: 9900,
       } 
 
-      const playerA = new Player("Anna", deckA, 40, tabIndices, false)
-      const playerB = new Player("Bernard", deckB, 40, {
-        ...tabIndices,
-        battlefield: tabIndices.battlefield + 10000,
-        playerStats: tabIndices.playerStats + 10000,
-        hand: tabIndices.hand + 10000,
-        library: tabIndices.library + 10000,
-        graveyard: tabIndices.graveyard + 10000,
-        exile: tabIndices.exile + 10000,
-        faceDown: tabIndices.faceDown + 10000,
-        commanderZone: tabIndices.commanderZone + 10000,
-      }, true)
+      const playerA = new Player(1, "Anna", deckA, 40, tabIndices, true)
+      const playerB = new Player(2, "Bernard", deckB, 40, 
+        Object.entries(tabIndices).reduce((acc, [key, value]) => ({
+          ...acc,
+          [key]: value + 10000,
+        }), {})
+      )
 
-      setPlayers([playerA, playerB])
-    }
-
-    fetchPlayers()
-  }, [])
-
-  useEffect(() => {
-    if (players.length > 0) {
-      const gameState = new GameStateController(players, players[0])
-      gameState.shuffleAllDecks()
-      gameState.eachPlayerDrawSeven()
-      gameState.putRandomCardIntoBattlefield(0)
-      gameState.putRandomCardIntoBattlefield(0)
-      gameState.putRandomCardIntoBattlefield(0)
-      gameState.putRandomCardIntoBattlefield(1)
-      gameState.putRandomCardIntoBattlefield(1)
-      gameState.putRandomCardIntoBattlefield(1)
-      gameState.putRandomCardIntoBattlefield(1)
+      const gameState = new GameStateController()
+      gameState.registerWebSocketClient(new WebSocketClient("test"))
+      gameState.addPlayer(playerA, true)
+      gameState.addPlayer(playerB, false)
       setGameStateController(gameState)
     }
-  }, [players])
+  }, [gameStateController])
 
   if (!gameStateController) {
     return <div>Loading...</div>
