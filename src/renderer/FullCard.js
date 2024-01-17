@@ -79,7 +79,7 @@ export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           tabIndex={tabIndex}
-          onClick={handleClick}
+          onDoubleClick={handleClick}
           onKeyDown={(event) => {
             if (event.key === 't') {
               handleClick();
