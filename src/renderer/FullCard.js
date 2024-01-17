@@ -80,6 +80,11 @@ export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
           ref={provided.innerRef}
           tabIndex={tabIndex}
           onClick={handleClick}
+          onKeyDown={(event) => {
+            if (event.key === 't') {
+              handleClick();
+            }
+          }}
           >
           <HiddenText>
             <div aria-live="assertive" aria-atomic="true">{card.aria_description} {isTapped ? ", tapped. " : ""}</div>
