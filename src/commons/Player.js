@@ -1,5 +1,5 @@
-import emptyAvatar from '../resources/images/bubbly_cat.jpg';
-
+import emptyAvatar from '../resources/images/bubbly_cat.jpg'
+import { Card } from './Card'
 
 export class Player {
     constructor(id, name, library, health, tabIndices, isLocal = false) {
@@ -24,6 +24,25 @@ export class Player {
         this.isLocal = isLocal
         this.avatar = emptyAvatar
         this._uid = Math.floor(Math.random() * 1000000) + ""
+    }
+
+    createCardInstances(cardArray) {
+        return cardArray.map(card => new Card(card));
+    }
+
+    updateFromPayload(payload)
+    {
+        this.hand = this.createCardInstances(payload.hand);
+        this.front_battlefield = this.createCardInstances(payload.front_battlefield);
+        this.back_battlefield = this.createCardInstances(payload.back_battlefield);
+        this.land_zone_battlefield = this.createCardInstances(payload.land_zone_battlefield);
+        this.graveyard = this.createCardInstances(payload.graveyard);
+        this.exile = this.createCardInstances(payload.exile);
+        this.faceDown = this.createCardInstances(payload.faceDown);
+        this.commanderZone = this.createCardInstances(payload.commanderZone);
+        this.selectedCards = this.createCardInstances(payload.selectedCards);
+        this.library = this.createCardInstances(payload.library);
+        this.sideboard = this.createCardInstances(payload.sideboard);
     }
 
     get cards_in_hand() {

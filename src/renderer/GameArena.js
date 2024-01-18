@@ -18,6 +18,7 @@ export const GameArena = ({gameState}) => {
   const player1FaceDownRef = useRef(null)
   const player1CommanderZoneRef = useRef(null)
   const player1SideboardRef = useRef(null)
+  const player1LogRef = useRef(null)
 
   const player1References = useMemo(() => ({
     playerStats: player1StatsRef,
@@ -29,6 +30,7 @@ export const GameArena = ({gameState}) => {
     faceDown: player1FaceDownRef,
     commanderZone: player1CommanderZoneRef,
     sideboard: player1SideboardRef,
+    log: player1LogRef,
   }), [])
 
   const player2StatsRef = useRef(null)
@@ -61,7 +63,7 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlKeyCommand('d', () => {hotkeys.playerRefs[1].library.current.focus()})
   hotkeys.registerCtrlKeyCommand('f', () => {hotkeys.playerRefs[1].graveyard.current.focus()})
   hotkeys.registerCtrlKeyCommand('q', () => {hotkeys.playerRefs[1].exile.current.focus()})
-  hotkeys.registerCtrlKeyCommand('w', () => {hotkeys.playerRefs[1].faceDown.current.focus()})
+  hotkeys.registerCtrlKeyCommand('h', () => {hotkeys.playerRefs[1].faceDown.current.focus()})
   hotkeys.registerCtrlKeyCommand('b', () => {hotkeys.playerRefs[1].commanderZone.current.focus()})
   // hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
   // shift+A: mão
@@ -72,17 +74,17 @@ export const GameArena = ({gameState}) => {
 // shift+W: exile
 // shift+E: facedown
 // shift+1-6: Avatar dos jogadores logo antes de seus fields.
-  hotkeys.registerCtrlShiftKeyCommand('z', () => {gameState.moveSelectedToHand()})
-  hotkeys.registerCtrlShiftKeyCommand('x', () => {gameState.moveSelectedToGraveyard()})
-  hotkeys.registerCtrlShiftKeyCommand('c', () => {gameState.moveSelectedToExile()})
-  hotkeys.registerCtrlShiftKeyCommand('v', () => {gameState.moveSelectedToLibrary()})
-  hotkeys.registerCtrlShiftKeyCommand('b', () => {gameState.moveSelectedToCommandZone()})
-  hotkeys.registerCtrlShiftKeyCommand('j', () => {gameState.tapUntapSelected()})
-  hotkeys.registerCtrlShiftKeyCommand('l', () => {gameState.declareAttacking()})
-  hotkeys.registerCtrlShiftKeyCommand('u', () => {gameState.declareBlocking()})
-  hotkeys.registerCtrlShiftKeyCommand('i', () => {gameState.scry()})
-  hotkeys.registerCtrlShiftKeyCommand('p', () => {gameState.addCounterOnSelected()})
-  hotkeys.registerCtrlShiftKeyCommand('m', () => {gameState.removeCounterOnSelected()})
+  hotkeys.registerCtrlShiftKeyCommand('Z', () => {gameState.moveSelectedToHand()})
+  hotkeys.registerCtrlShiftKeyCommand('X', () => {gameState.moveSelectedToGraveyard()})
+  hotkeys.registerCtrlShiftKeyCommand('C', () => {gameState.moveSelectedToExile()})
+  hotkeys.registerCtrlShiftKeyCommand('V', () => {gameState.moveSelectedToLibrary()})
+  hotkeys.registerCtrlShiftKeyCommand('B', () => {gameState.moveSelectedToCommandZone()})
+  hotkeys.registerCtrlShiftKeyCommand('J', () => {gameState.tapUntapSelected()})
+  hotkeys.registerCtrlShiftKeyCommand('L', () => {gameState.declareAttacking()})
+  hotkeys.registerCtrlShiftKeyCommand('U', () => {gameState.declareBlocking()})
+  hotkeys.registerCtrlShiftKeyCommand('I', () => {gameState.scry()})
+  hotkeys.registerCtrlShiftKeyCommand('P', () => {gameState.addCounterOnSelected()})
+  hotkeys.registerCtrlShiftKeyCommand('M', () => {gameState.removeCounterOnSelected()})
   hotkeys.registerKeyCommand('<', () => {gameState.untapAll()})
   hotkeys.registerKeyCommand('>', () => {gameState.drawCard()})
   hotkeys.registerKeyCommand('+', () => {gameState.drawCard()})

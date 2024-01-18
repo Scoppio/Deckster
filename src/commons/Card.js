@@ -1,7 +1,7 @@
 
 export class Card {
     constructor(card) {
-        this._uid = Math.floor(Math.random() * 1000000) + ""
+        this._uid = card._uid || Math.floor(Math.random() * 1000000) + "" 
         this.id = card.id
         this.name = card.name
         this.type_line = card.type_line

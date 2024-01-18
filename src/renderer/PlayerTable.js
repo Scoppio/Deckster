@@ -36,49 +36,13 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       const card = gameState.moveCardTo(source, destination)
       provided.announce('Moved ' + card.name + ' from ' + sourceName + ' to ' + destinationZone);
     }
-
-    /*
-    {
-        "draggableId": "814071",
-        "type": "DEFAULT",
-        "source": {
-            "index": 2,
-            "droppableId": "0"
-        },
-        "reason": "DROP",
-        "mode": "FLUID",
-        "destination": {
-            "droppableId": "0",
-            "index": 1
-        },
-        "combine": null
-    }
-
-    */
-  
   }
 
-  const poisonCounters = player.counters?.["poison"] ?? 0;
-  const energyCounters = player.counters?.["energy"] ?? 0;
-  const otherCounters = player.counters?.["other"] ?? 0;
   const handHeightVh = heightVh * 0.2
   const battlefieldHeight = heightVh * 0.8
   
   return (
-    <div className="col flex-fill d-flex flex-column" 
-    // role="region" 
-    // aria-label={`${player.name} ${isActivePlayer ? "active player" : "non-active player"} / 
-    // ${player.health} life,
-    // ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""} 
-    // ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
-    // ${(otherCounters > 0) ? otherCounters + " other counter, " : ""}
-    // ${player.hand.length} in hand,
-    // ${player.graveyard.length} in graveyard,
-    // ${player.library.length} in library,
-    // ${player.commanderZone.length} in command,
-    // ${player.exile.length} in exile,
-    // ${player.faceDown.length} face down.`}
-    >
+    <div className="col flex-fill d-flex flex-column" >
       <DragDropContext
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
@@ -129,7 +93,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
           landsOnNorth ?
           (<Row style={({height: `${handVh}vh`, background: 'grey'})}>
             <Col>
-              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handVh} />
+              <HiddenHand player={player} playerNumber={playerNumber} handVh={handVh} />
             </Col>
           </Row>) : null
         }
@@ -140,7 +104,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
           !landsOnNorth ?
           (<Row style={({height: `${handVh}vh`, background: 'grey'})}>
             <Col>
-              <HiddenHand player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handVh}/>
+              <HiddenHand player={player} playerNumber={playerNumber} handVh={handVh}/>
             </Col>
           </Row>) : null
         }

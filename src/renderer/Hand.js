@@ -22,13 +22,12 @@ const CardBackImg = ({scale}) => {
   )
 }
 
-export const HiddenHand = ({player, playerRef, playerNumber, handVh}) => {
+export const HiddenHand = ({player, playerNumber, handVh}) => {
   console.log(handVh)
   return (
     <div className="hand col" 
       role="region" 
-      tabIndex={player.tabIndices.hand} 
-      ref={playerRef.hand} 
+      tabIndex={player.tabIndices.hand}
       aria-labelledby={playerNumber + "-player-hand-label"} 
       aria-describedby={playerNumber + "-hand-desc"}>
       <div className="col" style={{height: `${handVh}vh`}}>
@@ -40,16 +39,15 @@ export const HiddenHand = ({player, playerRef, playerNumber, handVh}) => {
 
 HiddenHand.propTypes = {
   player: PropTypes.object.isRequired,
-  playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   handVh: PropTypes.number.isRequired,
 }
 
-export const Hand = ({player, playerRef, playerNumber, handVh}) => {
+export const Hand = ({player, playerRef, handVh}) => {
 
   return (
     <div>
-      <Row ref={playerRef.hand}>
+      <Row >
         <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
       </Row>
     </div>
@@ -59,15 +57,14 @@ export const Hand = ({player, playerRef, playerNumber, handVh}) => {
 Hand.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
-  playerNumber: PropTypes.number.isRequired,
   handVh: PropTypes.number.isRequired,
 }
 
-export const ShownHand = ({cards, tabIndex, handVh}) => {
+export const ShownHand = ({cards, tabIndex, handVh, playerRef}) => {
 
   return (
    <div style={{background: "grey", padding: "0px"}}>
-    <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}} >
+    <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}} ref={playerRef.hand}>
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}} 
         tabIndex={tabIndex} role="region" aria-label={`${cards.length} cards in hand.`}
@@ -84,5 +81,6 @@ export const ShownHand = ({cards, tabIndex, handVh}) => {
 ShownHand.propTypes = {
   cards: PropTypes.array.isRequired,
   tabIndex: PropTypes.number.isRequired,
+  playerRef: PropTypes.object.isRequired,
   handVh: PropTypes.number.isRequired,
 }

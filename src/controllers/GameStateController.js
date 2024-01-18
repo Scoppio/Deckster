@@ -1,6 +1,6 @@
 import AriaHelper from './AriaHelper'
-import tiny_push_button from '../resources/sounds/tiny_push_button.wav';
-import { EventEmitter } from 'events';
+import tiny_push_button from '../resources/sounds/tiny_push_button.wav'
+import { EventEmitter } from 'events'
 
 
 export class GameStateController extends EventEmitter {
@@ -15,6 +15,7 @@ export class GameStateController extends EventEmitter {
       this.webSocketClient = null
       this.ariaHelper = new AriaHelper(this)
       this.online = false
+      this.game_log = []
     }
   }
   
@@ -25,6 +26,7 @@ export class GameStateController extends EventEmitter {
     this.webSocketClient = previousState.webSocketClient
     this.ariaHelper = previousState.ariaHelper
     this.online = previousState.online
+    this.game_log = previousState.game_log
   }
 
   get player () {
@@ -43,6 +45,10 @@ export class GameStateController extends EventEmitter {
     return { id: this.player.id, idx: this.player_number }
   }
 
+  get log() {
+    return this.game_log
+  }
+
   registerWebSocketClient(webSocketClient) {
     this.webSocketClient = webSocketClient
     this.webSocketClient.addListener(this)
@@ -51,7 +57,7 @@ export class GameStateController extends EventEmitter {
   handleEvent(event) {
     console.log(`GameStateController ${event}`)
     this[event.type](event)
-    this.emit('stateChanged', this);
+    this.changed()
   }
   
   sendEvent(type, payload = {}) {
@@ -63,12 +69,17 @@ export class GameStateController extends EventEmitter {
     }
   }
 
+  changed() {
+    this.emit('stateChanged', this);
+  }
+
   // Local actions
   drawCardLocal() {
     this.player.hand.push(this.player.library.pop())
     this.emit('stateChanged', this);
     var audio = new Audio(tiny_push_button);
     audio.play();
+    this.changed()
   }
 
   untapAllLocal() {
@@ -76,7 +87,7 @@ export class GameStateController extends EventEmitter {
     this.player.land_zone_battlefield.forEach(card => card.tapped = false)
     this.player.back_battlefield.forEach(card => card.tapped = false)
     this.player.front_battlefield.forEach(card => card.tapped = false)
-    this.emit('stateChanged', this);
+    this.changed()
   }
 
   // Request actions
@@ -141,10 +152,19 @@ export class GameStateController extends EventEmitter {
       this.online = true
     }
     console.log(event)
+    this.game_log.push(event.payload)
   }
 
   _updatePlayer(event) {
-    this.players[this.player_number] = { ...this.player, ...event.payload }
+    this.player.updateFromPayload(event.payload)
+  
+  }
+
+  _drawCard(event) {
+    const cards = event.payload
+    const cardInstances = this.player.createCardInstances(cards);
+    this.player.hand.push(...cardInstances);
+  
   }
 
 }
