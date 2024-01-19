@@ -1,6 +1,7 @@
 import AriaHelper from './AriaHelper'
 import tiny_push_button from '../resources/sounds/tiny_push_button.wav'
 import { EventEmitter } from 'events'
+import { Card } from '../commons/Card'
 
 
 export class GameStateController extends EventEmitter {
@@ -16,6 +17,7 @@ export class GameStateController extends EventEmitter {
       this.ariaHelper = new AriaHelper(this)
       this.online = false
       this.game_log = []
+      this.focus_card = null
     }
   }
   
@@ -27,6 +29,7 @@ export class GameStateController extends EventEmitter {
     this.ariaHelper = previousState.ariaHelper
     this.online = previousState.online
     this.game_log = previousState.game_log
+    this.focus_card = previousState.focus_card
   }
 
   get player () {
@@ -74,9 +77,13 @@ export class GameStateController extends EventEmitter {
   }
 
   // Local actions
+  focusOnCard(card) {
+    this.focus_card = card
+    this.changed()
+  }
+
   drawCardLocal() {
     this.player.hand.push(this.player.library.pop())
-    this.emit('stateChanged', this);
     var audio = new Audio(tiny_push_button);
     audio.play();
     this.changed()
@@ -157,14 +164,13 @@ export class GameStateController extends EventEmitter {
 
   _updatePlayer(event) {
     this.player.updateFromPayload(event.payload)
-  
   }
 
   _drawCard(event) {
-    const cards = event.payload
-    const cardInstances = this.player.createCardInstances(cards);
-    this.player.hand.push(...cardInstances);
-  
+    this.player.hand.push(new Card(event.payload))
+    var audio = new Audio(tiny_push_button);
+    audio.play();
+    this.changed()
   }
 
 }
