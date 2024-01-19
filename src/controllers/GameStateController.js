@@ -167,7 +167,7 @@ export class GameStateController extends EventEmitter {
   }
 
   _drawCard(event) {
-    this.player.hand.push(new Card(event.payload))
+    this.player.hand.push(new Card(this.player.library.pop()))
     var audio = new Audio(tiny_push_button);
     audio.play();
     this.changed()
