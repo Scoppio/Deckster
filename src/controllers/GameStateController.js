@@ -58,7 +58,6 @@ export class GameStateController extends EventEmitter {
   }
 
   handleEvent(event) {
-    console.log(`GameStateController ${event}`)
     this[event.type](event)
     this.changed()
   }
@@ -100,9 +99,9 @@ export class GameStateController extends EventEmitter {
   // Request actions
   drawCard() {
     this.sendEvent("draw_card", {zone: "library", number_of_cards: 1})
-    if (!this.online) {
-      this.drawCardLocal()
-    }
+    // if (!this.online) {
+    //   this.drawCardLocal()
+    // }
   }
 
   untapAll() {
@@ -158,7 +157,6 @@ export class GameStateController extends EventEmitter {
     if (!this.online) {
       this.online = true
     }
-    console.log(event)
     this.game_log.push(event.payload)
   }
 
@@ -167,6 +165,7 @@ export class GameStateController extends EventEmitter {
   }
 
   _drawCard(event) {
+    console.log(this.player.hand);
     this.player.hand.push(new Card(event.payload))
     var audio = new Audio(tiny_push_button);
     audio.play();

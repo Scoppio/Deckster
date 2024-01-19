@@ -142,7 +142,7 @@ export class Card {
     }
     
     read_text(txt) {
-        if (txt === null) {
+        if (!txt) {
             return null
         }
         txt = txt.replace(/\{T\}/g, "tap ")

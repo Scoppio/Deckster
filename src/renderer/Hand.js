@@ -23,7 +23,6 @@ const CardBackImg = ({scale}) => {
 }
 
 export const HiddenHand = ({player, playerNumber, handVh}) => {
-  console.log(handVh)
   return (
     <div className="hand col" 
       role="region" 

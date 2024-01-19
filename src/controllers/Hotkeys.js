@@ -158,7 +158,6 @@ export class HotKeys {
     }
 
     handleKeyDown = (event) => {
-        console.log(event)
         if (this.isMac)
         {
             this.macCtrlKeyCommand.forEach((command) => {
