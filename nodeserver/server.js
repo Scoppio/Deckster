@@ -1,24 +1,32 @@
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8000 });
+const server = new WebSocket.Server({ port: 8000 });
 
 const game = {
   players: {}
 }
 
-wss.on('connection', ws => {
-  console.log('WebSocket connection established');
 
-  ws.on('message', message => {
-    console.log('received: %s', message);
-    const event = JSON.parse(message);
+server.on('connection', (socket) => {
+  console.log('Client connected');
 
-    // Respond to the "draw_card" event
-    if (event.type === 'draw_card') {
-      const player_id = event.sender['id']
+  socket.on('message', (message) => {
+    const json = JSON.parse(message)
+    if (json.type === 'login_player') {
+      game.players[json.payload['id']] = json.payload
+      const response = {
+        type: '_logEvent',
+        payload: "Player " + json.payload['name'] + " logged in",
+        sender: "server"
+      };
+
+      socket.send(JSON.stringify(response));
+    }
+    if (json.type === 'draw_card') {
+      const player_id = json.sender['id']
       const player = game.players[player_id]
-      const num_cards = event.payload['number_of_cards']
-      const zone = event.payload['zone']
+      const num_cards = json.payload['number_of_cards']
+      const zone = json.payload['zone']
       let cards_drawn = 0
       for (let i = 0; i < num_cards; i++) {
         if (player[zone].length <= 0) {
@@ -34,33 +42,17 @@ wss.on('connection', ws => {
         sender: "server"
       };
 
-      ws.send(JSON.stringify(responseLog));
-      ws.send(JSON.stringify({type: '_drawCard', payload: player, sender: "server"}));
+      socket.send(JSON.stringify(responseLog));
+      socket.send(JSON.stringify({type: '_updatePlayer', payload: player, sender: "server"}));
       
-      console.log('sending: %s', responseLog);
-    }
+      console.log('sending: %s ' + player['name'] + ' drew ' + cards_drawn + ' cards from ' + zone, responseLog);
 
-    // Respond to the "untap_all" event
-    if (event.type === 'untap_all') {
-      const response = {
-        type: '_logEvent',
-        payload: "untap_all",
-        sender: "server"
-      };
-
-      ws.send(JSON.stringify(response));
-    }
-
-    // Respond to the "login_player" event
-    if (event.type === 'login_player') {
-      game.players[event.payload['id']] = event.payload
-      const response = {
-        type: '_logEvent',
-        payload: "Player " + event.payload['name'] + " logged in",
-        sender: "server"
-      };
-
-      ws.send(JSON.stringify(response));
     }
   });
+
+  socket.on('close', () => {
+    console.log('Client disconnected');
+  });
 });
+
+console.log('WebSocket server is running on port 8000');

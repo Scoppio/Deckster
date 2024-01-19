@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     if (gameStateController) {
       const handleStateChange = (newState) => {
-        setGameStateController(new GameStateController(newState));
+        setGameStateController(new GameStateController(newState, setGameStateController));
       };
   
       gameStateController.on('stateChanged', handleStateChange);
@@ -50,7 +50,7 @@ function App() {
         }), {})
       )
 
-      const gameState = new GameStateController()
+      const gameState = new GameStateController(undefined, setGameStateController)
       gameState.registerWebSocketClient(new WebSocketClient("test"))
       gameState.addPlayer(playerA, true)
       gameState.addPlayer(playerB, false)

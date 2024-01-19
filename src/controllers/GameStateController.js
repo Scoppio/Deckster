@@ -5,8 +5,9 @@ import { Card } from '../commons/Card'
 
 
 export class GameStateController extends EventEmitter {
-  constructor(state = null) {
+  constructor(state = null, updateState) {
     super();
+    this.updateState = updateState;
     if (state) {
       this.fromPreviousState(state)
     } else {
@@ -73,6 +74,7 @@ export class GameStateController extends EventEmitter {
   }
 
   changed() {
+    this.updateState(this);
     this.emit('stateChanged', this);
   }
 
