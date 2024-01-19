@@ -84,34 +84,15 @@ export class GameStateController extends EventEmitter {
     this.changed()
   }
 
-  drawCardLocal() {
-    this.player.hand.push(this.player.library.pop())
-    var audio = new Audio(tiny_push_button);
-    audio.play();
-    this.changed()
-  }
-
-  untapAllLocal() {
-    this.player.hand.forEach(card => card.tapped = false)
-    this.player.land_zone_battlefield.forEach(card => card.tapped = false)
-    this.player.back_battlefield.forEach(card => card.tapped = false)
-    this.player.front_battlefield.forEach(card => card.tapped = false)
-    this.changed()
-  }
-
-  // Request actions
+  ////////////////////////////////////////////////////////
+  // Request actions                //////////////////////
+  ////////////////////////////////////////////////////////
   drawCard() {
     this.sendEvent("draw_card", {zone: "library", number_of_cards: 1})
-    if (!this.online) {
-      this.drawCardLocal()
-    }
   }
 
   untapAll() {
     this.sendEvent("untap_all")
-    if (!this.online) {
-      this.untapAllLocal()
-    }
   }
 
   addPlayer(player) {
@@ -130,27 +111,33 @@ export class GameStateController extends EventEmitter {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
     const card = this.player[sourceZone][sourceIndex]
-    this.player.selectedCard = card;
+    this.focusOnCard(card)
     return card
   }
 
   cancelCardMove() {
-    const card = this.player.selectedCard;
-    this.player.selectedCard = null;
-    return card
+    this.focusOnCard(null)
   }
 
   moveCardTo(source, destination) {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
     const card = this.player[sourceZone][sourceIndex]
-    this.player.selectedCard = card;
     this.player[sourceZone].splice(sourceIndex, 1);
 
     const destinationZone = destination.droppableId;
     const destinationIndex = destination.index;
     this.player[destinationZone].splice(destinationIndex, 0, card);
-    this.player.selectedCard = null;
+    this.focusOnCard(null)
+    
+    this.sendEvent("move_card", 
+      {
+        "from_zone": sourceZone, 
+        "to_zone": destinationZone,
+        "from_idx": sourceIndex,
+        "to_idx": destinationIndex
+      })
+
     return card;
   }
 

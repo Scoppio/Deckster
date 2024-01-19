@@ -22,6 +22,30 @@ server.on('connection', (socket) => {
 
       socket.send(JSON.stringify(response));
     }
+    
+    if (json.type === 'move_card') {
+      const player_id = json.sender['id']
+      const player = game.players[player_id]
+      const from_zone = json.payload['from_zone']
+      const to_zone = json.payload['to_zone']
+      const from_idx = json.payload['from_idx']
+      const to_idx = json.payload['to_idx']
+      const card_obj = player[from_zone][from_idx]
+      player[from_zone].splice(from_idx, 1)
+      player[to_zone].splice(to_idx, 0, card_obj)
+
+      const responseLog = {
+        type: '_logEvent',
+        payload: "Player " + player['name'] + " moved " + card_obj['name'] + " from " + from_zone + " to " + to_zone,
+        sender: "server"
+      };
+
+      socket.send(JSON.stringify(responseLog));
+      socket.send(JSON.stringify({type: '_updatePlayer', payload: player, sender: "server"}));
+      
+      console.log('sending: %s ' + player['name'] + ' moved ' + card_obj['name'] + ' from ' + from_zone + ' to ' + to_zone, responseLog);
+    }
+
     if (json.type === 'draw_card') {
       const player_id = json.sender['id']
       const player = game.players[player_id]
@@ -49,6 +73,9 @@ server.on('connection', (socket) => {
 
     }
   });
+
+
+
 
   socket.on('close', () => {
     console.log('Client disconnected');

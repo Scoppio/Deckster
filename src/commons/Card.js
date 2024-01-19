@@ -25,6 +25,7 @@ export class Card {
         this.card_faces = card.card_faces
         this.card_face = 0
         this.tapped = false
+        this.dont_untap = false
     }
 
     changeFace() {
