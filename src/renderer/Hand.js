@@ -60,7 +60,7 @@ Hand.propTypes = {
   handVh: PropTypes.number.isRequired,
 }
 
-export const ShownHand = ({cards, tabIndex, handVh, playerRef}) => {
+export const ShownHand = ({cards, gameState, tabIndex, handVh, playerRef}) => {
 
   return (
    <div style={{background: "grey", padding: "0px"}}>
@@ -69,7 +69,7 @@ export const ShownHand = ({cards, tabIndex, handVh, playerRef}) => {
         <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}} 
         tabIndex={tabIndex} role="region" aria-label={`${cards.length} cards in hand.`}
         >
-          {cards.map((card, idx) => <ImgCardHand key={card._uid} idx={idx} size="small" card={card} tabIndex={idx + tabIndex + 1} cardHeight={100} />)}
+          {cards.map((card, idx) => <ImgCardHand key={card._uid} gameState={gameState} idx={idx} size="small" card={card} tabIndex={idx + tabIndex + 1} cardHeight={100} />)}
           {provided.placeholder}
         </CardHolder>
       )}

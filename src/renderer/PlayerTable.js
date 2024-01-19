@@ -56,7 +56,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
               <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} heightVh={battlefieldHeight}/>
             </Row>
             <Row style={({height: `${handHeightVh}vh`})}>
-              <Hand player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handHeightVh}/>
+              <Hand gameState={gameState} player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handHeightVh}/>
             </Row>
           </Col>
         </Row>
