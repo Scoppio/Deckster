@@ -4,7 +4,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Library } from './Library';
-import { Graveyard, Exile, FaceDown, CommanderZone, PlayerHandZone } from './Zones';
+import { Graveyard, Exile, FaceDown, CommanderZone } from './Zones';
+import { PlayerHandZone } from './PlayerHandZone';
 
 const PlayerContainer = style.div`
   border: 1px;
@@ -57,7 +58,7 @@ export const GenericCounter = ({ value, color, aria_description }) =>{
   )
 }
 
-export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, heightVh }) => {
+export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState }) => {
   const poisonCounters = player.counters?.["poison"] ?? 0;
   const energyCounters = player.counters?.["energy"] ?? 0;
   const otherCounters = player.counters?.["other"] ?? 0;
@@ -88,12 +89,12 @@ export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, hei
             <Row><PlayerName>{player.name}</PlayerName></Row>
             <Row><PlayerHealthBox>{player.health}</PlayerHealthBox></Row>
             <br/>
-            <Row><PlayerHandZone {...{player, playerRef, playerNumber}}></PlayerHandZone></Row>
-            <Row><Library {...{player, playerRef, playerNumber}} /></Row>
-            <Row><Graveyard {...{player, playerRef, playerNumber}} /></Row>
-            <Row><Exile {...{player, playerRef, playerNumber}} /></Row>
-            <Row><FaceDown {...{player, playerRef, playerNumber}} /></Row>
-            <Row><CommanderZone {...{player, playerRef, playerNumber}} /></Row>
+            <Row><PlayerHandZone {...{player, playerRef, playerNumber, gameState}}></PlayerHandZone></Row>
+            <Row><Library {...{player, playerRef, playerNumber, gameState}} /></Row>
+            <Row><Graveyard {...{player, playerRef, playerNumber, gameState}} /></Row>
+            <Row><Exile {...{player, playerRef, playerNumber, gameState}} /></Row>
+            <Row><FaceDown {...{player, playerRef, playerNumber, gameState}} /></Row>
+            <Row><CommanderZone {...{player, playerRef, playerNumber, gameState}} /></Row>
           </Col>
         </Row>
       </Container>
@@ -105,6 +106,7 @@ PlayerBar.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 }
 
 

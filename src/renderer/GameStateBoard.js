@@ -6,21 +6,26 @@ export const GameStateBoard = ({gameState, playerRef }) => {
 
   return (
     <Row style={{width: "15vw", height: "100vh", background: "grey"}}>
-      <h1>Game State Board</h1>
-      <p>Here should go things like the card you are hovering the mouse over or selected cards (show the last selected)</p>
-      {
-        gameState.focus_card ? 
-          <div>
-            <h2>Focus Card</h2>
-            <p>{gameState.focus_card.name}</p>
-            <img src={gameState.focus_card.image_uris.normal} alt={gameState.focus_card.name} />
-            <p>
-              {gameState.focus_card.oracle_text}
-            </p>
-          </div>
-        : null
-      }
-      <LogFrame gameState={gameState} height={50} playerRef={playerRef.log} />
+      <div style={ {height: "75%"}}>
+        {
+          gameState.focus_card ? 
+            <div>
+              <h2>{gameState.focus_card.card_name}  {gameState.focus_card.card_mana_cost}</h2>
+              <img src={gameState.focus_card.card_image_uris.normal} alt={gameState.focus_card.card_name} style={{width: "100%"}}/>
+              <p>
+                {gameState.focus_card.card_type_line}
+              </p>
+              <p>
+                {gameState.focus_card.card_read_oracle_text}
+              </p>
+              <p>
+              {gameState.focus_card.power_toughness}
+              </p>
+            </div>
+          : null
+        }
+      </div>
+      <LogFrame gameState={gameState} height={25} playerRef={playerRef.log} />
     </Row>
   )
 }

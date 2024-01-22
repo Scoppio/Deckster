@@ -8,6 +8,7 @@ export class Player {
         this.health = health
         this.counters = {}
         this.library = library.deck
+        this.library_size = library.deck.length
         this.sideboard = []
         this.hand = []
         this.remote_hand_size = 0
@@ -41,8 +42,9 @@ export class Player {
         this.faceDown = this.createCardInstances(payload.faceDown);
         this.commanderZone = this.createCardInstances(payload.commanderZone);
         this.selectedCards = this.createCardInstances(payload.selectedCards);
-        this.library = this.createCardInstances(payload.library);
+        this.library = this.createCardInstances(payload.library ?? []);
         this.sideboard = this.createCardInstances(payload.sideboard);
+        this.library_size = payload.library_size;
     }
 
     get cards_in_hand() {

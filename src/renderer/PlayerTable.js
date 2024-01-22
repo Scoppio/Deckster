@@ -49,7 +49,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       >   
         <Row>
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh} } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState} } />
           </Col>
           <Col>
             <Row style={({height: `${battlefieldHeight}vh`})}>
@@ -84,7 +84,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
         {
           barSide === 'left' ? (
             <Col md="auto">
-              <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh } } />
+              <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState } } />
             </Col>
           ) : null
         }
@@ -112,7 +112,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
       {
         barSide === 'right' ? (
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh } } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState } } />
           </Col>
         ) : null
       }

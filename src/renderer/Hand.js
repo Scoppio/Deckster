@@ -43,18 +43,19 @@ HiddenHand.propTypes = {
   handVh: PropTypes.number.isRequired,
 }
 
-export const Hand = ({player, playerRef, handVh}) => {
+export const Hand = ({gameState, player, playerRef, handVh}) => {
 
   return (
     <div>
       <Row >
-        <ShownHand cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
+        <ShownHand gameState={gameState} cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
       </Row>
     </div>
   )
 }
 
 Hand.propTypes = {
+  gameState: PropTypes.object.isRequired,
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   handVh: PropTypes.number.isRequired,
@@ -83,4 +84,5 @@ ShownHand.propTypes = {
   tabIndex: PropTypes.number.isRequired,
   playerRef: PropTypes.object.isRequired,
   handVh: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 }

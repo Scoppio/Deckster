@@ -1,53 +1,12 @@
 import PropTypes from 'prop-types'
 import style from 'styled-components'
-import { Draggable } from 'react-beautiful-dnd';
-import emptyCard from '../resources/cards/empty_card.png';
+import { Draggable } from 'react-beautiful-dnd'
+import emptyCard from '../resources/cards/empty_card.png'
+import FuckedCardBack from '../resources/cards/mtgcardback.png'
 import { useState } from 'react';
 
 const SlimContainer = style.div`
 `
-
-const Container = style.div`
-  display: flex;
-  flex-direction: row;
-  border: 1px solid lightgrey;
-  padding: 8px;
-  border-radius: 4px;
-  margin-left: 8px;
-`
-
-export const MiniCard = ({idx, card, tabIndex, scale}) => (
-  <Draggable draggableId={card._uid} index={idx} key={card._uid}>
-    {provided => (
-      <Container 
-        scale={scale} 
-        tabIndex={tabIndex} 
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={provided.innerRef}
-        >
-          <div 
-            aria-label={card.name}
-            aria-describedby={ "card::name::" + card.name + " card::type::" + card.name + " card::text::" + card.name }
-            tabIndex={tabIndex}>
-            <p id={"card::name::" + card.name}>{card.name} {card.mana_cost}</p>
-            <p id={"card::type::" + card.name}>{card.type_line}</p>
-            <p id={"card::text::" + card.name}>{card.oracle_text}</p>
-          </div>
-
-        </Container>
-        )}
-    </Draggable>
-)
-
-MiniCard.propTypes = {
-  idx: PropTypes.number.isRequired,
-  data: PropTypes.object.isRequired,
-  scale: PropTypes.number.isRequired,
-  tabIndex: PropTypes.number.isRequired,
-}
-
-
 
 const HiddenText = style.div`
   position: absolute;
@@ -60,15 +19,32 @@ const HiddenText = style.div`
   border: 0;
 `
 
-export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
-  
+export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
   const [isTapped, setIsTapped] = useState(card.is_tapped);
-  
+  const [cardFace, setCardFace] = useState(card.card_face);
+
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
+  cardFace !== card.card_face && setCardFace(card.card_face);
+  
+  const flipCard = () => {
+    card.changeFace()
+    setCardFace(card.card_face);
+    gameState.updatePlayer();
+    gameState.focusOnCard(card);
+  }
 
   const handleClick = () => {
     card.tapped = !card.is_tapped;
+    gameState.updatePlayer();
     setIsTapped(card.tapped);
+  }
+
+  const onMouseOver = () => {
+    gameState.focusOnCard(card);
+  }
+
+  const onMouseLeave = () => {
+    gameState.focusOnCard(null);
   }
 
   return (
@@ -80,9 +56,15 @@ export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
           ref={provided.innerRef}
           tabIndex={tabIndex}
           onDoubleClick={handleClick}
+          onMouseOver={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          onContextMenu={flipCard}
           onKeyDown={(event) => {
             if (event.key === 't') {
               handleClick();
+            }
+            else if (event.key === 'l') {
+              flipCard();
             }
           }}
           >
@@ -93,7 +75,7 @@ export const ImgCard = ({idx, card, size, tabIndex, cardHeight}) => {
             <div aria-live="polite" aria-atomic="true">{card.type_line + ", "}</div>
             <div aria-live="polite" aria-atomic="true">{card.card_read_oracle_text}</div>
           </HiddenText>
-          <img src={card.card_image_uris ? card.card_image_uris[size] : emptyCard} alt={card.name} style={{
+          <img src={card.hidden ? FuckedCardBack : (card.card_image_uris?.[size] ?? emptyCard)} alt={card.name} style={{
               height: `${cardHeight}%`,
               borderRadius: '8px',
               transform: card.tapped ? 'rotate(90deg)' : 'none'
@@ -110,10 +92,32 @@ ImgCard.propTypes = {
   size : PropTypes.string.isRequired,
   tabIndex: PropTypes.number.isRequired,
   cardHeight: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 }
 
 
-export const ImgCardHand = ({idx, card, size, tabIndex, cardHeight}) => {
+export const ImgCardHand = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
+  const [cardFace, setCardFace] = useState(card.card_face);
+
+  cardFace !== card.card_face && setCardFace(card.card_face);
+  
+  const flipCard = () => {
+    card.changeFace()
+    setCardFace(card.card_face);
+    gameState.updatePlayer();
+    gameState.focusOnCard(card);
+  }
+
+  const onMouseOver = () => {
+    if (gameState) {
+      gameState.focusOnCard(card);
+    }
+  }
+  
+  const onMouseLeave = () => {
+    gameState.focusOnCard(null);
+  }
+
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {provided => (
@@ -121,7 +125,15 @@ export const ImgCardHand = ({idx, card, size, tabIndex, cardHeight}) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          tabIndex={tabIndex}
+          tabIndex={tabIndex}      
+          onMouseOver={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          onContextMenu={flipCard}
+          onKeyDown={(event) => {
+            if (event.key === 'l') {
+              flipCard();
+            }
+          }}
           >
           <HiddenText>
             <div aria-live="polite" aria-atomic="true">{card.aria_description}</div>
@@ -130,7 +142,7 @@ export const ImgCardHand = ({idx, card, size, tabIndex, cardHeight}) => {
             <div aria-live="polite" aria-atomic="true">{card.type_line + ", "}</div>
             <div aria-live="polite" aria-atomic="true">{card.card_read_oracle_text}</div>
           </HiddenText>
-          <img src={card.card_image_uris ? card.card_image_uris[size] : emptyCard} alt={card.name} style={{
+          <img src={card.hidden ? FuckedCardBack :  (card.card_image_uris?.[size] ?? emptyCard)} alt={card.name} style={{
               height: `${cardHeight}%`,
               borderRadius: '8px'
             }} />
@@ -146,12 +158,23 @@ ImgCardHand.propTypes = {
   size : PropTypes.string.isRequired,
   tabIndex: PropTypes.number.isRequired,
   cardHeight: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 }
 
-export const StaticImgCard = ({card, size, tabIndex, cardHeight}) => {
+export const StaticImgCard = ({card, gameState, size, tabIndex, cardHeight}) => {
+  const onMouseOver = () => {
+    gameState.focusOnCard(card);
+  }
+
+  const onMouseLeave = () => {
+    gameState.focusOnCard(null);
+  }
+
   return (
     <SlimContainer 
       tabIndex={tabIndex}
+      onMouseOver={onMouseOver}
+      onMouseLeave={onMouseLeave}
       >
       <HiddenText>
         <div>{card.aria_description} {card.is_tapped ? ", tapped. " : ""}</div>
@@ -160,11 +183,11 @@ export const StaticImgCard = ({card, size, tabIndex, cardHeight}) => {
         <div>{card.card_type_line + ", "}</div>
         <div>{card.card_read_oracle_text}</div>
       </HiddenText>
-      <img src={card.card_image_uris?.[size] ?? emptyCard} alt={card.card_name_with_mana_cost} style={{
-    height: `${cardHeight}%`,
-    borderRadius: '8px',
-    transform: card.is_tapped ? 'rotate(90deg)' : 'none'
-  }}/>
+      <img src={card.hidden ? FuckedCardBack : (card.card_image_uris?.[size] ?? emptyCard)} alt={card.card_name_with_mana_cost} style={{
+        height: `${cardHeight}%`,
+        borderRadius: '8px',
+        transform: card.is_tapped ? 'rotate(90deg)' : 'none'
+      }}/>
     </SlimContainer>
   )
 }
@@ -174,4 +197,5 @@ StaticImgCard.propTypes = {
   size : PropTypes.string.isRequired,
   tabIndex: PropTypes.number.isRequired,
   scale: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 }

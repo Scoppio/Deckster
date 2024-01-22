@@ -66,15 +66,8 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlKeyCommand('h', () => {hotkeys.playerRefs[1].faceDown.current.focus()})
   hotkeys.registerCtrlKeyCommand('b', () => {hotkeys.playerRefs[1].commanderZone.current.focus()})
   // hotkeys.registerCtrlKeyCommand('r', () => {player1References.sideboard.current.focus()})
-  // shift+A: mão
-// shift+S: field
-// shift+D: library
-// shift+F: command
-// shift+Q: Grave
-// shift+W: exile
-// shift+E: facedown
-// shift+1-6: Avatar dos jogadores logo antes de seus fields.
-  hotkeys.registerCtrlShiftKeyCommand('Z', () => {gameState.moveSelectedToHand()})
+
+  hotkeys.registerCtrlShiftKeyCommand('Z', () => {gameState.moveSelectedToHand()}) 
   hotkeys.registerCtrlShiftKeyCommand('X', () => {gameState.moveSelectedToGraveyard()})
   hotkeys.registerCtrlShiftKeyCommand('C', () => {gameState.moveSelectedToExile()})
   hotkeys.registerCtrlShiftKeyCommand('V', () => {gameState.moveSelectedToLibrary()})
@@ -88,8 +81,10 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerKeyCommand('<', () => {gameState.untapAll()})
   hotkeys.registerKeyCommand('>', () => {gameState.drawCard()})
   hotkeys.registerKeyCommand('+', () => {gameState.drawCard()})
-  hotkeys.registerKeyCommand('-', () => {gameState.removeLife()})
-  hotkeys.registerKeyCommand('*', () => {gameState.setLife()})
+  hotkeys.registerKeyCommand('-', () => {gameState.increaseLife()})
+  hotkeys.registerKeyCommand('*', () => {gameState.decreaseLife()})
+  hotkeys.registerCtrlKeyCommand('x', () => {gameState.untapAll()})
+  
   // hotkeys.registerAltKeyCommand('j', () => {gameState.untapAll()})
   // hotkeys.registerAltKeyCommand('k', () => {gameState.drawCard()})
   // hotkeys.registerAltKeyCommand('l', () => {gameState.responseAlert()})

@@ -12,6 +12,7 @@ server.on('connection', (socket) => {
 
   socket.on('message', (message) => {
     const json = JSON.parse(message)
+    console.log('received: %s', message);
     if (json.type === 'login_player') {
       game.players[json.payload['id']] = json.payload
       const response = {
@@ -22,7 +23,14 @@ server.on('connection', (socket) => {
 
       socket.send(JSON.stringify(response));
     }
-    
+
+    if (json.type === 'update_player') {
+      game.players[json.payload['id']] = json.payload
+      const player = game.players[json.payload['id']]
+      
+      socket.send(JSON.stringify({type: '_updatePlayer', payload: player, sender: "server"}));
+    }
+
     if (json.type === 'move_card') {
       const player_id = json.sender['id']
       const player = game.players[player_id]
@@ -73,9 +81,6 @@ server.on('connection', (socket) => {
 
     }
   });
-
-
-
 
   socket.on('close', () => {
     console.log('Client disconnected');

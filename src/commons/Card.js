@@ -1,4 +1,6 @@
 
+import FuckedCardBack from "../resources/cards/mtgcardback.png"
+
 export class Card {
     constructor(card) {
         this._uid = card._uid || Math.floor(Math.random() * 1000000) + "" 
@@ -23,13 +25,19 @@ export class Card {
         this.printed_type_line = card.printed_type_line
         this.lang = card.lang
         this.card_faces = card.card_faces
-        this.card_face = 0
-        this.tapped = false
-        this.dont_untap = false
+        this.card_face = card.card_face || 0
+        this.tapped = card.tapped || false
+        this.dont_untap = card.dont_untap || false
+        this.hidden = card.hidden || false
     }
 
     changeFace() {
         this.card_face = this.card_face === 0 ? 1 : 0
+        if (!this.is_two_sided && this.card_face === 1) {
+            this.hidden = true
+        } else if (!this.is_two_sided && this.card_face === 0) {
+            this.hidden = false
+        }
     }
 
     get is_tapped() {
@@ -50,43 +58,58 @@ export class Card {
         return this.card_faces?.length > 1;
     }
 
+    get is_transformed()
+    {
+        return this.hidden
+    }
+
     get is_land() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Land")
     }
 
     get is_creature() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Creature")
     }
 
     get is_planeswalker() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Planeswalker")
     }
 
     get is_artifact() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Artifact")
     }
 
     get is_enchantment() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Enchantment")
     }
 
     get is_aura() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Aura")
     }
 
     get is_instant() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Instant")
     }
 
     get is_sorcery() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Sorcery")
     }
 
     get is_historic() {
+        if (this.hidden) return false
         return this.card_type_line.includes("Legendary") || this.card_type_line.includes("Saga") || this.card_type_line.includes("Artifact")
     }
 
     get card_keywords() {
+        if (this.hidden) return null
         if (!this.is_two_sided) {
             return this.keywords
         }
@@ -94,6 +117,7 @@ export class Card {
     }
 
     get card_cmc() {
+        if (this.hidden) return null
         if (!this.is_two_sided) {
             return this.cmc
         }
@@ -101,6 +125,7 @@ export class Card {
     }
 
     get card_mana_cost() {
+        if (this.hidden) return null
         if (!this.is_two_sided) {
             return this.mana_cost
         }
@@ -108,6 +133,7 @@ export class Card {
     }
 
     get card_produced_mana() {
+        if (this.hidden) return null
         if (!this.is_two_sided) {
             return this.produced_mana
         }
@@ -115,6 +141,8 @@ export class Card {
     }
 
     get card_name() {
+        if (this.hidden) return "Hidden Card"
+
         if (!this.is_two_sided) {
             return this.name
         }
@@ -122,6 +150,8 @@ export class Card {
     }
 
     get card_type_line() {
+        if (this.hidden) return "Hidden Card"
+
         if (!this.is_two_sided) {
             return this.type_line
         }
@@ -129,6 +159,7 @@ export class Card {
     }
 
     get card_loaylty() {
+        if (this.hidden) return null
         if (!this.is_two_sided) {
             return this.loyalty
         }
@@ -136,6 +167,8 @@ export class Card {
     }
 
     get card_oracle_text() {
+        if (this.hidden) return ""
+
         if (!this.is_two_sided) {
             return this.oracle_text
         }
@@ -160,6 +193,7 @@ export class Card {
     }   
 
     get power_toughness() {
+        if (this.hidden) return null
         if (this.current_face.power === null || this.current_face.toughness === null || this.current_face.power === undefined || this.current_face.toughness === undefined) {
             return null
         }
@@ -167,18 +201,25 @@ export class Card {
     }
 
     get card_image_uris() {
+        if (this.hidden) return {small: FuckedCardBack, normal: FuckedCardBack}
+        if (!this.is_two_sided) {
+            if (this.card_face === 1) return {small: FuckedCardBack, normal: FuckedCardBack}
+        }
         return this.current_face.image_uris
     }
 
     get card_flavor_text() {
+        if (this.hidden) return "Hidden Card"
         return this.current_face.flavor_text
     }
 
     get card_printed_text() {
+        if (this.hidden) return "Hidden Card"
         return this.current_face.printed_text.replace(/\n+/g, ' ');
     }
 
     get card_name_with_mana_cost() {
+        if (this.hidden) return "Hidden Card"
         if (this.is_two_sided) {
             return this.card_faces[0].name + " " + (this.card_faces[0].mana_cost === null || this.card_faces[0].mana_cost === undefined ? "" : this.card_faces[0].mana_cost) + " // " + this.card_faces[1].name + " " + (this.card_faces[1].mana_cost === null || this.card_faces[1].mana_cost === undefined ? "" : this.card_faces[1].mana_cost)
         }
@@ -186,6 +227,7 @@ export class Card {
     }
 
     get aria_description() {
+        if (this.hidden) return "Hidden Card"
         return `${this.card_name_with_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
     }
 

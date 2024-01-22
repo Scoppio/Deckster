@@ -87,8 +87,9 @@ export class GameStateController extends EventEmitter {
   ////////////////////////////////////////////////////////
   // Request actions                //////////////////////
   ////////////////////////////////////////////////////////
-  drawCard() {
-    this.sendEvent("draw_card", {zone: "library", number_of_cards: 1})
+
+  drawCard(number_of_cards = 1) {
+    this.sendEvent("draw_card", {zone: "library", number_of_cards: number_of_cards})
   }
 
   untapAll() {
@@ -106,7 +107,98 @@ export class GameStateController extends EventEmitter {
     this.sendEvent('login_player', player)
   }
 
-  
+  updatePlayer() {
+    this.sendEvent('update_player', this.player)
+  }
+
+  increaseLife() {
+    this.player.life += 1
+    this.sendEvent('update_player', this.player)
+  }
+
+  decreaseLife() {
+    this.player.life -= 1
+    this.sendEvent('update_player', this.player)
+  }
+
+  moveSelectedToHand() {
+    console.log("TODO")
+  }
+
+  moveSelectedToGraveyard() {
+    console.log("TODO")
+  }
+
+  moveSelectedToExile() {
+    console.log("TODO")
+  }
+
+  moveSelectedToLibrary() {
+    console.log("TODO")
+  }
+
+  moveSelectedToCommandZone() {
+    console.log("TODO")
+  }
+
+  tapUntapSelected() {
+    console.log("TODO")
+  }
+
+  declareAttacking() {
+    console.log("TODO")
+  }
+
+  declareBlocking() {
+    console.log("TODO")
+  }
+
+  scry() {
+    console.log("TODO")
+  }
+
+  addCounterOnSelected() {
+    console.log("TODO")
+  }
+
+  removeCounterOnSelected() {
+    console.log("TODO")
+  }
+
+  drawHand() {
+    this.sendEvent("draw_hand", {number_of_cards: 7})
+  }
+
+  mulliganHand() {
+    this.sendEvent("mulligan", {number_of_cards: 7})
+  }
+
+  revealCardsInHand() {
+    console.log("TODO")
+  }
+
+  drawCardToBattlefield() {
+    console.log("TODO")
+  }
+
+  drawCardToGraveyard() {
+    console.log("TODO")
+  }
+
+  drawCardToExile() {
+    console.log("TODO")
+  }
+
+  drawCardToFaceDown() {
+    console.log("TODO")
+  }
+
+  shuffleDeck() {
+    this.sendEvent("shuffle_library")
+  }
+
+  ////////////////////////////////////////////////////////
+
   getCardFrom(source) {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
@@ -129,7 +221,7 @@ export class GameStateController extends EventEmitter {
     const destinationIndex = destination.index;
     this.player[destinationZone].splice(destinationIndex, 0, card);
     this.focusOnCard(null)
-    
+
     this.sendEvent("move_card", 
       {
         "from_zone": sourceZone, 
@@ -143,12 +235,25 @@ export class GameStateController extends EventEmitter {
 
   // Command actions
 
-  _logEvent(event) {
+  log_event_0(event) {
     if (!this.online) {
       this.online = true
     }
     console.log(event)
-    this.game_log.push(event.payload)
+    const currentTime = new Date();
+    const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+    this.game_log.unshift(`${formattedTime} - ${event.payload}`);
+    if (this.game_log.length > 100) {
+      this.game_log = this.game_log.slice(0, 100);
+    }
+  }
+
+  pass_turn_0(event) {
+    // TODO: pass turn
+  }
+
+  change_game_phase_0(event) {
+    // TODO: change game phase
   }
 
   _updatePlayer(event) {
