@@ -88,8 +88,8 @@ export class GameStateController extends EventEmitter {
   // Request actions                //////////////////////
   ////////////////////////////////////////////////////////
 
-  drawCard(number_of_cards = 1) {
-    this.sendEvent("draw_card", {zone: "library", number_of_cards: number_of_cards})
+  drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
+    this.sendEvent("draw_card", {zone: zone, number_of_cards: number_of_cards, destination: destination})
   }
 
   untapAll() {

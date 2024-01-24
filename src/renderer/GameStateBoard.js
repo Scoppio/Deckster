@@ -9,19 +9,31 @@ export const GameStateBoard = ({gameState, playerRef }) => {
       <div style={ {height: "75%"}}>
         {
           gameState.focus_card ? 
-            <div>
-              <h2>{gameState.focus_card.card_name}  {gameState.focus_card.card_mana_cost}</h2>
-              <img src={gameState.focus_card.card_image_uris.normal} alt={gameState.focus_card.card_name} style={{width: "100%"}}/>
-              <p>
-                {gameState.focus_card.card_type_line}
-              </p>
-              <p>
-                {gameState.focus_card.card_read_oracle_text}
-              </p>
-              <p>
-              {gameState.focus_card.power_toughness}
-              </p>
-            </div>
+            <>
+              <Row>
+                <h2 style={{ fontSize: '1vw', whiteSpace: 'nowrap', overflow: 'visible', textOverflow: 'ellipsis' }}>
+                  {gameState.focus_card.card_name}  {gameState.focus_card.card_mana_cost}
+                </h2>
+              </Row>
+              <Row>
+                <img src={gameState.focus_card.card_image_uris.normal} alt={gameState.focus_card.card_name} style={{width: "100%"}}/>
+              </Row>
+              <Row>
+                <p>
+                  {gameState.focus_card.card_type_line}
+                </p>
+              </Row>
+              <Row>
+                <p>
+                  {gameState.focus_card.card_read_oracle_text}
+                </p>
+              </Row>
+              <Row>
+                <p>
+                  {gameState.focus_card.power_toughness}
+                </p>
+              </Row>
+            </>
           : null
         }
       </div>

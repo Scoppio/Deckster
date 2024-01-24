@@ -8,15 +8,30 @@ import style from 'styled-components'
 const CardHolder = style.div`
   padding: 8px;
   display: flex;
-  flex-direction: row;
 `
+
+const BattlefieldDiv = style.div`
+padding: 8px;
+flex-direction: row;
+overflow-x: auto;
+width: 75vw;
+display: flex;
+`
+
+// padding: 8px;
+// display: flex;
+// flex-direction: row;
+// overflow-x: auto;
+// flex-wrap: nowrap;
+// width: 75vw;
+
 
 export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, landsOnNorth, heightVh }) => { 
   
-  const lineVh = heightVh / 3
+  const lineVh = heightVh / 3 
 
   return (
-  <div className="row" 
+  <BattlefieldDiv className="row" 
     ref={playerRef.battlefield} 
     tabIndex={player.tabIndices.battlefield}
     role="region"
@@ -37,13 +52,13 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, 
         player[landsOnNorth ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState} card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.land_zone_battlefield} cardHeight={100} />))
       }
       </CardHolder>
-  </div>
+  </BattlefieldDiv>
 )}
 
 export const Battlefield = ({ gameState, playerRef, playerNumber, player , heightVh}) => {
-  const lineVh = heightVh / 3
+  const lineVh = heightVh / 3 - 1
   return (
-    <div className="row" 
+    <BattlefieldDiv className="row" 
       role="region"
       aria-label={player.name + " Battlefield"}
       ref={playerRef.battlefield} 
@@ -72,7 +87,7 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player , heigh
           </CardHolder>
         )}
       </Droppable>
-    </div>
+    </BattlefieldDiv>
   )
 }
 

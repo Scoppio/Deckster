@@ -65,7 +65,7 @@ export const ShownHand = ({cards, gameState, tabIndex, handVh, playerRef}) => {
 
   return (
    <div style={{background: "grey", padding: "0px"}}>
-    <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}} ref={playerRef.hand}>
+    <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}}>
       {(provided) => (
         <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}} 
         tabIndex={tabIndex} role="region" aria-label={`${cards.length} cards in hand.`}

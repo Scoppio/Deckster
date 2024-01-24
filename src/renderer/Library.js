@@ -1,51 +1,64 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Row from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import Dropdown from 'react-bootstrap/Dropdown'
+import Row from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
 import FuckedCardBack from '../resources/cards/mtgcardback.png'
+import { Button } from 'react-bootstrap'
 
 
 const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
   
   const handleDrawHand = () => {
-    gameState.drawHand();
+    gameState.drawHand()
   }
 
   const handleDrawCardToHand = () => {
-    gameState.drawCard();
+    gameState.drawCard()
   }
 
   const handleDrawMultipleCardsToHand = (number_of_cards) => {
-    gameState.drawCard(number_of_cards);
+    gameState.drawCard(number_of_cards)
   }
 
   const handleDrawCardToBattlefield = () => {
-    gameState.drawCardToBattlefield();
+    gameState.drawCardToBattlefield()
   }
 
   const handleDrawCardToGraveyard = () => {
-    gameState.drawCardToGraveyard();
+    gameState.drawCardToGraveyard()
   }
 
   const handleDrawCardToExile = () => {
-    gameState.drawCardToExile();
+    gameState.drawCardToExile()
   }
 
   const handleDrawCardToFaceDown = () => {
-    gameState.drawCardToFaceDown();
+    gameState.drawCardToFaceDown()
   }
 
   const handleShuffleDeck = () => {
-    gameState.shuffleDeck();
+    gameState.shuffleDeck()
+  }
+
+  const handleDrawMultipleCardsToBattlefield = (number_of_cards) => {
+    gameState.drawCard(number_of_cards, "library", "back_battlefield")
+  }
+  
+  const handleDrawMultipleCardsToExile = (number_of_cards) => {
+    gameState.drawCard(number_of_cards, "library", "exile")
+  }
+  
+  const handleDrawMultipleCardsFaceDown = (number_of_cards) => {
+    gameState.drawCard(number_of_cards, "library", "faceDown")
   }
 
   return (
     <div className={"library row-flex"} 
       role="region"
       aria-describedby={playerNumber + "-library-desc"}>
-      <Dropdown autoClose="outside" 
-        tabIndex={player.tabIndices.library} >
+      <Dropdown autoClose="outside" >
           <Dropdown.Toggle 
           variant="secondary" 
           id="dropdown-autoclose-outside"
@@ -55,48 +68,28 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           <span id={playerNumber + "-library-label"}>Library</span>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item as={CustomItem} onClick={handleDrawMultipleCardsToHand} text={"Draw Cards"} eventKey="1" />
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToHand} text={"Hand"} placeholder={"Hand, type the number of cards to draw to hand..."} eventKey="1"
+            aria-labelledby={"Hand, type the number of cards to draw to hand, hit enter to confirm"} />
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToBattlefield} text={"Battlefield"} placeholder={"Battlefield, type the number of cards put in the battlefield..."} eventKey="2"
+            aria-labelledby={"Battlefield, type the number of cards put in the battlefield, hit enter to confirm"}
+          />
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToExile} text={"Exile"} placeholder={"Exile, type the number of cards to exile..."} eventKey="3"
+            aria-labelledby={"Exile, type the number of cards to exile, hit enter to confirm"}
+          />
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsFaceDown} text={"Facedown"} placeholder={"Facedown, type the number of cards to set facedown..."} eventKey="4"
+            aria-labelledby={"Facedown, type the number of cards to set facedown, hit enter to confirm"}
+          />
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawHand}>Draw Hand of 7 cards</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawHand}>Draw Hand of 7 cards</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleShuffleDeck}>Shuffle Deck</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleShuffleDeck}>Shuffle Deck</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawCardToHand}>Draw card to Hand</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToBattlefield}>Draw card to Battlefield</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToGraveyard}>Draw card to Graveyard</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToExile}>Draw card to Exile</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToHand}>Draw card to Hand</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToBattlefield}>Draw card to Battlefield</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToGraveyard}>Draw card to Graveyard</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToExile}>Draw card to Exile</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>
         </Dropdown.Menu>
-{/* 
-        <Dropdown.Toggle 
-          variant="secondary" 
-          id="dropdown-autoclose-outside"
-          ref={playerRef.library} 
-          tabIndex={player.tabIndices.library} size="sm"
-          onDoubleClick={handleDrawCardToHand}>
-          <span id={playerNumber + "-library-label"}>Library</span>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => console.log("implement action")} >Draw x card
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => console.log("implement action")} >Mill x card</Dropdown.Item>
-          <Dropdown.Item onClick={() => console.log("implement action")} >Exile x card</Dropdown.Item>
-          <Dropdown.Item onClick={() => console.log("implement action")} >See the top X cards</Dropdown.Item>
-          <Dropdown.Item onClick={() => console.log("implement action")} >Reveal X top cards</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={() => console.log("implement action")} >View all cards</Dropdown.Item> 
-          <Dropdown.Item onClick={() => console.log("implement action")} >Play with top card revealed</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawHand}>Draw Hand of 7 cards</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={handleShuffleDeck}>Shuffle Deck</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawCardToHand}>Draw card to Hand</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToBattlefield}>Draw card to Battlefield</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToGraveyard}>Draw card to Graveyard</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToExile}>Draw card to Exile</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>
-        </Dropdown.Menu> */}
       </Dropdown>
       <p id={playerNumber + "-library-desc"}>{player.library_size} cards</p>
     </div>
@@ -115,59 +108,43 @@ Library.propTypes = {
 }
 
 
-// const CustomToggle = React.forwardRef(({ children, onClick, onDoubleClick }, ref) => (
-//   <div>
-//     <img
-//       ref={ref}
-//       onClick={(e) => {
-//         e.preventDefault();
-//         onClick(e);
-//       }}
-//       onDoubleClick={(e) => {
-//         e.preventDefault();
-//         onDoubleClick(e);
-//       }}
-//       src={FuckedCardBack}
-//       alt="library"
-//       style={{transform: "rotate(90deg)", height: "40px"}}
-//     />
-//     {children}
-//     &#x25bc;
-//   </div>
-// ));
-// CustomToggle.displayName = 'CustomToggle';
-
-
 const CustomItem = React.forwardRef(
-  ({ onClick, style, className, text, 'aria-labelledby': labeledBy,  }, ref) => {
-    const [value, setValue] = useState('');
-
+  ({ onConfirm, style, className, text, placeholder, 'aria-labelledby': labelledBy,  }, ref) => {
+    const [value, setValue] = useState('')
+    const handleConfirmation = () => onConfirm(parseInt(value, 10))
+    
     return (
       <div
         ref={ref}
         style={style}
         className={className}
+        aria-labelledby={labelledBy}
       >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span>{text}</span>
-        <Form.Control
-          autoFocus
-          className="mx-3 my-2 w-auto"
-          placeholder="Type the number of cards to draw..."
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.stopPropagation()
-              onClick(parseInt(value, 10))
-            }
-          }}
-          value={value}
-          aria-labelledby='Enter number of cards'
-        />
-        </div>
+        <Row className="justify-content-md-center" style={{ display: 'flex', alignItems: 'center' }}>
+          <Col>
+            <span>{text}</span>
+          </Col>
+          <Col  md="auto">
+            <Form.Control
+              autoFocus
+              className="mx-3 my-2 w-auto"
+              placeholder={placeholder}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && value !== '') {
+                  e.stopPropagation();
+                  handleConfirmation()
+                  setValue('')
+                }
+              }}
+              value={value}
+              aria-labelledby={labelledBy}
+            />
+          </Col>
+        </Row>
       </div>
-    );
+    )
   },
-);
+)
 
-CustomItem.displayName = 'CustomItem';
+CustomItem.displayName = 'CustomItem'
