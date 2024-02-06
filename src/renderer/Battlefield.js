@@ -13,7 +13,6 @@ const CardHolder = style.div`
 const BattlefieldDiv = style.div`
 padding: 8px;
 flex-direction: row;
-overflow-x: auto;
 width: 75vw;
 display: flex;
 `

@@ -9,7 +9,6 @@ const CardHolder = style.div`
   padding: 8px;
   display: flex;
   flex-direction: row;
-  overflow-x: auto;
   flex-wrap: nowrap;
   width: 75vw;
 `

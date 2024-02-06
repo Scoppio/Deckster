@@ -79,12 +79,12 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             aria-labelledby={"Facedown, type the number of cards to set facedown, hit enter to confirm"}
           />
           <Dropdown.Divider />
-          <Dropdown.Item onConfirm={handleDrawHand}>Draw Hand of 7 cards</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawHand} eventKey="5">Draw Hand of 7 cards</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onConfirm={handleShuffleDeck}>Shuffle Deck</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleShuffleDeck} eventKey="6">Shuffle Deck</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onConfirm={handleDrawCardToHand}>Draw card to Hand</Dropdown.Item>
-          <Dropdown.Item onConfirm={handleDrawCardToBattlefield}>Draw card to Battlefield</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToHand} eventKey="8">Draw card to Hand</Dropdown.Item>
+          <Dropdown.Item onConfirm={handleDrawCardToBattlefield} eventKey="9">Draw card to Battlefield</Dropdown.Item>
           <Dropdown.Item onConfirm={handleDrawCardToGraveyard}>Draw card to Graveyard</Dropdown.Item>
           <Dropdown.Item onConfirm={handleDrawCardToExile}>Draw card to Exile</Dropdown.Item>
           <Dropdown.Item onConfirm={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>

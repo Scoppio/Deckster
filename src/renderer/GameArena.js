@@ -83,6 +83,7 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerKeyCommand('+', () => {gameState.drawCard()})
   hotkeys.registerKeyCommand('-', () => {gameState.increaseLife()})
   hotkeys.registerKeyCommand('*', () => {gameState.decreaseLife()})
+  hotkeys.registerKeyCommand('F1', () => {gameState.listCommands()})
   hotkeys.registerCtrlKeyCommand('x', () => {gameState.untapAll()})
   
   // hotkeys.registerAltKeyCommand('j', () => {gameState.untapAll()})
