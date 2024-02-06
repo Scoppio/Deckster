@@ -69,13 +69,13 @@ export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
           }}
           >
           <HiddenText>
-            <div aria-live="assertive" aria-atomic="true">{card.aria_description} {isTapped ? ", tapped. " : ""}</div>
+            <div aria-live="assertive" aria-atomic="true">{card.face_aria_description} {isTapped ? ", tapped. " : ""}</div>
           </HiddenText>
           <HiddenText>
-            <div aria-live="polite" aria-atomic="true">{card.type_line + ", "}</div>
+            <div aria-live="polite" aria-atomic="true">{card.card_type_line + ", "}</div>
             <div aria-live="polite" aria-atomic="true">{card.card_read_oracle_text}</div>
           </HiddenText>
-          <img src={card.hidden ? FuckedCardBack : (card.card_image_uris?.[size] ?? emptyCard)} alt={card.name} style={{
+          <img src={card.hidden ? FuckedCardBack : (card.card_image_uris?.[size] ?? emptyCard)} alt={card.card_face_name_with_mana_cost} style={{
               height: `${cardHeight}%`,
               borderRadius: '8px',
               transform: card.tapped ? 'rotate(90deg)' : 'none'

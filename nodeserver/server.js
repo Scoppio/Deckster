@@ -175,8 +175,7 @@ server.on('connection', (socket) => {
     const json = JSON.parse(message)
     console.log('received: %s', message);
     if (json.type === 'login_player') {
-      gameSession.players[json.payload['id']] = json.payload
-
+      gameSession.addPlayer(json.payload)
       const response = {
         type: '_logEvent',
         payload: "Player " + json.payload['name'] + " logged in",

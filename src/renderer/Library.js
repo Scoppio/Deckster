@@ -4,8 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Row from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
-import FuckedCardBack from '../resources/cards/mtgcardback.png'
-import { Button } from 'react-bootstrap'
+
 
 
 const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {

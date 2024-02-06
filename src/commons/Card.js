@@ -218,17 +218,27 @@ export class Card {
         return this.current_face.printed_text.replace(/\n+/g, ' ');
     }
 
+    get card_face_name_with_mana_cost() {
+        if (this.hidden) return "Hidden Card"
+        return this.current_face.name + (this.card_mana_cost !== null ? ` (${this.card_mana_cost})` : "")
+    }
+
     get card_name_with_mana_cost() {
         if (this.hidden) return "Hidden Card"
         if (this.is_two_sided) {
             return this.card_faces[0].name + " " + (this.card_faces[0].mana_cost === null || this.card_faces[0].mana_cost === undefined ? "" : this.card_faces[0].mana_cost) + " // " + this.card_faces[1].name + " " + (this.card_faces[1].mana_cost === null || this.card_faces[1].mana_cost === undefined ? "" : this.card_faces[1].mana_cost)
         }
-        return this.card_name + (this.card_mana_cost !== null ? ` (${this.card_mana_cost})` : "")
+        return this.card_face_name_with_mana_cost
     }
 
     get aria_description() {
         if (this.hidden) return "Hidden Card"
-        return `${this.card_name_with_mana_cost}` + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
+        return this.card_name_with_mana_cost + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + ", "
+    }
+
+    get face_aria_description() {
+        if (this.hidden) return "Hidden Card"
+        return this.card_face_name_with_mana_cost + (this.power_toughness !== null ? `, ${this.power_toughness}` : "") + (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") + (this.is_two_sided ? ", other side is " + this.card_faces[this.card_face === 0 ? 1 : 0].name : "") + "."
     }
 
     tap(){
