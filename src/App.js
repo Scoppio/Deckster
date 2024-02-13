@@ -42,8 +42,8 @@ function App() {
         commanderZone: 9900,
       } 
 
-      const playerA = new Player(1, "Anna", deckA, 40, tabIndices, true)
-      const playerB = new Player(2, "Bernard", deckB, 40, 
+      const playerA = new Player(1, "Lulu", deckA, 40, tabIndices, true)
+      const playerB = new Player(2, "Opponent", deckB, 40, 
         Object.entries(tabIndices).reduce((acc, [key, value]) => ({
           ...acc,
           [key]: value + 10000,

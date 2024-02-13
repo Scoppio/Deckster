@@ -38,20 +38,21 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
     }
   }
 
-  const handHeightVh = heightVh * 0.2
+  const handHeightVh = heightVh * 0.17
   const battlefieldHeight = heightVh * 0.8
   
   return (
     <div className="col flex-fill d-flex flex-column" >
-      <DragDropContext
-        onDragEnd={onDragEnd}
-        onDragStart={onDragStart}
-      >   
-        <Row>
+  
+        <Row >
           <Col md="auto">
             <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState} } />
           </Col>
-          <Col>
+          <DragDropContext
+        onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
+      > 
+          <Col style={({overflowX: 'auto' })}>
             <Row style={({height: `${battlefieldHeight}vh`})}>
               <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} heightVh={battlefieldHeight}/>
             </Row>
@@ -59,8 +60,8 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
               <Hand gameState={gameState} player={player} playerRef={playerRef} playerNumber={playerNumber} handVh={handHeightVh}/>
             </Row>
           </Col>
-        </Row>
-      </DragDropContext>
+        </DragDropContext>
+      </Row>
     </div>
   )
 }
