@@ -61,8 +61,8 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           <Dropdown.Toggle 
           variant="secondary" 
           id="dropdown-autoclose-outside"
-          ref={playerRef.library} 
-          tabIndex={player.tabIndices.library} size="sm"
+          ref={player && playerRef.library}
+          tabIndex={player && player.tabIndices.library} size="sm"
           onDoubleClick={handleDrawCardToHand}>
           <span id={playerNumber + "-library-label"}>Library</span>
         </Dropdown.Toggle>
@@ -90,7 +90,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           <Dropdown.Item onConfirm={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <p id={playerNumber + "-library-desc"}>{player.library_size} cards</p>
+      <p id={playerNumber + "-library-desc"}>{player?.library_size ?? 0} cards</p>
     </div>
   )
 }

@@ -53,7 +53,7 @@ function App() {
       const gameState = new GameStateController(undefined, setGameStateController)
       gameState.registerWebSocketClient(new WebSocketClient("test"))
       gameState.addPlayer(playerA, true)
-      gameState.addPlayer(playerB, false)
+      // gameState.addPlayer(playerB, false)
       setGameStateController(gameState)
     }
   }, [gameStateController])

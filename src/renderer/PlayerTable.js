@@ -46,7 +46,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
   
         <Row >
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState} } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, heightVh, gameState} } />
           </Col>
           <DragDropContext
         onDragEnd={onDragEnd}
@@ -85,7 +85,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
         {
           barSide === 'left' ? (
             <Col md="auto">
-              <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState } } />
+              <PlayerBar { ...{ player, playerRef, playerNumber, heightVh, gameState } } />
             </Col>
           ) : null
         }
@@ -113,7 +113,7 @@ export const NorthTable = ({gameState, playerRef, playerNumber, player, isActive
       {
         barSide === 'right' ? (
           <Col md="auto">
-            <PlayerBar { ...{ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState } } />
+            <PlayerBar { ...{ player, playerRef, playerNumber, heightVh, gameState } } />
           </Col>
         ) : null
       }

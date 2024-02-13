@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { Library } from './Library';
 import { Graveyard, Exile, FaceDown, CommanderZone } from './Zones';
 import { PlayerHandZone } from './PlayerHandZone';
+import emptyAvatar from '../resources/images/bubbly_cat.jpg'
 
 const PlayerContainer = style.div`
   border: 1px;
@@ -40,7 +41,7 @@ const PlayerName = style.h2`
   font-size: 16px;
 `
 
-const PlayerHealthBox = style.div`
+const PlayerLifeBox = style.div`
   width: 100%;
   height: 20px;
   background: grey;
@@ -58,36 +59,36 @@ export const GenericCounter = ({ value, color, aria_description }) =>{
   )
 }
 
-export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, heightVh, gameState }) => {
-  const poisonCounters = player.counters?.["poison"] ?? 0;
-  const energyCounters = player.counters?.["energy"] ?? 0;
-  const otherCounters = player.counters?.["other"] ?? 0;
+export const PlayerBar = ({ player, playerRef, playerNumber, heightVh, gameState }) => {
+  function getCounterValue(player, counterType, defaultValue = 0) {
+    return player?.counters?.[counterType] ?? defaultValue;
+  }
+
+  const poisonCounters = getCounterValue(player, "poison");
+  const energyCounters = getCounterValue(player, "energy");
+  const otherCounters = getCounterValue(player, "other");
+  const ariaLabel = gameState.ariaHelper.playerQuickGlance(playerNumber);
 
   return (
-      <PlayerContainer width={10} height={heightVh} role="region"
-        aria-label={`${player.name} ${isActivePlayer ? "active player" : ""} / ${player.health} life, 
-        ${(poisonCounters > 0) ? poisonCounters + " poison, " : ""}
-        ${(energyCounters > 0) ? energyCounters + " energy, " : ""}
-        ${(otherCounters > 0) ? otherCounters + " other counter, " : ""}
-        ${player.hand.length} in hand,
-        ${player.graveyard.length} in graveyard,
-        ${player.library.length} in library,
-        ${player.commanderZone.length} in command,
-        ${player.exile.length} in exile,
-        ${player.faceDown.length} face down.`}
-        tabIndex={player.tabIndices.playerStats} 
-      ref={playerRef.playerStats}>
+      <PlayerContainer 
+        width={10} 
+        height={heightVh} 
+        role="region"
+        aria-label={ariaLabel}
+        tabIndex={player && player.tabIndices.playerStats} 
+        ref={playerRef.playerStats}
+      >
       <Container fluid>
         <Row>
           <Col md="auto" >
-            <PlayerAvatarImg src={player.avatar} alt={player.name} />
+            <PlayerAvatarImg src={player?.avatar ?? emptyAvatar} alt={player?.name ?? "Nothing to see"} />
             <Row><GenericCounter value={poisonCounters} color={"green"} aria_description={`${poisonCounters} poison`} /></Row>
             <Row><GenericCounter value={energyCounters} color={"blue"} aria_description={`${energyCounters} energy`} /></Row>
             <Row><GenericCounter value={otherCounters} color={"grey"} aria_description={`${otherCounters} other`} /></Row>
           </Col>
           <Col>
-            <Row><PlayerName>{player.name}</PlayerName></Row>
-            <Row><PlayerHealthBox>{player.health}</PlayerHealthBox></Row>
+            <Row><PlayerName>{player?.name ?? "-"}</PlayerName></Row>
+            <Row><PlayerLifeBox>{player?.life ?? 0}</PlayerLifeBox></Row>
             <br/>
             <Row><PlayerHandZone {...{player, playerRef, playerNumber, gameState}}></PlayerHandZone></Row>
             <Row><Library {...{player, playerRef, playerNumber, gameState}} /></Row>
@@ -107,24 +108,4 @@ PlayerBar.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
-}
-
-
-
-export const Avatar = ({ player, playerRef, playerNumber }) => (
-  <div className="player-stats" role="region" 
-    tabIndex={player.tabIndices.playerStats} 
-    ref={playerRef.playerStats} 
-    aria-labelledby={playerNumber + "-player-name-label"} 
-    aria-describedby={playerNumber + "-health-desc " +  playerNumber + "-counter-desc"}>
-    <h2 id={playerNumber + "-player-name-label"}>{player.name}</h2>
-    <div><p id={playerNumber + "-health-desc"}>health {player.health},</p></div>
-    <div><p id={playerNumber + "-counter-desc"}>counter {player.counter}</p></div>
-  </div>
-)
-
-Avatar.propTypes = {
-  player: PropTypes.object.isRequired,
-  playerRef: PropTypes.object.isRequired,
-  playerNumber: PropTypes.number.isRequired,
 }

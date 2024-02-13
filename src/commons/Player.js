@@ -2,10 +2,10 @@ import emptyAvatar from '../resources/images/bubbly_cat.jpg'
 import { Card } from './Card'
 
 export class Player {
-    constructor(id, name, library, health, tabIndices, isLocal = false) {
+    constructor(id, name, library, life, tabIndices, isLocal = false) {
         this.id = id
         this.name = name
-        this.health = health
+        this.life = life
         this.counters = {}
         this.library = library.deck
         this.library_size = library.deck.length

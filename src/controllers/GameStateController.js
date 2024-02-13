@@ -78,10 +78,20 @@ export class GameStateController extends EventEmitter {
     this.emit('stateChanged', this);
   }
 
-  // Local actions
+  ////////////////////////////////////////////////////////
+  // Local actions                  //////////////////////
+  ////////////////////////////////////////////////////////
+
   focusOnCard(card) {
     this.focus_card = card
     this.changed()
+  }
+
+  getPlayer(playerNumber) {
+    if (playerNumber < 0 || playerNumber >= this.players.length) {
+      return null
+    }
+    return this.players[playerNumber]
   }
 
   ////////////////////////////////////////////////////////

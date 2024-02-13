@@ -52,11 +52,11 @@ export const GameArena = ({gameState}) => {
     [gameState, player1References, player2References, player3References, player4References, player5References, player6References]);
 
   hotkeys.registerCtrlKeyCommand('1', () => {hotkeys.playerRefs[1].playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('2', () => {hotkeys.playerRefs[2].playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('3', () => {hotkeys.playerRefs[3].playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('4', () => {hotkeys.playerRefs[4].playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('5', () => {hotkeys.playerRefs[5].playerStats.current.focus()})
-  hotkeys.registerCtrlKeyCommand('6', () => {hotkeys.playerRefs[6].playerStats.current.focus()})
+  hotkeys.registerCtrlKeyCommand('2', () => {hotkeys.playerRefs[2]?.playerStats?.current?.focus()})
+  hotkeys.registerCtrlKeyCommand('3', () => {hotkeys.playerRefs[3]?.playerStats?.current?.focus()})
+  hotkeys.registerCtrlKeyCommand('4', () => {hotkeys.playerRefs[4]?.playerStats?.current?.focus()})
+  hotkeys.registerCtrlKeyCommand('5', () => {hotkeys.playerRefs[5]?.playerStats?.current?.focus()})
+  hotkeys.registerCtrlKeyCommand('6', () => {hotkeys.playerRefs[6]?.playerStats?.current?.focus()})
 
   hotkeys.registerCtrlKeyCommand('e', () => {hotkeys.playerRefs[1].hand.current.focus()})
   hotkeys.registerCtrlKeyCommand('s', () => {hotkeys.playerRefs[1].battlefield.current.focus()})
@@ -113,19 +113,18 @@ export const GameArena = ({gameState}) => {
           <>
           <Row>
             <NorthTable barSide="left" gameState={gameState} playerRef={player2References} heightVh={100/2}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            playerNumber={1} player={gameState.getPlayer(1)} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
           </Row>
           <Row>
             <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} heightVh={100/2}
             player={gameState.players[0]} isActivePlayer={gameState.activePlayer === 0} />
           </Row>
-          
           </>
          ) : gameState.players.length === 3 || gameState.players.length === 4 ? (
           <>
           <Row>
             <NorthTable barSide="left" gameState={gameState} playerRef={player2References} heightVh={100/2}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            playerNumber={1} player={gameState.getPlayer(1)} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
           </Row>
           <Row>
             <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} heightVh={100/2}
@@ -135,12 +134,12 @@ export const GameArena = ({gameState}) => {
          ) : (
           <>
           <Row>
-            <NorthTable barSide="left" gameState={gameState} playerRef={player2References} heightVh={100/3}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            <NorthTable barSide="left" gameState={gameState} playerRef={player3References} heightVh={100/3}
+            playerNumber={2} player={gameState.getPlayer(2)} isActivePlayer={gameState.activePlayer === 2} landsOnNorth={true} />
           </Row>
           <Row>
             <NorthTable barSide="left" gameState={gameState} playerRef={player2References} heightVh={100/3}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            playerNumber={1} player={gameState.getPlayer(1)} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
           </Row>
           <Row>
             <SouthTable gameState={gameState} playerRef={player1References} playerNumber={0} heightVh={100/3}
@@ -154,27 +153,27 @@ export const GameArena = ({gameState}) => {
       gameState.players.length === 3 || gameState.players.length === 4 ? (
         <Col>
           <Row>
-            <NorthTable barSide="right" gameState={gameState} playerRef={player2References} heightVh={100/2}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            <NorthTable barSide="right" gameState={gameState} playerRef={player3References} heightVh={100/2}
+            playerNumber={2} player={gameState.getPlayer(2)} isActivePlayer={gameState.activePlayer === 2} landsOnNorth={true} />
           </Row>
           <Row>
-            <NorthTable barSide="right" gameState={gameState} playerRef={player2References} heightVh={100/2}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={false} />
+            <NorthTable barSide="right" gameState={gameState} playerRef={player4References} heightVh={100/2}
+            playerNumber={3} player={gameState.getPlayer(3)} isActivePlayer={gameState.activePlayer === 3} landsOnNorth={false} />
           </Row>
         </Col>
         ): gameState.players.length === 5 || gameState.players.length === 6 ? (
           <Col>
           <Row>
-            <NorthTable barSide="right" gameState={gameState} playerRef={player2References} heightVh={100/3}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            <NorthTable barSide="right" gameState={gameState} playerRef={player4References} heightVh={100/3}
+            playerNumber={3} player={gameState.getPlayer(3)} isActivePlayer={gameState.activePlayer === 3} landsOnNorth={true} />
           </Row>
           <Row>
-            <NorthTable barSide="right" gameState={gameState} playerRef={player2References} heightVh={100/3}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={true} />
+            <NorthTable barSide="right" gameState={gameState} playerRef={player5References} heightVh={100/3}
+            playerNumber={4} player={gameState.getPlayer(4)} isActivePlayer={gameState.activePlayer === 4} landsOnNorth={true} />
           </Row>
           <Row>
-            <NorthTable barSide="right" gameState={gameState} playerRef={player2References} heightVh={100/3}
-            playerNumber={1} player={gameState.players[1]} isActivePlayer={gameState.activePlayer === 1} landsOnNorth={false} />
+            <NorthTable barSide="right" gameState={gameState} playerRef={player6References} heightVh={100/3}
+            playerNumber={5} player={gameState.getPlayer(5)} isActivePlayer={gameState.activePlayer === 5} landsOnNorth={false} />
           </Row>
         </Col>
       ): null

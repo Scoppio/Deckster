@@ -26,11 +26,11 @@ export const HiddenHand = ({player, playerNumber, handVh}) => {
   return (
     <div className="hand col" 
       role="region" 
-      tabIndex={player.tabIndices.hand}
+      tabIndex={player && player.tabIndices.hand}
       aria-labelledby={playerNumber + "-player-hand-label"} 
       aria-describedby={playerNumber + "-hand-desc"}>
       <div className="col" style={{height: `${handVh}vh`}}>
-        {player.hand.map((card, idx) => <CardBackImg key={card._uid} scale={100} />)}
+        {player?.hand?.map((card, idx) => <CardBackImg key={card._uid} scale={100} />)}
       </div>
     </div>
   )
@@ -47,7 +47,7 @@ export const Hand = ({gameState, player, playerRef, handVh}) => {
   return (
     <div>
       <Row >
-        <ShownHand gameState={gameState} cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
+        <ShownHand gameState={gameState} cards={player.hand} tabIndex={player && player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
       </Row>
     </div>
   )
