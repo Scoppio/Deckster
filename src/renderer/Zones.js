@@ -14,7 +14,7 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
         variant="secondary" 
         id="dropdown-autoclose-outside"
         ref={playerRef[zoneName]} 
-        tabIndex={player.tabIndices[zoneName]} size="sm">
+        tabIndex={player && player.tabIndices[zoneName]} size="sm">
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
@@ -35,10 +35,10 @@ const Zone = ({ zoneName, player, playerRef, playerNumber }) => (
         
       </Dropdown.Menu>
     </Dropdown>
-    <p id={playerNumber  + "-" + zoneName + "-desc"}>{player[zoneName].length} cards</p>
+    <p id={playerNumber  + "-" + zoneName + "-desc"}>{player?.[zoneName]?.length ?? 0} cards</p>
     {
       zoneName === "commanderZone" && 
-        <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+        <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player?.commanderExtraCastingCost ?? '0'}</p>
     }
   </div>
 )
@@ -53,12 +53,12 @@ const TheCommanderZone = ({ zoneName, player, playerRef, playerNumber }) => (
         variant="secondary" 
         id="dropdown-autoclose-outside"
         ref={playerRef[zoneName]} 
-        tabIndex={player.tabIndices[zoneName]} size="sm">
+        tabIndex={player && player.tabIndices[zoneName]} size="sm">
         <span id={playerNumber + "-" + zoneName + "-label"}>commander</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>
-        <Dropdown.Item>Commander casting cost: {player.commanderExtraCastingCost}</Dropdown.Item>
+        <Dropdown.Item>Commander casting cost: {player?.commanderExtraCastingCost ?? '0'}</Dropdown.Item>
         <Dropdown.Item>Increase commander casting cost by 2</Dropdown.Item>
         <Dropdown.Item>Decrease commander casting cost by 2</Dropdown.Item>
         <Dropdown.Divider />
@@ -77,7 +77,7 @@ const TheCommanderZone = ({ zoneName, player, playerRef, playerNumber }) => (
         
       </Dropdown.Menu>
     </Dropdown>
-    <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+    <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player?.commanderExtraCastingCost ?? '0'}</p>
   </div>
 )
 

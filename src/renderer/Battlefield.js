@@ -32,23 +32,23 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, 
   return (
   <BattlefieldDiv className="row" 
     ref={playerRef.battlefield} 
-    tabIndex={player.tabIndices.battlefield}
+    tabIndex={player && player.tabIndices.battlefield}
     role="region"
-    aria-label={player.name + " Battlefield"}
+    aria-label={player?.name + " Battlefield"}
     aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}>
       <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
       {
-        player[landsOnNorth ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState}  card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.front_battlefield} cardHeight={100} />))
+        player?.[landsOnNorth ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState}  card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.front_battlefield} cardHeight={100} />))
       }
       </CardHolder>
       <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
       {
-        player.back_battlefield.map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.back_battlefield} cardHeight={100} />))
+        player?.back_battlefield.map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.back_battlefield} cardHeight={100} />))
       }
       </CardHolder>
       <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
       {
-        player[landsOnNorth ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState} card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.land_zone_battlefield} cardHeight={100} />))
+        player?.[landsOnNorth ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState} card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.land_zone_battlefield} cardHeight={100} />))
       }
       </CardHolder>
   </BattlefieldDiv>
@@ -59,13 +59,13 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player , heigh
   return (
     <BattlefieldDiv className="row" 
       role="region"
-      aria-label={player.name + " Battlefield"}
+      aria-label={player?.name + " Battlefield"}
       ref={playerRef.battlefield} 
-      tabIndex={player.tabIndices.front_battlefield}>
+      tabIndex={player && player.tabIndices.front_battlefield}>
       <Droppable droppableId="front_battlefield" direction="horizontal">
         {(provided) => (
           <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}}>
-            {player.front_battlefield.map((card, idx) => <ImgCard key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.front_battlefield} cardHeight={100} />)}
+            {player?.front_battlefield.map((card, idx) => <ImgCard key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.front_battlefield} cardHeight={100} />)}
             {provided.placeholder}
           </CardHolder>
         )}
@@ -73,7 +73,7 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player , heigh
       <Droppable droppableId="back_battlefield" direction="horizontal">
         {(provided) => (
           <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}}>
-            {player.back_battlefield.map((card, idx) => <ImgCard key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.back_battlefield} cardHeight={100} />)}
+            {player?.back_battlefield.map((card, idx) => <ImgCard key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.back_battlefield} cardHeight={100} />)}
             {provided.placeholder}
           </CardHolder>
         )}
@@ -81,7 +81,7 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player , heigh
       <Droppable droppableId="land_zone_battlefield" direction="horizontal">
         {(provided) => (
           <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}}>
-            {player.land_zone_battlefield.map((card, idx) => <ImgCard key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.land_zone_battlefield} cardHeight={100} />)}
+            {player?.land_zone_battlefield.map((card, idx) => <ImgCard key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.land_zone_battlefield} cardHeight={100} />)}
             {provided.placeholder}
           </CardHolder>
         )}

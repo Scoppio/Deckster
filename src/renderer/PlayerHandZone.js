@@ -23,7 +23,7 @@ const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) =
           variant="secondary" 
           id="dropdown-autoclose-outside"
           ref={playerRef.hand} 
-          tabIndex={player.tabIndices.hand} size="sm">
+          tabIndex={player && player.tabIndices.hand} size="sm">
           <span id={playerNumber + "-hand-label"}>hand</span>
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -42,7 +42,7 @@ const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) =
           
         </Dropdown.Menu>
       </Dropdown>
-      <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+      <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player?.commanderExtraCastingCost ?? '0'}</p>
     </div>
   )
 }
