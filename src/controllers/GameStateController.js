@@ -4,7 +4,7 @@ import { EventEmitter } from 'events'
 import { Card } from '../commons/Card'
 
 
-export class GameStateController extends EventEmitter {
+class BaseGameStateController extends EventEmitter {
   constructor(state = null, updateState) {
     super();
     this.updateState = updateState;
@@ -82,6 +82,13 @@ export class GameStateController extends EventEmitter {
   focusOnCard(card) {
     this.focus_card = card
     this.changed()
+  }
+
+}
+
+class RequestGameActions extends BaseGameStateController {
+  constructor(state = null, updateState) {
+    super(state, updateState);
   }
 
   ////////////////////////////////////////////////////////
@@ -235,7 +242,80 @@ export class GameStateController extends EventEmitter {
 
   // Command actions
 
-  log_event_0(event) {
+  log_event(event) {
+    if (!this.online) {
+      this.online = true
+    }
+    console.log(event)
+    const currentTime = new Date();
+    const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+    this.game_log.unshift(`${formattedTime} - ${event.payload}`);
+    if (this.game_log.length > 100) {
+      this.game_log = this.game_log.slice(0, 100);
+    }
+  }
+
+  log_commands(event) {
+    console.log(event)
+    const reverse_log = event.payload.split("\n").reverse()
+    // remove the last entry
+    reverse_log.pop()
+
+    reverse_log.forEach((line) => {
+      this.game_log.unshift(line.trim());
+    })
+    if (this.game_log.length > 100) {
+      this.game_log = this.game_log.slice(0, 100);
+    }
+    this.changed()
+  }
+
+  listCommands(hotkeys) {
+    const keyCommandsList = hotkeys.keyCommands.map((cmd) => {
+      return `${cmd.key} - ${cmd.description}`
+    }).join("\n")
+    const ctrlKeyCommandsList = hotkeys.ctrlKeyCommands.map((cmd) => {
+      return `${hotkeys.ctrlKeyCommandModifier} ${cmd.key} - ${cmd.description}`
+    }).join("\n")
+    const ctrlShiftKeyCommandsList = hotkeys.ctrlShiftKeyCommands.map((cmd) => {
+      return `${hotkeys.ctrlShiftKeyCommandModifier} ${cmd.key} - ${cmd.description}`
+    }).join("\n")
+    const altKeyCommandsList = hotkeys.altKeyCommands.map((cmd) => {
+      return `${hotkeys.altKeyCommandModifier} ${cmd.key} - ${cmd.description}`
+    }).join("\n")
+
+    this.log_commands({
+      type: "log_event",
+      payload: `Available commands:
+      ${keyCommandsList}
+      ${ctrlKeyCommandsList}
+      ${ctrlShiftKeyCommandsList}
+      ${altKeyCommandsList}
+      `
+    })
+  }
+  
+  pass_turn(event) {
+    // TODO: pass turn
+  }
+
+  change_game_phase(event) {
+    // TODO: change game phase
+  }
+
+  update_player(event) {
+    this.player.updateFromPayload(event.payload)
+  }
+
+}
+
+class ExecuteGameActions extends RequestGameActions {
+  constructor(state = null, updateState) {
+    super(state, updateState);
+  }
+  // Command actions
+
+  log_event(event) {
     if (!this.online) {
       this.online = true
     }
@@ -300,23 +380,22 @@ export class GameStateController extends EventEmitter {
     })
   }
   
-  pass_turn_0(event) {
+  pass_turn(event) {
     // TODO: pass turn
   }
 
-  change_game_phase_0(event) {
+  change_game_phase(event) {
     // TODO: change game phase
   }
 
-  _updatePlayer(event) {
+  update_player(event) {
     this.player.updateFromPayload(event.payload)
   }
 
-  _drawCard(event) {
-    this.player.hand.push(new Card(this.player.library.pop()))
-    var audio = new Audio(tiny_push_button);
-    audio.play();
-    this.changed()
-  }
+}
 
+export default class GameStateController extends ExecuteGameActions {
+  constructor(state = null, updateState) {
+    super(state, updateState);
+  }
 }

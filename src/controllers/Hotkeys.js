@@ -117,45 +117,129 @@ export class HotKeys {
         this.k = new HotkeysChooser().hotkeys
         this.macCtrlKeyCommand = []
         this.macCtrlShiftKeyCommand = []
+        this.macAltKeyCommand = []
+        this.macKeyCommand = []
+
         this.ctrlKeyCommand = []
         this.ctrlShiftKeyCommand = []
         this.altKeyCommand = []
-        this.macAltKeyCommand = []
         this.keyCommand = []
-        this.macKeyCommand = []
     }
 
-    registerKeyCommand = (key, func, os) => {
-        if (os === 'mac') {
-            this.macKeyCommand.push({key, func})
-        } else {
-            this.keyCommand.push({key, func})
+    get keyCommands() {
+        if (this.isMac) {
+            return this.macKeyCommand
         }
+        return this.keyCommand
     }
 
-    registerCtrlKeyCommand = (key, func, os) => {
-        if (os === 'mac') {
-            this.macCtrlKeyCommand.push({key, func})
-        } else {
-            this.ctrlKeyCommand.push({key, func})
+    get ctrlKeyCommands() {
+        if (this.isMac) {
+            return this.macCtrlKeyCommand
         }
+        return this.ctrlKeyCommand
     }
 
-    registerCtrlShiftKeyCommand = (key, func, os) => {
-        if (os === 'mac') {
-            this.macCtrlShiftKeyCommand.push({key, func})
-        } else {
-            this.ctrlShiftKeyCommand.push({key, func})
+    get ctrlKeyCommandModifier() {
+        if (this.isMac) {
+            return "meta"
         }
+        return "ctrl"
     }
 
-    registerAltKeyCommand = (key, func, os) => {
-        if (os === 'mac') {
-            this.macAltKeyCommand.push({key, func})
-        } else {
-            this.altKeyCommand.push({key, func})
+    get ctrlShiftKeyCommands() {
+        if (this.isMac) {
+            return this.macCtrlShiftKeyCommand
         }
+        return this.ctrlShiftKeyCommand
     }
+
+    get ctrlShiftKeyCommandModifier() {
+        if (this.isMac) {
+            return "meta+shift"
+        }
+        return "ctrl+shift"
+    }
+
+    get altKeyCommands() {
+        if (this.isMac) {
+            return this.macAltKeyCommand
+        }
+        return this.altKeyCommand
+    }
+
+    get altKeyCommandModifier() {
+        if (this.isMac) {
+            return "option"
+        }
+        return "alt"
+    }
+
+    registerKeyCommand = (key, func, description, os) => {
+        let keys = []
+        if (key.includes("," && key !== ",")) {
+            keys = key.split(",")
+        } else {
+            keys = [key]
+        }
+        keys.forEach((k) => {
+            if (os === 'mac') {
+                this.macKeyCommand.push({key: k, func, description})
+            } else {
+                this.keyCommand.push({key: k, func, description})
+            }
+        })
+    }
+
+    registerCtrlKeyCommand = (key, func, description, os) => {
+        let keys = []
+        if (key.includes(",") && key !== ",") {
+            keys = key.split(",")
+        } else {
+            keys = [key]
+        }
+        keys.forEach((k) => {
+            if (os === 'mac') {
+                this.macCtrlKeyCommand.push({key: k, func, description})
+            } else {
+                this.ctrlKeyCommand.push({key: k, func, description})
+            }
+        })
+    }
+
+    registerCtrlShiftKeyCommand = (key, func, description, os) => {
+        let keys = []
+        if (key.includes(",") && key !== ",") {
+            keys = key.split(",")
+        } else {
+            keys = [key]
+        }
+        keys.forEach((k) => {
+            if (os === 'mac') {
+                this.macCtrlShiftKeyCommand.push({key: k, func, description})
+            } else {
+                this.ctrlShiftKeyCommand.push({key: k, func, description})
+            }
+        })
+    }
+
+    registerAltKeyCommand = (key, func, description, os) => {
+        let keys = []
+        if (key.includes(",") && key !== ",") {
+            keys = key.split(",")
+        } else {
+            keys = [key]
+        }
+        keys.forEach((k) => {
+            if (os === 'mac') {
+                this.macAltKeyCommand.push({key: k, func, description})
+            } else {
+                this.altKeyCommand.push({key: k, func, description})
+            }
+        })
+    }
+
+
 
     handleKeyDown = (event) => {
         console.log(event)
