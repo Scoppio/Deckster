@@ -1,5 +1,6 @@
 import emptyAvatar from '../resources/images/bubbly_cat.jpg'
 import { Card } from './Card'
+import { Utils } from './Utils'
 
 export class Player {
     constructor(id, name, library, life, tabIndices, isLocal = false) {
@@ -24,7 +25,7 @@ export class Player {
         this.tabIndices = {...tabIndices}
         this.isLocal = isLocal
         this.avatar = emptyAvatar
-        this._uid = Math.floor(Math.random() * 1000000) + ""
+        this._uid = Utils.random_id_str
     }
 
     createCardInstances(cardArray) {
