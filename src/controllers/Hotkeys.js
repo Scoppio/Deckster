@@ -115,6 +115,7 @@ export class HotKeys {
         })
 
         this.k = new HotkeysChooser().hotkeys
+
         this.macCtrlKeyCommand = []
         this.macCtrlShiftKeyCommand = []
         this.macAltKeyCommand = []
@@ -142,7 +143,7 @@ export class HotKeys {
 
     get ctrlKeyCommandModifier() {
         if (this.isMac) {
-            return "meta"
+            return "command"
         }
         return "ctrl"
     }
@@ -156,9 +157,9 @@ export class HotKeys {
 
     get ctrlShiftKeyCommandModifier() {
         if (this.isMac) {
-            return "meta+shift"
+            return "command shift"
         }
-        return "ctrl+shift"
+        return "ctrl shift"
     }
 
     get altKeyCommands() {
@@ -176,12 +177,7 @@ export class HotKeys {
     }
 
     registerKeyCommand = (key, func, description, os) => {
-        let keys = []
-        if (key.includes("," && key !== ",")) {
-            keys = key.split(",")
-        } else {
-            keys = [key]
-        }
+        let keys = this.parseKey(key)
         keys.forEach((k) => {
             if (os === 'mac') {
                 this.macKeyCommand.push({key: k, func, description})
@@ -192,12 +188,7 @@ export class HotKeys {
     }
 
     registerCtrlKeyCommand = (key, func, description, os) => {
-        let keys = []
-        if (key.includes(",") && key !== ",") {
-            keys = key.split(",")
-        } else {
-            keys = [key]
-        }
+        let keys = this.parseKey(key)
         keys.forEach((k) => {
             if (os === 'mac') {
                 this.macCtrlKeyCommand.push({key: k, func, description})
@@ -208,12 +199,7 @@ export class HotKeys {
     }
 
     registerCtrlShiftKeyCommand = (key, func, description, os) => {
-        let keys = []
-        if (key.includes(",") && key !== ",") {
-            keys = key.split(",")
-        } else {
-            keys = [key]
-        }
+        let keys = this.parseKey(key)
         keys.forEach((k) => {
             if (os === 'mac') {
                 this.macCtrlShiftKeyCommand.push({key: k, func, description})
@@ -224,12 +210,7 @@ export class HotKeys {
     }
 
     registerAltKeyCommand = (key, func, description, os) => {
-        let keys = []
-        if (key.includes(",") && key !== ",") {
-            keys = key.split(",")
-        } else {
-            keys = [key]
-        }
+        let keys = this.parseKey(key)
         keys.forEach((k) => {
             if (os === 'mac') {
                 this.macAltKeyCommand.push({key: k, func, description})
@@ -278,5 +259,15 @@ export class HotKeys {
                 this.k.isKey(event, command.key, command.func)
             })
         }
+    }
+
+    parseKey(key) {
+        let keys = []
+        if (key.includes(",") && key !== ",") {
+            keys = key.split(",")
+        } else {
+            keys = [key]
+        }
+        return keys
     }
 }

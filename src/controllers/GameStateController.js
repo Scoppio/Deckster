@@ -1,7 +1,6 @@
 import AriaHelper from './AriaHelper'
-import tiny_push_button from '../resources/sounds/tiny_push_button.wav'
 import { EventEmitter } from 'events'
-import { Card } from '../commons/Card'
+import { SoundTable } from './Sounds'
 
 
 class BaseGameStateController extends EventEmitter {
@@ -81,6 +80,11 @@ class BaseGameStateController extends EventEmitter {
     this.focusOnCard(null)
   }
 
+  playSound(sound_name, volume = 1.0) {
+    const sound = new Audio(SoundTable.get(sound_name, "PLACEHOLDER_SOUND"))
+    sound.volume = volume
+    sound.play()
+  }
 }
 
 class RequestGameActions extends BaseGameStateController {
@@ -96,18 +100,6 @@ class RequestGameActions extends BaseGameStateController {
       console.log(error)
     }
   }
-  
-  ////////////////////////////////////////////////////////
-  // Request actions                //////////////////////
-  ////////////////////////////////////////////////////////
-
-  drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
-    this.sendEvent("draw_card", {zone: zone, number_of_cards: number_of_cards, destination: destination})
-  }
-
-  untapAll() {
-    this.sendEvent("untap_all")
-  }
 
   addPlayer(player) {
     this.players.push(player)
@@ -120,18 +112,28 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent('login_player', player)
   }
 
+  ////////////
+
+  drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
+    this.sendEvent("draw_card", {zone: zone, number_of_cards: number_of_cards, destination: destination})
+  }
+
+  untapAll() {
+    this.sendEvent("untap_all")
+  }
+
   updatePlayer() {
     this.sendEvent('update_player', this.player)
   }
 
-  increaseLife() {
-    this.player.life += 1
-    this.sendEvent('update_player', this.player)
+  increaseLife(health_points = 1) {
+    this.player.life += health_points
+    this.updatePlayer()
   }
 
-  decreaseLife() {
-    this.player.life -= 1
-    this.sendEvent('update_player', this.player)
+  decreaseLife(health_points = 1) {
+    this.player.life -= health_points
+    this.updatePlayer()
   }
 
   moveSelectedToHand() {
@@ -178,6 +180,10 @@ class RequestGameActions extends BaseGameStateController {
     console.log("TODO")
   }
 
+  revealCardsInHand() {
+    console.log("TODO")
+  }
+
   drawHand(number_of_cards = 7) {
     this.sendEvent("draw_hand", {number_of_cards})
   }
@@ -186,28 +192,28 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("mulligan", {number_of_cards})
   }
 
-  revealCardsInHand() {
-    console.log("TODO")
+  drawCardToBattlefield(number_of_cards = 1) {
+    this.drawCard(number_of_cards, "library", "front_battlefield")
   }
 
-  drawCardToBattlefield() {
-    console.log("TODO")
+  drawCardToGraveyard(number_of_cards = 1) {
+    this.drawCard(number_of_cards, "library", "graveyard")
   }
 
-  drawCardToGraveyard() {
-    console.log("TODO")
+  drawCardToExile(number_of_cards = 1) {
+    this.drawCard(number_of_cards, "library", "exile")
   }
 
-  drawCardToExile() {
-    console.log("TODO")
-  }
-
-  drawCardToFaceDown() {
-    console.log("TODO")
+  drawCardToFaceDown(number_of_cards = 1) {
+    this.drawCard(number_of_cards, "library", "faceDown")
   }
 
   shuffleDeck() {
     this.sendEvent("shuffle_library")
+  }
+
+  passTurn() {
+    this.sendEvent("pass_turn")
   }
 
   moveCardTo(source, destination) {
@@ -247,14 +253,14 @@ class RequestGameActions extends BaseGameStateController {
     }).join("\n")
 
     const msg = `Available commands:
-    ${keyCommandsList}
-    ${ctrlKeyCommandsList}
-    ${ctrlShiftKeyCommandsList}
-    ${altKeyCommandsList}
-    `
-    const reverse_log = msg.payload.split("\n").reverse()
-    // remove the last entry
-    reverse_log.pop()
+${keyCommandsList}
+${ctrlKeyCommandsList}
+${ctrlShiftKeyCommandsList}
+${altKeyCommandsList}`
+
+    let reverse_log = msg.split("\n").reverse()
+    // remove all empty lines
+    reverse_log = reverse_log.filter((line) => line.trim() !== "")
     reverse_log.forEach((line) => {
       this.game_log.unshift(line.trim());
     })
@@ -264,24 +270,12 @@ class RequestGameActions extends BaseGameStateController {
     this.changed()
   }
   
-  pass_turn(event) {
-    // TODO: pass turn
-  }
-
-  change_game_phase(event) {
-    // TODO: change game phase
-  }
-
-  update_player(event) {
-    this.player.updateFromPayload(event.payload)
-  }
 }
 
 class ExecuteGameActions extends RequestGameActions {
   constructor(state = null, updateState) {
     super(state, updateState);
   }
-  // Command actions
 
   handleEvent(event) {
     console.log(`GameStateController ${event}`)
@@ -314,10 +308,13 @@ class ExecuteGameActions extends RequestGameActions {
     this.player.updateFromPayload(event.payload)
   }
 
+  play_sound(event) {
+    this.playSound(event.payload?.name ?? "PLACEHOLDER_SOUND", event.payload?.volume ?? 1.0)
+  }
 }
 
 export default class GameStateController extends ExecuteGameActions {
   constructor(state = null, updateState) {
-    super(state, updateState);
+    super(state, updateState)
   }
 }

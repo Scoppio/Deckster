@@ -3,7 +3,7 @@
 import { GameArena } from './renderer/GameArena'
 import { loadDeck } from './commons/DeckLoader'
 import { useState, useEffect } from 'react'
-import { GameStateController } from './controllers/GameStateController'
+import GameStateController from './controllers/GameStateController'
 import { Player } from './commons/Player'
 import '@atlaskit/css-reset'
 import 'mana-font/css/mana.css'
