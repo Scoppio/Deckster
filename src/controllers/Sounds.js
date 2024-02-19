@@ -16,8 +16,7 @@ import remove_marker_sound from '../resources/sounds/mouse-click-104737.mp3'
 import add_marker_sound from '../resources/sounds/rclick-13693.mp3'
 
 
-export const SoundTable = {
-  // DEFAULT SOUND
+const SoundTable = {
   PLACEHOLDER_SOUND: placeholder_sound,
   SHUFFLE_SOUND: shuffle_sound,
   DRAW_SOUND: tiny_push_button,
@@ -35,5 +34,17 @@ export const SoundTable = {
   GAME_START_SOUND: game_start_sound,
   ADD_COUNTER_SOUND: add_marker_sound,
   REMOVE_COUNTER_SOUND: remove_marker_sound,
-  get: (sound_name, default_sound) => SoundTable[sound_name] || default_sound
+}
+
+export default class Sounds {
+  constructor() {
+    this.sounds = {}
+  }
+
+  playSound(sound_name, volume = 1.0) {
+    const sound = this.sounds[sound_name] || new Audio(SoundTable[sound_name] || placeholder_sound)
+    sound.volume = volume
+    sound.cloneNode(true).play()
+    this.sounds[sound_name] = sound
+  }
 }

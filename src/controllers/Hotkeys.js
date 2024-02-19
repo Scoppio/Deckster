@@ -177,47 +177,35 @@ export class HotKeys {
     }
 
     registerKeyCommand = (key, func, description, os) => {
-        let keys = this.parseKey(key)
-        keys.forEach((k) => {
-            if (os === 'mac') {
-                this.macKeyCommand.push({key: k, func, description})
-            } else {
-                this.keyCommand.push({key: k, func, description})
-            }
-        })
+        if (os === 'mac') {
+            this.macKeyCommand.push({key, func, description})
+        } else {
+            this.keyCommand.push({key, func, description})
+        }
     }
 
     registerCtrlKeyCommand = (key, func, description, os) => {
-        let keys = this.parseKey(key)
-        keys.forEach((k) => {
-            if (os === 'mac') {
-                this.macCtrlKeyCommand.push({key: k, func, description})
-            } else {
-                this.ctrlKeyCommand.push({key: k, func, description})
-            }
-        })
+        if (os === 'mac') {
+            this.macCtrlKeyCommand.push({key, func, description})
+        } else {
+            this.ctrlKeyCommand.push({key, func, description})
+        }
     }
 
     registerCtrlShiftKeyCommand = (key, func, description, os) => {
-        let keys = this.parseKey(key)
-        keys.forEach((k) => {
-            if (os === 'mac') {
-                this.macCtrlShiftKeyCommand.push({key: k, func, description})
-            } else {
-                this.ctrlShiftKeyCommand.push({key: k, func, description})
-            }
-        })
+        if (os === 'mac') {
+            this.macCtrlShiftKeyCommand.push({key, func, description})
+        } else {
+            this.ctrlShiftKeyCommand.push({key, func, description})
+        }
     }
 
     registerAltKeyCommand = (key, func, description, os) => {
-        let keys = this.parseKey(key)
-        keys.forEach((k) => {
-            if (os === 'mac') {
-                this.macAltKeyCommand.push({key: k, func, description})
-            } else {
-                this.altKeyCommand.push({key: k, func, description})
-            }
-        })
+        if (os === 'mac') {
+            this.macAltKeyCommand.push({key, func, description})
+        } else {
+            this.altKeyCommand.push({key, func, description})
+        }
     }
 
 
@@ -259,15 +247,5 @@ export class HotKeys {
                 this.k.isKey(event, command.key, command.func)
             })
         }
-    }
-
-    parseKey(key) {
-        let keys = []
-        if (key.includes(",") && key !== ",") {
-            keys = key.split(",")
-        } else {
-            keys = [key]
-        }
-        return keys
     }
 }

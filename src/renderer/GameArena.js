@@ -80,8 +80,10 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlShiftKeyCommand('P', () => {gameState.addCounterOnSelected()}, "Add a counter on selected cards.")
   hotkeys.registerCtrlShiftKeyCommand('M', () => {gameState.removeCounterOnSelected()}, "Remove a counter on selected cards.")
 
-  hotkeys.registerKeyCommand('<,x', () => {gameState.untapAll()}, "Untap all your permanents.")
-  hotkeys.registerKeyCommand('>,+', () => {gameState.drawCard()}, "Draw a card.")
+  hotkeys.registerKeyCommand('x', () => {gameState.untapAll()}, "Untap all your permanents.")
+  hotkeys.registerKeyCommand('+', () => {gameState.drawCard()}, "Draw a card.")
+  hotkeys.registerKeyCommand('<', () => {gameState.untapAll()}, "Untap all your permanents.")
+  hotkeys.registerKeyCommand('>', () => {gameState.drawCard()}, "Draw a card.")
   hotkeys.registerKeyCommand('-', () => {gameState.increaseLife()}, "Increase your life total.")
   hotkeys.registerKeyCommand('*', () => {gameState.decreaseLife()}, "Decrease your life total.")
   

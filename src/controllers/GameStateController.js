@@ -1,6 +1,6 @@
 import AriaHelper from './AriaHelper'
 import { EventEmitter } from 'events'
-import { SoundTable } from './Sounds'
+import Sounds from './Sounds'
 
 
 class BaseGameStateController extends EventEmitter {
@@ -18,6 +18,7 @@ class BaseGameStateController extends EventEmitter {
       this.online = false
       this.game_log = []
       this.focus_card = null
+      this.sounds = new Sounds()
     }
   }
   
@@ -30,6 +31,7 @@ class BaseGameStateController extends EventEmitter {
     this.online = previousState.online
     this.game_log = previousState.game_log
     this.focus_card = previousState.focus_card
+    this.sounds = previousState.sounds
   }
 
   get player () {
@@ -81,9 +83,7 @@ class BaseGameStateController extends EventEmitter {
   }
 
   playSound(sound_name, volume = 1.0) {
-    const sound = new Audio(SoundTable.get(sound_name, "PLACEHOLDER_SOUND"))
-    sound.volume = volume
-    sound.play()
+    this.sounds.playSound(sound_name, volume)
   }
 }
 
@@ -309,7 +309,7 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   play_sound(event) {
-    this.playSound(event.payload?.name ?? "PLACEHOLDER_SOUND", event.payload?.volume ?? 1.0)
+    this.playSound(event.payload?.name, event.payload?.volume ?? 1.0)
   }
 }
 
