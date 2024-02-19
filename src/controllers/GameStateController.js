@@ -58,21 +58,6 @@ class BaseGameStateController extends EventEmitter {
     this.webSocketClient.addListener(this)
   }
 
-  handleEvent(event) {
-    console.log(`GameStateController ${event}`)
-    this[event.type](event)
-    this.changed()
-  }
-  
-  sendEvent(type, payload = {}) {
-    const sender = this.sender
-    try {
-      this.webSocketClient?.sendEvent({ sender: sender, type: type, payload: payload })      
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   changed() {
     this.updateState(this);
     this.emit('stateChanged', this);
@@ -84,6 +69,18 @@ class BaseGameStateController extends EventEmitter {
     this.changed()
   }
 
+  getCardFrom(source) {
+    const sourceZone = source.droppableId;
+    const sourceIndex = source.index;
+    const card = this.player[sourceZone][sourceIndex]
+    this.focusOnCard(card)
+    return card
+  }
+
+  cancelCardMove() {
+    this.focusOnCard(null)
+  }
+
 }
 
 class RequestGameActions extends BaseGameStateController {
@@ -91,6 +88,15 @@ class RequestGameActions extends BaseGameStateController {
     super(state, updateState);
   }
 
+  sendEvent(type, payload = {}) {
+    const sender = this.sender
+    try {
+      this.webSocketClient?.sendEvent({ sender: sender, type: type, payload: payload })      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
   ////////////////////////////////////////////////////////
   // Request actions                //////////////////////
   ////////////////////////////////////////////////////////
@@ -172,12 +178,12 @@ class RequestGameActions extends BaseGameStateController {
     console.log("TODO")
   }
 
-  drawHand() {
-    this.sendEvent("draw_hand", {number_of_cards: 7})
+  drawHand(number_of_cards = 7) {
+    this.sendEvent("draw_hand", {number_of_cards})
   }
 
-  mulliganHand() {
-    this.sendEvent("mulligan", {number_of_cards: 7})
+  mulliganHand(number_of_cards = 7) {
+    this.sendEvent("mulligan", {number_of_cards})
   }
 
   revealCardsInHand() {
@@ -204,20 +210,6 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("shuffle_library")
   }
 
-  ////////////////////////////////////////////////////////
-
-  getCardFrom(source) {
-    const sourceZone = source.droppableId;
-    const sourceIndex = source.index;
-    const card = this.player[sourceZone][sourceIndex]
-    this.focusOnCard(card)
-    return card
-  }
-
-  cancelCardMove() {
-    this.focusOnCard(null)
-  }
-
   moveCardTo(source, destination) {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
@@ -240,36 +232,6 @@ class RequestGameActions extends BaseGameStateController {
     return card;
   }
 
-  // Command actions
-
-  log_event(event) {
-    if (!this.online) {
-      this.online = true
-    }
-    console.log(event)
-    const currentTime = new Date();
-    const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
-    this.game_log.unshift(`${formattedTime} - ${event.payload}`);
-    if (this.game_log.length > 100) {
-      this.game_log = this.game_log.slice(0, 100);
-    }
-  }
-
-  log_commands(event) {
-    console.log(event)
-    const reverse_log = event.payload.split("\n").reverse()
-    // remove the last entry
-    reverse_log.pop()
-
-    reverse_log.forEach((line) => {
-      this.game_log.unshift(line.trim());
-    })
-    if (this.game_log.length > 100) {
-      this.game_log = this.game_log.slice(0, 100);
-    }
-    this.changed()
-  }
-
   listCommands(hotkeys) {
     const keyCommandsList = hotkeys.keyCommands.map((cmd) => {
       return `${cmd.key} - ${cmd.description}`
@@ -284,15 +246,22 @@ class RequestGameActions extends BaseGameStateController {
       return `${hotkeys.altKeyCommandModifier} ${cmd.key} - ${cmd.description}`
     }).join("\n")
 
-    this.log_commands({
-      type: "log_event",
-      payload: `Available commands:
-      ${keyCommandsList}
-      ${ctrlKeyCommandsList}
-      ${ctrlShiftKeyCommandsList}
-      ${altKeyCommandsList}
-      `
+    const msg = `Available commands:
+    ${keyCommandsList}
+    ${ctrlKeyCommandsList}
+    ${ctrlShiftKeyCommandsList}
+    ${altKeyCommandsList}
+    `
+    const reverse_log = msg.payload.split("\n").reverse()
+    // remove the last entry
+    reverse_log.pop()
+    reverse_log.forEach((line) => {
+      this.game_log.unshift(line.trim());
     })
+    if (this.game_log.length > 100) {
+      this.game_log = this.game_log.slice(0, 100);
+    }
+    this.changed()
   }
   
   pass_turn(event) {
@@ -306,7 +275,6 @@ class RequestGameActions extends BaseGameStateController {
   update_player(event) {
     this.player.updateFromPayload(event.payload)
   }
-
 }
 
 class ExecuteGameActions extends RequestGameActions {
@@ -315,6 +283,12 @@ class ExecuteGameActions extends RequestGameActions {
   }
   // Command actions
 
+  handleEvent(event) {
+    console.log(`GameStateController ${event}`)
+    this[event.type](event)
+    this.changed()
+  }
+
   log_event(event) {
     if (!this.online) {
       this.online = true
@@ -322,62 +296,10 @@ class ExecuteGameActions extends RequestGameActions {
     console.log(event)
     const currentTime = new Date();
     const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
-    this.game_log.unshift(`${formattedTime} - ${event.payload}`);
+    this.game_log.unshift(`${event.payload} - ${formattedTime}`);
     if (this.game_log.length > 100) {
       this.game_log = this.game_log.slice(0, 100);
     }
-  }
-
-  log_commands(event) {
-    console.log(event)
-    const reverse_log = event.payload.split("\n").reverse()
-    // remove the last entry
-    reverse_log.pop()
-
-    reverse_log.forEach((line) => {
-      this.game_log.unshift(line.trim());
-    })
-    if (this.game_log.length > 100) {
-      this.game_log = this.game_log.slice(0, 100);
-    }
-    this.changed()
-  }
-
-  listCommands() {
-    this.log_commands({
-      type: "log_event",
-      payload: `Available commands: 
-      - List commands: F1
-      - Select player 1: Ctrl + 1 
-      - Select player 2: Ctrl + 2 
-      - Select player 3: Ctrl + 3 
-      - Select player 4: Ctrl + 4 
-      - Select player 5: Ctrl + 5 
-      - Select player 6: Ctrl + 6
-      - Select your hand: Ctrl + E
-      - Select your battlefield: Ctrl + S
-      - Select your library: Ctrl + D
-      - Select your graveyard: Ctrl + F
-      - Select your exile: Ctrl + Q
-      - Select your face down cards: Ctrl + H
-      - Select your commander zone: Ctrl + B
-      - Untap all: Ctrl + X or <
-      - Draw card: > or +
-      - Increase life: +
-      - Decrease life: -
-      - Add counter on selected: Ctrl + Shift + P
-      - Remove counter on selected: Ctrl + Shift + M
-      - Move selected to hand: Ctrl + Shift + Z
-      - Move selected to graveyard: Ctrl + Shift + X
-      - Move selected to exile: Ctrl + Shift + C
-      - Move selected to library: Ctrl + Shift + V
-      - Move selected to command zone: Ctrl + Shift + B
-      - Tap/Untap selected: Ctrl + Shift + J
-      - Declare attacking: Ctrl + Shift + L
-      - Declare blocking: Ctrl + Shift + U
-      - Scry: Ctrl + Shift + I
-      `
-    })
   }
   
   pass_turn(event) {
