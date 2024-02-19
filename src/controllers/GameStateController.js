@@ -116,24 +116,26 @@ class RequestGameActions extends BaseGameStateController {
 
   drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
     this.sendEvent("draw_card", {zone: zone, number_of_cards: number_of_cards, destination: destination})
+    
   }
 
   untapAll() {
     this.sendEvent("untap_all")
+    
   }
 
-  updatePlayer() {
-    this.sendEvent('update_player', this.player)
+  updatePlayer(sound, volume) {
+    this.sendEvent('update_player', {...this.player, sound, volume})
   }
 
   increaseLife(health_points = 1) {
     this.player.life += health_points
-    this.updatePlayer()
+    this.updatePlayer("ADD_COUNTER_SOUND", 1.0)
   }
 
   decreaseLife(health_points = 1) {
     this.player.life -= health_points
-    this.updatePlayer()
+    this.updatePlayer("ADD_COUNTER_SOUND", 1.0)
   }
 
   moveSelectedToHand() {
@@ -186,10 +188,12 @@ class RequestGameActions extends BaseGameStateController {
 
   drawHand(number_of_cards = 7) {
     this.sendEvent("draw_hand", {number_of_cards})
+    
   }
 
   mulliganHand(number_of_cards = 7) {
     this.sendEvent("mulligan", {number_of_cards})
+    
   }
 
   drawCardToBattlefield(number_of_cards = 1) {
@@ -210,10 +214,12 @@ class RequestGameActions extends BaseGameStateController {
 
   shuffleDeck() {
     this.sendEvent("shuffle_library")
+    
   }
 
   passTurn() {
     this.sendEvent("pass_turn")
+    
   }
 
   moveCardTo(source, destination) {
@@ -234,7 +240,7 @@ class RequestGameActions extends BaseGameStateController {
         "from_idx": sourceIndex,
         "to_idx": destinationIndex
       })
-
+    
     return card;
   }
 
@@ -267,9 +273,9 @@ ${altKeyCommandsList}`
     if (this.game_log.length > 100) {
       this.game_log = this.game_log.slice(0, 100);
     }
+    this.playSound("PLACEHOLDER_SOUND", 1.0)
     this.changed()
   }
-  
 }
 
 class ExecuteGameActions extends RequestGameActions {
