@@ -1,7 +1,6 @@
 const WebSocket = require('ws');
 const { v4: uuidv4 } = require('uuid');
 
-
 const server = new WebSocket.Server({ port: 8000 });
 
 const SERVER = {"name": "server", "id": 9999, "idx": 9999}
@@ -158,45 +157,58 @@ class GameSession {
   }
 }
 
+///////////////////////////////////////////////////////
+
 const gameSession = new GameSession('test', 'test');
 
 class login_player {
-  constructor(gameSession, event) {
+  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
     this.gameSession = gameSession;
     this.event = event;
+    this.sendJson = sendJson;
+    this.broadcastJson = broadcastJson;
+    this.playSound = playSound;
   }
 
   execute() {
     this.gameSession.addPlayer(this.event.payload)
-    return {
+    const ret = {
       type: 'log_event',
       payload: "Player " + this.event.payload['name'] + " logged in",
       sender: SERVER
     };
+    this.sendJson(ret);
   }
 }
 
 class update_player {
-  constructor(gameSession, event) {
+  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
     this.gameSession = gameSession;
     this.event = event;
+    this.sendJson = sendJson;
+    this.broadcastJson = broadcastJson;
+    this.playSound = playSound;
   }
 
   execute() {
     this.gameSession.players[this.event.payload['id']] = this.event.payload
     const player = this.gameSession.players[this.event.payload['id']]
-    return {type: 'update_player', payload: player, sender: this.event.sender}
+    const ret = {type: 'update_player', payload: player, sender: this.event.sender}
+    this.sendJson(ret);
+    this.broadcastJson({...ret, type: 'update_opp_table'});
   }
 }
 
 class move_card {
-  constructor(gameSession, event) {
+  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
     this.gameSession = gameSession;
     this.event = event;
+    this.sendJson = sendJson;
+    this.broadcastJson = broadcastJson;
+    this.playSound = playSound;
   }
 
   execute() {
-
     const player_id = this.event.sender['id']
     const player = this.gameSession.players[player_id]
     const from_zone = this.event.payload['from_zone']
@@ -212,20 +224,27 @@ class move_card {
       payload: "Player " + player['name'] + " moved " + card_obj['name'] + " from " + from_zone + " to " + to_zone,
       sender: SERVER
     };
-    return responseLog
+    
+    this.sendJson(responseLog);
+    this.sendJson({type: 'update_player', payload: player, sender: SERVER});
+    this.broadcastJson({type: 'update_opp_table', payload: player, sender: this.event.sender});
+    this.playSound('PLAY_SOUND', 1.0, player)
   }
 
 }
 
 class draw_card {
-  constructor(gameSession, event) {
+  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
     this.gameSession = gameSession;
     this.event = event;
+    this.sendJson = sendJson;
+    this.broadcastJson = broadcastJson;
+    this.playSound = playSound;
   }
 
   execute() {
     const player_id = this.event.sender['id']
-    const player = gameSession.players[player_id]
+    const player = this.gameSession.players[player_id]
     const num_cards = this.event.payload['number_of_cards']
     const zone = this.event.payload['zone']
     let cards_drawn = 0
@@ -243,20 +262,28 @@ class draw_card {
       sender: SERVER
     };
 
-    return responseLog
+    this.sendJson(responseLog);
+    this.sendJson({type: 'update_player', payload: player, sender: this.event.sender});
+    this.broadcastJson({type: 'update_opp_table', payload: player, sender: this.event.sender});
+    this.playSound('DRAW_SOUND', 1.0, player)
+  }
+}
+
+const ACTION_CONFIG = {
+  login_player,
+  update_player,
+  move_card,
+  draw_card
+}
+
+class ActionFactory {
+  static create(gameSession, event, sendJson, broadcastJson, playSound) {
+    return new ACTION_CONFIG[event.type](gameSession, event, sendJson, broadcastJson, playSound);
   }
 }
 
 server.on('connection', (socket) => {
   console.log('Client connected');
-
-  const playSound = (sound_name, volume = 1.0, sender = SERVER) => {
-    server.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({type: 'play_sound', payload: {name: sound_name, volume}, sender: sender}));
-      }
-    });
-  }
 
   const broadcastJson = (message) => {
     server.clients.forEach(function each(client) {
@@ -266,6 +293,10 @@ server.on('connection', (socket) => {
     });
   }
 
+  const playSound = (sound_name, volume = 1.0, sender = SERVER) => {
+    broadcastJson({type: 'play_sound', payload: {name: sound_name, volume}, sender: sender});
+  }
+
   const sendJson = (message) => {
     socket.send(JSON.stringify(message));
   }
@@ -273,35 +304,7 @@ server.on('connection', (socket) => {
   socket.on('message', (message) => {
     const json = JSON.parse(message)
     console.log('received: %s', message);
-    
-    if (json.type === 'login_player') {
-      const ret = new login_player(gameSession, json).execute();
-      sendJson(ret);
-    }
-
-    if (json.type === 'update_player') {
-      const ret = new update_player(gameSession, json).execute();
-      sendJson(ret);
-      broadcastJson({...ret, type: 'update_opp_table'});
-    }
-
-    if (json.type === 'move_card') {
-      const responseLog = new move_card(gameSession, json).execute();
-      const player = gameSession.players[json.sender['id']]
-      sendJson(responseLog);
-      sendJson({type: 'update_player', payload: player, sender: SERVER});
-      broadcastJson({type: 'update_opp_table', payload: player, sender: json.sender});
-      playSound('PLAY_SOUND', 1.0, player)
-    }
-
-    if (json.type === 'draw_card') {
-      const responseLog = new draw_card(gameSession, json).execute();
-      const player = gameSession.players[json.sender['id']]
-      sendJson(responseLog);
-      sendJson({type: 'update_player', payload: player, sender: SERVER});
-      broadcastJson({type: 'update_opp_table', payload: player, sender: json.sender});
-      playSound('DRAW_SOUND', 1.0, player)
-    }
+    ActionFactory.create(gameSession, json, sendJson, broadcastJson, playSound).execute();
   });
 
   socket.on('close', () => {
@@ -309,4 +312,4 @@ server.on('connection', (socket) => {
   });
 });
 
-console.log('WebSocket server is running on port 8000');
+console.log('WebSocket server is running on port 8000')
