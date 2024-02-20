@@ -310,6 +310,12 @@ class ExecuteGameActions extends RequestGameActions {
     // TODO: change game phase
   }
 
+  update_opp_table(event) {
+    if (this.player_number !== event.sender.idx) {
+      this.players[event.sender.idx].updateFromPayload(event.payload)
+    }
+  }
+
   update_player(event) {
     this.player.updateFromPayload(event.payload)
   }
