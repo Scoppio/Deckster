@@ -262,13 +262,72 @@ class shuffle_library extends action {
   }
 }
 
+class pass_turn extends action {
+  execute() {
+    const activePlayer = this.gameSession.game.passTurn()
+    this.broadcastJson({type: 'pass_turn', payload: {active_player: {id: activePlayer.id, name: activePlayer.name}}, sender: this.event.sender});
+  }
+}
+
+class mulligan extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event)
+    const hand = player.hand
+    const [newHand, wasSuccessful] = new this.gameSession.game.mulliganStrategy(player, 'hand').draw(hand.length)
+    player.hand = newHand
+    this.sendJson({type: 'update_player', payload: player, sender: this.event.sender});
+    this.broadcastJson({type: 'update_opp_table', payload: player, sender: this.event.sender});
+    this.playSound('MULLIGAN_SOUND', 1.0, player)
+  }
+}
+
+class change_game_phase extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event)
+    const phase = this.event.payload['phase']
+    const responseLog = {
+      type: 'log_event',
+      payload: "Player " + player['name'] + " changed game phase to " + phase,
+      sender: SERVER
+    };
+    this.sendJson(responseLog);
+  }
+}
+
+class untap_all extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event)
+    const permanents = player.battlefield
+    for (const permanent of permanents) {
+      permanent.tapped = false
+    }
+    this.sendJson({type: 'update_player', payload: player, sender: this.event.sender});
+    this.broadcastJson({type: 'update_opp_table', payload: player, sender: this.event.sender});
+  }
+}
+
+class draw_hand extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event)
+    const [hand, wasSuccessful] = new this.gameSession.game.openingHandDrawStrategy(player, 'library').draw(7)
+    player.hand = hand
+    this.sendJson({type: 'update_player', payload: player, sender: this.event.sender});
+    this.broadcastJson({type: 'update_opp_table', payload: player, sender: this.event.sender});
+  }
+}
+
 const ACTION_CONFIG = {
   login_player,
   update_player,
   move_card,
   draw_card,
-  shuffle_library
+  shuffle_library,
+  pass_turn,
+  mulligan,
+  untap_all,
+  draw_hand
 }
+
 
 class ActionFactory {
   static create(gameSession, event, sendJson, broadcastJson, playSound) {
