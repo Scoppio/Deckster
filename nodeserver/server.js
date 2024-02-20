@@ -4,6 +4,8 @@ const { v4: uuidv4 } = require('uuid');
 
 const server = new WebSocket.Server({ port: 8000 });
 
+const SERVER = {"name": "server", "id": 9999, "idx": 9999}
+
 ////////////////////////////////////////////////////////
 
 class DrawStrategy {
@@ -83,11 +85,7 @@ class StrategyChooser {
   }
 }
 
-
-
-
 ///////////////////////////////////////////////////////
-
 
 class Game {
   constructor(openingHandDrawStrategy = "random", mulliganStrategy = "favored") {
@@ -160,86 +158,149 @@ class GameSession {
   }
 }
 
-
-
-////////////////////////////////////////////////////////
-
 const gameSession = new GameSession('test', 'test');
 
-const SERVER = {"name": "server", "id": 9999, "idx": 9999}
+class login_player {
+  constructor(gameSession, event) {
+    this.gameSession = gameSession;
+    this.event = event;
+  }
+
+  execute() {
+    this.gameSession.addPlayer(this.event.payload)
+    return {
+      type: 'log_event',
+      payload: "Player " + this.event.payload['name'] + " logged in",
+      sender: SERVER
+    };
+  }
+}
+
+class update_player {
+  constructor(gameSession, event) {
+    this.gameSession = gameSession;
+    this.event = event;
+  }
+
+  execute() {
+    this.gameSession.players[this.event.payload['id']] = this.event.payload
+    const player = this.gameSession.players[this.event.payload['id']]
+    return {type: 'update_player', payload: player, sender: this.event.sender}
+  }
+}
+
+class move_card {
+  constructor(gameSession, event) {
+    this.gameSession = gameSession;
+    this.event = event;
+  }
+
+  execute() {
+
+    const player_id = this.event.sender['id']
+    const player = this.gameSession.players[player_id]
+    const from_zone = this.event.payload['from_zone']
+    const to_zone = this.event.payload['to_zone']
+    const from_idx = this.event.payload['from_idx']
+    const to_idx = this.event.payload['to_idx']
+    const card_obj = player[from_zone][from_idx]
+    player[from_zone].splice(from_idx, 1)
+    player[to_zone].splice(to_idx, 0, card_obj)
+
+    const responseLog = {
+      type: 'log_event',
+      payload: "Player " + player['name'] + " moved " + card_obj['name'] + " from " + from_zone + " to " + to_zone,
+      sender: SERVER
+    };
+    return responseLog
+  }
+
+}
+
+class draw_card {
+  constructor(gameSession, event) {
+    this.gameSession = gameSession;
+    this.event = event;
+  }
+
+  execute() {
+    const player_id = this.event.sender['id']
+    const player = gameSession.players[player_id]
+    const num_cards = this.event.payload['number_of_cards']
+    const zone = this.event.payload['zone']
+    let cards_drawn = 0
+    for (let i = 0; i < num_cards; i++) {
+      if (player[zone].length <= 0) {
+        break
+      }
+      player['hand'].push(player[zone].pop())
+      cards_drawn += 1
+    }
+
+    const responseLog = {
+      type: 'log_event',
+      payload: "Player " + player['name'] + " drew " + cards_drawn + " cards from " + zone,
+      sender: SERVER
+    };
+
+    return responseLog
+  }
+}
 
 server.on('connection', (socket) => {
   console.log('Client connected');
 
+  const playSound = (sound_name, volume = 1.0, sender = SERVER) => {
+    server.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({type: 'play_sound', payload: {name: sound_name, volume}, sender: sender}));
+      }
+    });
+  }
+
+  const broadcastJson = (message) => {
+    server.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(message));
+      }
+    });
+  }
+
+  const sendJson = (message) => {
+    socket.send(JSON.stringify(message));
+  }
+
   socket.on('message', (message) => {
     const json = JSON.parse(message)
     console.log('received: %s', message);
+    
     if (json.type === 'login_player') {
-      gameSession.addPlayer(json.payload)
-      const response = {
-        type: '_logEvent',
-        payload: "Player " + json.payload['name'] + " logged in",
-        sender: SERVER
-      };
-
-      socket.send(JSON.stringify(response));
+      const ret = new login_player(gameSession, json).execute();
+      sendJson(ret);
     }
 
     if (json.type === 'update_player') {
-      gameSession.players[json.payload['id']] = json.payload
-      const player = gameSession.players[json.payload['id']]
-      
-      socket.send(JSON.stringify({type: '_updatePlayer', payload: player, sender: SERVER}));
+      const ret = new update_player(gameSession, json).execute();
+      sendJson(ret);
+      broadcastJson({...ret, type: 'update_opp_table'});
     }
 
     if (json.type === 'move_card') {
-      const player_id = json.sender['id']
-      const player = gameSession.players[player_id]
-      const from_zone = json.payload['from_zone']
-      const to_zone = json.payload['to_zone']
-      const from_idx = json.payload['from_idx']
-      const to_idx = json.payload['to_idx']
-      const card_obj = player[from_zone][from_idx]
-      player[from_zone].splice(from_idx, 1)
-      player[to_zone].splice(to_idx, 0, card_obj)
-
-      const responseLog = {
-        type: '_logEvent',
-        payload: "Player " + player['name'] + " moved " + card_obj['name'] + " from " + from_zone + " to " + to_zone,
-        sender: SERVER
-      };
-
-      socket.send(JSON.stringify(responseLog));
-      socket.send(JSON.stringify({type: '_updatePlayer', payload: player, sender: SERVER}));
-      
-      console.log('sending: %s ' + player['name'] + ' moved ' + card_obj['name'] + ' from ' + from_zone + ' to ' + to_zone, responseLog);
+      const responseLog = new move_card(gameSession, json).execute();
+      const player = gameSession.players[json.sender['id']]
+      sendJson(responseLog);
+      sendJson({type: 'update_player', payload: player, sender: SERVER});
+      broadcastJson({type: 'update_opp_table', payload: player, sender: json.sender});
+      playSound('PLAY_SOUND', 1.0, player)
     }
 
     if (json.type === 'draw_card') {
-      const player_id = json.sender['id']
-      const player = gameSession.players[player_id]
-      const num_cards = json.payload['number_of_cards']
-      const zone = json.payload['zone']
-      let cards_drawn = 0
-      for (let i = 0; i < num_cards; i++) {
-        if (player[zone].length <= 0) {
-          break
-        }
-        player['hand'].push(player[zone].pop())
-        cards_drawn += 1
-      }
-
-      const responseLog = {
-        type: '_logEvent',
-        payload: "Player " + player['name'] + " drew " + cards_drawn + " cards from " + zone,
-        sender: SERVER
-      };
-
-      socket.send(JSON.stringify(responseLog));
-      socket.send(JSON.stringify({type: '_updatePlayer', payload: player, sender: SERVER}));
-      
-      console.log('sending: %s ' + player['name'] + ' drew ' + cards_drawn + ' cards from ' + zone, responseLog);
-
+      const responseLog = new draw_card(gameSession, json).execute();
+      const player = gameSession.players[json.sender['id']]
+      sendJson(responseLog);
+      sendJson({type: 'update_player', payload: player, sender: SERVER});
+      broadcastJson({type: 'update_opp_table', payload: player, sender: json.sender});
+      playSound('DRAW_SOUND', 1.0, player)
     }
   });
 
