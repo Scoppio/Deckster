@@ -129,12 +129,12 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   increaseLife(health_points = 1) {
-    this.player.life += health_points
+    this.player.health += health_points
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0)
   }
 
   decreaseLife(health_points = 1) {
-    this.player.life -= health_points
+    this.player.health -= health_points
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0)
   }
 

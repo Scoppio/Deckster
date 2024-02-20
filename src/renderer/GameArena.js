@@ -84,8 +84,10 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerKeyCommand('+', () => {gameState.drawCard()}, "Draw a card.")
   hotkeys.registerKeyCommand('<', () => {gameState.untapAll()}, "Untap all your permanents.")
   hotkeys.registerKeyCommand('>', () => {gameState.drawCard()}, "Draw a card.")
-  hotkeys.registerKeyCommand('-', () => {gameState.increaseLife()}, "Increase your life total.")
-  hotkeys.registerKeyCommand('*', () => {gameState.decreaseLife()}, "Decrease your life total.")
+  hotkeys.registerKeyCommand('c', () => {gameState.drawCard()}, "Draw a card.")
+  hotkeys.registerKeyCommand('-', () => {gameState.decreaseLife()}, "Decrease your life total.")
+  hotkeys.registerKeyCommand('=', () => {gameState.increaseLife()}, "Increase your life total.")
+  hotkeys.registerKeyCommand('*', () => {gameState.increaseLife()}, "Increase your life total.")
   
   useEffect(() => {
     const handleKeyDown = (event) => {
