@@ -161,7 +161,7 @@ class GameSession {
 
 const gameSession = new GameSession('test', 'test');
 
-class login_player {
+class action {
   constructor(gameSession, event, sendJson, broadcastJson, playSound) {
     this.gameSession = gameSession;
     this.event = event;
@@ -169,7 +169,9 @@ class login_player {
     this.broadcastJson = broadcastJson;
     this.playSound = playSound;
   }
+}
 
+class login_player extends action{
   execute() {
     this.gameSession.addPlayer(this.event.payload)
     const ret = {
@@ -181,15 +183,7 @@ class login_player {
   }
 }
 
-class update_player {
-  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
-    this.gameSession = gameSession;
-    this.event = event;
-    this.sendJson = sendJson;
-    this.broadcastJson = broadcastJson;
-    this.playSound = playSound;
-  }
-
+class update_player extends action {
   execute() {
     this.gameSession.players[this.event.payload['id']] = this.event.payload
     const player = this.gameSession.players[this.event.payload['id']]
@@ -199,15 +193,7 @@ class update_player {
   }
 }
 
-class move_card {
-  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
-    this.gameSession = gameSession;
-    this.event = event;
-    this.sendJson = sendJson;
-    this.broadcastJson = broadcastJson;
-    this.playSound = playSound;
-  }
-
+class move_card extends action {
   execute() {
     const player_id = this.event.sender['id']
     const player = this.gameSession.players[player_id]
@@ -233,15 +219,7 @@ class move_card {
 
 }
 
-class draw_card {
-  constructor(gameSession, event, sendJson, broadcastJson, playSound) {
-    this.gameSession = gameSession;
-    this.event = event;
-    this.sendJson = sendJson;
-    this.broadcastJson = broadcastJson;
-    this.playSound = playSound;
-  }
-
+class draw_card extends action {
   execute() {
     const player_id = this.event.sender['id']
     const player = this.gameSession.players[player_id]
@@ -269,11 +247,27 @@ class draw_card {
   }
 }
 
+class shuffle_library extends action {
+  execute() {
+    const player_id = this.event.sender['id']
+    const player = this.gameSession.players[player_id]
+    player['library'].sort(() => Math.random() - 0.5)
+    const responseLog = {
+      type: 'log_event',
+      payload: "Player " + player['name'] + " shuffled their library",
+      sender: SERVER
+    };
+    this.sendJson(responseLog);
+    this.playSound('SHUFFLE_SOUND', 1.0, player)
+  }
+}
+
 const ACTION_CONFIG = {
   login_player,
   update_player,
   move_card,
-  draw_card
+  draw_card,
+  shuffle_library
 }
 
 class ActionFactory {
