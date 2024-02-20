@@ -137,12 +137,12 @@ class GameSession {
   constructor(gameName, gameGroupName) {
     this.gameName = gameName;
     this.gameGroupName = gameGroupName;
-    this.players = [];
+    this.players = {};
     this.game = new Game();
   }
 
   addPlayer(player) {
-    this.players.push(player);
+    this.players[player.id] = player;
     this.game.addPlayer(player);
   }
 
@@ -223,6 +223,7 @@ class draw_card extends action {
   execute() {
     const player_id = this.event.sender['id']
     const player = this.gameSession.players[player_id]
+    console.log(player_id, player.name)
     const num_cards = this.event.payload['number_of_cards']
     const zone = this.event.payload['zone']
     let cards_drawn = 0
@@ -272,8 +273,7 @@ class pass_turn extends action {
 class mulligan extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event)
-    const hand = player.hand
-    const [newHand, wasSuccessful] = new this.gameSession.game.mulliganStrategy(player, 'hand').draw(hand.length)
+    const [newHand, wasSuccessful] = new this.gameSession.game.mulliganStrategy(player, 'hand').draw(7)
     player.hand = newHand
     this.sendJson({type: 'update_player', payload: player, sender: this.event.sender});
     this.broadcastJson({type: 'update_opp_table', payload: player, sender: this.event.sender});
@@ -327,7 +327,6 @@ const ACTION_CONFIG = {
   untap_all,
   draw_hand
 }
-
 
 class ActionFactory {
   static create(gameSession, event, sendJson, broadcastJson, playSound) {
