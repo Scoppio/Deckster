@@ -11,13 +11,16 @@ import Col from 'react-bootstrap/Col';
 export const SouthTable = ({gameState, playerRef, playerNumber, player, isActivePlayer, heightVh }) => {
   const onDragStart = (start, provided) => {
     const { source } = start;
-    gameState.getCardFrom(source)
+    const card = gameState.getCardFrom(source)
+    const sourceZone = source.droppableId;
+    let sourceName = sourceZone.split('-')[1] || sourceZone
+    provided.announce('You lifted ' + card.name + ' in ' + sourceName +  'at position ' + source.index);
   }
 
   const onDragEnd = (result, provided) => {
     const { source, destination } = result;
     const sourceZone = source.droppableId;
-    let sourceName = sourceZone.split('-')[1]
+    let sourceName = sourceZone.split('-')[1] || sourceZone
 
     if (result.reason === 'CANCEL') {
       provided.announce(`Cancelling card movement, returning card to ${sourceName}`);
@@ -34,8 +37,17 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
 
       const destinationZone = destination.droppableId;
       const card = gameState.moveCardTo(source, destination)
-      provided.announce('Moved ' + card.name + ' from ' + sourceName + ' to ' + destinationZone);
+      provided.announce('Moved ' + card.name + ' from ' + sourceName + ' to ' + destinationZone + ' at position ' + destination.index);
     }
+  }
+
+  const onDragUpdate = (update, provided) => {
+    console.log(update)
+    const { source, destination } = update;
+    const card = gameState.getCardFrom(source)
+    const destinationZone = destination.droppableId;
+
+    provided.announce(destinationZone + ' at position ' + destination.index);
   }
 
   const handHeightVh = heightVh * 0.17
@@ -50,7 +62,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
           </Col>
           <DragDropContext
             onDragEnd={onDragEnd}
-            onDragUpdate={(update) => {console.log(update)}}
+            onDragUpdate={onDragUpdate}
             onDragStart={onDragStart}
           > 
           <Col>
