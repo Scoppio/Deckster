@@ -124,6 +124,7 @@ export const ImgCardHand = ({idx, gameState, card, size, tabIndex, cardHeight}) 
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {provided => (
         <SlimContainer 
+          className="hand_zone ImgCardHand"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}

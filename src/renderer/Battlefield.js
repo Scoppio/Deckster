@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 
 import { Droppable } from "react-beautiful-dnd";
 import { StaticImgCard, ImgCard } from "./FullCard";
@@ -51,47 +50,6 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, 
 
 export const Battlefield = ({ gameState, playerRef, playerNumber, player , heightVh}) => {
   const lineVh = heightVh / 3 - 1
-
-  const handleKeyDown = (event) => {
-    const zones = ['front_battlefield', 'back_battlefield', 'land_zone_battlefield']; // Array.from(document.querySelectorAll('.Droppable'));  // 
-    const focusedElement = document.activeElement;
-    const cards = Array.from(document.querySelectorAll('.ImgCard'));
-    const currentZone = focusedElement.className.split(' ').find(className => zones.includes(className));
-    let currentZoneIndex = zones.findIndex(zone => zone === currentZone);
-    let currentCardIndex = cards.findIndex(card => card === focusedElement);
-  
-    if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-      if (currentCardIndex === -1) {
-        return;
-      }
-  
-      if (event.key === 'ArrowLeft' && currentCardIndex > 0) {
-        cards[currentCardIndex - 1].focus();
-      } else if (event.key === 'ArrowRight' && currentCardIndex < cards.length - 1) {
-        cards[currentCardIndex + 1].focus();
-      }
-    } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
-      if (currentZoneIndex === -1) {
-        return;
-      }
-  
-      if (event.key === 'ArrowUp' && currentZoneIndex > 0) {
-        const nextZone = zones[currentZoneIndex - 1];
-        const firstCardInNextZone = cards.find(card => card.closest(`.${nextZone}.ImgCard`));
-        firstCardInNextZone && firstCardInNextZone.focus();
-      } else if (event.key === 'ArrowDown' && currentZoneIndex < zones.length - 1) {
-        const nextZone = zones[currentZoneIndex + 1];
-        const firstCardInNextZone = cards.find(card => card.closest(`.${nextZone}.ImgCard`));
-        firstCardInNextZone && firstCardInNextZone.focus();
-      }
-    }
-  };
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
 
   return (
     <BattlefieldDiv className="row" 

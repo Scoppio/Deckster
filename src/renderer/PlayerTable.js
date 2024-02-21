@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react';
+
 import { Battlefield, StaticBattlefield } from './Battlefield'
 import { PlayerBar } from './PlayerBar'
 import { Hand, HiddenHand } from './Hand'
@@ -49,10 +51,90 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       provided.announce(destinationZone + ' at position ' + destination.index);
     }
   }
+  
+  
 
   const handHeightVh = heightVh * 0.17
   const battlefieldHeight = heightVh * 0.8
   
+  useEffect(() => {
+    function findNextNonEmptyZoneIndex(zones, cardPerZone, currentZoneIndex, direction) {
+      const nextZoneIndex = currentZoneIndex + direction;
+      if (nextZoneIndex < 0 || nextZoneIndex >= zones.length) {
+        return -1;
+      }
+      if (cardPerZone[zones[nextZoneIndex]].length > 0) {
+        return nextZoneIndex;
+      }
+      return findNextNonEmptyZoneIndex(zones, cardPerZone, nextZoneIndex, direction);
+    }
+
+    const handleKeyDown = (event) => {
+      const focusedElement = document.activeElement;
+      if (!focusedElement || !focusedElement.className.includes('ImgCard')) {
+        return;
+      }
+      
+      const zones = ['front_battlefield', 'back_battlefield', 'land_zone_battlefield', 'hand_zone'];
+      const cardPerZone = {}
+      zones.forEach(zone => {
+        const selector = zone === 'hand_zone' ? `.${zone}` : `.${zone}.ImgCard`;
+        cardPerZone[zone] = Array.from(document.querySelectorAll(selector));
+      });
+  
+      const cards = Array.from(document.querySelectorAll('.ImgCard'));
+      const handCards = Array.from(document.querySelectorAll('.hand_zone.ImgCardHand'));
+      cards.push(...handCards);
+  
+      const currentZone = zones.find(zone => focusedElement.className.includes(zone));
+      let currentZoneIndex = zones.findIndex(zone => zone === currentZone);
+      let currentCardIndex = cards.findIndex(card => card === focusedElement);
+      
+      if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        if (currentCardIndex === -1) {
+          return;
+        }
+        if (event.key === 'ArrowLeft' && currentCardIndex > 0) {
+          cards[currentCardIndex - 1].focus();
+        } else if (event.key === 'ArrowRight' && currentCardIndex < cards.length - 1) {
+          cards[currentCardIndex + 1].focus();
+        }
+      } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+        if (currentZoneIndex === -1) {
+          return;
+        }
+        const currentIndexOnZone = cardPerZone[currentZone].findIndex(card => card === focusedElement);
+  
+        if (event.key === 'ArrowUp') {
+          const nextZoneIndex = findNextNonEmptyZoneIndex(zones, cardPerZone, currentZoneIndex, -1);
+          if (nextZoneIndex !== -1) {
+            const nextZone = zones[nextZoneIndex];
+            const cardsInNextZone = cards.filter(card => card.closest(`.${nextZone}.ImgCard`));
+            const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
+            const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
+            closesCardInNextZone && closesCardInNextZone.focus();
+          }
+        } else if (event.key === 'ArrowDown') {
+          const nextZoneIndex = findNextNonEmptyZoneIndex(zones, cardPerZone, currentZoneIndex, 1);
+          if (nextZoneIndex !== -1) {
+            const nextZone = zones[nextZoneIndex];
+            const selector = nextZone === 'hand_zone' ? `.${nextZone}` : `.${nextZone}.ImgCard`;
+            const cardsInNextZone = cards.filter(card => card.closest(selector));
+            const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
+            const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
+            closesCardInNextZone && closesCardInNextZone.focus();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+
   return (
     <div className="col flex-fill d-flex flex-column" >
   
