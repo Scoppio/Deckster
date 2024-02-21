@@ -19,7 +19,7 @@ const HiddenText = style.div`
   border: 0;
 `
 
-export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
+export const ImgCard = ({region, idx, gameState, card, size, tabIndex, cardHeight}) => {
   const [isTapped, setIsTapped] = useState(card.is_tapped);
   const [cardFace, setCardFace] = useState(card.card_face);
 
@@ -51,6 +51,7 @@ export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {provided => (
         <SlimContainer 
+          className={`${region} ImgCard`}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
@@ -87,6 +88,7 @@ export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
 }
 
 ImgCard.propTypes = {
+  region: PropTypes.string.isRequired,
   idx: PropTypes.number.isRequired,
   card : PropTypes.object.isRequired,
   size : PropTypes.string.isRequired,
