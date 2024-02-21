@@ -290,9 +290,6 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   log_event(event) {
-    if (!this.online) {
-      this.online = true
-    }
     console.log(event)
     const currentTime = new Date();
     const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;

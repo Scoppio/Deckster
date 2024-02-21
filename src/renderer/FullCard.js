@@ -69,7 +69,7 @@ export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
           }}
           >
           <HiddenText>
-            <div aria-live="assertive" aria-atomic="true">{card.face_aria_description} {isTapped ? ", tapped. " : ""}</div>
+            <div aria-live="assertive" aria-atomic="true">{isTapped ? "tapped " : ""}{card.face_aria_description} </div>
           </HiddenText>
           <HiddenText>
             <div aria-live="polite" aria-atomic="true">{card.card_type_line + ", "}</div>
@@ -177,7 +177,7 @@ export const StaticImgCard = ({card, gameState, size, tabIndex, cardHeight}) => 
       onMouseLeave={onMouseLeave}
       >
       <HiddenText>
-        <div>{card.aria_description} {card.is_tapped ? ", tapped. " : ""}</div>
+        <div>{card.is_tapped ? "tapped " : ""}{card.aria_description}</div>
       </HiddenText>
       <HiddenText>
         <div>{card.card_type_line + ", "}</div>
