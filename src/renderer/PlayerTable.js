@@ -43,11 +43,11 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
 
   const onDragUpdate = (update, provided) => {
     console.log(update)
-    const { source, destination } = update;
-    const card = gameState.getCardFrom(source)
-    const destinationZone = destination.droppableId;
-
-    provided.announce(destinationZone + ' at position ' + destination.index);
+    const { destination } = update;
+    if (destination !== null) {
+      const destinationZone = destination.droppableId;
+      provided.announce(destinationZone + ' at position ' + destination.index);
+    }
   }
 
   const handHeightVh = heightVh * 0.17

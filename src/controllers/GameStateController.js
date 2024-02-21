@@ -124,7 +124,7 @@ class RequestGameActions extends BaseGameStateController {
     
   }
 
-  updatePlayer(sound, volume) {
+  updatePlayer(sound, volume = 1.0) {
     this.sendEvent('update_player', {...this.player, sound, volume})
   }
 

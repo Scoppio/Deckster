@@ -25,9 +25,18 @@ class login_player extends action{
 
 class update_player extends action {
   execute() {
-    this.gameSession.players[this.event.payload['id']] = this.event.payload
+    let payloadPlayer = this.event.payload
+    let sound = this.event.payload['sound']
+    let volume = this.event.payload['volume'] || 1.0
+    if (sound) {
+      this.playSound(sound, volume, this.event.sender)
+      delete payloadPlayer['sound']
+      delete payloadPlayer['volume']
+    }
+    this.gameSession.players[this.event.payload['id']] = payloadPlayer
     const player = this.gameSession.players[this.event.payload['id']]
     const ret = {type: 'update_player', payload: player, sender: this.event.sender}
+
     this.sendJson(ret);
     this.broadcastJson({...ret, type: 'update_opp_table'});
   }

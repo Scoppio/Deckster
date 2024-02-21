@@ -29,13 +29,13 @@ export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
   const flipCard = () => {
     card.changeFace()
     setCardFace(card.card_face);
-    gameState.updatePlayer();
+    gameState.updatePlayer("flip_card", 1.0);
     gameState.focusOnCard(card);
   }
 
   const handleClick = () => {
     card.tapped = !card.is_tapped;
-    gameState.updatePlayer();
+    gameState.updatePlayer("tap_card", 1.0);
     setIsTapped(card.tapped);
   }
 
@@ -69,7 +69,7 @@ export const ImgCard = ({idx, gameState, card, size, tabIndex, cardHeight}) => {
           }}
           >
           <HiddenText>
-            <div aria-live="assertive" aria-atomic="true">{isTapped ? "tapped " : ""}{card.face_aria_description} </div>
+            <div aria-live="assertive" aria-atomic="true">{isTapped ? "tapped " : ""}{card.face_aria_description}</div>
           </HiddenText>
           <HiddenText>
             <div aria-live="polite" aria-atomic="true">{card.card_type_line + ", "}</div>
