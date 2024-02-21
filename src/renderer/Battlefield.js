@@ -1,6 +1,9 @@
+import React, { useEffect } from 'react';
+
 import { Droppable } from "react-beautiful-dnd";
 import { StaticImgCard, ImgCard } from "./FullCard";
 import PropTypes from 'prop-types';
+
 
 import style from 'styled-components'
 
@@ -48,6 +51,34 @@ export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, 
 
 export const Battlefield = ({ gameState, playerRef, playerNumber, player , heightVh}) => {
   const lineVh = heightVh / 3 - 1
+
+  const handleKeyDown = (event) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      return;
+    }
+
+    const focusedElement = document.activeElement;
+    const cards = Array.from(document.querySelectorAll('.card'));
+
+    const index = cards.indexOf(focusedElement);
+    if (index === -1) {
+      return;
+    }
+
+    if (event.key === 'ArrowLeft' && index > 0) {
+      cards[index - 1].focus();
+    } else if (event.key === 'ArrowRight' && index < cards.length - 1) {
+      cards[index + 1].focus();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <BattlefieldDiv className="row" 
       role="region"
