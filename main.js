@@ -21,6 +21,8 @@ const createWindow = () => {
     win.loadURL('http://localhost:3010')
 }
 
+app.setAccessibilitySupportEnabled(true)
+
 app.whenReady().then(() => {
     createWindow()
     
