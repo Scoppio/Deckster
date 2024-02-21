@@ -63,7 +63,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div role="application">
       <RemoveScrollBar />
       <GameArena gameState={gameStateController}/>
     </div>
