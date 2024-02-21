@@ -11,48 +11,40 @@ const CardHolder = style.div`
 `
 
 const BattlefieldDiv = style.div`
-padding: 8px;
-flex-direction: row;
-width: 75vw;
-display: flex;
+  padding: 8px;
+  flex-direction: row;
+  width: 75vw;
+  display: flex;
 `
 
-// padding: 8px;
-// display: flex;
-// flex-direction: row;
-// overflow-x: auto;
-// flex-wrap: nowrap;
-// width: 75vw;
-
-
 export const StaticBattlefield = ({ gameState, playerRef, playerNumber, player, landsOnNorth, heightVh }) => { 
-  
   const lineVh = heightVh / 3 
 
   return (
-  <BattlefieldDiv className="row" 
-    ref={playerRef.battlefield} 
-    tabIndex={player.tabIndices.battlefield}
-    role="region"
-    aria-label={player.name + " Battlefield"}
-    aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}>
-      <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
-      {
-        player[landsOnNorth ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState}  card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.front_battlefield} cardHeight={100} />))
-      }
-      </CardHolder>
-      <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
-      {
-        player.back_battlefield.map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.back_battlefield} cardHeight={100} />))
-      }
-      </CardHolder>
-      <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
-      {
-        player[landsOnNorth ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState} card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.land_zone_battlefield} cardHeight={100} />))
-      }
-      </CardHolder>
-  </BattlefieldDiv>
-)}
+    <BattlefieldDiv className="row" 
+      ref={playerRef.battlefield} 
+      tabIndex={player.tabIndices.battlefield}
+      role="region"
+      aria-label={player.name + " Battlefield"}
+      aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}>
+        <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
+        {
+          player[landsOnNorth ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState}  card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.front_battlefield} cardHeight={100} />))
+        }
+        </CardHolder>
+        <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
+        {
+          player.back_battlefield.map((card, index) => (<StaticImgCard card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.back_battlefield} cardHeight={100} />))
+        }
+        </CardHolder>
+        <CardHolder style={{height: `${lineVh}vh`, padding: "2px"}}>
+        {
+          player[landsOnNorth ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (<StaticImgCard gameState={gameState} card={card} key={index} size={"small"} tabIndex={index + player.tabIndices.land_zone_battlefield} cardHeight={100} />))
+        }
+        </CardHolder>
+    </BattlefieldDiv>
+  )
+}
 
 export const Battlefield = ({ gameState, playerRef, playerNumber, player , heightVh}) => {
   const lineVh = heightVh / 3 - 1
@@ -95,5 +87,14 @@ Battlefield.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
+  heightVh: PropTypes.number.isRequired,
+}
+
+StaticBattlefield.propTypes = {
+  gameState: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+  player: PropTypes.object.isRequired,
+  landsOnNorth: PropTypes.bool.isRequired,
   heightVh: PropTypes.number.isRequired,
 }

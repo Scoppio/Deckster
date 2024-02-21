@@ -325,7 +325,8 @@ const ACTION_CONFIG = {
   pass_turn,
   mulligan,
   untap_all,
-  draw_hand
+  draw_hand,
+  change_game_phase
 }
 
 class ActionFactory {
