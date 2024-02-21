@@ -53,7 +53,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
             onDragUpdate={(update) => {console.log(update)}}
             onDragStart={onDragStart}
           > 
-          <Col style={({overflowX: 'auto' })}>
+          <Col>
             <Row style={({height: `${battlefieldHeight}vh`})}>
               <Battlefield gameState={gameState} playerRef={playerRef} playerNumber={playerNumber} player={player} heightVh={battlefieldHeight}/>
             </Row>
