@@ -73,6 +73,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       }
       
       const zones = ['front_battlefield', 'back_battlefield', 'land_zone_battlefield', 'hand_zone'];
+      const battlefieldZones = ['front_battlefield', 'back_battlefield', 'land_zone_battlefield'];
       const zonesByName = {
         front_battlefield: 'front',
         back_battlefield: 'back',
@@ -108,10 +109,17 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
           cardIndex -= 1;
         } else if (event.key === 'ArrowRight' && currentCardIndex < cards.length - 1) {
           cardIndex += 1;
+        } else {
+          return;
         }
         
-        cards[cardIndex].focus();
         const nextZone = reverseCardIndexZoneMap[cardIndex];
+        if ((nextZone === 'hand_zone' && currentZone !== 'hand_zone') 
+          || (nextZone !== 'hand_zone' && currentZone === 'hand_zone')) {
+          return;
+        }
+
+        cards[cardIndex].focus();
         if (currentZone !== nextZone) {
           gameState.announce(`${zonesByName[nextZone]} lane`)
         }
@@ -123,7 +131,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         const currentIndexOnZone = cardPerZone[currentZone].findIndex(card => card === focusedElement);
   
         if (event.key === 'ArrowUp') {
-          const nextZoneIndex = findNextNonEmptyZoneIndex(zones, cardPerZone, currentZoneIndex, -1);
+          const nextZoneIndex = findNextNonEmptyZoneIndex(battlefieldZones, cardPerZone, currentZoneIndex, -1);
           if (nextZoneIndex !== -1) {
             const nextZone = zones[nextZoneIndex];
             const cardsInNextZone = cards.filter(card => card.closest(`.${nextZone}.ImgCard`));
@@ -135,7 +143,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
             }
           }
         } else if (event.key === 'ArrowDown') {
-          const nextZoneIndex = findNextNonEmptyZoneIndex(zones, cardPerZone, currentZoneIndex, 1);
+          const nextZoneIndex = findNextNonEmptyZoneIndex(battlefieldZones, cardPerZone, currentZoneIndex, 1);
           if (nextZoneIndex !== -1) {
             const nextZone = zones[nextZoneIndex];
             const selector = nextZone === 'hand_zone' ? `.${nextZone}` : `.${nextZone}.ImgCard`;
