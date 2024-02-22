@@ -17,7 +17,6 @@ const createWindow = () => {
             enableRemoteModule: true,
         }
     })
-
     win.loadURL('http://localhost:3010')
 }
 

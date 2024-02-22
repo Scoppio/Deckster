@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { Battlefield, StaticBattlefield } from './Battlefield'
 import { PlayerBar } from './PlayerBar'
 import { Hand, HiddenHand } from './Hand'
@@ -52,7 +51,6 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
     }
   }
   
-  
 
   const handHeightVh = heightVh * 0.17
   const battlefieldHeight = heightVh * 0.8
@@ -76,12 +74,24 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
       }
       
       const zones = ['front_battlefield', 'back_battlefield', 'land_zone_battlefield', 'hand_zone'];
+      const zonesByName = {
+        front_battlefield: 'front',
+        back_battlefield: 'back',
+        land_zone_battlefield: 'land',
+        hand_zone: 'hand',
+      }
       const cardPerZone = {}
       zones.forEach(zone => {
         const selector = zone === 'hand_zone' ? `.${zone}` : `.${zone}.ImgCard`;
         cardPerZone[zone] = Array.from(document.querySelectorAll(selector));
       });
-  
+      const reverseMapCardPerZone = Object.entries(cardPerZone).reduce((acc, [zone, cards]) => {
+        cards.forEach(card => {
+          acc[card] = zone;
+        });
+        return acc;
+      }, {});
+      
       const cards = Array.from(document.querySelectorAll('.ImgCard'));
       const handCards = Array.from(document.querySelectorAll('.hand_zone.ImgCardHand'));
       cards.push(...handCards);
@@ -94,11 +104,17 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         if (currentCardIndex === -1) {
           return;
         }
+
         if (event.key === 'ArrowLeft' && currentCardIndex > 0) {
           cards[currentCardIndex - 1].focus();
         } else if (event.key === 'ArrowRight' && currentCardIndex < cards.length - 1) {
           cards[currentCardIndex + 1].focus();
         }
+        const nextZone = reverseMapCardPerZone[cards[currentCardIndex]];
+        if (currentZone !== nextZone) {
+          gameState.announce(`${zonesByName[currentZone]} lane`)
+        }
+
       } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
         if (currentZoneIndex === -1) {
           return;
@@ -113,6 +129,9 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
             const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
             const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
             closesCardInNextZone && closesCardInNextZone.focus();
+            if (currentIndexOnZone !== nextZoneIndex) {
+              gameState.announce(`${zonesByName[nextZone]} lane`)
+            }
           }
         } else if (event.key === 'ArrowDown') {
           const nextZoneIndex = findNextNonEmptyZoneIndex(zones, cardPerZone, currentZoneIndex, 1);
@@ -123,6 +142,9 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
             const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
             const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
             closesCardInNextZone && closesCardInNextZone.focus();
+            if (currentIndexOnZone !== nextZoneIndex) {
+              gameState.announce(`${nextZone} lane`)
+            }
           }
         }
       }

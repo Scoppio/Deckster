@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
-import { LogFrame } from './LogFrame';
+import { LogFrame, AnnouncementFrame } from './LogFrame';
 
 export const GameStateBoard = ({gameState, playerRef }) => {
 
@@ -37,6 +37,7 @@ export const GameStateBoard = ({gameState, playerRef }) => {
           : null
         }
       </div>
+      <AnnouncementFrame gameState={gameState} />
       <LogFrame gameState={gameState} height={25} playerRef={playerRef.log} />
     </Row>
   )

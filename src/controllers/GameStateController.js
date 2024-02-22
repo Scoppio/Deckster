@@ -54,6 +54,11 @@ class BaseGameStateController extends EventEmitter {
     return this.game_log
   }
 
+  announce(message) {
+    this.announcement_message = message
+    this.changed()
+  }
+
   registerWebSocketClient(webSocketClient) {
     this.webSocketClient = webSocketClient
     this.webSocketClient.addListener(this)
