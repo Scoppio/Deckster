@@ -135,9 +135,10 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
           if (nextZoneIndex !== -1) {
             const nextZone = zones[nextZoneIndex];
             const cardsInNextZone = cards.filter(card => card.closest(`.${nextZone}.ImgCard`));
-            const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
-            const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
-            closesCardInNextZone && closesCardInNextZone.focus();
+            const firstCardInNextZone = cardsInNextZone[0];
+            // const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
+            // const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
+            firstCardInNextZone && firstCardInNextZone.focus();
             if (currentIndexOnZone !== nextZoneIndex) {
               gameState.announce(`${zonesByName[nextZone]} lane`)
             }
@@ -148,9 +149,10 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
             const nextZone = zones[nextZoneIndex];
             const selector = nextZone === 'hand_zone' ? `.${nextZone}` : `.${nextZone}.ImgCard`;
             const cardsInNextZone = cards.filter(card => card.closest(selector));
-            const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
-            const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
-            closesCardInNextZone && closesCardInNextZone.focus();
+            const firstCardInNextZone = cardsInNextZone[0];
+            // const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
+            // const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
+            firstCardInNextZone && firstCardInNextZone.focus();
             if (currentIndexOnZone !== nextZoneIndex) {
               gameState.announce(`${zonesByName[nextZone]} lane`)
             }
