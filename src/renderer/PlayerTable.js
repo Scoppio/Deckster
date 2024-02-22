@@ -51,7 +51,6 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
     }
   }
   
-
   const handHeightVh = heightVh * 0.17
   const battlefieldHeight = heightVh * 0.8
   
@@ -80,17 +79,17 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         land_zone_battlefield: 'land',
         hand_zone: 'hand',
       }
+
       const cardPerZone = {}
+      const reverseCardIndexZoneMap = {}
+      let accumulator = 0;
       zones.forEach(zone => {
         const selector = zone === 'hand_zone' ? `.${zone}` : `.${zone}.ImgCard`;
         cardPerZone[zone] = Array.from(document.querySelectorAll(selector));
+        for (let i = 0; i < cardPerZone[zone].length; i++) {
+          reverseCardIndexZoneMap[accumulator++] = zone;
+        }
       });
-      const reverseMapCardPerZone = Object.entries(cardPerZone).reduce((acc, [zone, cards]) => {
-        cards.forEach(card => {
-          acc[card] = zone;
-        });
-        return acc;
-      }, {});
       
       const cards = Array.from(document.querySelectorAll('.ImgCard'));
       const handCards = Array.from(document.querySelectorAll('.hand_zone.ImgCardHand'));
@@ -104,15 +103,17 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         if (currentCardIndex === -1) {
           return;
         }
-
+        let cardIndex = currentCardIndex
         if (event.key === 'ArrowLeft' && currentCardIndex > 0) {
-          cards[currentCardIndex - 1].focus();
+          cardIndex -= 1;
         } else if (event.key === 'ArrowRight' && currentCardIndex < cards.length - 1) {
-          cards[currentCardIndex + 1].focus();
+          cardIndex += 1;
         }
-        const nextZone = reverseMapCardPerZone[cards[currentCardIndex]];
+        
+        cards[cardIndex].focus();
+        const nextZone = reverseCardIndexZoneMap[cardIndex];
         if (currentZone !== nextZone) {
-          gameState.announce(`${zonesByName[currentZone]} lane`)
+          gameState.announce(`${zonesByName[nextZone]} lane`)
         }
 
       } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
@@ -143,7 +144,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
             const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
             closesCardInNextZone && closesCardInNextZone.focus();
             if (currentIndexOnZone !== nextZoneIndex) {
-              gameState.announce(`${nextZone} lane`)
+              gameState.announce(`${zonesByName[nextZone]} lane`)
             }
           }
         }
@@ -154,7 +155,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [gameState]);
 
 
   return (

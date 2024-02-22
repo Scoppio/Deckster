@@ -57,25 +57,25 @@ export const Battlefield = ({ gameState, playerRef, playerNumber, player , heigh
       aria-label={player.name + " Battlefield"}
       ref={playerRef.battlefield} 
       tabIndex={player.tabIndices.front_battlefield}>
-      <Droppable droppableId="front_battlefield" direction="horizontal">
+      <Droppable droppableId="front_battlefield" direction="horizontal" aria-label="front lane" role="region">
         {(provided) => (
-          <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}} className="Droppable">
+          <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}} className="Droppable" aria-label="front lane">
             {player.front_battlefield.map((card, idx) => <ImgCard region="front_battlefield" key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.front_battlefield} cardHeight={100} />)}
             {provided.placeholder}
           </CardHolder>
         )}
       </Droppable>
-      <Droppable droppableId="back_battlefield" direction="horizontal">
+      <Droppable droppableId="back_battlefield" direction="horizontal" aria-label="back lane" role="region">
         {(provided) => (
-          <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}} className="Droppable">
+          <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}} className="Droppable" aria-label="back lane">
             {player.back_battlefield.map((card, idx) => <ImgCard region="back_battlefield" key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.back_battlefield} cardHeight={100} />)}
             {provided.placeholder}
           </CardHolder>
         )}
       </Droppable>
-      <Droppable droppableId="land_zone_battlefield" direction="horizontal">
+      <Droppable droppableId="land_zone_battlefield" direction="horizontal" aria-label="land lane" role="region">
         {(provided) => (
-          <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}} className="Droppable">
+          <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${lineVh}vh`, padding: "2px"}} className="Droppable" aria-label="land lane">
             {player.land_zone_battlefield.map((card, idx) => <ImgCard region="land_zone_battlefield" key={card._uid} gameState={gameState} size={"small"} idx={idx} card={card} tabIndex={idx + player.tabIndices.land_zone_battlefield} cardHeight={100} />)}
             {provided.placeholder}
           </CardHolder>

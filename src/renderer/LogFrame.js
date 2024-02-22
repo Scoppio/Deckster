@@ -35,7 +35,7 @@ LogFrame.propTypes = {
 export const AnnouncementFrame = ({gameState}) => {
   return (
     <HiddenText aria-live="assertive" aria-atomic="true">
-      <p>{gameState.announcement}</p>
+      <p>{gameState.announcement_message}</p>
     </HiddenText>
   )
 }

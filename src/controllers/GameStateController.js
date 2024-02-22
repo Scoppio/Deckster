@@ -17,6 +17,7 @@ class BaseGameStateController extends EventEmitter {
       this.ariaHelper = new AriaHelper(this)
       this.online = false
       this.game_log = []
+      this.announcement_message = ""
       this.focus_card = null
       this.sounds = new Sounds()
     }
@@ -32,6 +33,7 @@ class BaseGameStateController extends EventEmitter {
     this.game_log = previousState.game_log
     this.focus_card = previousState.focus_card
     this.sounds = previousState.sounds
+    this.announcement_message = previousState.announcement_message
   }
 
   get player () {
