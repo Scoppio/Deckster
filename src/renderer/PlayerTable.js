@@ -125,37 +125,20 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
         }
 
       } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
-        if (currentZoneIndex === -1) {
+        if (currentZoneIndex === -1 || currentZone === 'hand_zone') {
           return;
         }
-        const currentIndexOnZone = cardPerZone[currentZone].findIndex(card => card === focusedElement);
-  
-        if (event.key === 'ArrowUp') {
-          const nextZoneIndex = findNextNonEmptyZoneIndex(battlefieldZones, cardPerZone, currentZoneIndex, -1);
-          if (nextZoneIndex !== -1) {
-            const nextZone = zones[nextZoneIndex];
-            const cardsInNextZone = cards.filter(card => card.closest(`.${nextZone}.ImgCard`));
-            const firstCardInNextZone = cardsInNextZone[0];
-            // const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
-            // const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
-            firstCardInNextZone && firstCardInNextZone.focus();
-            if (currentIndexOnZone !== nextZoneIndex) {
-              gameState.announce(`${zonesByName[nextZone]} lane`)
-            }
-          }
-        } else if (event.key === 'ArrowDown') {
-          const nextZoneIndex = findNextNonEmptyZoneIndex(battlefieldZones, cardPerZone, currentZoneIndex, 1);
-          if (nextZoneIndex !== -1) {
-            const nextZone = zones[nextZoneIndex];
-            const selector = nextZone === 'hand_zone' ? `.${nextZone}` : `.${nextZone}.ImgCard`;
-            const cardsInNextZone = cards.filter(card => card.closest(selector));
-            const firstCardInNextZone = cardsInNextZone[0];
-            // const lastCardInNextZone = cardsInNextZone[cardsInNextZone.length - 1];
-            // const closesCardInNextZone = cardPerZone[nextZone][currentIndexOnZone] || lastCardInNextZone;
-            firstCardInNextZone && firstCardInNextZone.focus();
-            if (currentIndexOnZone !== nextZoneIndex) {
-              gameState.announce(`${zonesByName[nextZone]} lane`)
-            }
+        const direction = event.key === 'ArrowUp' ? -1 : 1;
+        
+        const nextZoneIndex = findNextNonEmptyZoneIndex(battlefieldZones, cardPerZone, currentZoneIndex, direction);
+        if (nextZoneIndex !== -1) {
+          const nextZone = zones[nextZoneIndex];
+          const cardsInNextZone = cards.filter(card => card.closest(`.${nextZone}.ImgCard`));
+          const firstCardInNextZone = cardsInNextZone[0];
+          firstCardInNextZone && firstCardInNextZone.focus();
+          const currentIndexOnZone = cardPerZone[currentZone].findIndex(card => card === focusedElement);
+          if (currentIndexOnZone !== nextZoneIndex) {
+            gameState.announce(`${zonesByName[nextZone]} lane`)
           }
         }
       }
