@@ -16,8 +16,7 @@ const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) =
   return (
     <div className={"hand row-flex"} 
       role="region"
-      aria-labelledby={playerNumber + "-hand-label"}
-      aria-describedby={playerNumber + "-hand-desc"}>
+      aria-describedby={`${player.hand.length} cards in hand.`}>
       <Dropdown autoClose="outside" >
         <Dropdown.Toggle 
           variant="secondary" 
