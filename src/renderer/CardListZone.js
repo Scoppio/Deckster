@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 import style from 'styled-components'
 
@@ -15,9 +14,20 @@ const CardEntry = style.p`
 `
 
 export const CardListZone = ({gameState, playerRef, tabIndex }) => {
+  const closeCardList = () => {
+    gameState.closeViewZone();
+  }
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      closeCardList();
+    }
+  }
+
   return (
-    <CardList ref={playerRef.cardListZone} tabIndex={gameState.open_zone.zone && tabIndex.card_list_zone}>
-      {gameState.open_zone.cards.map((card, idx) => <CardEntry key={idx} tabIndex={tabIndex.card_list_zone + 1 + idx}>{card.name}</CardEntry>)}
+    <CardList ref={playerRef.cardListZone}>
+      {gameState.open_zone.zone && <p onClick={closeCardList} onKeyDown={handleKeyDown} tabIndex={tabIndex.card_list_zone}><u>Close List</u></p>}
+      {gameState.open_zone.cards.map((card, idx) => <CardEntry key={idx} tabIndex={tabIndex.card_list_zone + 2 + idx} >{card.name}</CardEntry>)}
     </CardList>
   )
 }
