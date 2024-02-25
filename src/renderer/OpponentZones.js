@@ -19,8 +19,8 @@ const Zone = ({ zoneName, player, playerNumber }) => (
     </Dropdown>
     <p id={playerNumber  + "-" + zoneName + "-desc"}>{player[zoneName].length} cards</p>
     {
-      zoneName === "commanderZone" && 
-        <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+      zoneName === "commander_zone" && 
+        <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commander_extra_casting_cost}</p>
     }
   </div>
 )
@@ -56,8 +56,8 @@ export const OppFaceDown = ({ player, playerNumber }) => (
   <Zone zoneName="faceDown" player={player} playerNumber={playerNumber} />
 )
 
-export const OppCommanderZone = ({ player, playerNumber }) => (
-  <Zone zoneName="commanderZone" player={player} playerNumber={playerNumber} />
+export const Oppcommander_zone = ({ player, playerNumber }) => (
+  <Zone zoneName="commander_zone" player={player} playerNumber={playerNumber} />
 )
 
 export const OppPlayerHandZone = ({ player, playerNumber }) => (
@@ -95,7 +95,7 @@ OppFaceDown.propTypes = {
   playerNumber: PropTypes.number.isRequired,
 }
 
-OppCommanderZone.propTypes = {
+Oppcommander_zone.propTypes = {
   player: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
 }

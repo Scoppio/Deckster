@@ -56,6 +56,13 @@ class move_card extends action {
     const from_idx = this.event.payload['from_idx']
     const to_idx = this.event.payload['to_idx']
     const card_obj = player[from_zone][from_idx]
+
+    if (!card_obj) {
+      console.log('Card not found')
+      this.sendJson({type: 'update_player', payload: player, sender: this.SERVER});
+      return
+    }
+    
     player[from_zone].splice(from_idx, 1)
     player[to_zone].splice(to_idx, 0, card_obj)
 

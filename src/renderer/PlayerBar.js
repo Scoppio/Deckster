@@ -72,7 +72,7 @@ export const PlayerBar = ({ player, playerRef, playerNumber, isActivePlayer, hei
         ${player.hand.length} in hand,
         ${player.graveyard.length} in graveyard,
         ${player.library.length} in library,
-        ${player.commanderZone.length} in command,
+        ${player.commander_zone.length} in command,
         ${player.exile.length} in exile,
         ${player.faceDown.length} face down.`}
         tabIndex={player.tabIndices.playerStats} 

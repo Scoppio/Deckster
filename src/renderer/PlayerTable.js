@@ -15,7 +15,7 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
     const card = gameState.getCardFrom(source)
     const sourceZone = source.droppableId;
     let sourceName = sourceZone.split('-')[1] || sourceZone
-    provided.announce('You lifted ' + card.name + ' in ' + sourceName +  'at position ' + source.index);
+    card && provided.announce('You lifted ' + card.name + ' in ' + sourceName +  'at position ' + source.index);
   }
 
   const onDragEnd = (result, provided) => {
@@ -118,8 +118,11 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
           || (nextZone !== 'hand_zone' && currentZone === 'hand_zone')) {
           return;
         }
-
-        cards[cardIndex].focus();
+        cards[cardIndex].focus()
+        
+        const f = document.activeElement
+        const cardIdx = cardPerZone[nextZone].findIndex(card => card.attributes.uniqueid === f.attributes.uniqueid);
+        gameState.focusOnCard(gameState.player[nextZone][cardIdx]);
         if (currentZone !== nextZone) {
           gameState.announce(`${zonesByName[nextZone]} lane`)
         }
@@ -135,8 +138,9 @@ export const SouthTable = ({gameState, playerRef, playerNumber, player, isActive
           const nextZone = zones[nextZoneIndex];
           const cardsInNextZone = cards.filter(card => card.closest(`.${nextZone}.ImgCard`));
           const firstCardInNextZone = cardsInNextZone[0];
-          firstCardInNextZone && firstCardInNextZone.focus();
           const currentIndexOnZone = cardPerZone[currentZone].findIndex(card => card === focusedElement);
+          firstCardInNextZone && firstCardInNextZone.focus()
+          gameState.focusOnCard(gameState.player[nextZone][0]);
           if (currentIndexOnZone !== nextZoneIndex) {
             gameState.announce(`${zonesByName[nextZone]} lane`)
           }

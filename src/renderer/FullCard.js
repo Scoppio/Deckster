@@ -5,6 +5,7 @@ import emptyCard from '../resources/cards/empty_card.png'
 import FuckedCardBack from '../resources/cards/mtgcardback.png'
 import { useState } from 'react';
 
+
 const SlimContainer = style.div`
 `
 
@@ -22,10 +23,12 @@ const HiddenText = style.div`
 export const ImgCard = ({region, idx, gameState, card, size, tabIndex, cardHeight}) => {
   const [isTapped, setIsTapped] = useState(card.is_tapped);
   const [cardFace, setCardFace] = useState(card.card_face);
-
+  const cardCurrentRegion = region
+  const positionIdx = idx
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
   
+
   const flipCard = () => {
     card.changeFace()
     setCardFace(card.card_face);
@@ -33,10 +36,11 @@ export const ImgCard = ({region, idx, gameState, card, size, tabIndex, cardHeigh
     gameState.focusOnCard(card);
   }
 
-  const handleClick = () => {
+  const tapCard = () => {
     card.tapped = !card.is_tapped;
     gameState.updatePlayer("tap_card", 1.0);
     setIsTapped(card.tapped);
+    gameState.focusOnCard(card);
   }
 
   const onMouseOver = () => {
@@ -47,34 +51,47 @@ export const ImgCard = ({region, idx, gameState, card, size, tabIndex, cardHeigh
     gameState.focusOnCard(null);
   }
 
+  const sendToGraveyard = () => {
+    gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "graveyard");
+  }
+
+  const sendToExile = () => {
+    gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "exile");
+  }
+
+  const commands = {
+    "t": tapCard,
+    "l": flipCard,
+    "g": sendToGraveyard,
+    "e": sendToExile,
+  }
+
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {provided => (
         <SlimContainer 
           className={`${region} ImgCard`}
+          uniqueid={card._uid}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           tabIndex={tabIndex}
-          onDoubleClick={handleClick}
+          onDoubleClick={tapCard}
           onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}
           onContextMenu={flipCard}
           onKeyDown={(event) => {
-            if (event.key === 't') {
-              handleClick();
-            }
-            else if (event.key === 'l') {
-              flipCard();
+            if (commands[event.key] && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+              commands[event.key]();
             }
           }}
           >
           <HiddenText>
-            <div aria-live="assertive" aria-atomic="true">{isTapped ? "tapped " : ""}{card.face_aria_description}</div>
+            <div aria-live="polite" aria-atomic="true">{isTapped ? "tapped " : ""}{card.face_aria_description}</div>
           </HiddenText>
           <HiddenText>
-            <div aria-live="polite" aria-atomic="true">{card.card_type_line + ", "}</div>
-            <div aria-live="polite" aria-atomic="true">{card.card_read_oracle_text}</div>
+            <div aria-live="off" aria-atomic="true">{card.card_type_line + ", "}</div>
+            <div aria-live="off" aria-atomic="true">{card.card_read_oracle_text}</div>
           </HiddenText>
           <img src={card.hidden ? FuckedCardBack : (card.card_image_uris?.[size] ?? emptyCard)} alt={card.card_face_name_with_mana_cost} style={{
               height: `${cardHeight}%`,

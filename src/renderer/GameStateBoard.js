@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import { LogFrame, AnnouncementFrame } from './LogFrame';
+import { CardListZone } from './CardListZone';
+import { TabIndices } from '../commons/Player';
 
 export const GameStateBoard = ({gameState, playerRef }) => {
 
   return (
     <Row style={{width: "15vw", height: "100vh", background: "grey"}}>
-      <div style={ {height: "75%"}}>
+      <div style={ {height: "50%"}}>
         {
           gameState.focus_card ? 
             <>
@@ -37,6 +39,7 @@ export const GameStateBoard = ({gameState, playerRef }) => {
           : null
         }
       </div>
+      <CardListZone gameState={gameState} playerRef={playerRef} tabIndex={TabIndices}/>
       <AnnouncementFrame gameState={gameState} />
       <LogFrame gameState={gameState} height={25} playerRef={playerRef.log} />
     </Row>

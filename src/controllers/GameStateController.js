@@ -20,6 +20,7 @@ class BaseGameStateController extends EventEmitter {
       this.announcement_message = ""
       this.focus_card = null
       this.sounds = new Sounds()
+      this.open_zone = {zone: null, cards: []}
     }
   }
   
@@ -34,6 +35,7 @@ class BaseGameStateController extends EventEmitter {
     this.focus_card = previousState.focus_card
     this.sounds = previousState.sounds
     this.announcement_message = previousState.announcement_message
+    this.open_zone = previousState.open_zone
   }
 
   get player () {
@@ -112,7 +114,7 @@ class RequestGameActions extends BaseGameStateController {
     this.players.push(player)
     const playerNumber = this.players.length - 1
 
-    if (player.isLocal) {
+    if (player.isLocal && !player._is_empty) {
       this.player_number = playerNumber
     }
 
@@ -149,12 +151,10 @@ class RequestGameActions extends BaseGameStateController {
     console.log("TODO")
   }
 
-  moveSelectedToGraveyard() {
-    console.log("TODO")
-  }
-
-  moveSelectedToExile() {
-    console.log("TODO")
+  moveCardToZoneTop(sourceZone, sourceIndex, destinationZone) {
+    const source = {droppableId: sourceZone, index: sourceIndex}
+    const destination = {droppableId: destinationZone, index: 0}
+    this.moveCardTo(source, destination)
   }
 
   moveSelectedToLibrary() {
@@ -225,8 +225,18 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   passTurn() {
-    this.sendEvent("pass_turn")
-    
+    this.sendEvent("pass_turn")  
+  }
+
+  viewZone(zone) {
+    this.announce(`Viewing ${zone}`)
+    this.open_zone = {zone: zone, cards: this.player[zone]}
+    this.changed()
+  }
+
+  closeViewZone() {
+    this.open_zone = {zone: null, cards: []}
+    this.changed()
   }
 
   moveCardTo(source, destination) {

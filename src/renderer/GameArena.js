@@ -16,7 +16,7 @@ export const GameArena = ({gameState}) => {
   const player1BattlefieldRef = useRef(null)
   const player1LibraryRef = useRef(null)
   const player1FaceDownRef = useRef(null)
-  const player1CommanderZoneRef = useRef(null)
+  const player1commanderZoneRef = useRef(null)
   const player1SideboardRef = useRef(null)
   const player1LogRef = useRef(null)
 
@@ -28,7 +28,7 @@ export const GameArena = ({gameState}) => {
     battlefield: player1BattlefieldRef,
     library: player1LibraryRef,
     faceDown: player1FaceDownRef,
-    commanderZone: player1CommanderZoneRef,
+    commander_zone: player1commanderZoneRef,
     sideboard: player1SideboardRef,
     log: player1LogRef,
   }), [])
@@ -65,7 +65,7 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlKeyCommand('f', () => {hotkeys.playerRefs[1].graveyard.current.focus()}, "Your graveyard.")
   hotkeys.registerCtrlKeyCommand('q', () => {hotkeys.playerRefs[1].exile.current.focus()}, "Your exile.")
   hotkeys.registerCtrlKeyCommand('h', () => {hotkeys.playerRefs[1].faceDown.current.focus()}, "Your face down cards.")
-  hotkeys.registerCtrlKeyCommand('b', () => {hotkeys.playerRefs[1].commanderZone.current.focus()}, "Your commander zone.")
+  hotkeys.registerCtrlKeyCommand('b', () => {hotkeys.playerRefs[1].commander_zone.current.focus()}, "Your commander zone.")
   hotkeys.registerCtrlKeyCommand('z', () => {hotkeys.playerRefs[1].sideboard.current.focus()}, "Your sideboard.")
   
   hotkeys.registerCtrlShiftKeyCommand('Z', () => {gameState.moveSelectedToHand()}, "Move selected cards to your hand.") 
