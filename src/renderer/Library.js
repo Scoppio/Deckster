@@ -53,6 +53,14 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
     gameState.drawCard(number_of_cards, "library", "faceDown")
   }
 
+  const openLibrary = () => {
+    gameState.viewLibrary()
+  }
+
+  const viewTopXCards = (number_of_cards) => {
+    gameState.viewTopXCards(number_of_cards)
+  }
+
   return (
     <div className={"library row-flex"} 
       role="region"
@@ -67,24 +75,28 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           <span id={playerNumber + "-library-label"}>Library</span>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToHand} text={"Hand"} placeholder={"Hand, type the number of cards to draw to hand..."} eventKey="1"
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToHand} text={"Hand"} placeholder={"Hand, type the number of cards to draw to hand..."}
             aria-labelledby={"Hand, type the number of cards to draw to hand, hit enter to confirm"} />
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToBattlefield} text={"Battlefield"} placeholder={"Battlefield, type the number of cards put in the battlefield..."} eventKey="2"
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToBattlefield} text={"Battlefield"} placeholder={"Battlefield, type the number of cards put in the battlefield..."}
             aria-labelledby={"Battlefield, type the number of cards put in the battlefield, hit enter to confirm"}
           />
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToExile} text={"Exile"} placeholder={"Exile, type the number of cards to exile..."} eventKey="3"
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToExile} text={"Exile"} placeholder={"Exile, type the number of cards to exile..."}
             aria-labelledby={"Exile, type the number of cards to exile, hit enter to confirm"}
           />
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsFaceDown} text={"Facedown"} placeholder={"Facedown, type the number of cards to set facedown..."} eventKey="4"
+          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsFaceDown} text={"Facedown"} placeholder={"Facedown, type the number of cards to set facedown..."}
             aria-labelledby={"Facedown, type the number of cards to set facedown, hit enter to confirm"}
           />
+          <Dropdown.Item as={CustomItem} onConfirm={viewTopXCards} text={"View Top X"} placeholder={"View top X amount of cards..."}
+            aria-labelledby={"View top X amount of cards, hit enter to confirm"}
+          />
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawHand} eventKey="5">Draw Hand of 7 cards</Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawHand}>Draw Hand of 7 cards</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleShuffleDeck} eventKey="6">Shuffle Deck</Dropdown.Item>
+          <Dropdown.Item onClick={openLibrary}>View cards</Dropdown.Item>
+          <Dropdown.Item onClick={handleShuffleDeck}>Shuffle Deck</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawCardToHand} eventKey="8">Draw card to Hand</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToBattlefield} eventKey="9">Draw card to Battlefield</Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToHand}>Draw card to Hand</Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToBattlefield}>Draw card to Battlefield</Dropdown.Item>
           <Dropdown.Item onClick={handleDrawCardToGraveyard}>Draw card to Graveyard</Dropdown.Item>
           <Dropdown.Item onClick={handleDrawCardToExile}>Draw card to Exile</Dropdown.Item>
           <Dropdown.Item onClick={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>

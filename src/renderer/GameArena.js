@@ -19,6 +19,7 @@ export const GameArena = ({gameState}) => {
   const player1commanderZoneRef = useRef(null)
   const player1SideboardRef = useRef(null)
   const player1LogRef = useRef(null)
+  const player1CardListZone = useRef(null)
 
   const player1References = useMemo(() => ({
     playerStats: player1StatsRef,
@@ -31,6 +32,7 @@ export const GameArena = ({gameState}) => {
     commander_zone: player1commanderZoneRef,
     sideboard: player1SideboardRef,
     log: player1LogRef,
+    card_list_zone: player1CardListZone,
   }), [])
 
   const player2StatsRef = useRef(null)
@@ -52,7 +54,7 @@ export const GameArena = ({gameState}) => {
     [gameState, player1References, player2References, player3References, player4References, player5References, player6References]);
 
   hotkeys.registerKeyCommand('F1', () => {gameState.listCommands(hotkeys)}, "List all commands.")
-  hotkeys.registerCtrlKeyCommand('1', () => {hotkeys.playerRefs[1].playerStats.current.focus()}, "Player 1 (You) stats.")
+  hotkeys.registerCtrlKeyCommand('1', () => {hotkeys.playerRefs[1].playerStats.current.focus()}, "Player 1 (Your) stats.")
   hotkeys.registerCtrlKeyCommand('2', () => {hotkeys.playerRefs[2].playerStats.current.focus()}, "Player 2 stats.")
   hotkeys.registerCtrlKeyCommand('3', () => {hotkeys.playerRefs[3].playerStats.current.focus()}, "Player 3 stats.")
   hotkeys.registerCtrlKeyCommand('4', () => {hotkeys.playerRefs[4].playerStats.current.focus()}, "Player 4 stats.")
@@ -67,6 +69,8 @@ export const GameArena = ({gameState}) => {
   hotkeys.registerCtrlKeyCommand('h', () => {hotkeys.playerRefs[1].faceDown.current.focus()}, "Your face down cards.")
   hotkeys.registerCtrlKeyCommand('b', () => {hotkeys.playerRefs[1].commander_zone.current.focus()}, "Your commander zone.")
   hotkeys.registerCtrlKeyCommand('z', () => {hotkeys.playerRefs[1].sideboard.current.focus()}, "Your sideboard.")
+  hotkeys.registerCtrlKeyCommand('l', () => {hotkeys.playerRefs[1].log.current.focus()}, "Game log.")
+  hotkeys.registerCtrlKeyCommand('c', () => {hotkeys.playerRefs[1].card_list_zone.current.focus()}, "Card list zone.")
   
   hotkeys.registerCtrlShiftKeyCommand('Z', () => {gameState.moveSelectedToHand()}, "Move selected cards to your hand.") 
   hotkeys.registerCtrlShiftKeyCommand('X', () => {gameState.moveSelectedToGraveyard()}, "Move selected cards to your graveyard.")

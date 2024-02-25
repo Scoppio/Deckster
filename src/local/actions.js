@@ -62,7 +62,7 @@ class move_card extends action {
       this.sendJson({type: 'update_player', payload: player, sender: this.SERVER});
       return
     }
-    
+
     player[from_zone].splice(from_idx, 1)
     player[to_zone].splice(to_idx, 0, card_obj)
 
@@ -184,6 +184,26 @@ class draw_hand extends action {
   }
 }
 
+class view_library extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event)
+    this.sendJson({type: 'view_library', payload: player.library.slice().reverse(), sender: this.event.sender});
+    this.playSound('PLAY_SOUND', 1.0, player)
+    this.sendJson({type: 'log_event', payload: "Player " + player['name'] + " viewed their library", sender: this.SERVER});
+  }
+}
+
+class view_top_x_cards extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event)
+    const number_of_cards = this.event.payload['number_of_cards']
+    const cards = player.library.slice().reverse().slice(0, number_of_cards)
+    this.sendJson({type: 'view_top_x_cards', payload: cards, sender: this.event.sender});
+    this.playSound('PLAY_SOUND', 1.0, player)
+    this.sendJson({type: 'log_event', payload: "Player " + player['name'] + " viewed the top " + number_of_cards + " cards of their library", sender: this.SERVER});
+  }
+}
+
 const ACTION_CONFIG = {
   action,
   login_player,
@@ -195,7 +215,9 @@ const ACTION_CONFIG = {
   mulligan,
   change_game_phase,
   untap_all,
-  draw_hand
+  draw_hand,
+  view_library,
+  view_top_x_cards
 }
 
 class ActionFactory {

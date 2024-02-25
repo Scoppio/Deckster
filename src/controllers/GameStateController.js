@@ -234,6 +234,14 @@ class RequestGameActions extends BaseGameStateController {
     this.changed()
   }
 
+  viewLibrary() {
+    this.sendEvent("view_library")
+  }
+
+  viewTopXCards(number_of_cards) {
+    this.sendEvent("view_top_x_cards", {number_of_cards})
+  }
+
   closeViewZone() {
     this.open_zone = {zone: null, cards: []}
     this.changed()
@@ -316,6 +324,7 @@ class ExecuteGameActions extends RequestGameActions {
     }
   }
   
+
   pass_turn(event) {
     // TODO: pass turn
   }
@@ -328,6 +337,18 @@ class ExecuteGameActions extends RequestGameActions {
     if (this.player_number !== event.sender.idx) {
       this.players[event.sender.idx].updateFromPayload(event.payload)
     }
+  }
+
+  view_library(event) {
+    this.announce(`Viewing library`)
+    this.open_zone = {zone: "library", cards: event.payload}
+    this.changed()
+  }
+
+  view_top_x_cards (event) {
+    this.announce(`Viewing top ${event.payload.number_of_cards} cards`)
+    this.open_zone = {zone: "library", cards: event.payload}
+    this.changed()
   }
 
   update_player(event) {
