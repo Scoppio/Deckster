@@ -39,7 +39,6 @@ export const LogFrame = ({ gameState, height, playerRef }) => {
 
 LogFrame.propTypes = {
   gameState: PropTypes.object.isRequired,
-  height: PropTypes.number.isRequired,
   playerRef: PropTypes.object.isRequired,
 };
 

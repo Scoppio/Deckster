@@ -1,10 +1,9 @@
+import "./gameArena.css";
+
 import { SouthTable, NorthTable } from "./PlayerTable";
 import { GameStateBoard } from "./GameStateBoard";
 import { useEffect, useRef, useMemo } from "react";
 import { HotKeys } from "../controllers/Hotkeys";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
 import PropTypes from "prop-types";
 
 export const GameArena = ({ gameState }) => {
@@ -15,10 +14,9 @@ export const GameArena = ({ gameState }) => {
   const player1BattlefieldRef = useRef(null);
   const player1LibraryRef = useRef(null);
   const player1FaceDownRef = useRef(null);
-  const player1commanderZoneRef = useRef(null);
+  const player1CommanderZoneRef = useRef(null);
   const player1SideboardRef = useRef(null);
   const player1LogRef = useRef(null);
-  const player1CardListZone = useRef(null);
 
   const player1References = useMemo(
     () => ({
@@ -29,42 +27,41 @@ export const GameArena = ({ gameState }) => {
       battlefield: player1BattlefieldRef,
       library: player1LibraryRef,
       faceDown: player1FaceDownRef,
-      commander_zone: player1commanderZoneRef,
+      commanderZone: player1CommanderZoneRef,
       sideboard: player1SideboardRef,
       log: player1LogRef,
-      card_list_zone: player1CardListZone,
     }),
-    [],
+    []
   );
 
   const player2StatsRef = useRef(null);
   const player2References = useMemo(
     () => ({ playerStats: player2StatsRef }),
-    [],
+    []
   );
 
   const player3StatsRef = useRef(null);
   const player3References = useMemo(
     () => ({ playerStats: player3StatsRef }),
-    [],
+    []
   );
 
   const player4StatsRef = useRef(null);
   const player4References = useMemo(
     () => ({ playerStats: player4StatsRef }),
-    [],
+    []
   );
 
   const player5StatsRef = useRef(null);
   const player5References = useMemo(
     () => ({ playerStats: player5StatsRef }),
-    [],
+    []
   );
 
   const player6StatsRef = useRef(null);
   const player6References = useMemo(
     () => ({ playerStats: player6StatsRef }),
-    [],
+    []
   );
 
   const hotkeys = useMemo(
@@ -85,7 +82,7 @@ export const GameArena = ({ gameState }) => {
       player4References,
       player5References,
       player6References,
-    ],
+    ]
   );
 
   hotkeys.registerKeyCommand(
@@ -93,49 +90,49 @@ export const GameArena = ({ gameState }) => {
     () => {
       gameState.listCommands(hotkeys);
     },
-    "List all commands.",
+    "List all commands."
   );
   hotkeys.registerCtrlKeyCommand(
     "1",
     () => {
       hotkeys.playerRefs[1].playerStats.current.focus();
     },
-    "Player 1 (Your) stats.",
+    "Player 1 (You) stats."
   );
   hotkeys.registerCtrlKeyCommand(
     "2",
     () => {
       hotkeys.playerRefs[2].playerStats.current.focus();
     },
-    "Player 2 stats.",
+    "Player 2 stats."
   );
   hotkeys.registerCtrlKeyCommand(
     "3",
     () => {
       hotkeys.playerRefs[3].playerStats.current.focus();
     },
-    "Player 3 stats.",
+    "Player 3 stats."
   );
   hotkeys.registerCtrlKeyCommand(
     "4",
     () => {
       hotkeys.playerRefs[4].playerStats.current.focus();
     },
-    "Player 4 stats.",
+    "Player 4 stats."
   );
   hotkeys.registerCtrlKeyCommand(
     "5",
     () => {
       hotkeys.playerRefs[5].playerStats.current.focus();
     },
-    "Player 5 stats.",
+    "Player 5 stats."
   );
   hotkeys.registerCtrlKeyCommand(
     "6",
     () => {
       hotkeys.playerRefs[6].playerStats.current.focus();
     },
-    "Player 6 stats.",
+    "Player 6 stats."
   );
 
   hotkeys.registerCtrlKeyCommand(
@@ -143,70 +140,56 @@ export const GameArena = ({ gameState }) => {
     () => {
       hotkeys.playerRefs[1].hand.current.focus();
     },
-    "Your hand.",
+    "Your hand."
   );
   hotkeys.registerCtrlKeyCommand(
     "s",
     () => {
       hotkeys.playerRefs[1].battlefield.current.focus();
     },
-    "Your battlefield.",
+    "Your battlefield."
   );
   hotkeys.registerCtrlKeyCommand(
     "d",
     () => {
       hotkeys.playerRefs[1].library.current.focus();
     },
-    "Your library.",
+    "Your library."
   );
   hotkeys.registerCtrlKeyCommand(
     "f",
     () => {
       hotkeys.playerRefs[1].graveyard.current.focus();
     },
-    "Your graveyard.",
+    "Your graveyard."
   );
   hotkeys.registerCtrlKeyCommand(
     "q",
     () => {
       hotkeys.playerRefs[1].exile.current.focus();
     },
-    "Your exile.",
+    "Your exile."
   );
   hotkeys.registerCtrlKeyCommand(
     "h",
     () => {
       hotkeys.playerRefs[1].faceDown.current.focus();
     },
-    "Your face down cards.",
+    "Your face down cards."
   );
   hotkeys.registerCtrlKeyCommand(
     "b",
     () => {
-      hotkeys.playerRefs[1].commander_zone.current.focus();
+      hotkeys.playerRefs[1].commanderZone.current.focus();
     },
-    "Your commander zone.",
+    "Your commander zone."
   );
   hotkeys.registerCtrlKeyCommand(
     "z",
     () => {
       hotkeys.playerRefs[1].sideboard.current.focus();
     },
-    "Your sideboard.",
-  );
-  hotkeys.registerCtrlKeyCommand(
-    "l",
-    () => {
-      hotkeys.playerRefs[1].log.current.focus();
-    },
-    "Game log.",
-  );
-  hotkeys.registerCtrlKeyCommand(
-    "c",
-    () => {
-      hotkeys.playerRefs[1].card_list_zone.current.focus();
-    },
-    "Card list zone.",
+    "Your sideboard."
   );
 
   hotkeys.registerCtrlShiftKeyCommand(
@@ -214,77 +197,77 @@ export const GameArena = ({ gameState }) => {
     () => {
       gameState.moveSelectedToHand();
     },
-    "Move selected cards to your hand.",
+    "Move selected cards to your hand."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "X",
     () => {
       gameState.moveSelectedToGraveyard();
     },
-    "Move selected cards to your graveyard.",
+    "Move selected cards to your graveyard."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "C",
     () => {
       gameState.moveSelectedToExile();
     },
-    "Move selected cards to your exile zone.",
+    "Move selected cards to your exile zone."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "V",
     () => {
       gameState.moveSelectedToLibrary();
     },
-    "Move selected cards to your library.",
+    "Move selected cards to your library."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "B",
     () => {
       gameState.moveSelectedToCommandZone();
     },
-    "Move selected cards to your command zone.",
+    "Move selected cards to your command zone."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "J",
     () => {
       gameState.tapUntapSelected();
     },
-    "Tap/Untap selected cards.",
+    "Tap/Untap selected cards."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "L",
     () => {
       gameState.declareAttacking();
     },
-    "Declare attacking with selected cards.",
+    "Declare attacking with selected cards."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "U",
     () => {
       gameState.declareBlocking();
     },
-    "Declare blocking with selected cards.",
+    "Declare blocking with selected cards."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "I",
     () => {
       gameState.scry();
     },
-    "Scry the top card of your library.",
+    "Scry the top card of your library."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "P",
     () => {
       gameState.addCounterOnSelected();
     },
-    "Add a counter on selected cards.",
+    "Add a counter on selected cards."
   );
   hotkeys.registerCtrlShiftKeyCommand(
     "M",
     () => {
       gameState.removeCounterOnSelected();
     },
-    "Remove a counter on selected cards.",
+    "Remove a counter on selected cards."
   );
 
   hotkeys.registerKeyCommand(
@@ -292,56 +275,56 @@ export const GameArena = ({ gameState }) => {
     () => {
       gameState.untapAll();
     },
-    "Untap all your permanents.",
+    "Untap all your permanents."
   );
   hotkeys.registerKeyCommand(
     "+",
     () => {
       gameState.drawCard();
     },
-    "Draw a card.",
+    "Draw a card."
   );
   hotkeys.registerKeyCommand(
     "<",
     () => {
       gameState.untapAll();
     },
-    "Untap all your permanents.",
+    "Untap all your permanents."
   );
   hotkeys.registerKeyCommand(
     ">",
     () => {
       gameState.drawCard();
     },
-    "Draw a card.",
+    "Draw a card."
   );
   hotkeys.registerKeyCommand(
     "c",
     () => {
       gameState.drawCard();
     },
-    "Draw a card.",
+    "Draw a card."
   );
   hotkeys.registerKeyCommand(
     "-",
     () => {
       gameState.decreaseLife();
     },
-    "Decrease your life total.",
+    "Decrease your life total."
   );
   hotkeys.registerKeyCommand(
     "=",
     () => {
       gameState.increaseLife();
     },
-    "Increase your life total.",
+    "Increase your life total."
   );
   hotkeys.registerKeyCommand(
     "*",
     () => {
       gameState.increaseLife();
     },
-    "Increase your life total.",
+    "Increase your life total."
   );
 
   useEffect(() => {
@@ -355,6 +338,37 @@ export const GameArena = ({ gameState }) => {
     };
   }, [hotkeys]);
 
+  // For now, only support 2 players
+  return (
+    <div className="main">
+      <section className="main-left">
+        <div className="main-arena">
+          <NorthTable
+            barSide="left"
+            gameState={gameState}
+            playerRef={player2References}
+            playerNumber={1}
+            player={gameState.players[1]}
+            isActivePlayer={gameState.activePlayer === 1}
+            landsOnNorth={true}
+          />
+          <SouthTable
+            barSide="left"
+            gameState={gameState}
+            playerRef={player1References}
+            playerNumber={0}
+            player={gameState.players[0]}
+            isActivePlayer={gameState.activePlayer === 0}
+            landsOnNorth={true}
+          />
+        </div>
+      </section>
+      <section className="main-right">
+        <GameStateBoard gameState={gameState} playerRef={player1References} />
+      </section>
+    </div>
+  );
+  /*
   return (
     <Row>
       <Col>
@@ -519,6 +533,7 @@ export const GameArena = ({ gameState }) => {
       </Col>
     </Row>
   );
+  */
 };
 
 GameArena.propTypes = {

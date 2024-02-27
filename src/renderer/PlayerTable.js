@@ -4,9 +4,11 @@ import { PlayerBar } from "./PlayerBar";
 import { Hand, HiddenHand } from "./Hand";
 import { DragDropContext } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+import "./playerTable.css";
+import classNames from "classnames";
 
 export const SouthTable = ({
   gameState,
@@ -18,6 +20,7 @@ export const SouthTable = ({
 }) => {
   const onDragStart = (start, provided) => {
     const { source } = start;
+
     const card = gameState.getCardFrom(source);
     const sourceZone = source.droppableId;
     let sourceName = sourceZone.split("-")[1] || sourceZone;
@@ -40,6 +43,7 @@ export const SouthTable = ({
     if (result.reason === "CANCEL") {
       provided.announce(
         `Cancelling card movement, returning card to ${sourceName}`,
+
       );
       gameState.cancelCardMove();
       return;
@@ -47,7 +51,7 @@ export const SouthTable = ({
     if (result.reason === "DROP") {
       if (destination === null) {
         provided.announce(
-          `Dropped in an invalid location, returning card to ${sourceName}`,
+          `Dropped in an invalid location, returning card to ${sourceName}`
         );
         gameState.cancelCardMove();
         return;
@@ -67,6 +71,7 @@ export const SouthTable = ({
       );
     }
   };
+
 
   const onDragUpdate = (update, provided) => {
     console.log(update);
@@ -218,6 +223,7 @@ export const SouthTable = ({
     };
   }, [gameState]);
 
+  
   return (
     <div className="col flex-fill d-flex flex-column">
       <Row>
@@ -286,73 +292,59 @@ export const NorthTable = ({
   const handVh = heightVh * 0.2;
   const battlefieldVh = heightVh * 0.8;
 
+  const PlayerBarRenderer = (
+    <PlayerBar
+      player={player}
+      playerRef={playerRef}
+      playerNumber={playerNumber}
+      isActivePlayer={isActivePlayer}
+      gameState={gameState}
+    />
+  );
+
   return (
-    <Container fluid>
-      <Row>
-        {barSide === "left" ? (
-          <Col md="auto">
-            <PlayerBar
-              {...{
-                player,
-                playerRef,
-                playerNumber,
-                isActivePlayer,
-                heightVh,
-                gameState,
-              }}
-            />
-          </Col>
-        ) : null}
-        <Col>
-          {landsOnNorth ? (
-            <Row style={{ height: `${handVh}vh`, background: "grey" }}>
-              <Col>
-                <HiddenHand
-                  player={player}
-                  playerNumber={playerNumber}
-                  handVh={handVh}
-                />
-              </Col>
-            </Row>
-          ) : null}
-          <Row style={{ height: `${battlefieldVh}vh`, background: "gold" }}>
-            <StaticBattlefield
-              gameState={gameState}
-              playerRef={playerRef}
-              playerNumber={playerNumber}
-              player={player}
-              landsOnNorth={landsOnNorth}
-              heightVh={battlefieldVh}
-            />
+    <div
+      className={classNames("player-table", {
+        "player-table-right": barSide === "right",
+      })}
+    >
+      {barSide === "left" ? PlayerBarRenderer : null}
+      <Col>
+        {landsOnNorth ? (
+          <Row style={{ background: "grey" }}>
+            <Col>
+              <HiddenHand
+                player={player}
+                playerNumber={playerNumber}
+                handVh={handVh}
+              />
+            </Col>
           </Row>
-          {!landsOnNorth ? (
-            <Row style={{ height: `${handVh}vh`, background: "grey" }}>
-              <Col>
-                <HiddenHand
-                  player={player}
-                  playerNumber={playerNumber}
-                  handVh={handVh}
-                />
-              </Col>
-            </Row>
-          ) : null}
-        </Col>
-        {barSide === "right" ? (
-          <Col md="auto">
-            <PlayerBar
-              {...{
-                player,
-                playerRef,
-                playerNumber,
-                isActivePlayer,
-                heightVh,
-                gameState,
-              }}
-            />
-          </Col>
         ) : null}
-      </Row>
-    </Container>
+        <Row style={{ background: "gold" }}>
+          <StaticBattlefield
+            gameState={gameState}
+            playerRef={playerRef}
+            playerNumber={playerNumber}
+            player={player}
+            landsOnNorth={landsOnNorth}
+            heightVh={battlefieldVh}
+          />
+        </Row>
+        {!landsOnNorth ? (
+          <Row style={{ background: "grey" }}>
+            <Col>
+              <HiddenHand
+                player={player}
+                playerNumber={playerNumber}
+                handVh={handVh}
+              />
+            </Col>
+          </Row>
+        ) : null}
+      </Col>
+      {barSide === "right" ? PlayerBarRenderer : null}
+    </div>
   );
 };
 
