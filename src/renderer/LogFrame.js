@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
-import Row from 'react-bootstrap/Row';
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import Row from "react-bootstrap/Row";
 
-export const LogFrame = ({gameState, height, playerRef }) => {
+export const LogFrame = ({ gameState, playerRef }) => {
   const endRef = useRef(null);
 
   useEffect(() => {
@@ -10,15 +10,23 @@ export const LogFrame = ({gameState, height, playerRef }) => {
   }, [gameState.log]);
 
   return (
-    <div style={{width: "100%", height: `${height}vh`, background: "green", overflowY: "auto", lineHeight: "20px"}} aria-live="assertive" aria-atomic="true" ref={playerRef.log}>
-      {gameState.log.map((logEntry, idx) => <p key={idx} style={{margin: "0"}}>{JSON.stringify(logEntry)}</p>)}
+    <div
+      style={{ background: "green", overflowY: "auto", lineHeight: "20px" }}
+      aria-live="assertive"
+      aria-atomic="true"
+      ref={playerRef.log}
+    >
+      {gameState.log.map((logEntry, idx) => (
+        <p key={idx} style={{ margin: "0" }}>
+          {JSON.stringify(logEntry)}
+        </p>
+      ))}
       <div ref={endRef} />
     </div>
-  )
-}
+  );
+};
 
 LogFrame.propTypes = {
   gameState: PropTypes.object.isRequired,
-  height: PropTypes.number.isRequired,
   playerRef: PropTypes.object.isRequired,
-}
+};

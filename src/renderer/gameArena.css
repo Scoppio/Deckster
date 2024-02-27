@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  height: 100%;
+}
+
+.main-left {
+  flex: 1;
+  background-color: red;
+}
+
+.main-right {
+  background-color: pink;
+}
+
+.main-arena {
+  display: grid;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+}
