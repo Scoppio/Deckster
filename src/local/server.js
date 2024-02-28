@@ -1,5 +1,5 @@
-const WebSocket = require('ws');
-const ActionFactory = require('./actions');
+const WebSocket = require("ws");
+const ActionFactory = require("./actions");
 
 const server = new WebSocket.Server({ port: 8000 });
 
@@ -19,12 +19,11 @@ class DrawStrategy {
   }
 
   _draw(numCards) {
-    throw new Error('Not implemented');
+    throw new Error("Not implemented");
   }
 }
 
 class DrawCards extends DrawStrategy {
-
   _draw(numCards) {
     let wasSuccessful = false;
     if (this.drawPile.length === 0) {
@@ -54,13 +53,20 @@ class FavoredStartingHand extends DrawStrategy {
   }
 
   _numberOfLands(hand) {
-    return hand.filter(card => card.typeLine === 'land').length;
+    return hand.filter((card) => card.typeLine === "land").length;
   }
 
   _draw(numCards) {
-    const hands = Array.from({length: this.numberOfHands}, () => this._drawHand(numCards));
-    const selectedHand = hands.reduce((a, b) => Math.abs(this._numberOfLands(a) - this.desiredNumberOfLands) < Math.abs(this._numberOfLands(b) - this.desiredNumberOfLands) ? a : b);
-    const otherHands = hands.filter(hand => hand !== selectedHand);
+    const hands = Array.from({ length: this.numberOfHands }, () =>
+      this._drawHand(numCards),
+    );
+    const selectedHand = hands.reduce((a, b) =>
+      Math.abs(this._numberOfLands(a) - this.desiredNumberOfLands) <
+      Math.abs(this._numberOfLands(b) - this.desiredNumberOfLands)
+        ? a
+        : b,
+    );
+    const otherHands = hands.filter((hand) => hand !== selectedHand);
     for (const hand of otherHands) {
       this.drawPile.push(...hand);
     }
@@ -72,9 +78,9 @@ class FavoredStartingHand extends DrawStrategy {
 class StrategyChooser {
   static choose(strategyName) {
     switch (strategyName) {
-      case 'random':
+      case "random":
         return DrawCards;
-      case 'favored':
+      case "favored":
         return FavoredStartingHand;
       default:
         return DrawCards;
@@ -85,11 +91,16 @@ class StrategyChooser {
 ///////////////////////////////////////////////////////
 
 class Game {
-  constructor(openingHandDrawStrategy = "random", mulliganStrategy = "favored") {
+  constructor(
+    openingHandDrawStrategy = "random",
+    mulliganStrategy = "favored",
+  ) {
     this.players = {};
     this.playersSequence = [];
     this.activePlayer = null;
-    this.openingHandDrawStrategy = StrategyChooser.choose(openingHandDrawStrategy);
+    this.openingHandDrawStrategy = StrategyChooser.choose(
+      openingHandDrawStrategy,
+    );
     this.mulliganStrategy = StrategyChooser.choose(mulliganStrategy);
   }
 
@@ -104,7 +115,7 @@ class Game {
     if (this.activePlayer === player) {
       this.passTurn();
     }
-    this.playersSequence = this.playersSequence.filter(p => p !== player);
+    this.playersSequence = this.playersSequence.filter((p) => p !== player);
   }
 
   passTurn() {
@@ -115,7 +126,9 @@ class Game {
     if (this.activePlayer === null) {
       this.activePlayer = this.playersSequence[0];
     } else {
-      const idx = (this.playersSequence.indexOf(this.activePlayer) + 1) % this.playersSequence.length;
+      const idx =
+        (this.playersSequence.indexOf(this.activePlayer) + 1) %
+        this.playersSequence.length;
       this.activePlayer = this.playersSequence[idx];
     }
     return this.activePlayer;
@@ -145,7 +158,7 @@ class GameSession {
   }
 
   removePlayer(player) {
-    this.players = this.players.filter(p => p !== player);
+    this.players = this.players.filter((p) => p !== player);
     this.game.removePlayer(player);
   }
 
@@ -157,10 +170,10 @@ class GameSession {
 
 ///////////////////////////////////////////////////////
 
-const gameSession = new GameSession('test', 'test');
+const gameSession = new GameSession("test", "test");
 
-server.on('connection', (socket) => {
-  console.log('Client connected');
+server.on("connection", (socket) => {
+  console.log("Client connected");
 
   const broadcastJson = (message) => {
     server.clients.forEach(function each(client) {
@@ -168,25 +181,31 @@ server.on('connection', (socket) => {
         client.send(JSON.stringify(message));
       }
     });
-  }
+  };
 
   const playSound = (name, volume, sender) => {
-    broadcastJson({type: 'play_sound', payload: {name, volume}, sender});
-  }
+    broadcastJson({ type: "play_sound", payload: { name, volume }, sender });
+  };
 
   const sendJson = (message) => {
     socket.send(JSON.stringify(message));
-  }
+  };
 
-  socket.on('message', (message) => {
-    const json = JSON.parse(message)
-    console.log('received: %s', message);
-    ActionFactory.create(gameSession, json, sendJson, broadcastJson, playSound).execute();
+  socket.on("message", (message) => {
+    const json = JSON.parse(message);
+    console.log("received: %s", message);
+    ActionFactory.create(
+      gameSession,
+      json,
+      sendJson,
+      broadcastJson,
+      playSound,
+    ).execute();
   });
 
-  socket.on('close', () => {
-    console.log('Client disconnected');
+  socket.on("close", () => {
+    console.log("Client disconnected");
   });
 });
 
-console.log('WebSocket server is running on port 8000')
+console.log("WebSocket server is running on port 8000");

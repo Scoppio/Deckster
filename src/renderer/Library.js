@@ -1,129 +1,191 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Row from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
-
-
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import Dropdown from "react-bootstrap/Dropdown";
+import Row from "react-bootstrap/Container";
+import Col from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
 
 const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
-  
   const handleDrawHand = () => {
-    gameState.drawHand()
-  }
+    gameState.drawHand();
+  };
 
   const handleDrawCardToHand = () => {
-    gameState.drawCard()
-  }
+    gameState.drawCard();
+  };
 
   const handleDrawMultipleCardsToHand = (number_of_cards) => {
-    gameState.drawCard(number_of_cards)
-  }
+    gameState.drawCard(number_of_cards);
+  };
 
   const handleDrawCardToBattlefield = () => {
-    gameState.drawCardToBattlefield()
-  }
+    gameState.drawCardToBattlefield();
+  };
 
   const handleDrawCardToGraveyard = () => {
-    gameState.drawCardToGraveyard()
-  }
+    gameState.drawCardToGraveyard();
+  };
 
   const handleDrawCardToExile = () => {
-    gameState.drawCardToExile()
-  }
+    gameState.drawCardToExile();
+  };
 
   const handleDrawCardToFaceDown = () => {
-    gameState.drawCardToFaceDown()
-  }
+    gameState.drawCardToFaceDown();
+  };
 
   const handleShuffleDeck = () => {
-    gameState.shuffleDeck()
-  }
+    gameState.shuffleDeck();
+  };
 
   const handleDrawMultipleCardsToBattlefield = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "back_battlefield")
-  }
-  
+    gameState.drawCard(number_of_cards, "library", "back_battlefield");
+  };
+
   const handleDrawMultipleCardsToExile = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "exile")
-  }
-  
+    gameState.drawCard(number_of_cards, "library", "exile");
+  };
+
   const handleDrawMultipleCardsFaceDown = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "faceDown")
-  }
+    gameState.drawCard(number_of_cards, "library", "faceDown");
+  };
 
   const openLibrary = () => {
-    gameState.viewLibrary()
-  }
+    gameState.viewLibrary();
+  };
 
   const viewTopXCards = (number_of_cards) => {
-    gameState.viewTopXCards(number_of_cards)
-  }
+    gameState.viewTopXCards(number_of_cards);
+  };
 
   return (
-    <div className={"library row-flex"} 
+    <div
+      className={"library row-flex"}
       role="region"
-      aria-describedby={playerNumber + "-library-desc"}>
-      <Dropdown autoClose="outside" >
-          <Dropdown.Toggle 
-          variant="secondary" 
+      aria-describedby={playerNumber + "-library-desc"}
+    >
+      <Dropdown autoClose="outside">
+        <Dropdown.Toggle
+          variant="secondary"
           id="dropdown-autoclose-outside"
-          ref={playerRef.library} 
-          tabIndex={player.tabIndices.library} size="sm"
-          onDoubleClick={handleDrawCardToHand}>
+          ref={playerRef.library}
+          tabIndex={player.tabIndices.library}
+          size="sm"
+          onDoubleClick={handleDrawCardToHand}
+        >
           <span id={playerNumber + "-library-label"}>Library</span>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToHand} text={"Hand"} placeholder={"Hand, type the number of cards to draw to hand..."}
-            aria-labelledby={"Hand, type the number of cards to draw to hand, hit enter to confirm"} />
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToBattlefield} text={"Battlefield"} placeholder={"Battlefield, type the number of cards put in the battlefield..."}
-            aria-labelledby={"Battlefield, type the number of cards put in the battlefield, hit enter to confirm"}
+          <Dropdown.Item
+            as={CustomItem}
+            onConfirm={handleDrawMultipleCardsToHand}
+            text={"Hand"}
+            placeholder={"Hand, type the number of cards to draw to hand..."}
+            aria-labelledby={
+              "Hand, type the number of cards to draw to hand, hit enter to confirm"
+            }
           />
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsToExile} text={"Exile"} placeholder={"Exile, type the number of cards to exile..."}
-            aria-labelledby={"Exile, type the number of cards to exile, hit enter to confirm"}
+          <Dropdown.Item
+            as={CustomItem}
+            onConfirm={handleDrawMultipleCardsToBattlefield}
+            text={"Battlefield"}
+            placeholder={
+              "Battlefield, type the number of cards put in the battlefield..."
+            }
+            aria-labelledby={
+              "Battlefield, type the number of cards put in the battlefield, hit enter to confirm"
+            }
           />
-          <Dropdown.Item as={CustomItem} onConfirm={handleDrawMultipleCardsFaceDown} text={"Facedown"} placeholder={"Facedown, type the number of cards to set facedown..."}
-            aria-labelledby={"Facedown, type the number of cards to set facedown, hit enter to confirm"}
+          <Dropdown.Item
+            as={CustomItem}
+            onConfirm={handleDrawMultipleCardsToExile}
+            text={"Exile"}
+            placeholder={"Exile, type the number of cards to exile..."}
+            aria-labelledby={
+              "Exile, type the number of cards to exile, hit enter to confirm"
+            }
           />
-          <Dropdown.Item as={CustomItem} onConfirm={viewTopXCards} text={"View Top X"} placeholder={"View top X amount of cards..."}
+          <Dropdown.Item
+            as={CustomItem}
+            onConfirm={handleDrawMultipleCardsFaceDown}
+            text={"Facedown"}
+            placeholder={
+              "Facedown, type the number of cards to set facedown..."
+            }
+            aria-labelledby={
+              "Facedown, type the number of cards to set facedown, hit enter to confirm"
+            }
+          />
+          <Dropdown.Item
+            as={CustomItem}
+            onConfirm={viewTopXCards}
+            text={"View Top X"}
+            placeholder={"View top X amount of cards..."}
             aria-labelledby={"View top X amount of cards, hit enter to confirm"}
           />
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawHand}>Draw Hand of 7 cards</Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawHand}>
+            Draw Hand of 7 cards
+          </Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item onClick={openLibrary}>View cards</Dropdown.Item>
-          <Dropdown.Item onClick={handleShuffleDeck}>Shuffle Deck</Dropdown.Item>
+          <Dropdown.Item onClick={handleShuffleDeck}>
+            Shuffle Deck
+          </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={handleDrawCardToHand}>Draw card to Hand</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToBattlefield}>Draw card to Battlefield</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToGraveyard}>Draw card to Graveyard</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToExile}>Draw card to Exile</Dropdown.Item>
-          <Dropdown.Item onClick={handleDrawCardToFaceDown}>Draw card Face-Down</Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToHand}>
+            Draw card to Hand
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToBattlefield}>
+            Draw card to Battlefield
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToGraveyard}>
+            Draw card to Graveyard
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToExile}>
+            Draw card to Exile
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleDrawCardToFaceDown}>
+            Draw card Face-Down
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <p id={playerNumber + "-library-desc"}>{player.library_size} cards</p>
     </div>
-  )
-}
+  );
+};
 
 export const Library = ({ player, playerRef, playerNumber, gameState }) => (
-  <TheLibrary player={player} playerRef={playerRef} playerNumber={playerNumber} gameState={gameState} />
-)
+  <TheLibrary
+    player={player}
+    playerRef={playerRef}
+    playerNumber={playerNumber}
+    gameState={gameState}
+  />
+);
 
 Library.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
-}
-
+};
 
 const CustomItem = React.forwardRef(
-  ({ onConfirm, style, className, text, placeholder, 'aria-labelledby': labelledBy,  }, ref) => {
-    const [value, setValue] = useState('')
-    const handleConfirmation = () => onConfirm(parseInt(value, 10))
-    
+  (
+    {
+      onConfirm,
+      style,
+      className,
+      text,
+      placeholder,
+      "aria-labelledby": labelledBy,
+    },
+    ref,
+  ) => {
+    const [value, setValue] = useState("");
+    const handleConfirmation = () => onConfirm(parseInt(value, 10));
+
     return (
       <div
         ref={ref}
@@ -131,21 +193,24 @@ const CustomItem = React.forwardRef(
         className={className}
         aria-labelledby={labelledBy}
       >
-        <Row className="justify-content-md-center" style={{ display: 'flex', alignItems: 'center' }}>
+        <Row
+          className="justify-content-md-center"
+          style={{ display: "flex", alignItems: "center" }}
+        >
           <Col>
             <span>{text}</span>
           </Col>
-          <Col  md="auto">
+          <Col md="auto">
             <Form.Control
               autoFocus
               className="mx-3 my-2 w-auto"
               placeholder={placeholder}
               onChange={(e) => setValue(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && value !== '') {
+                if (e.key === "Enter" && value !== "") {
                   e.stopPropagation();
-                  handleConfirmation()
-                  setValue('')
+                  handleConfirmation();
+                  setValue("");
                 }
               }}
               value={value}
@@ -154,8 +219,8 @@ const CustomItem = React.forwardRef(
           </Col>
         </Row>
       </div>
-    )
+    );
   },
-)
+);
 
-CustomItem.displayName = 'CustomItem'
+CustomItem.displayName = "CustomItem";

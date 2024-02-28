@@ -1,39 +1,39 @@
-
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 export class WebSocketClient {
   constructor(gameName) {
-    this.listeners = [] 
+    this.listeners = [];
 
-    this.client = new W3CWebSocket('ws://'
-      // + window.location.host
-      + "localhost:8000"
-      + '/ws/vtt/game/'
-      + gameName
-      + '/'
-    )
+    this.client = new W3CWebSocket(
+      "ws://" +
+        // + window.location.host
+        "localhost:8000" +
+        "/ws/vtt/game/" +
+        gameName +
+        "/",
+    );
 
     this.client.onclose = (e) => {
-      console.error('Chat socket closed unexpectedly', e);
-    }
+      console.error("Chat socket closed unexpectedly", e);
+    };
 
     this.client.onopen = () => {
       console.log("WebSocket Client Connected");
-    }
+    };
 
     this.client.onmessage = (message) => {
-      this.onEventReceived(message)
-    }
+      this.onEventReceived(message);
+    };
   }
 
   addListener(listener) {
-    this.listeners.push(listener)
-    return this
+    this.listeners.push(listener);
+    return this;
   }
 
   removeListener(listener) {
-    this.listeners = this.listeners.filter((l) => l !== listener)
-    return this
+    this.listeners = this.listeners.filter((l) => l !== listener);
+    return this;
   }
 
   sendEvent(event) {
@@ -41,7 +41,7 @@ export class WebSocketClient {
       const waitForOpen = setInterval(() => {
         if (this.client.readyState === this.client.OPEN) {
           clearInterval(waitForOpen);
-          this.client.send(JSON.stringify({...event}));
+          this.client.send(JSON.stringify({ ...event }));
           resolve(this);
         } else if (this.client.readyState > this.client.OPEN) {
           clearInterval(waitForOpen);
@@ -53,7 +53,7 @@ export class WebSocketClient {
 
   onEventReceived(event) {
     this.listeners.forEach((listener) => {
-      listener.handleEvent(JSON.parse(event.data))
-    })
+      listener.handleEvent(JSON.parse(event.data));
+    });
   }
 }

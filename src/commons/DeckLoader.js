@@ -1,5 +1,5 @@
-import { Card } from '../commons/Card'
-import {DeckB, DeckA} from '../commons/Decks'
+import { Card } from "../commons/Card";
+import { DeckB, DeckA } from "../commons/Decks";
 
 export const tyranid_swarm = `1 Aberrant
 1 Abundance
@@ -81,7 +81,7 @@ export const tyranid_swarm = `1 Aberrant
 1 Unclaimed Territory
 1 Venomthrope
 1 Winged Hive Tyrant
-1 Zoanthrope`
+1 Zoanthrope`;
 
 export const forces_of_imperium = `1 And They Shall Know No Fear
 1 Arcane Sanctum
@@ -165,10 +165,10 @@ export const forces_of_imperium = `1 And They Shall Know No Fear
 1 Utter End
 1 Vanguard Suppressor
 1 Vexilus Praetor
-1 Zephyrim`
+1 Zephyrim`;
 
 function randomCost() {
-  const costs = ['w', 'u', 'r', 'b', 'g'];
+  const costs = ["w", "u", "r", "b", "g"];
   const result = [];
   const colorlessCost = Math.floor(Math.random() * 4) + 1; // Generate colorless cost between 1 and 4
   result.push(`{${colorlessCost}}`);
@@ -179,36 +179,36 @@ function randomCost() {
     result.push(`{${costs[colorIndex]}}`);
   }
 
-  return result.join('');
+  return result.join("");
 }
 
 export const convertTextToDeck = (text) => {
-  const fullDeckList = text.split('\n').map((line) => {
-    const [count, ...rest] = line.split(' ')
-    const name = rest.join(' ')
-    return { name, count: parseInt(count) }
-  })
+  const fullDeckList = text.split("\n").map((line) => {
+    const [count, ...rest] = line.split(" ");
+    const name = rest.join(" ");
+    return { name, count: parseInt(count) };
+  });
 
-  const randomType = () => ['Creature', 'Land', 'Artifact', 'Enchantment', 'Instant', 'Sorcery'][Math.floor(Math.random() * 6)]
-  const commanders = []
-  const deck = []
+  const randomType = () =>
+    ["Creature", "Land", "Artifact", "Enchantment", "Instant", "Sorcery"][
+      Math.floor(Math.random() * 6)
+    ];
+  const commanders = [];
+  const deck = [];
   for (const card of fullDeckList) {
     for (let i = 0; i < card.count; i++) {
-      deck.push(new Card(
-        card.name,
-        randomCost(),
-        randomType(),
-        "card text",
-      ))
+      deck.push(new Card(card.name, randomCost(), randomType(), "card text"));
     }
   }
-  
-  return { deck, commanders }
-}
+
+  return { deck, commanders };
+};
 
 export const fetchDeck = async (deck_id) => {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/vtt/deck/${deck_id}`, { mode: 'cors' });
+    const response = await fetch(`http://127.0.0.1:8000/vtt/deck/${deck_id}`, {
+      mode: "cors",
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -229,13 +229,13 @@ export const fetchDeck = async (deck_id) => {
     }
     return { deck, commanders };
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
-}
+};
 
 export const loadDeck = (deck_id) => {
-  const data = deck_id === 46 ? DeckA : DeckB
-  
+  const data = deck_id === 46 ? DeckA : DeckB;
+
   const commanders = [];
   for (const card_quantity of data["commanders"]) {
     for (let i = 0; i < card_quantity.quantity; i++) {
@@ -250,4 +250,4 @@ export const loadDeck = (deck_id) => {
     }
   }
   return { deck, commanders };
-}
+};
