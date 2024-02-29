@@ -3,5 +3,5 @@
   max-width: 250px;
 
   display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 0.25fr);
+  grid-template-rows: minmax(0, 1fr) minmax(0.25, 0.25fr);
 }

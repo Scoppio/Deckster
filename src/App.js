@@ -2,20 +2,13 @@ import { GameArena } from "./renderer/GameArena";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
 import GameStateController from "./controllers/GameStateController";
-import { Player } from "./commons/Player";
 import "mana-font/css/mana.css";
 import { WebSocketClient } from "./controllers/WebSocketClient";
 
 import "./App.css";
-import { GameArena } from "./renderer/GameArena";
-import { loadDeck } from "./commons/DeckLoader";
-import { useState, useEffect } from "react";
-import GameStateController from "./controllers/GameStateController";
+
 import { Player, TabIndices } from "./commons/Player";
-import "@atlaskit/css-reset";
-import "mana-font/css/mana.css";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
-import { WebSocketClient } from "./controllers/WebSocketClient";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
