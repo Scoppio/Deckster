@@ -1,12 +1,13 @@
-import "./gameArena.css";
-
-import { SouthTable, NorthTable } from "./PlayerTable";
-import { GameStateBoard } from "./GameStateBoard";
 import { useEffect, useRef, useMemo } from "react";
 import { HotKeys } from "../controllers/Hotkeys";
+import { GameStateBoard } from "./GameStateBoard";
+import { NorthTable, SouthTable } from "./PlayerTable";
+
+import "./gameArena.css";
+
 import PropTypes from "prop-types";
 
-export const GameArena = ({ gameState }) => {
+export function GameArena({ gameState }) {
   const player1StatsRef = useRef(null);
   const player1HandRef = useRef(null);
   const player1GraveyardRef = useRef(null);
@@ -14,9 +15,10 @@ export const GameArena = ({ gameState }) => {
   const player1BattlefieldRef = useRef(null);
   const player1LibraryRef = useRef(null);
   const player1FaceDownRef = useRef(null);
-  const player1CommanderZoneRef = useRef(null);
+  const player1commanderZoneRef = useRef(null);
   const player1SideboardRef = useRef(null);
   const player1LogRef = useRef(null);
+  const player1CardListZone = useRef(null);
 
   const player1References = useMemo(
     () => ({
@@ -27,9 +29,10 @@ export const GameArena = ({ gameState }) => {
       battlefield: player1BattlefieldRef,
       library: player1LibraryRef,
       faceDown: player1FaceDownRef,
-      commanderZone: player1CommanderZoneRef,
+      commander_zone: player1commanderZoneRef,
       sideboard: player1SideboardRef,
       log: player1LogRef,
+      card_list_zone: player1CardListZone,
     }),
     []
   );
@@ -97,7 +100,7 @@ export const GameArena = ({ gameState }) => {
     () => {
       hotkeys.playerRefs[1].playerStats.current.focus();
     },
-    "Player 1 (You) stats."
+    "Player 1 (Your) stats."
   );
   hotkeys.registerCtrlKeyCommand(
     "2",
@@ -180,7 +183,7 @@ export const GameArena = ({ gameState }) => {
   hotkeys.registerCtrlKeyCommand(
     "b",
     () => {
-      hotkeys.playerRefs[1].commanderZone.current.focus();
+      hotkeys.playerRefs[1].commander_zone.current.focus();
     },
     "Your commander zone."
   );
@@ -190,6 +193,20 @@ export const GameArena = ({ gameState }) => {
       hotkeys.playerRefs[1].sideboard.current.focus();
     },
     "Your sideboard."
+  );
+  hotkeys.registerCtrlKeyCommand(
+    "l",
+    () => {
+      hotkeys.playerRefs[1].log.current.focus();
+    },
+    "Game log."
+  );
+  hotkeys.registerCtrlKeyCommand(
+    "c",
+    () => {
+      hotkeys.playerRefs[1].card_list_zone.current.focus();
+    },
+    "Card list zone."
   );
 
   hotkeys.registerCtrlShiftKeyCommand(
@@ -270,63 +287,6 @@ export const GameArena = ({ gameState }) => {
     "Remove a counter on selected cards."
   );
 
-  hotkeys.registerKeyCommand(
-    "x",
-    () => {
-      gameState.untapAll();
-    },
-    "Untap all your permanents."
-  );
-  hotkeys.registerKeyCommand(
-    "+",
-    () => {
-      gameState.drawCard();
-    },
-    "Draw a card."
-  );
-  hotkeys.registerKeyCommand(
-    "<",
-    () => {
-      gameState.untapAll();
-    },
-    "Untap all your permanents."
-  );
-  hotkeys.registerKeyCommand(
-    ">",
-    () => {
-      gameState.drawCard();
-    },
-    "Draw a card."
-  );
-  hotkeys.registerKeyCommand(
-    "c",
-    () => {
-      gameState.drawCard();
-    },
-    "Draw a card."
-  );
-  hotkeys.registerKeyCommand(
-    "-",
-    () => {
-      gameState.decreaseLife();
-    },
-    "Decrease your life total."
-  );
-  hotkeys.registerKeyCommand(
-    "=",
-    () => {
-      gameState.increaseLife();
-    },
-    "Increase your life total."
-  );
-  hotkeys.registerKeyCommand(
-    "*",
-    () => {
-      gameState.increaseLife();
-    },
-    "Increase your life total."
-  );
-
   useEffect(() => {
     const handleKeyDown = (event) => {
       hotkeys.handleKeyDown(event);
@@ -337,7 +297,7 @@ export const GameArena = ({ gameState }) => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [hotkeys]);
-
+  
   // For now, only support 2 players
   return (
     <div className="main">
@@ -368,173 +328,172 @@ export const GameArena = ({ gameState }) => {
       </section>
     </div>
   );
-  /*
-  return (
-    <Row>
-      <Col>
-        {gameState.players.length === 1 || gameState.players.length === 2 ? (
-          <>
-            <Row>
-              <NorthTable
-                barSide="left"
-                gameState={gameState}
-                playerRef={player2References}
-                heightVh={100 / 2}
-                playerNumber={1}
-                player={gameState.players[1]}
-                isActivePlayer={gameState.activePlayer === 1}
-                landsOnNorth={true}
-              />
-            </Row>
-            <Row>
-              <SouthTable
-                gameState={gameState}
-                playerRef={player1References}
-                playerNumber={0}
-                heightVh={100 / 2}
-                player={gameState.players[0]}
-                isActivePlayer={gameState.activePlayer === 0}
-              />
-            </Row>
-          </>
-        ) : gameState.players.length === 3 || gameState.players.length === 4 ? (
-          <>
-            <Row>
-              <NorthTable
-                barSide="left"
-                gameState={gameState}
-                playerRef={player2References}
-                heightVh={100 / 2}
-                playerNumber={1}
-                player={gameState.players[1]}
-                isActivePlayer={gameState.activePlayer === 1}
-                landsOnNorth={true}
-              />
-            </Row>
-            <Row>
-              <SouthTable
-                gameState={gameState}
-                playerRef={player1References}
-                playerNumber={0}
-                heightVh={100 / 2}
-                player={gameState.players[0]}
-                isActivePlayer={gameState.activePlayer === 0}
-              />
-            </Row>
-          </>
-        ) : (
-          <>
-            <Row>
-              <NorthTable
-                barSide="left"
-                gameState={gameState}
-                playerRef={player2References}
-                heightVh={100 / 3}
-                playerNumber={1}
-                player={gameState.players[1]}
-                isActivePlayer={gameState.activePlayer === 1}
-                landsOnNorth={true}
-              />
-            </Row>
-            <Row>
-              <NorthTable
-                barSide="left"
-                gameState={gameState}
-                playerRef={player2References}
-                heightVh={100 / 3}
-                playerNumber={1}
-                player={gameState.players[1]}
-                isActivePlayer={gameState.activePlayer === 1}
-                landsOnNorth={true}
-              />
-            </Row>
-            <Row>
-              <SouthTable
-                gameState={gameState}
-                playerRef={player1References}
-                playerNumber={0}
-                heightVh={100 / 3}
-                player={gameState.players[0]}
-                isActivePlayer={gameState.activePlayer === 0}
-              />
-            </Row>
-          </>
-        )}
-      </Col>
-      {gameState.players.length === 3 || gameState.players.length === 4 ? (
-        <Col>
-          <Row>
-            <NorthTable
-              barSide="right"
-              gameState={gameState}
-              playerRef={player2References}
-              heightVh={100 / 2}
-              playerNumber={1}
-              player={gameState.players[1]}
-              isActivePlayer={gameState.activePlayer === 1}
-              landsOnNorth={true}
-            />
-          </Row>
-          <Row>
-            <NorthTable
-              barSide="right"
-              gameState={gameState}
-              playerRef={player2References}
-              heightVh={100 / 2}
-              playerNumber={1}
-              player={gameState.players[1]}
-              isActivePlayer={gameState.activePlayer === 1}
-              landsOnNorth={false}
-            />
-          </Row>
-        </Col>
-      ) : gameState.players.length === 5 || gameState.players.length === 6 ? (
-        <Col>
-          <Row>
-            <NorthTable
-              barSide="right"
-              gameState={gameState}
-              playerRef={player2References}
-              heightVh={100 / 3}
-              playerNumber={1}
-              player={gameState.players[1]}
-              isActivePlayer={gameState.activePlayer === 1}
-              landsOnNorth={true}
-            />
-          </Row>
-          <Row>
-            <NorthTable
-              barSide="right"
-              gameState={gameState}
-              playerRef={player2References}
-              heightVh={100 / 3}
-              playerNumber={1}
-              player={gameState.players[1]}
-              isActivePlayer={gameState.activePlayer === 1}
-              landsOnNorth={true}
-            />
-          </Row>
-          <Row>
-            <NorthTable
-              barSide="right"
-              gameState={gameState}
-              playerRef={player2References}
-              heightVh={100 / 3}
-              playerNumber={1}
-              player={gameState.players[1]}
-              isActivePlayer={gameState.activePlayer === 1}
-              landsOnNorth={false}
-            />
-          </Row>
-        </Col>
-      ) : null}
-      <Col md="auto" style={{ backgroundColor: "green" }}>
-        <GameStateBoard gameState={gameState} playerRef={player1References} />
-      </Col>
-    </Row>
-  );
-  */
-};
+}
+
+// return (
+//   <Row>
+//     <Col>
+//       {gameState.players.length === 1 || gameState.players.length === 2 ? (
+//         <>
+//           <Row>
+//             <NorthTable
+//               barSide="left"
+//               gameState={gameState}
+//               playerRef={player2References}
+//               heightVh={100 / 2}
+//               playerNumber={1}
+//               player={gameState.players[1]}
+//               isActivePlayer={gameState.activePlayer === 1}
+//               landsOnNorth={true}
+//             />
+//           </Row>
+//           <Row>
+//             <SouthTable
+//               gameState={gameState}
+//               playerRef={player1References}
+//               playerNumber={0}
+//               heightVh={100 / 2}
+//               player={gameState.players[0]}
+//               isActivePlayer={gameState.activePlayer === 0}
+//             />
+//           </Row>
+//         </>
+//       ) : gameState.players.length === 3 || gameState.players.length === 4 ? (
+//         <>
+//           <Row>
+//             <NorthTable
+//               barSide="left"
+//               gameState={gameState}
+//               playerRef={player2References}
+//               heightVh={100 / 2}
+//               playerNumber={1}
+//               player={gameState.players[1]}
+//               isActivePlayer={gameState.activePlayer === 1}
+//               landsOnNorth={true}
+//             />
+//           </Row>
+//           <Row>
+//             <SouthTable
+//               gameState={gameState}
+//               playerRef={player1References}
+//               playerNumber={0}
+//               heightVh={100 / 2}
+//               player={gameState.players[0]}
+//               isActivePlayer={gameState.activePlayer === 0}
+//             />
+//           </Row>
+//         </>
+//       ) : (
+//         <>
+//           <Row>
+//             <NorthTable
+//               barSide="left"
+//               gameState={gameState}
+//               playerRef={player2References}
+//               heightVh={100 / 3}
+//               playerNumber={1}
+//               player={gameState.players[1]}
+//               isActivePlayer={gameState.activePlayer === 1}
+//               landsOnNorth={true}
+//             />
+//           </Row>
+//           <Row>
+//             <NorthTable
+//               barSide="left"
+//               gameState={gameState}
+//               playerRef={player2References}
+//               heightVh={100 / 3}
+//               playerNumber={1}
+//               player={gameState.players[1]}
+//               isActivePlayer={gameState.activePlayer === 1}
+//               landsOnNorth={true}
+//             />
+//           </Row>
+//           <Row>
+//             <SouthTable
+//               gameState={gameState}
+//               playerRef={player1References}
+//               playerNumber={0}
+//               heightVh={100 / 3}
+//               player={gameState.players[0]}
+//               isActivePlayer={gameState.activePlayer === 0}
+//             />
+//           </Row>
+//         </>
+//       )}
+//     </Col>
+//     {gameState.players.length === 3 || gameState.players.length === 4 ? (
+//       <Col>
+//         <Row>
+//           <NorthTable
+//             barSide="right"
+//             gameState={gameState}
+//             playerRef={player2References}
+//             heightVh={100 / 2}
+//             playerNumber={1}
+//             player={gameState.players[1]}
+//             isActivePlayer={gameState.activePlayer === 1}
+//             landsOnNorth={true}
+//           />
+//         </Row>
+//         <Row>
+//           <NorthTable
+//             barSide="right"
+//             gameState={gameState}
+//             playerRef={player2References}
+//             heightVh={100 / 2}
+//             playerNumber={1}
+//             player={gameState.players[1]}
+//             isActivePlayer={gameState.activePlayer === 1}
+//             landsOnNorth={false}
+//           />
+//         </Row>
+//       </Col>
+//     ) : gameState.players.length === 5 || gameState.players.length === 6 ? (
+//       <Col>
+//         <Row>
+//           <NorthTable
+//             barSide="right"
+//             gameState={gameState}
+//             playerRef={player2References}
+//             heightVh={100 / 3}
+//             playerNumber={1}
+//             player={gameState.players[1]}
+//             isActivePlayer={gameState.activePlayer === 1}
+//             landsOnNorth={true}
+//           />
+//         </Row>
+//         <Row>
+//           <NorthTable
+//             barSide="right"
+//             gameState={gameState}
+//             playerRef={player2References}
+//             heightVh={100 / 3}
+//             playerNumber={1}
+//             player={gameState.players[1]}
+//             isActivePlayer={gameState.activePlayer === 1}
+//             landsOnNorth={true}
+//           />
+//         </Row>
+//         <Row>
+//           <NorthTable
+//             barSide="right"
+//             gameState={gameState}
+//             playerRef={player2References}
+//             heightVh={100 / 3}
+//             playerNumber={1}
+//             player={gameState.players[1]}
+//             isActivePlayer={gameState.activePlayer === 1}
+//             landsOnNorth={false}
+//           />
+//         </Row>
+//       </Col>
+//     ) : null}
+//     <Col md="auto" style={{ backgroundColor: "green" }}>
+//       <GameStateBoard gameState={gameState} playerRef={player1References} />
+//     </Col>
+//   </Row>
+// );
 
 GameArena.propTypes = {
   gameState: PropTypes.object.isRequired,

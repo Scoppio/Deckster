@@ -287,10 +287,9 @@ export const NorthTable = ({
   isActivePlayer,
   barSide,
   landsOnNorth,
-  heightVh,
 }) => {
-  const handVh = heightVh * 0.2;
-  const battlefieldVh = heightVh * 0.8;
+  const handVh = 0.2;
+  const battlefieldVh = 0.8;
 
   const PlayerBarRenderer = (
     <PlayerBar
@@ -312,34 +311,21 @@ export const NorthTable = ({
       <Col>
         {landsOnNorth ? (
           <Row style={{ background: "grey" }}>
-            <Col>
-              <HiddenHand
-                player={player}
-                playerNumber={playerNumber}
-                handVh={handVh}
-              />
-            </Col>
+            <HiddenHand player={player} playerNumber={playerNumber} />
           </Row>
         ) : null}
-        <Row style={{ background: "gold" }}>
+        {/* <Row style={{ background: "gold" }}>
           <StaticBattlefield
             gameState={gameState}
             playerRef={playerRef}
             playerNumber={playerNumber}
             player={player}
             landsOnNorth={landsOnNorth}
-            heightVh={battlefieldVh}
           />
-        </Row>
+        </Row> */}
         {!landsOnNorth ? (
           <Row style={{ background: "grey" }}>
-            <Col>
-              <HiddenHand
-                player={player}
-                playerNumber={playerNumber}
-                handVh={handVh}
-              />
-            </Col>
+            <HiddenHand player={player} playerNumber={playerNumber} />
           </Row>
         ) : null}
       </Col>
