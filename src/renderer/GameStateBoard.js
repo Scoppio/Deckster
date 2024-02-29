@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import Row from "react-bootstrap/Row";
-import { LogFrame } from "./LogFrame";
+import { LogFrame, AnnouncementFrame } from "./LogFrame";
+import { CardListZone } from "./CardListZone";
+import { TabIndices } from "../commons/Player";
 
 import "./gameStateBoard.css";
 
@@ -42,6 +44,12 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
           </>
         ) : null}
       </div>
+      <CardListZone
+        gameState={gameState}
+        playerRef={playerRef}
+        tabIndex={TabIndices}
+      />
+      <AnnouncementFrame gameState={gameState} />
       <LogFrame gameState={gameState} playerRef={playerRef.log} />
     </div>
   );

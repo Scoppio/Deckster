@@ -17,8 +17,10 @@ class BaseGameStateController extends EventEmitter {
       this.ariaHelper = new AriaHelper(this)
       this.online = false
       this.game_log = []
+      this.announcement_message = ""
       this.focus_card = null
       this.sounds = new Sounds()
+      this.open_zone = {zone: null, cards: []}
     }
   }
   
@@ -32,6 +34,8 @@ class BaseGameStateController extends EventEmitter {
     this.game_log = previousState.game_log
     this.focus_card = previousState.focus_card
     this.sounds = previousState.sounds
+    this.announcement_message = previousState.announcement_message
+    this.open_zone = previousState.open_zone
   }
 
   get player () {
@@ -52,6 +56,11 @@ class BaseGameStateController extends EventEmitter {
 
   get log() {
     return this.game_log
+  }
+
+  announce(message) {
+    this.announcement_message = message
+    this.changed()
   }
 
   registerWebSocketClient(webSocketClient) {
@@ -105,7 +114,7 @@ class RequestGameActions extends BaseGameStateController {
     this.players.push(player)
     const playerNumber = this.players.length - 1
 
-    if (player.isLocal) {
+    if (player.isLocal && !player._is_empty) {
       this.player_number = playerNumber
     }
 
@@ -124,7 +133,7 @@ class RequestGameActions extends BaseGameStateController {
     
   }
 
-  updatePlayer(sound, volume) {
+  updatePlayer(sound, volume = 1.0) {
     this.sendEvent('update_player', {...this.player, sound, volume})
   }
 
@@ -142,12 +151,10 @@ class RequestGameActions extends BaseGameStateController {
     console.log("TODO")
   }
 
-  moveSelectedToGraveyard() {
-    console.log("TODO")
-  }
-
-  moveSelectedToExile() {
-    console.log("TODO")
+  moveCardToZoneTop(sourceZone, sourceIndex, destinationZone) {
+    const source = {droppableId: sourceZone, index: sourceIndex}
+    const destination = {droppableId: destinationZone, index: 0}
+    this.moveCardTo(source, destination)
   }
 
   moveSelectedToLibrary() {
@@ -218,8 +225,26 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   passTurn() {
-    this.sendEvent("pass_turn")
-    
+    this.sendEvent("pass_turn")  
+  }
+
+  viewZone(zone) {
+    this.announce(`Viewing ${zone}`)
+    this.open_zone = {zone: zone, cards: this.player[zone]}
+    this.changed()
+  }
+
+  viewLibrary() {
+    this.sendEvent("view_library")
+  }
+
+  viewTopXCards(number_of_cards) {
+    this.sendEvent("view_top_x_cards", {number_of_cards})
+  }
+
+  closeViewZone() {
+    this.open_zone = {zone: null, cards: []}
+    this.changed()
   }
 
   moveCardTo(source, destination) {
@@ -290,9 +315,6 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   log_event(event) {
-    if (!this.online) {
-      this.online = true
-    }
     console.log(event)
     const currentTime = new Date();
     const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
@@ -302,6 +324,7 @@ class ExecuteGameActions extends RequestGameActions {
     }
   }
   
+
   pass_turn(event) {
     // TODO: pass turn
   }
@@ -314,6 +337,18 @@ class ExecuteGameActions extends RequestGameActions {
     if (this.player_number !== event.sender.idx) {
       this.players[event.sender.idx].updateFromPayload(event.payload)
     }
+  }
+
+  view_library(event) {
+    this.announce(`Viewing library`)
+    this.open_zone = {zone: "library", cards: event.payload}
+    this.changed()
+  }
+
+  view_top_x_cards (event) {
+    this.announce(`Viewing top ${event.payload.number_of_cards} cards`)
+    this.open_zone = {zone: "library", cards: event.payload}
+    this.changed()
   }
 
   update_player(event) {

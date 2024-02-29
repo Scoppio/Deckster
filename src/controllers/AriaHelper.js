@@ -15,4 +15,5 @@ export default class AriaHelper {
 
     return `${this.gameState.players[playerNumber].name} battlefield, ${numberOfCards} cards, ${numberOfLands} lands, ${numberOfCreatures} creatures, ${numberOfPlaneswalkers} planeswalkers, ${numberOfArtefacts} artefacts, ${numberOfOtherCards} other cards`
   }
+
 }

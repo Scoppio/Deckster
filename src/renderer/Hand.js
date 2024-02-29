@@ -42,12 +42,12 @@ HiddenHand.propTypes = {
   handVh: PropTypes.number.isRequired,
 }
 
-export const Hand = ({gameState, player, playerRef, handVh}) => {
+export const Hand = ({gameState, player, handVh}) => {
 
   return (
     <div>
       <Row >
-        <ShownHand gameState={gameState} cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} playerRef={playerRef}/>
+        <ShownHand gameState={gameState} cards={player.hand} tabIndex={player.tabIndices.hand} handVh={handVh} />
       </Row>
     </div>
   )
@@ -60,15 +60,13 @@ Hand.propTypes = {
   handVh: PropTypes.number.isRequired,
 }
 
-export const ShownHand = ({cards, gameState, tabIndex, handVh, playerRef}) => {
+export const ShownHand = ({cards, gameState, tabIndex, handVh}) => {
 
   return (
    <div style={{background: "grey", padding: "0px"}}>
     <Droppable droppableId="hand" direction="horizontal" style={{padding: "0px"}}>
       {(provided) => (
-        <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}} 
-        tabIndex={tabIndex} role="region" aria-label={`${cards.length} cards in hand.`}
-        >
+        <CardHolder {...provided.droppableProps} ref={provided.innerRef} style={{height: `${handVh}vh`, padding: "0px"}}>
           {cards.map((card, idx) => <ImgCardHand key={card._uid} gameState={gameState} idx={idx} size="small" card={card} tabIndex={idx + tabIndex + 1} cardHeight={100} />)}
           {provided.placeholder}
         </CardHolder>
@@ -81,7 +79,6 @@ export const ShownHand = ({cards, gameState, tabIndex, handVh, playerRef}) => {
 ShownHand.propTypes = {
   cards: PropTypes.array.isRequired,
   tabIndex: PropTypes.number.isRequired,
-  playerRef: PropTypes.object.isRequired,
   handVh: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
 }

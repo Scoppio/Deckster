@@ -2,7 +2,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import PropTypes from 'prop-types';
 
 const gameZones = ["library", "graveyard", "exile", "faceDown"]
-const gameZoneNames = ["Library", "Graveyard", "Exile", "Face Down"]
+const gamezoneNames = ["Library", "Graveyard", "Exile", "Face Down"]
 
 const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) => {
   
@@ -16,8 +16,7 @@ const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) =
   return (
     <div className={"hand row-flex"} 
       role="region"
-      aria-labelledby={playerNumber + "-hand-label"}
-      aria-describedby={playerNumber + "-hand-desc"}>
+      aria-describedby={`${player.hand.length} cards in hand.`}>
       <Dropdown autoClose="outside" >
         <Dropdown.Toggle 
           variant="secondary" 
@@ -33,7 +32,7 @@ const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) =
             // for each zone that is not zoneName
             gameZones.map((gameZone, index) => {
               return (
-                <Dropdown.Item href={"#/" + gameZone} key={index}>Move all cards to {gameZoneNames[index]}</Dropdown.Item>
+                <Dropdown.Item href={"#/" + gameZone} key={index}>Move all cards to {gamezoneNames[index]}</Dropdown.Item>
               );
             }).filter(Boolean)
           }
@@ -42,7 +41,7 @@ const TheHandZone = ({ zoneName, player, playerRef, playerNumber, gameState }) =
           
         </Dropdown.Menu>
       </Dropdown>
-      <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commanderExtraCastingCost}</p>
+      <p id={playerNumber + "-commander-casting-cost"}>Extra casting cost: {player.commander_extra_casting_cost}</p>
     </div>
   )
 }
