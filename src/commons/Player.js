@@ -1,5 +1,6 @@
 import emptyAvatar from "../resources/images/bubbly_cat.jpg";
 import { Card } from "./Card";
+import { Utils } from './Utils';
 
 export const TabIndices = {
   playerStats: 1000,
@@ -38,13 +39,13 @@ export class Player {
     this.tabIndices = { ...tabIndices };
     this.isLocal = isLocal;
     this.avatar = emptyAvatar;
-    this._uid = Math.floor(Math.random() * 1000000) + "";
+    this._uid = Utils.random_id_str;
     this._is_empty = false;
   }
 
   static emptyPlayer() {
     const player = new Player(
-      Math.floor(Math.random() * 1000000) + "",
+      Utils.random_id_str,
       "",
       { deck: [], commanders: [] },
       0,
@@ -101,3 +102,6 @@ export class Player {
     return this.remote_hand_size;
   }
 }
+
+
+export const EMPTY_PLAYER = Player.emptyPlayer();

@@ -1,8 +1,10 @@
 import FuckedCardBack from "../resources/cards/mtgcardback.png";
+import { Utils } from './Utils';
+
 
 export class Card {
   constructor(card) {
-    this._uid = card._uid || Math.floor(Math.random() * 1000000) + "";
+    this._uid = card._uid || Utils.random_id_str;
     this.id = card.id;
     this.name = card.name;
     this.type_line = card.type_line;

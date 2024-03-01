@@ -1,6 +1,8 @@
 import AriaHelper from "./AriaHelper";
 import { EventEmitter } from "events";
 import Sounds from "./Sounds";
+import { EMPTY_PLAYER } from "../commons/Player";
+
 
 class BaseGameStateController extends EventEmitter {
   constructor(state = null, updateState) {
@@ -77,6 +79,14 @@ class BaseGameStateController extends EventEmitter {
     this.focus_card = card;
     this.changed();
   }
+
+  getPlayer(playerNumber) {
+    if (playerNumber < 0 || playerNumber >= this.players.length) {
+      return EMPTY_PLAYER;
+    }
+    return this.players[playerNumber];
+  }
+
 
   getCardFrom(source) {
     const sourceZone = source.droppableId;
