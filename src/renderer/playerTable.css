@@ -1,0 +1,9 @@
+.player-table {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+.player-table-right {
+  grid-template-columns: minmax(0, 1fr) max-content;
+}

@@ -4,16 +4,18 @@ import { LogFrame, AnnouncementFrame } from "./LogFrame";
 import { CardListZone } from "./CardListZone";
 import { TabIndices } from "../commons/Player";
 
+import "./gameStateBoard.css";
+
 export const GameStateBoard = ({ gameState, playerRef }) => {
   return (
-    <Row style={{ width: "15vw", height: "100vh", background: "grey" }}>
-      <div style={{ height: "50%" }}>
+    <div className="game-state-board">
+      <div>
         {gameState.focus_card ? (
           <>
             <Row>
               <h2
                 style={{
-                  fontSize: "1vw",
+                  fontSize: "1.5vw",
                   whiteSpace: "nowrap",
                   overflow: "visible",
                   textOverflow: "ellipsis",
@@ -42,14 +44,15 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
           </>
         ) : null}
       </div>
+
       <CardListZone
         gameState={gameState}
         playerRef={playerRef}
         tabIndex={TabIndices}
       />
       <AnnouncementFrame gameState={gameState} />
-      <LogFrame gameState={gameState} height={25} playerRef={playerRef.log} />
-    </Row>
+      <LogFrame gameState={gameState} playerRef={playerRef.log} />
+    </div>
   );
 };
 

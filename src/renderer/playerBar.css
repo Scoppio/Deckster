@@ -1,0 +1,17 @@
+.player-bar {
+  height: 100%;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+
+  padding: 10px;
+}
+
+.player-counters {
+}
+
+.player-actions {
+  max-height: 99%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: green;
+}

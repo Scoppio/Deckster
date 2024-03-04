@@ -1,14 +1,11 @@
-// import { useState, useMemo } from 'react'
-
 import { GameArena } from "./renderer/GameArena";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
 import GameStateController from "./controllers/GameStateController";
-import { Player, TabIndices } from "./commons/Player";
-import "@atlaskit/css-reset";
-import "mana-font/css/mana.css";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 import { WebSocketClient } from "./controllers/WebSocketClient";
+import { Player, TabIndices } from "./commons/Player";
+import "mana-font/css/mana.css";
+import "./App.css";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
@@ -17,7 +14,7 @@ function App() {
     if (gameStateController) {
       const handleStateChange = (newState) => {
         setGameStateController(
-          new GameStateController(newState, setGameStateController),
+          new GameStateController(newState, setGameStateController)
         );
       };
 
@@ -28,6 +25,7 @@ function App() {
       };
     } else {
       const deckA = loadDeck(46); // await fetchDeck(46)
+
       // const deckB = loadDeck(47) // await fetchDeck(47)
       const playerA = new Player(1, "Lulu", deckA, 40, TabIndices, true);
       const playerB = Player.emptyPlayer();
@@ -48,8 +46,7 @@ function App() {
   }
 
   return (
-    <div role="application">
-      <RemoveScrollBar />
+    <div className="app">
       <GameArena gameState={gameStateController} />
     </div>
   );

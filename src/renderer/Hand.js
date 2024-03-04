@@ -19,8 +19,7 @@ const CardBackImg = ({ scale }) => {
   );
 };
 
-export const HiddenHand = ({ player, playerNumber, handVh }) => {
-  console.log(handVh);
+export const HiddenHand = ({ player, playerNumber }) => {
   return (
     <div
       className="hand col"
@@ -29,7 +28,10 @@ export const HiddenHand = ({ player, playerNumber, handVh }) => {
       aria-labelledby={playerNumber + "-player-hand-label"}
       aria-describedby={playerNumber + "-hand-desc"}
     >
-      <div className="col" style={{ height: `${handVh}vh` }}>
+      <div
+        className="col"
+        style={{ minHeight: "50px", backgroundColor: "blue" }}
+      >
         {player.hand.map((card, idx) => (
           <CardBackImg key={card._uid} scale={100} />
         ))}
