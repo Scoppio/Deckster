@@ -176,9 +176,10 @@ export const SouthTable = ({
 
         const f = document.activeElement;
         const cardIdx = cardPerZone[nextZone].findIndex(
-          (card) => card.attributes.uniqueid === f.attributes.uniqueid,
+          (card) => card.attributes['data-rbd-drag-handle-draggable-id'] === f.attributes['data-rbd-drag-handle-draggable-id'],
         );
-        gameState.focusOnCard(gameState.player[nextZone][cardIdx]);
+        const zoneNameAsVariable = nextZone === "hand_zone" ? "hand" : nextZone;
+        gameState.focusOnCard(gameState.player[zoneNameAsVariable][cardIdx]);
         if (currentZone !== nextZone) {
           gameState.announce(`${zonesByName[nextZone]} lane`);
         }
