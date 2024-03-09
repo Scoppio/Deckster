@@ -311,7 +311,7 @@ export function GameArena({ gameState }) {
             isActivePlayer={gameState.activePlayer === 1}
             landsOnNorth={true}
           />
-          <NorthTable
+          <SouthTable
             barSide="left"
             gameState={gameState}
             playerRef={player1References}

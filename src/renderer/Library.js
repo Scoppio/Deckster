@@ -60,11 +60,11 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
 
   return (
     <div
-      className={"library row-flex"}
+      className={"library"}
       role="region"
       aria-describedby={playerNumber + "-library-desc"}
     >
-      <Dropdown autoClose="outside">
+      <Dropdown drop="up" style={{ maxHeight: "100px" }} autoClose="outside">
         <Dropdown.Toggle
           variant="secondary"
           id="dropdown-autoclose-outside"

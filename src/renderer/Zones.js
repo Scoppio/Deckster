@@ -29,7 +29,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
 
   return (
     <div
-      className={zoneName + " row"}
+      className={zoneName}
       role="region"
       aria-labelledby={playerNumber + "-" + zoneName + "-label"}
       aria-describedby={playerNumber + "-" + zoneName + "-desc"}
@@ -89,7 +89,7 @@ const TheCommanderZone = ({
 
   return (
     <div
-      className={zoneName + " row-flex"}
+      className={zoneName}
       role="region"
       aria-labelledby={playerNumber + "-" + zoneName + "-label"}
       aria-describedby={playerNumber + "-" + zoneName + "-desc"}

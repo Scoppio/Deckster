@@ -3,14 +3,14 @@ import { Droppable } from "react-beautiful-dnd";
 import FuckedCardBack from "../resources/cards/mtgcardback.png";
 import style from "styled-components";
 import PropTypes from "prop-types";
-import Row from "react-bootstrap/Row";
 
 const CardHolder = style.div`
   padding: 8px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  width: 75vw;
+  height: 100%;
+  width: 100%;
 `;
 
 const CardBackImg = ({ scale }) => {
@@ -22,16 +22,13 @@ const CardBackImg = ({ scale }) => {
 export const HiddenHand = ({ player, playerNumber }) => {
   return (
     <div
-      className="hand col"
+      className="hand"
       role="region"
       tabIndex={player.tabIndices.hand}
       aria-labelledby={playerNumber + "-player-hand-label"}
       aria-describedby={playerNumber + "-hand-desc"}
     >
-      <div
-        className="col"
-        style={{ minHeight: "50px", backgroundColor: "blue" }}
-      >
+      <div style={{ height: "100px", backgroundColor: "blue" }}>
         {player.hand.map((card, idx) => (
           <CardBackImg key={card._uid} scale={100} />
         ))}
@@ -43,21 +40,15 @@ export const HiddenHand = ({ player, playerNumber }) => {
 HiddenHand.propTypes = {
   player: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-  handVh: PropTypes.number.isRequired,
 };
 
-export const Hand = ({ gameState, player, handVh }) => {
+export const Hand = ({ gameState, player }) => {
   return (
-    <div>
-      <Row>
-        <ShownHand
-          gameState={gameState}
-          cards={player.hand}
-          tabIndex={player.tabIndices.hand}
-          handVh={handVh}
-        />
-      </Row>
-    </div>
+    <ShownHand
+      gameState={gameState}
+      cards={player.hand}
+      tabIndex={player.tabIndices.hand}
+    />
   );
 };
 
@@ -65,12 +56,11 @@ Hand.propTypes = {
   gameState: PropTypes.object.isRequired,
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
-  handVh: PropTypes.number.isRequired,
 };
 
-export const ShownHand = ({ cards, gameState, tabIndex, handVh }) => {
+export const ShownHand = ({ cards, gameState, tabIndex }) => {
   return (
-    <div style={{ background: "grey", padding: "0px" }}>
+    <div style={{ background: "gold", padding: "0px" }}>
       <Droppable
         droppableId="hand"
         direction="horizontal"
@@ -80,7 +70,7 @@ export const ShownHand = ({ cards, gameState, tabIndex, handVh }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: `${handVh}vh`, padding: "0px" }}
+            style={{ padding: "0px" }}
           >
             {cards.map((card, idx) => (
               <ImgCardHand
@@ -104,6 +94,5 @@ export const ShownHand = ({ cards, gameState, tabIndex, handVh }) => {
 ShownHand.propTypes = {
   cards: PropTypes.array.isRequired,
   tabIndex: PropTypes.number.isRequired,
-  handVh: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
 };

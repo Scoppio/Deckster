@@ -20,7 +20,7 @@ const TheHandZone = ({
 
   return (
     <div
-      className={"hand row-flex"}
+      className={"hand"}
       role="region"
       aria-describedby={`${player.hand.length} cards in hand.`}
     >

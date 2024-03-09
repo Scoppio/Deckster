@@ -1,7 +1,18 @@
 .player-table {
   height: 100%;
   display: flex;
-  overflow: hidden;
+}
+
+.player-table-arena-south {
+  flex: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 100px;
+}
+
+.player-table-arena-north {
+  flex: 1;
+  display: grid;
+  grid-template-rows: 100px minmax(0, 1fr);
 }
 
 .player-table-right {

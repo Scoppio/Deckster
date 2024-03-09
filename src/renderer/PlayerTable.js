@@ -17,7 +17,6 @@ export const SouthTable = ({
   playerNumber,
   player,
   isActivePlayer,
-  heightVh,
 }) => {
   const onDragStart = (start, provided) => {
     const { source } = start;
@@ -70,9 +69,6 @@ export const SouthTable = ({
       );
     }
   };
-
-  const handHeightVh = heightVh * 0.17;
-  const battlefieldHeight = heightVh * 0.8;
 
   const onDragUpdate = (update, provided) => {
     console.log(update);
@@ -221,48 +217,70 @@ export const SouthTable = ({
     };
   }, [gameState]);
 
+  // return (
+  //   <div
+  //     className={classNames("player-table", {
+  //       "player-table-right": barSide === "right",
+  //     })}
+  //   >
+  //     {barSide === "left" ? PlayerBarRenderer : null}
+  //     <Col>
+  //       {landsOnNorth ? (
+  //         <Row style={{ background: "grey" }}>
+  //           <HiddenHand player={player} playerNumber={playerNumber} />
+  //         </Row>
+  //       ) : null}
+  //       <Row style={{ background: "gold" }}>
+  //         <StaticBattlefield
+  //           gameState={gameState}
+  //           playerRef={playerRef}
+  //           playerNumber={playerNumber}
+  //           player={player}
+  //           landsOnNorth={landsOnNorth}
+  //         />
+  //       </Row>
+  //       {!landsOnNorth ? (
+  //         <Row style={{ background: "grey" }}>
+  //           <HiddenHand player={player} playerNumber={playerNumber} />
+  //         </Row>
+  //       ) : null}
+  //     </Col>
+  //     {barSide === "right" ? PlayerBarRenderer : null}
+  //   </div>
+  // );
+
   return (
-    <div className="col flex-fill d-flex flex-column">
-      <Row>
-        <Col md="auto">
-          <PlayerBar
-            {...{
-              player,
-              playerRef,
-              playerNumber,
-              isActivePlayer,
-              heightVh,
-              gameState,
-            }}
+    <div className={classNames("player-table")}>
+      <PlayerBar
+        {...{
+          player,
+          playerRef,
+          playerNumber,
+          isActivePlayer,
+          gameState,
+        }}
+      />
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onDragUpdate={onDragUpdate}
+        onDragStart={onDragStart}
+      >
+        <div className="player-table-arena-south">
+          <Battlefield
+            gameState={gameState}
+            playerRef={playerRef}
+            playerNumber={playerNumber}
+            player={player}
           />
-        </Col>
-        <DragDropContext
-          onDragEnd={onDragEnd}
-          onDragUpdate={onDragUpdate}
-          onDragStart={onDragStart}
-        >
-          <Col>
-            <Row style={{ height: `${battlefieldHeight}vh` }}>
-              <Battlefield
-                gameState={gameState}
-                playerRef={playerRef}
-                playerNumber={playerNumber}
-                player={player}
-                heightVh={battlefieldHeight}
-              />
-            </Row>
-            <Row style={{ height: `${handHeightVh}vh` }}>
-              <Hand
-                gameState={gameState}
-                player={player}
-                playerRef={playerRef}
-                playerNumber={playerNumber}
-                handVh={handHeightVh}
-              />
-            </Row>
-          </Col>
-        </DragDropContext>
-      </Row>
+
+          <Hand
+            gameState={gameState}
+            player={player}
+            playerRef={playerRef}
+            playerNumber={playerNumber}
+          />
+        </div>
+      </DragDropContext>
     </div>
   );
 };
@@ -285,48 +303,29 @@ export const NorthTable = ({
   barSide,
   landsOnNorth,
 }) => {
-  const handVh = 0.2;
-  const battlefieldVh = 0.8;
-
-  const PlayerBarRenderer = (
-    <PlayerBar
-      player={player}
-      playerRef={playerRef}
-      playerNumber={playerNumber}
-      isActivePlayer={isActivePlayer}
-      gameState={gameState}
-    />
-  );
-
   return (
     <div
       className={classNames("player-table", {
         "player-table-right": barSide === "right",
       })}
     >
-      {barSide === "left" ? PlayerBarRenderer : null}
-      <Col>
-        {landsOnNorth ? (
-          <Row style={{ background: "grey" }}>
-            <HiddenHand player={player} playerNumber={playerNumber} />
-          </Row>
-        ) : null}
-        {/* <Row style={{ background: "gold" }}>
-          <StaticBattlefield
-            gameState={gameState}
-            playerRef={playerRef}
-            playerNumber={playerNumber}
-            player={player}
-            landsOnNorth={landsOnNorth}
-          />
-        </Row> */}
-        {!landsOnNorth ? (
-          <Row style={{ background: "grey" }}>
-            <HiddenHand player={player} playerNumber={playerNumber} />
-          </Row>
-        ) : null}
-      </Col>
-      {barSide === "right" ? PlayerBarRenderer : null}
+      <PlayerBar
+        player={player}
+        playerRef={playerRef}
+        playerNumber={playerNumber}
+        isActivePlayer={isActivePlayer}
+        gameState={gameState}
+      />
+      <div className="player-table-arena-north">
+        <HiddenHand player={player} playerNumber={playerNumber} />
+        <StaticBattlefield
+          gameState={gameState}
+          playerRef={playerRef}
+          playerNumber={playerNumber}
+          player={player}
+          landsOnNorth={landsOnNorth}
+        />
+      </div>
     </div>
   );
 };
