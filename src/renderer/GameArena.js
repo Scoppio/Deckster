@@ -297,7 +297,6 @@ export function GameArena({ gameState }) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [hotkeys]);
-
   // For now, only support 2 players
   return (
     <div className="main">

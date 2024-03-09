@@ -1,98 +1,97 @@
-import AriaHelper from './AriaHelper'
-import { EventEmitter } from 'events'
-import Sounds from './Sounds'
-
+import AriaHelper from "./AriaHelper";
+import { EventEmitter } from "events";
+import Sounds from "./Sounds";
 
 class BaseGameStateController extends EventEmitter {
   constructor(state = null, updateState) {
     super();
     this.updateState = updateState;
     if (state) {
-      this.fromPreviousState(state)
+      this.fromPreviousState(state);
     } else {
-      this.players = []
-      this.activePlayer = 0
-      this.player_number = 0
-      this.webSocketClient = null
-      this.ariaHelper = new AriaHelper(this)
-      this.online = false
-      this.game_log = []
-      this.announcement_message = ""
-      this.focus_card = null
-      this.sounds = new Sounds()
-      this.open_zone = {zone: null, cards: []}
+      this.players = [];
+      this.activePlayer = 0;
+      this.player_number = 0;
+      this.webSocketClient = null;
+      this.ariaHelper = new AriaHelper(this);
+      this.online = false;
+      this.game_log = [];
+      this.announcement_message = "";
+      this.focus_card = null;
+      this.sounds = new Sounds();
+      this.open_zone = { zone: null, cards: [] };
     }
   }
-  
+
   fromPreviousState(previousState) {
-    this.players = previousState.players
-    this.activePlayer = previousState.activePlayer
-    this.player_number = previousState.player_number
-    this.webSocketClient = previousState.webSocketClient
-    this.ariaHelper = previousState.ariaHelper
-    this.online = previousState.online
-    this.game_log = previousState.game_log
-    this.focus_card = previousState.focus_card
-    this.sounds = previousState.sounds
-    this.announcement_message = previousState.announcement_message
-    this.open_zone = previousState.open_zone
+    this.players = previousState.players;
+    this.activePlayer = previousState.activePlayer;
+    this.player_number = previousState.player_number;
+    this.webSocketClient = previousState.webSocketClient;
+    this.ariaHelper = previousState.ariaHelper;
+    this.online = previousState.online;
+    this.game_log = previousState.game_log;
+    this.focus_card = previousState.focus_card;
+    this.sounds = previousState.sounds;
+    this.announcement_message = previousState.announcement_message;
+    this.open_zone = previousState.open_zone;
   }
 
-  get player () {
-    return this.players[this.player_number]
-  } 
+  get player() {
+    return this.players[this.player_number];
+  }
 
   get active_player() {
-    return this.players[this.activePlayer]
+    return this.players[this.activePlayer];
   }
-  
+
   get active_player_number() {
-    return this.activePlayer
+    return this.activePlayer;
   }
 
   get sender() {
-    return { id: this.player.id, idx: this.player_number }
+    return { id: this.player.id, idx: this.player_number };
   }
 
   get log() {
-    return this.game_log
+    return this.game_log;
   }
 
   announce(message) {
-    this.announcement_message = message
-    this.changed()
+    this.announcement_message = message;
+    this.changed();
   }
 
   registerWebSocketClient(webSocketClient) {
-    this.webSocketClient = webSocketClient
-    this.webSocketClient.addListener(this)
+    this.webSocketClient = webSocketClient;
+    this.webSocketClient.addListener(this);
   }
 
   changed() {
     this.updateState(this);
-    this.emit('stateChanged', this);
+    this.emit("stateChanged", this);
   }
 
   // Local actions
   focusOnCard(card) {
-    this.focus_card = card
-    this.changed()
+    this.focus_card = card;
+    this.changed();
   }
 
   getCardFrom(source) {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
-    const card = this.player[sourceZone][sourceIndex]
-    this.focusOnCard(card)
-    return card
+    const card = this.player[sourceZone][sourceIndex];
+    this.focusOnCard(card);
+    return card;
   }
 
   cancelCardMove() {
-    this.focusOnCard(null)
+    this.focusOnCard(null);
   }
 
   playSound(sound_name, volume = 1.0) {
-    this.sounds.playSound(sound_name, volume)
+    this.sounds.playSound(sound_name, volume);
   }
 }
 
@@ -102,204 +101,214 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   sendEvent(type, payload = {}) {
-    const sender = this.sender
+    const sender = this.sender;
     try {
-      this.webSocketClient?.sendEvent({ sender: sender, type: type, payload: payload })      
+      this.webSocketClient?.sendEvent({
+        sender: sender,
+        type: type,
+        payload: payload,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   addPlayer(player) {
-    this.players.push(player)
-    const playerNumber = this.players.length - 1
+    this.players.push(player);
+    const playerNumber = this.players.length - 1;
 
     if (player.isLocal && !player._is_empty) {
-      this.player_number = playerNumber
+      this.player_number = playerNumber;
     }
 
-    this.sendEvent('login_player', player)
+    this.sendEvent("login_player", player);
   }
 
   ////////////
 
   drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
-    this.sendEvent("draw_card", {zone: zone, number_of_cards: number_of_cards, destination: destination})
-    
+    this.sendEvent("draw_card", {
+      zone: zone,
+      number_of_cards: number_of_cards,
+      destination: destination,
+    });
   }
 
   untapAll() {
-    this.sendEvent("untap_all")
-    
+    this.sendEvent("untap_all");
   }
 
   updatePlayer(sound, volume = 1.0) {
-    this.sendEvent('update_player', {...this.player, sound, volume})
+    this.sendEvent("update_player", { ...this.player, sound, volume });
   }
 
   increaseLife(health_points = 1) {
-    this.player.health += health_points
-    this.updatePlayer("ADD_COUNTER_SOUND", 1.0)
+    this.player.health += health_points;
+    this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
   }
 
   decreaseLife(health_points = 1) {
-    this.player.health -= health_points
-    this.updatePlayer("ADD_COUNTER_SOUND", 1.0)
+    this.player.health -= health_points;
+    this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
   }
 
   moveSelectedToHand() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   moveCardToZoneTop(sourceZone, sourceIndex, destinationZone) {
-    const source = {droppableId: sourceZone, index: sourceIndex}
-    const destination = {droppableId: destinationZone, index: 0}
-    this.moveCardTo(source, destination)
+    const source = { droppableId: sourceZone, index: sourceIndex };
+    const destination = { droppableId: destinationZone, index: 0 };
+    this.moveCardTo(source, destination);
   }
 
   moveSelectedToLibrary() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   moveSelectedToCommandZone() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   tapUntapSelected() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   declareAttacking() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   declareBlocking() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   scry() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   addCounterOnSelected() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   removeCounterOnSelected() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   revealCardsInHand() {
-    console.log("TODO")
+    console.log("TODO");
   }
 
   drawHand(number_of_cards = 7) {
-    this.sendEvent("draw_hand", {number_of_cards})
-    
+    this.sendEvent("draw_hand", { number_of_cards });
   }
 
   mulliganHand(number_of_cards = 7) {
-    this.sendEvent("mulligan", {number_of_cards})
-    
+    this.sendEvent("mulligan", { number_of_cards });
   }
 
   drawCardToBattlefield(number_of_cards = 1) {
-    this.drawCard(number_of_cards, "library", "front_battlefield")
+    this.drawCard(number_of_cards, "library", "front_battlefield");
   }
 
   drawCardToGraveyard(number_of_cards = 1) {
-    this.drawCard(number_of_cards, "library", "graveyard")
+    this.drawCard(number_of_cards, "library", "graveyard");
   }
 
   drawCardToExile(number_of_cards = 1) {
-    this.drawCard(number_of_cards, "library", "exile")
+    this.drawCard(number_of_cards, "library", "exile");
   }
 
   drawCardToFaceDown(number_of_cards = 1) {
-    this.drawCard(number_of_cards, "library", "faceDown")
+    this.drawCard(number_of_cards, "library", "faceDown");
   }
 
   shuffleDeck() {
-    this.sendEvent("shuffle_library")
-    
+    this.sendEvent("shuffle_library");
   }
 
   passTurn() {
-    this.sendEvent("pass_turn")  
+    this.sendEvent("pass_turn");
   }
 
   viewZone(zone) {
-    this.announce(`Viewing ${zone}`)
-    this.open_zone = {zone: zone, cards: this.player[zone]}
-    this.changed()
+    this.announce(`Viewing ${zone}`);
+    this.open_zone = { zone: zone, cards: this.player[zone] };
+    this.changed();
   }
 
   viewLibrary() {
-    this.sendEvent("view_library")
+    this.sendEvent("view_library");
   }
 
   viewTopXCards(number_of_cards) {
-    this.sendEvent("view_top_x_cards", {number_of_cards})
+    this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
   closeViewZone() {
-    this.open_zone = {zone: null, cards: []}
-    this.changed()
+    this.open_zone = { zone: null, cards: [] };
+    this.changed();
   }
 
   moveCardTo(source, destination) {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
-    const card = this.player[sourceZone][sourceIndex]
+    const card = this.player[sourceZone][sourceIndex];
     this.player[sourceZone].splice(sourceIndex, 1);
 
     const destinationZone = destination.droppableId;
     const destinationIndex = destination.index;
     this.player[destinationZone].splice(destinationIndex, 0, card);
-    this.focusOnCard(null)
+    this.focusOnCard(null);
 
-    this.sendEvent("move_card", 
-      {
-        "from_zone": sourceZone, 
-        "to_zone": destinationZone,
-        "from_idx": sourceIndex,
-        "to_idx": destinationIndex
-      })
-    
+    this.sendEvent("move_card", {
+      from_zone: sourceZone,
+      to_zone: destinationZone,
+      from_idx: sourceIndex,
+      to_idx: destinationIndex,
+    });
+
     return card;
   }
 
   listCommands(hotkeys) {
-    const keyCommandsList = hotkeys.keyCommands.map((cmd) => {
-      return `${cmd.key} - ${cmd.description}`
-    }).join("\n")
-    const ctrlKeyCommandsList = hotkeys.ctrlKeyCommands.map((cmd) => {
-      return `${hotkeys.ctrlKeyCommandModifier} ${cmd.key} - ${cmd.description}`
-    }).join("\n")
-    const ctrlShiftKeyCommandsList = hotkeys.ctrlShiftKeyCommands.map((cmd) => {
-      return `${hotkeys.ctrlShiftKeyCommandModifier} ${cmd.key} - ${cmd.description}`
-    }).join("\n")
-    const altKeyCommandsList = hotkeys.altKeyCommands.map((cmd) => {
-      return `${hotkeys.altKeyCommandModifier} ${cmd.key} - ${cmd.description}`
-    }).join("\n")
+    const keyCommandsList = hotkeys.keyCommands
+      .map((cmd) => {
+        return `${cmd.key} - ${cmd.description}`;
+      })
+      .join("\n");
+    const ctrlKeyCommandsList = hotkeys.ctrlKeyCommands
+      .map((cmd) => {
+        return `${hotkeys.ctrlKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
+      })
+      .join("\n");
+    const ctrlShiftKeyCommandsList = hotkeys.ctrlShiftKeyCommands
+      .map((cmd) => {
+        return `${hotkeys.ctrlShiftKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
+      })
+      .join("\n");
+    const altKeyCommandsList = hotkeys.altKeyCommands
+      .map((cmd) => {
+        return `${hotkeys.altKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
+      })
+      .join("\n");
 
     const msg = `Available commands:
 ${keyCommandsList}
 ${ctrlKeyCommandsList}
 ${ctrlShiftKeyCommandsList}
-${altKeyCommandsList}`
+${altKeyCommandsList}`;
 
-    let reverse_log = msg.split("\n").reverse()
+    let reverse_log = msg.split("\n").reverse();
     // remove all empty lines
-    reverse_log = reverse_log.filter((line) => line.trim() !== "")
+    reverse_log = reverse_log.filter((line) => line.trim() !== "");
     reverse_log.forEach((line) => {
       this.game_log.unshift(line.trim());
-    })
+    });
     if (this.game_log.length > 100) {
       this.game_log = this.game_log.slice(0, 100);
     }
-    this.playSound("PLACEHOLDER_SOUND", 1.0)
-    this.changed()
+    this.playSound("PLACEHOLDER_SOUND", 1.0);
+    this.changed();
   }
 }
 
@@ -309,13 +318,13 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   handleEvent(event) {
-    console.log(`GameStateController ${event}`)
-    this[event.type](event)
-    this.changed()
+    console.log(`GameStateController ${event}`);
+    this[event.type](event);
+    this.changed();
   }
 
   log_event(event) {
-    console.log(event)
+    console.log(event);
     const currentTime = new Date();
     const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
     this.game_log.unshift(`${event.payload} - ${formattedTime}`);
@@ -323,7 +332,6 @@ class ExecuteGameActions extends RequestGameActions {
       this.game_log = this.game_log.slice(0, 100);
     }
   }
-  
 
   pass_turn(event) {
     // TODO: pass turn
@@ -335,33 +343,33 @@ class ExecuteGameActions extends RequestGameActions {
 
   update_opp_table(event) {
     if (this.player_number !== event.sender.idx) {
-      this.players[event.sender.idx].updateFromPayload(event.payload)
+      this.players[event.sender.idx].updateFromPayload(event.payload);
     }
   }
 
   view_library(event) {
-    this.announce(`Viewing library`)
-    this.open_zone = {zone: "library", cards: event.payload}
-    this.changed()
+    this.announce(`Viewing library`);
+    this.open_zone = { zone: "library", cards: event.payload };
+    this.changed();
   }
 
-  view_top_x_cards (event) {
-    this.announce(`Viewing top ${event.payload.number_of_cards} cards`)
-    this.open_zone = {zone: "library", cards: event.payload}
-    this.changed()
+  view_top_x_cards(event) {
+    this.announce(`Viewing top ${event.payload.number_of_cards} cards`);
+    this.open_zone = { zone: "library", cards: event.payload };
+    this.changed();
   }
 
   update_player(event) {
-    this.player.updateFromPayload(event.payload)
+    this.player.updateFromPayload(event.payload);
   }
 
   play_sound(event) {
-    this.playSound(event.payload?.name, event.payload?.volume ?? 1.0)
+    this.playSound(event.payload?.name, event.payload?.volume ?? 1.0);
   }
 }
 
 export default class GameStateController extends ExecuteGameActions {
   constructor(state = null, updateState) {
-    super(state, updateState)
+    super(state, updateState);
   }
 }
