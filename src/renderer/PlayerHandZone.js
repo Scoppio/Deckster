@@ -1,5 +1,6 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
+import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
 const gameZones = ["library", "graveyard", "exile", "faceDown"];
 const gamezoneNames = ["Library", "Graveyard", "Exile", "Face Down"];
@@ -34,7 +35,7 @@ const TheHandZone = ({
         >
           <span id={playerNumber + "-hand-label"}>hand</span>
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <DropdownMenuPortal>
           <Dropdown.Item onClick={handleRevealCardsInHand}>
             Reveal all cards in hand
           </Dropdown.Item>
@@ -53,7 +54,7 @@ const TheHandZone = ({
           }
           <Dropdown.Divider />
           <Dropdown.Item onClick={handleMulligan}>Mulligan hand</Dropdown.Item>
-        </Dropdown.Menu>
+        </DropdownMenuPortal>
       </Dropdown>
       <p id={playerNumber + "-commander-casting-cost"}>
         Extra casting cost: {player.commander_extra_casting_cost}

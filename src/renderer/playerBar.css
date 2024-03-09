@@ -11,7 +11,7 @@
 
 .player-actions {
   max-height: 99%;
-  /* overflow-y: auto; */
+  overflow-y: auto;
   /* overflow-x: hidden; */
   background-color: green;
 }

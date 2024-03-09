@@ -1,5 +1,6 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
+import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
 const gameZones = [
   "battlefield",
@@ -44,7 +45,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
         >
           <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <DropdownMenuPortal>
           <Dropdown.Item onClick={viewZone}>View all cards</Dropdown.Item>
           <Dropdown.Divider />
           {
@@ -62,7 +63,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
               })
               .filter(Boolean)
           }
-        </Dropdown.Menu>
+        </DropdownMenuPortal>
       </Dropdown>
       <p id={playerNumber + "-" + zoneName + "-desc"}>
         {player[zoneName].length} cards
@@ -104,7 +105,7 @@ const TheCommanderZone = ({
         >
           <span id={playerNumber + "-" + zoneName + "-label"}>commander</span>
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <DropdownMenuPortal>
           <Dropdown.Item onClick={viewZone}>View all cards</Dropdown.Item>
           <Dropdown.Item>
             Commander casting cost: {player.commander_extra_casting_cost}
@@ -127,7 +128,7 @@ const TheCommanderZone = ({
               })
               .filter(Boolean)
           }
-        </Dropdown.Menu>
+        </DropdownMenuPortal>
       </Dropdown>
       <p id={playerNumber + "-commander-casting-cost"}>
         Extra casting cost: {player.commander_extra_casting_cost}
