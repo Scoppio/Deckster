@@ -93,7 +93,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{ height: "33.33%", padding: "2px" }}
-            className="Droppable"
+            // className="Droppable"
             aria-label="front lane"
           >
             {player.front_battlefield.map((card, idx) => (
@@ -123,7 +123,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{ height: "33.33%", padding: "2px" }}
-            className="Droppable"
+            // className="Droppable"
             aria-label="back lane"
           >
             {player.back_battlefield.map((card, idx) => (
@@ -153,7 +153,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{ height: "33.33%", padding: "2px" }}
-            className="Droppable"
+            // className="Droppable"
             aria-label="land lane"
           >
             {player.land_zone_battlefield.map((card, idx) => (

@@ -4,9 +4,6 @@ import { PlayerBar } from "./PlayerBar";
 import { Hand, HiddenHand } from "./Hand";
 import { DragDropContext } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 import "./playerTable.css";
 import classNames from "classnames";
@@ -165,10 +162,8 @@ export const SouthTable = ({
         }
 
         const nextZone = reverseCardIndexZoneMap[cardIndex];
-        if (
-          (nextZone === "hand_zone" && currentZone !== "hand_zone") ||
-          (nextZone !== "hand_zone" && currentZone === "hand_zone")
-        ) {
+        // XOR - does not go from hand to another place nor from another place to hand.
+        if ((nextZone === "hand_zone") !== (currentZone === "hand_zone")) {
           return;
         }
         cards[cardIndex].focus();
@@ -182,11 +177,18 @@ export const SouthTable = ({
           gameState.announce(`${zonesByName[nextZone]} lane`);
         }
       } else if (["ArrowUp", "ArrowDown"].includes(event.key)) {
-        if (currentZoneIndex === -1 || currentZone === "hand_zone") {
+        if (currentZoneIndex === -1) {
           return;
         }
-        const direction = event.key === "ArrowUp" ? -1 : 1;
 
+        const direction = event.key === "ArrowUp" ? -1 : 1;
+                
+        if (currentZone === "hand_zone" && handCards.length > 0) {
+          const cardToFocus = direction === -1 ? handCards[0] : handCards[handCards.length - 1];
+          cardToFocus && cardToFocus.focus();
+          return;
+        }
+        
         const nextZoneIndex = findNextNonEmptyZoneIndex(
           battlefieldZones,
           cardPerZone,
