@@ -168,15 +168,19 @@ export const SouthTable = ({
         }
         cards[cardIndex].focus();
 
+        const uniqProp = "data-rbd-drag-handle-draggable-id";
         const f = document.activeElement;
-        const cardIdx = cardPerZone[nextZone].findIndex(
-          (card) => card.attributes.uniqueid === f.attributes.uniqueid
-        );
-        gameState.focusOnCard(gameState.player[nextZone][cardIdx]);
+        const cardIdx = cardPerZone[nextZone].findIndex((card) => card.attributes[uniqProp] === f.attributes[uniqProp]);
+        const zoneNameAsVariable = nextZone === "hand_zone" ? "hand" : nextZone;
+        
+        gameState.focusOnCard(gameState.player[zoneNameAsVariable][cardIdx]);
+        
         if (currentZone !== nextZone) {
           gameState.announce(`${zonesByName[nextZone]} lane`);
         }
+
       } else if (["ArrowUp", "ArrowDown"].includes(event.key)) {
+        
         if (currentZoneIndex === -1) {
           return;
         }
