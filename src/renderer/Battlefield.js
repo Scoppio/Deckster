@@ -10,10 +10,17 @@ const CardHolder = style.div`
 `;
 
 const BattlefieldDiv = style.div`
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
   display: flex;
   background-color: purple;
+`;
+
+const StaticBattlefieldDiv = style.div`
+  flex-direction: column;
+  width: 100%;
+  display: flex;
+  background-color: yellow;
 `;
 
 export const StaticBattlefield = ({
@@ -24,7 +31,7 @@ export const StaticBattlefield = ({
   landsOnNorth,
 }) => {
   return (
-    <BattlefieldDiv
+    <StaticBattlefieldDiv
       ref={playerRef.battlefield}
       tabIndex={player.tabIndices.battlefield}
       role="region"
@@ -70,7 +77,7 @@ export const StaticBattlefield = ({
           />
         ))}
       </CardHolder>
-    </BattlefieldDiv>
+    </StaticBattlefieldDiv>
   );
 };
 
@@ -92,8 +99,8 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px" }}
-            // className="Droppable"
+            style={{ height: "33.33%", padding: "2px", "background-color": "red" }}
+            className="Droppable"
             aria-label="front lane"
           >
             {player.front_battlefield.map((card, idx) => (
@@ -122,8 +129,8 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px" }}
-            // className="Droppable"
+            style={{ height: "33.33%", padding: "2px", "background-color": "blue" }}
+            className="Droppable"
             aria-label="back lane"
           >
             {player.back_battlefield.map((card, idx) => (
@@ -152,8 +159,8 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px" }}
-            // className="Droppable"
+            style={{ height: "33.33%", padding: "2px", "background-color": "green" }}
+            className="Droppable"
             aria-label="land lane"
           >
             {player.land_zone_battlefield.map((card, idx) => (
