@@ -41,6 +41,7 @@ export class Player {
     this.avatar = emptyAvatar;
     this._uid = Utils.random_id_str;
     this._is_empty = false;
+    this.battlemap = [[]];
   }
 
   static emptyPlayer() {
@@ -93,6 +94,7 @@ export class Player {
     this.sideboard = this.createCardInstances(payload.sideboard);
     this.library_size = payload.library_size;
     this.counters = payload.counters;
+    this.battlemap = payload.battlemap;
   }
 
   get cards_in_hand() {
