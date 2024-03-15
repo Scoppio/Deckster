@@ -1,5 +1,6 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
+import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
 const Zone = ({ zoneName, player, playerNumber }) => (
   <div
@@ -17,9 +18,9 @@ const Zone = ({ zoneName, player, playerNumber }) => (
       >
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <DropdownMenuPortal>
         <Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>
-      </Dropdown.Menu>
+      </DropdownMenuPortal>
     </Dropdown>
     <p id={playerNumber + "-" + zoneName + "-desc"}>
       {player[zoneName].length} cards
@@ -48,9 +49,9 @@ export const OppLibrary = ({ player, playerNumber }) => (
       >
         <span id={playerNumber + "-library-label"}>{"library"}</span>
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <DropdownMenuPortal>
         <Dropdown.Item>{player.library_size} cards</Dropdown.Item>
-      </Dropdown.Menu>
+      </DropdownMenuPortal>
     </Dropdown>
   </div>
 );

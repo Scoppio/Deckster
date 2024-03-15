@@ -209,6 +209,7 @@ export const ImgCardHand = ({
             alt={card.name}
             style={{
               height: `${cardHeight}%`,
+              maxWidth: "100%",
               borderRadius: "8px",
             }}
           />

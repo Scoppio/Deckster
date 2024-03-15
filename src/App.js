@@ -1,14 +1,14 @@
-// import { useState, useMemo } from 'react'
-
 import { GameArena } from "./renderer/GameArena";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
 import GameStateController from "./controllers/GameStateController";
-import { Player, TabIndices } from "./commons/Player";
-import "@atlaskit/css-reset";
 import "mana-font/css/mana.css";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 import { WebSocketClient } from "./controllers/WebSocketClient";
+
+import "./App.css";
+
+import { Player, TabIndices } from "./commons/Player";
+import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
@@ -17,7 +17,7 @@ function App() {
     if (gameStateController) {
       const handleStateChange = (newState) => {
         setGameStateController(
-          new GameStateController(newState, setGameStateController),
+          new GameStateController(newState, setGameStateController)
         );
       };
 
@@ -34,7 +34,7 @@ function App() {
 
       const gameState = new GameStateController(
         undefined,
-        setGameStateController,
+        setGameStateController
       );
       gameState.registerWebSocketClient(new WebSocketClient("test"));
       gameState.addPlayer(playerA);
@@ -48,9 +48,10 @@ function App() {
   }
 
   return (
-    <div role="application">
-      <RemoveScrollBar />
+    <div role="application" className="app">
       <GameArena gameState={gameStateController} />
+      <RemoveScrollBar />
+      {/* <GameArena gameState={gameStateController} /> */}
     </div>
   );
 }

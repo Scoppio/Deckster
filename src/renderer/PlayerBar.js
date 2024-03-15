@@ -1,23 +1,20 @@
 import PropTypes from "prop-types";
 import style from "styled-components";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Library } from "./Library";
 import { Graveyard, Exile, FaceDown, CommanderZone } from "./Zones";
 import { PlayerHandZone } from "./PlayerHandZone";
 
+import "./playerBar.css";
+
 const PlayerContainer = style.div`
-  border: 1px;
-  width: ${(props) => props.width}vw;
-  height: ${(props) => props.height}vh;
-  margin: 0 auto;
-  background: #grey;
+  min-width: 200px;
+  background: grey;
 `;
 
 const PlayerAvatarImg = style.img`
   width: 30px;
-  height: 30px;
+  aspect-ratio: 1;
   object-fit: contain;
   border-radius: 50%;
   margin: 2px;
@@ -43,7 +40,7 @@ const PlayerName = style.h2`
 const PlayerHealthBox = style.div`
   width: 100%;
   height: 20px;
-  background: grey;
+  background: lightgray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,7 +62,6 @@ export const PlayerBar = ({
   playerRef,
   playerNumber,
   isActivePlayer,
-  heightVh,
   gameState,
 }) => {
   const poisonCounters = player.counters?.["poison"] ?? 0;
@@ -74,8 +70,6 @@ export const PlayerBar = ({
 
   return (
     <PlayerContainer
-      width={10}
-      height={heightVh}
       role="region"
       aria-label={`${player.name} ${isActivePlayer ? "active player" : ""} / ${
         player.health
@@ -92,65 +86,43 @@ export const PlayerBar = ({
       tabIndex={player.tabIndices.playerStats}
       ref={playerRef.playerStats}
     >
-      <Container fluid>
-        <Row>
-          <Col md="auto">
-            <PlayerAvatarImg src={player.avatar} alt={player.name} />
-            <Row>
-              <GenericCounter
-                value={poisonCounters}
-                color={"green"}
-                aria_description={`${poisonCounters} poison`}
-              />
-            </Row>
-            <Row>
-              <GenericCounter
-                value={energyCounters}
-                color={"blue"}
-                aria_description={`${energyCounters} energy`}
-              />
-            </Row>
-            <Row>
-              <GenericCounter
-                value={otherCounters}
-                color={"grey"}
-                aria_description={`${otherCounters} other`}
-              />
-            </Row>
-          </Col>
-          <Col>
-            <Row>
-              <PlayerName>{player.name}</PlayerName>
-            </Row>
-            <Row>
-              <PlayerHealthBox>{player.health}</PlayerHealthBox>
-            </Row>
-            <br />
-            <Row>
-              <PlayerHandZone
-                {...{ player, playerRef, playerNumber, gameState }}
-              ></PlayerHandZone>
-            </Row>
-            <Row>
-              <Library {...{ player, playerRef, playerNumber, gameState }} />
-            </Row>
-            <Row>
-              <Graveyard {...{ player, playerRef, playerNumber, gameState }} />
-            </Row>
-            <Row>
-              <Exile {...{ player, playerRef, playerNumber, gameState }} />
-            </Row>
-            <Row>
-              <FaceDown {...{ player, playerRef, playerNumber, gameState }} />
-            </Row>
-            <Row>
-              <CommanderZone
-                {...{ player, playerRef, playerNumber, gameState }}
-              />
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+      <div className="player-bar">
+        <div className="player-counters">
+          <PlayerAvatarImg src={player.avatar} alt={player.name} />
+          <Row>
+            <GenericCounter
+              value={poisonCounters}
+              color={"green"}
+              aria_description={`${poisonCounters} poison`}
+            />
+          </Row>
+          <Row>
+            <GenericCounter
+              value={energyCounters}
+              color={"blue"}
+              aria_description={`${energyCounters} energy`}
+            />
+          </Row>
+          <Row>
+            <GenericCounter
+              value={otherCounters}
+              color={"grey"}
+              aria_description={`${otherCounters} other`}
+            />
+          </Row>
+        </div>
+        <div className="player-actions">
+          <PlayerName>{player.name}</PlayerName>
+          <PlayerHealthBox>{player.health}</PlayerHealthBox>
+          <br />
+          <PlayerHandZone {...{ player, playerRef, playerNumber, gameState }} />
+          <Library {...{ player, playerRef, playerNumber, gameState }} />
+          <Graveyard {...{ player, playerRef, playerNumber, gameState }} />
+          <Exile {...{ player, playerRef, playerNumber, gameState }} />
+          <FaceDown {...{ player, playerRef, playerNumber, gameState }} />
+          <CommanderZone {...{ player, playerRef, playerNumber, gameState }} />
+        </div>
+      </div>
     </PlayerContainer>
   );
 };

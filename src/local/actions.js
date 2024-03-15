@@ -215,7 +215,10 @@ class change_game_phase extends action {
 class untap_all extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event);
-    const permanents = player.battlefield;
+    const permanents = player.battlefield || [];
+    if (permanents.length === 0) {
+      return;
+    }
     for (const permanent of permanents) {
       permanent.tapped = false;
     }
