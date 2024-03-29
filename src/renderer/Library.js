@@ -4,6 +4,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Row from "react-bootstrap/Container";
 import Col from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
+import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
 const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
   const handleDrawHand = () => {
@@ -60,11 +61,11 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
 
   return (
     <div
-      className={"library row-flex"}
+      className={"library"}
       role="region"
       aria-describedby={playerNumber + "-library-desc"}
     >
-      <Dropdown autoClose="outside">
+      <Dropdown drop="up" style={{ maxHeight: "100px" }} autoClose="outside">
         <Dropdown.Toggle
           variant="secondary"
           id="dropdown-autoclose-outside"
@@ -75,7 +76,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
         >
           <span id={playerNumber + "-library-label"}>Library</span>
         </Dropdown.Toggle>
-        <Dropdown.Menu>
+        <DropdownMenuPortal>
           <Dropdown.Item
             as={CustomItem}
             onConfirm={handleDrawMultipleCardsToHand}
@@ -148,7 +149,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           <Dropdown.Item onClick={handleDrawCardToFaceDown}>
             Draw card Face-Down
           </Dropdown.Item>
-        </Dropdown.Menu>
+        </DropdownMenuPortal>
       </Dropdown>
       <p id={playerNumber + "-library-desc"}>{player.library_size} cards</p>
     </div>
@@ -181,7 +182,7 @@ const CustomItem = React.forwardRef(
       placeholder,
       "aria-labelledby": labelledBy,
     },
-    ref,
+    ref
   ) => {
     const [value, setValue] = useState("");
     const handleConfirmation = () => onConfirm(parseInt(value, 10));
@@ -220,7 +221,7 @@ const CustomItem = React.forwardRef(
         </Row>
       </div>
     );
-  },
+  }
 );
 
 CustomItem.displayName = "CustomItem";

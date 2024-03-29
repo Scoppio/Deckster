@@ -1,0 +1,7 @@
+.game-state-board {
+  height: 100%;
+  max-width: 250px;
+
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0.25, 0.25fr);
+}

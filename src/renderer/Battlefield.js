@@ -10,10 +10,17 @@ const CardHolder = style.div`
 `;
 
 const BattlefieldDiv = style.div`
-  padding: 8px;
-  flex-direction: row;
-  width: 75vw;
+  flex-direction: column;
+  width: 100%;
   display: flex;
+  background-color: purple;
+`;
+
+const StaticBattlefieldDiv = style.div`
+  flex-direction: column;
+  width: 100%;
+  display: flex;
+  background-color: yellow;
 `;
 
 export const StaticBattlefield = ({
@@ -22,20 +29,16 @@ export const StaticBattlefield = ({
   playerNumber,
   player,
   landsOnNorth,
-  heightVh,
 }) => {
-  const lineVh = heightVh / 3;
-
   return (
-    <BattlefieldDiv
-      className="row"
+    <StaticBattlefieldDiv
       ref={playerRef.battlefield}
       tabIndex={player.tabIndices.battlefield}
       role="region"
       aria-label={player.name + " Battlefield"}
       aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}
     >
-      <CardHolder style={{ height: `${lineVh}vh`, padding: "2px" }}>
+      <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player[
           landsOnNorth ? "land_zone_battlefield" : "front_battlefield"
         ].map((card, index) => (
@@ -49,7 +52,7 @@ export const StaticBattlefield = ({
           />
         ))}
       </CardHolder>
-      <CardHolder style={{ height: `${lineVh}vh`, padding: "2px" }}>
+      <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player.back_battlefield.map((card, index) => (
           <StaticImgCard
             card={card}
@@ -60,7 +63,7 @@ export const StaticBattlefield = ({
           />
         ))}
       </CardHolder>
-      <CardHolder style={{ height: `${lineVh}vh`, padding: "2px" }}>
+      <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player[
           landsOnNorth ? "front_battlefield" : "land_zone_battlefield"
         ].map((card, index) => (
@@ -74,22 +77,13 @@ export const StaticBattlefield = ({
           />
         ))}
       </CardHolder>
-    </BattlefieldDiv>
+    </StaticBattlefieldDiv>
   );
 };
 
-export const Battlefield = ({
-  gameState,
-  playerRef,
-  playerNumber,
-  player,
-  heightVh,
-}) => {
-  const lineVh = heightVh / 3 - 1;
-
+export const Battlefield = ({ gameState, playerRef, player }) => {
   return (
     <BattlefieldDiv
-      className="row"
       role="region"
       aria-label={player.name + " Battlefield"}
       ref={playerRef.battlefield}
@@ -105,7 +99,7 @@ export const Battlefield = ({
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: `${lineVh}vh`, padding: "2px" }}
+            style={{ height: "33.33%", padding: "2px", "background-color": "red" }}
             className="Droppable"
             aria-label="front lane"
           >
@@ -135,7 +129,7 @@ export const Battlefield = ({
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: `${lineVh}vh`, padding: "2px" }}
+            style={{ height: "33.33%", padding: "2px", "background-color": "blue" }}
             className="Droppable"
             aria-label="back lane"
           >
@@ -165,7 +159,7 @@ export const Battlefield = ({
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: `${lineVh}vh`, padding: "2px" }}
+            style={{ height: "33.33%", padding: "2px", "background-color": "green" }}
             className="Droppable"
             aria-label="land lane"
           >
