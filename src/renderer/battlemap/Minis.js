@@ -38,7 +38,7 @@ export const ImgMini = ({
     <Draggable draggableId={mini._uid} index={idx} key={mini._uid}>
       {(provided) => (
         <SlimContainer
-          className="hand_zone ImgCardHand"
+          className="hand_zone ImgMinisHand"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
@@ -53,7 +53,7 @@ export const ImgMini = ({
         >
           <HiddenText>
             <div aria-live="polite" aria-atomic="true">
-              {mini.aria_description}
+              {mini.name}
             </div>
           </HiddenText>
           <img

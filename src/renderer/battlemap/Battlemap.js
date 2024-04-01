@@ -1,5 +1,6 @@
 import { Droppable } from "react-beautiful-dnd";
 import { ImgMini } from "./Minis";
+import { Hand } from "../Hand";
 import PropTypes from "prop-types";
 
 import style from "styled-components";
@@ -66,6 +67,7 @@ export const Battlemap = ({ gameState, playerRef, columns, rows }) => {
           </Droppable>
         ))
       )}
+      <Hand gameState={gameState} player={gameState.player} />
     </BattlefieldDiv>
   );
 };

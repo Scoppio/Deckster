@@ -1,12 +1,12 @@
 import { useEffect, useRef, useMemo } from "react";
 import { HotKeys } from "../../controllers/Hotkeys";
-import Battlemap from "./Battlemap";
-
-import "./main.css";
-
+import { Battlemap } from "./Battlemap";
 import PropTypes from "prop-types";
 
-export function Main({ gameState }) {
+import "./gameArenaMini.css";
+
+
+export function GameArenaMini({ gameState }) {
   const player1HandRef = useRef(null);
   const player1BattlemapRef = useRef(null);
   const player1LogRef = useRef(null);
@@ -51,13 +51,13 @@ export function Main({ gameState }) {
     <div className="main">
       <section className="main-left">
         <div className="main-arena">
-          <Battlemap playerRef={player1References} />
+          <Battlemap gameState={gameState} playerRef={player1References} columns={4} row={4} />
         </div>
       </section>
     </div>
   );
 }
 
-Main.propTypes = {
+GameArenaMini.propTypes = {
   gameState: PropTypes.object.isRequired,
 };

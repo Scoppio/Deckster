@@ -22,8 +22,8 @@ export class Player {
     this.name = name;
     this.health = health;
     this.counters = {};
-    this.library = library.deck;
-    this.library_size = library.deck.length;
+    this.library = library?.deck || [];
+    this.library_size = this.library.length;
     this.sideboard = [];
     this.hand = [];
     this.remote_hand_size = 0;
