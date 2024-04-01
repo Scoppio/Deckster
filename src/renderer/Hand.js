@@ -54,8 +54,7 @@ export const Hand = ({ gameState, player }) => {
 
 Hand.propTypes = {
   gameState: PropTypes.object.isRequired,
-  player: PropTypes.object.isRequired,
-  playerRef: PropTypes.object.isRequired,
+  player: PropTypes.object.isRequired
 };
 
 export const ShownHand = ({ cards, gameState, tabIndex }) => {

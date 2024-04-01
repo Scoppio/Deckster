@@ -1,7 +1,9 @@
-import { GameArena } from "./renderer/GameArena";
-import { loadDeck } from "./commons/DeckLoader";
+import { GameArenaMini } from "./renderer/battlemap/GameArenaMini";
+import { HandOfMinis } from "./commons/Minis";
+import { Miniature } from "./commons/Miniature";
 import { useState, useEffect } from "react";
 import GameStateController from "./controllers/GameStateController";
+
 import "mana-font/css/mana.css";
 import { WebSocketClient } from "./controllers/WebSocketClient";
 
@@ -27,9 +29,10 @@ function App() {
         gameStateController.off("stateChanged", handleStateChange);
       };
     } else {
-      const deckA = loadDeck(46); // await fetchDeck(46)
-      // const deckB = loadDeck(47) // await fetchDeck(47)
-      const playerA = new Player(1, "Lulu", deckA, 40, TabIndices, true);
+      
+      const playerA = new Player(1, "Lulu", [], 0, TabIndices, true);
+      playerA.hand = HandOfMinis.map((i) => new Miniature(i));
+      
       const playerB = Player.emptyPlayer();
 
       const gameState = new GameStateController(
@@ -49,9 +52,8 @@ function App() {
 
   return (
     <div role="application" className="app">
-      <GameArena gameState={gameStateController} />
+      <GameArenaMini gameState={gameStateController} />
       <RemoveScrollBar />
-      {/* <GameArena gameState={gameStateController} /> */}
     </div>
   );
 }
