@@ -93,7 +93,7 @@ class StrategyChooser {
 class Game {
   constructor(
     openingHandDrawStrategy = "random",
-    mulliganStrategy = "favored",
+    mulliganStrategy = "random",
   ) {
     this.players = {};
     this.playersSequence = [];

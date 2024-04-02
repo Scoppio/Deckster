@@ -53,7 +53,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prebuild": "npm version minor",
-    "electron:servelocal": "concurrently -k \"node src/local/server.js\" \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
+    "electron:servelocal": "concurrently -k \"nodemon src/local/server.js\" \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
     "electron:serve": "concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
     "electron:build": "electron-builder build -w",
     "electron:start": "wait-on tcp:3010 && electron ."
@@ -88,6 +88,7 @@
     "electron": "^28.1.0",
     "electron-builder": "^24.9.1",
     "electron-is-dev": "^2.0.0",
+    "nodemon": "^3.1.0",
     "prettier": "^3.1.0",
     "wait-on": "^7.2.0"
   }

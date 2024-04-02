@@ -2,6 +2,7 @@ import AriaHelper from "./AriaHelper";
 import { EventEmitter } from "events";
 import Sounds from "./Sounds";
 import { EMPTY_PLAYER } from "../commons/Player";
+import { Card } from "../commons/Card";
 
 
 class BaseGameStateController extends EventEmitter {
@@ -58,6 +59,9 @@ class BaseGameStateController extends EventEmitter {
   get log() {
     return this.game_log;
   }
+
+  _hideHiddenCardZone() {}
+  _showHiddenCardZone() {}
 
   announce(message) {
     this.announcement_message = message;
@@ -240,12 +244,6 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("pass_turn");
   }
 
-  viewZone(zone) {
-    this.announce(`Viewing ${zone}`);
-    this.open_zone = { zone: zone, cards: this.player[zone] };
-    this.changed();
-  }
-
   viewLibrary() {
     this.sendEvent("view_library");
   }
@@ -254,8 +252,17 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
+  viewZone(zone) {
+    this.announce(`Viewing ${zone}`);
+    this.open_zone = { zone: zone, cards: this.player[zone] };
+    this._showHiddenCardZone();
+    this.changed();
+  }
+
   closeViewZone() {
     this.open_zone = { zone: null, cards: [] };
+    this.sendEvent("close_view_zone");
+    this._hideHiddenCardZone();
     this.changed();
   }
 
@@ -357,19 +364,29 @@ class ExecuteGameActions extends RequestGameActions {
     }
   }
 
+  createCardInstances(cardArray) {
+    return cardArray.map((card) => new Card(card));
+  }
+
   view_library(event) {
     this.announce(`Viewing library`);
-    this.open_zone = { zone: "library", cards: event.payload };
+    this.open_zone = { zone: "library", cards: this.createCardInstances(event.payload) };
     this.changed();
+    this._showHiddenCardZone();
   }
 
   view_top_x_cards(event) {
     this.announce(`Viewing top ${event.payload.number_of_cards} cards`);
-    this.open_zone = { zone: "library", cards: event.payload };
+    this.open_zone = { zone: "library", cards: this.createCardInstances(event.payload) };
     this.changed();
+    this._showHiddenCardZone();
   }
 
   update_player(event) {
+    this.player.updateFromPayload(event.payload);
+  }
+
+  hide_hidden_card_zone(event) {
     this.player.updateFromPayload(event.payload);
   }
 

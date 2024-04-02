@@ -1,61 +1,69 @@
-import React, { useEffect } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
+import style from "styled-components";
 import PropTypes from "prop-types";
 
-import classNames from "classnames";
+import { ImgCardHand } from "./FullCard";
 
-export function ZoneModal(onDragStart, onDragEnd, onDragUpdate, closeAndCommit, zones) {
+
+const CardHolder = style.div`
+  padding: 8px;
+  display: flex;
+`;
+
+
+export function ZoneModal({gameState, sourceZone, closeModal, hideModal, useCloseAndShuffle}) {
+
+  const player = gameState.player;
+  const usingCloseAndShuffle = useCloseAndShuffle;
+  const closeAndShuffle = () => {
+    gameState.shuffleLibrary();
+    closeModal();
+  };
 
   return (
     <div className="modalBackground">
       <div className="modalContainer">
         <div className="titleHideBtn">
-          <button>Hide</button>
-        </div>
-        <div className="title">
-          <h1>Zone Modal</h1>
+          { 
+            usingCloseAndShuffle ?
+              <button onClick={closeAndShuffle}>Close & Shuffle</button> :
+              <button onClick={closeModal}>Close</button>
+          }
+          <button onClick={hideModal}>Hide Modal</button>
+          <label>Search</label>
+          <input type="text" />
+          <button>Search</button>
         </div>
         <div className="body">
-          <DragDropContext
-            onDragEnd={onDragEnd}
-            onDragUpdate={onDragUpdate}
-            onDragStart={onDragStart}
+          <Droppable
+            droppableId={sourceZone}
+            direction="horizontal"
+            aria-label={sourceZone}
+            role="region"
           >
-            <Droppable
-              droppableId="front_battlefield"
-              direction="horizontal"
-              aria-label="front lane"
-              role="region"
-            >
-              {(provided) => (
-                <CardHolder
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{ height: "33.33%", padding: "2px", "background-color": "red" }}
-                  className="Droppable"
-                  aria-label="front lane"
-                >
-                  {player.front_battlefield.map((card, idx) => (
-                    <ImgCard
-                      region="front_battlefield"
-                      key={card._uid}
-                      gameState={gameState}
-                      size={"small"}
-                      idx={idx}
-                      card={card}
-                      tabIndex={idx + player.tabIndices.front_battlefield}
-                      cardHeight={100}
-                    />
-                  ))}
-                  {provided.placeholder}
-                </CardHolder>
-              )}
-            </Droppable>
-            
-          </DragDropContext>
-        </div>
-        <div className="footer">
-          <button onClick={closeAndCommit}>Finish</button>
+            {(provided) => (
+              <CardHolder
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={{ height: "75px", padding: "2px", "background-color": "red" }}
+                className="Droppable"
+                aria-label={sourceZone}
+              >
+                {gameState.open_zone.cards.map((card, idx) => (
+                  <ImgCardHand
+                    idx={idx}
+                    gameState={gameState}
+                    size="small"
+                    card={card}
+                    tabIndex={idx + player.tabIndices.card_list_zone + 1}
+                    cardHeight={100}
+                    key={card._uid}
+                  />
+                ))}
+                {provided.placeholder}
+              </CardHolder>
+            )}
+          </Droppable>
         </div>
       </div>
     </div>
@@ -65,8 +73,9 @@ export function ZoneModal(onDragStart, onDragEnd, onDragUpdate, closeAndCommit, 
 
 
 ZoneModal.propTypes = {
-  onDragStart: PropTypes.func,
-  onDragEnd: PropTypes.func,
-  onDragUpdate: PropTypes.func,
-  zones: PropTypes.array,
+  gameState: PropTypes.object.isRequired,
+  sourceZone: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  hideModal: PropTypes.func.isRequired,
+  useCloseAndShuffle: PropTypes.bool.isRequired,
 };
