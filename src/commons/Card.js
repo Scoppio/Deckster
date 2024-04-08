@@ -30,6 +30,10 @@ export class Card {
     this.tapped = card.tapped || false;
     this.dont_untap = card.dont_untap || false;
     this.hidden = card.hidden || false;
+    this.power_toughness_counters = card.power_toughness_counters || 0;
+    this.power_modifier = card.power_modifier || 0;
+    this.toughness_modifier = card.toughness_modifier || 0;
+    this.couters = card.counters || 0;
   }
 
   changeFace() {
@@ -161,7 +165,7 @@ export class Card {
     return this.current_face.type_line;
   }
 
-  get card_loaylty() {
+  get card_loyalty() {
     if (this.hidden) return null;
     if (!this.is_two_sided) {
       return this.loyalty;
@@ -205,7 +209,11 @@ export class Card {
     ) {
       return null;
     }
-    return this.current_face.power + "/" + this.current_face.toughness;
+
+    const _power = this.current_face.power + this.power_modifier + this.power_toughness_counters;
+    const _toughness = this.current_face.toughness + this.toughness_modifier + this.power_toughness_counters;
+
+    return _power + "/" + _toughness;
   }
 
   get card_image_uris() {
@@ -262,7 +270,8 @@ export class Card {
     return (
       this.card_name_with_mana_cost +
       (this.power_toughness !== null ? `, ${this.power_toughness}` : "") +
-      (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") +
+      (this.card_loyalty ? `, ${this.card_loyalty} starting loyalty` : "") +
+      (this.counters ? `, ${this.counters} counters` : "") +
       ", "
     );
   }
@@ -272,7 +281,8 @@ export class Card {
     return (
       this.card_face_name_with_mana_cost +
       (this.power_toughness !== null ? `, ${this.power_toughness}` : "") +
-      (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") +
+      (this.card_loyalty ? `, ${this.card_loyalty} starting loyalty` : "") +
+      (this.counters ? `, ${this.counters} counters` : "") +
       (this.is_two_sided
         ? ", other side is " +
           this.card_faces[this.card_face === 0 ? 1 : 0].name
