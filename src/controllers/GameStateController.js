@@ -280,6 +280,21 @@ class RequestGameActions extends BaseGameStateController {
     return card;
   }
 
+  changeCounter(sourceZone, sourceIndex, value, counterType = "charge") {
+    this.sendEvent("change_card_special_value", {
+      from_zone: sourceZone,
+      from_idx: sourceIndex,
+      special_value: counterType,
+      value: value,
+    });
+
+    if (value > 0) {
+      this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
+    } else {
+      this.updatePlayer("REMOVE_COUNTER_SOUND", 1.0);
+    }
+  }
+
   listCommands(hotkeys) {
     const keyCommandsList = hotkeys.keyCommands
       .map((cmd) => {

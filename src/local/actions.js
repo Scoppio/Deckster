@@ -56,6 +56,13 @@ class move_card extends action {
     );
   }
 
+  is_leaving_battlefield(zone) {
+    return (zone !== "front_battlefield" &&
+      zone !== "back_battlefield" &&
+      zone !== "land_zone_battlefield"
+    );
+  }
+
   execute() {
     const player_id = this.event.sender["id"];
     const player = this.gameSession.players[player_id];
@@ -75,6 +82,16 @@ class move_card extends action {
       return;
     }
 
+    if (this.is_leaving_battlefield(to_zone)) {
+      card_obj.tapped = false;
+      card_obj.dont_untap = false;
+      card_obj.counters = 0;
+      card_obj.misc_counters = 0;
+      card_obj.power_toughness_counters = 0;
+      card_obj.power_modifier = 0;
+      card_obj.toughness_modifier = 0;
+    }
+    
     player[from_zone].splice(from_idx, 1);
     player[to_zone].splice(to_idx, 0, card_obj);
 
@@ -297,6 +314,71 @@ class view_top_x_cards extends action {
   }
 }
 
+class change_card_special_value extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event);
+
+    const from_zone = this.event.payload["from_zone"];
+    const from_idx = this.event.payload["from_idx"];
+
+    const counter = this.event.payload["special_value"];
+    const value = this.event.payload["value"];
+    
+    const permanent = player[from_zone][from_idx];
+    
+    if (!permanent) {
+      console.log("Card not found");
+      this.sendJson({
+        type: "update_player",
+        payload: player,
+        sender: this.SERVER,
+      });
+      return;
+    }
+
+    const refTable = {
+      "+1/+1": "power_toughness_counters",
+      counter: "counters",
+      counters: "counters",
+      loyalty: "counters",
+      charge: "counters",
+      energy: "misc_counters",
+      temp_power: "power_modifier",
+      temp_toughness: "toughness_modifier",
+    };
+
+    const cardProperty = refTable[counter] || "counters";
+
+    if (!permanent[cardProperty]) {
+      permanent[cardProperty] = 0;
+    }
+
+    permanent[cardProperty] += value;
+
+    const playerName = player["name"];
+    let cardName = permanent.name;
+
+    const responseLog = {
+      type: "log_event",
+      payload: `Player ${playerName} changed ${value} ${counter} on ${cardName}`,
+      sender: this.SERVER,
+    };
+
+    this.sendJson(responseLog);
+    this.sendJson({
+      type: "update_player",
+      payload: player,
+      sender: this.SERVER,
+    });
+    this.broadcastJson({
+      type: "update_opp_table",
+      payload: player,
+      sender: this.event.sender,
+    });
+    this.playSound("PLAY_SOUND", 1.0, player);
+  }
+}
+
 const ACTION_CONFIG = {
   action,
   login_player,
@@ -311,6 +393,7 @@ const ACTION_CONFIG = {
   draw_hand,
   view_library,
   view_top_x_cards,
+  change_card_special_value,
 };
 
 class ActionFactory {

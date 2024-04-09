@@ -31,9 +31,10 @@ export class Card {
     this.dont_untap = card.dont_untap || false;
     this.hidden = card.hidden || false;
     this.power_toughness_counters = card.power_toughness_counters || 0;
-    this.power_modifier = card.power_modifier || 0;
-    this.toughness_modifier = card.toughness_modifier || 0;
-    this.couters = card.counters || 0;
+    this.counters = card.counters || 0;
+    this.power_modifier = card.power_modifier || 0; // NOT USED BY NOW
+    this.toughness_modifier = card.toughness_modifier || 0; // NOT USED BY NOW
+    this.misc_counters = card.misc_counters || 0;  // NOT USED BY NOW
   }
 
   changeFace() {
@@ -271,7 +272,6 @@ export class Card {
       this.card_name_with_mana_cost +
       (this.power_toughness !== null ? `, ${this.power_toughness}` : "") +
       (this.card_loyalty ? `, ${this.card_loyalty} starting loyalty` : "") +
-      (this.counters ? `, ${this.counters} counters` : "") +
       ", "
     );
   }
@@ -282,7 +282,6 @@ export class Card {
       this.card_face_name_with_mana_cost +
       (this.power_toughness !== null ? `, ${this.power_toughness}` : "") +
       (this.card_loyalty ? `, ${this.card_loyalty} starting loyalty` : "") +
-      (this.counters ? `, ${this.counters} counters` : "") +
       (this.is_two_sided
         ? ", other side is " +
           this.card_faces[this.card_face === 0 ? 1 : 0].name

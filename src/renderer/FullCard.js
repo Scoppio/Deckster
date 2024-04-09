@@ -6,6 +6,8 @@ import FuckedCardBack from "../resources/cards/mtgcardback.png";
 import { useState } from "react";
 
 const SlimContainer = style.div`
+  position: relative;
+  display: inline-block;
 `;
 
 const HiddenText = style.div`
@@ -19,6 +21,19 @@ const HiddenText = style.div`
   border: 0;
 `;
 
+const Counter = style.div`
+  background-color: blue;
+  border-radius: 25px;
+  width: 25px;
+  height: 25px;
+  top: 10px;
+  left: 10px;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  position: absolute;
+`;
+
 export const ImgCard = ({
   region,
   idx,
@@ -28,6 +43,7 @@ export const ImgCard = ({
   tabIndex,
   cardHeight,
 }) => {
+  
   const [isTapped, setIsTapped] = useState(card.is_tapped);
   const [cardFace, setCardFace] = useState(card.card_face);
   const cardCurrentRegion = region;
@@ -65,11 +81,31 @@ export const ImgCard = ({
     gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "exile");
   };
 
+  const addCounterPlusOnePlusOne = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, 1, "+1/+1");
+  };
+
+  const addCounterMinusOneMinusOne = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, -1, "-1/-1");
+  };
+
+  const addCounter = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, 1);
+  };
+
+  const removeCounter = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, -1);
+  };
+
   const commands = {
     t: tapCard,
     l: flipCard,
     g: sendToGraveyard,
     e: sendToExile,
+    o: addCounterPlusOnePlusOne,
+    k: addCounterMinusOneMinusOne,
+    i: addCounter,
+    j: removeCounter,
   };
 
   return (
@@ -101,6 +137,8 @@ export const ImgCard = ({
             <div aria-live="polite" aria-atomic="true">
               {isTapped ? "tapped " : ""}
               {card.face_aria_description}
+              {card.counters ? `, ${card.counters} counters` : ","}
+              {card.misc_counters ? `, ${card.misc_counters} miscelaneous counters` : ""}
             </div>
           </HiddenText>
           <HiddenText>
@@ -120,10 +158,19 @@ export const ImgCard = ({
             alt={card.card_face_name_with_mana_cost}
             style={{
               height: `${cardHeight}%`,
+              display: "block",
               borderRadius: "8px",
               transform: card.tapped ? "rotate(90deg)" : "none",
+              width: "100%",
             }}
           />
+          {
+            card.counters > 0 ?
+              <Counter>
+                {card.counters}
+              </Counter>
+            : null
+          }
         </SlimContainer>
       )}
     </Draggable>
