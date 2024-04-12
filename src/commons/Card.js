@@ -200,19 +200,30 @@ export class Card {
     return this.read_text(this.card_oracle_text);
   }
 
+  get is_power_and_thoughness_modified() {
+    return (
+      this.power_toughness_counters !== 0 ||
+      this.power_toughness_counters !== 0
+    );
+  }
+
   get power_toughness() {
     if (this.hidden) return null;
-    if (
-      this.current_face.power === null ||
-      this.current_face.toughness === null ||
-      this.current_face.power === undefined ||
-      this.current_face.toughness === undefined
-    ) {
-      return null;
+    if (!this.is_power_and_thoughness_modified) {
+      if (
+        this.current_face.power === null ||
+        this.current_face.toughness === null ||
+        this.current_face.power === undefined ||
+        this.current_face.toughness === undefined
+      ) {
+        return null;
+      }
     }
+    const p = this.current_face.power === "*" ? "0" : this.current_face.power;
+    const t = this.current_face.toughness === "*" ? "0" : this.current_face.toughness;
 
-    const _power = this.current_face.power + this.power_modifier + this.power_toughness_counters;
-    const _toughness = this.current_face.toughness + this.toughness_modifier + this.power_toughness_counters;
+    const _power = String(Number(p || 0) + Number(this.power_modifier || 0) + Number(this.power_toughness_counters || 0));
+    const _toughness = String(Number(t || 0) + Number(this.toughness_modifier || 0) + Number(this.power_toughness_counters || 0));
 
     return _power + "/" + _toughness;
   }

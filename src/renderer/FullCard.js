@@ -3,7 +3,7 @@ import style from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import emptyCard from "../resources/cards/empty_card.png";
 import FuckedCardBack from "../resources/cards/mtgcardback.png";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const SlimContainer = style.div`
   position: relative;
@@ -26,13 +26,23 @@ const Counter = style.div`
   border-radius: 25px;
   width: 25px;
   height: 25px;
-  top: 10px;
-  left: 10px;
+  bottom: 20px;
+  left: 5px;
   color: white;
-  padding: 5px;
-  border-radius: 5px;
+  padding-left: 5px;
   position: absolute;
 `;
+
+const BlackBelt = style.div`
+  background-color: black;
+  width: 100%;
+  height: 20px;
+  bottom: 0px;
+  position: absolute;
+  color: white;
+`;
+
+
 
 export const ImgCard = ({
   region,
@@ -48,9 +58,10 @@ export const ImgCard = ({
   const [cardFace, setCardFace] = useState(card.card_face);
   const cardCurrentRegion = region;
   const positionIdx = idx;
+  const cardRef = useRef(null);
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
-
+  console.log("Counter: ", card.counters);
   const flipCard = () => {
     card.changeFace();
     setCardFace(card.card_face);
@@ -65,8 +76,9 @@ export const ImgCard = ({
     gameState.focusOnCard(card);
   };
 
-  const onMouseOver = () => {
+  const onMouseOver = (event) => {
     gameState.focusOnCard(card);
+    cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
@@ -116,7 +128,7 @@ export const ImgCard = ({
           uniqueid={card._uid}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          ref={provided.innerRef}
+          ref={(el) => {provided.innerRef(el); cardRef.current = el;} }
           tabIndex={tabIndex}
           onDoubleClick={tapCard}
           onMouseOver={onMouseOver}
@@ -165,10 +177,17 @@ export const ImgCard = ({
             }}
           />
           {
-            card.counters > 0 ?
+            card.counters !== 0 ?
               <Counter>
                 {card.counters}
               </Counter>
+            : null
+          }
+          {
+            card.is_power_and_thoughness_modified ? 
+            <BlackBelt>
+              {card.power_toughness}
+            </BlackBelt>
             : null
           }
         </SlimContainer>
@@ -196,7 +215,7 @@ export const ImgCardHand = ({
   cardHeight,
 }) => {
   const [cardFace, setCardFace] = useState(card.card_face);
-
+  const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
 
   const flipCard = () => {
@@ -210,6 +229,7 @@ export const ImgCardHand = ({
     if (gameState) {
       gameState.focusOnCard(card);
     }
+    cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
@@ -223,7 +243,7 @@ export const ImgCardHand = ({
           className="hand_zone ImgCardHand"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          ref={provided.innerRef}
+          ref={(el) => {provided.innerRef(el); cardRef.current = el;}}
           tabIndex={tabIndex}
           onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}
@@ -282,8 +302,10 @@ export const StaticImgCard = ({
   tabIndex,
   cardHeight,
 }) => {
-  const onMouseOver = () => {
+  const cardRef = useRef(null);
+  const onMouseOver = (event) => {
     gameState.focusOnCard(card);
+    cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
@@ -295,6 +317,7 @@ export const StaticImgCard = ({
       tabIndex={tabIndex}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
+      ref={cardRef}
     >
       <HiddenText>
         <div>

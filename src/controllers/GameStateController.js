@@ -281,18 +281,13 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   changeCounter(sourceZone, sourceIndex, value, counterType = "charge") {
+    console.log(`Changing counter ${counterType} by ${value}`);
     this.sendEvent("change_card_special_value", {
       from_zone: sourceZone,
       from_idx: sourceIndex,
       special_value: counterType,
       value: value,
     });
-
-    if (value > 0) {
-      this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
-    } else {
-      this.updatePlayer("REMOVE_COUNTER_SOUND", 1.0);
-    }
   }
 
   listCommands(hotkeys) {
@@ -343,7 +338,7 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   handleEvent(event) {
-    console.log(`GameStateController ${event}`);
+    console.log(`GameStateController ${event.type}`);
     this[event.type](event);
     this.changed();
   }
@@ -389,6 +384,7 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   play_sound(event) {
+    console.log("Playing sound", event.payload?.name, event.payload?.volume ?? 1.0);
     this.playSound(event.payload?.name, event.payload?.volume ?? 1.0);
   }
 }

@@ -325,7 +325,7 @@ class change_card_special_value extends action {
     const value = this.event.payload["value"];
     
     const permanent = player[from_zone][from_idx];
-    
+    console.log("Permanent: ", permanent)
     if (!permanent) {
       console.log("Card not found");
       this.sendJson({
@@ -338,6 +338,7 @@ class change_card_special_value extends action {
 
     const refTable = {
       "+1/+1": "power_toughness_counters",
+      "-1/-1": "power_toughness_counters",
       counter: "counters",
       counters: "counters",
       loyalty: "counters",
@@ -360,22 +361,25 @@ class change_card_special_value extends action {
 
     const responseLog = {
       type: "log_event",
-      payload: `Player ${playerName} changed ${value} ${counter} on ${cardName}`,
+      payload: `Player ${playerName} changed ${value} in ${counter} on ${cardName}, total of ${permanent[cardProperty]}`,
       sender: this.SERVER,
     };
 
     this.sendJson(responseLog);
+
+    this.playSound(value > 0 ? "ADD_COUNTER_SOUND" : "REMOVE_COUNTER_SOUND" , 1.0, player);
+
     this.sendJson({
       type: "update_player",
       payload: player,
       sender: this.SERVER,
     });
+    
     this.broadcastJson({
       type: "update_opp_table",
       payload: player,
       sender: this.event.sender,
     });
-    this.playSound("PLAY_SOUND", 1.0, player);
   }
 }
 
