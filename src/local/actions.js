@@ -12,17 +12,24 @@ class action {
   }
 
   execute() {}
+
+  broadcastLog(message) {
+    this.broadcastJson({
+      type: "log_event",
+      payload: message,
+      sender: this.event.sender,
+    });
+  }
+
+  get player() {
+    return this.gameSession.getPlayer(this.event);
+  }
 }
 
 class login_player extends action {
   execute() {
     this.gameSession.addPlayer(this.event.payload);
-    const ret = {
-      type: "log_event",
-      payload: "Player " + this.event.payload["name"] + " logged in",
-      sender: this.SERVER,
-    };
-    this.sendJson(ret);
+    this.broadcastLog("Player " + this.event.payload["name"] + " logged in");
   }
 }
 
@@ -96,7 +103,6 @@ class move_card extends action {
     }
     
     player[from_zone].splice(from_idx, 1);
-    player[to_zone].splice(to_idx, 0, card_obj);
 
     const playerName = player["name"];
     let cardName = card_obj["name"];
@@ -105,13 +111,15 @@ class move_card extends action {
       cardName = "a card";
     }
 
-    const responseLog = {
-      type: "log_event",
-      payload: `Player ${playerName} moved ${cardName} from ${from_zone} to ${to_zone}`,
-      sender: this.SERVER,
-    };
+    if (this.is_leaving_battlefield(to_zone) && card_obj.is_token) {
+      // card is a token, it stop existing when it leaves the battlefield
+    } else {
+      player[to_zone].splice(to_idx, 0, card_obj);
+        
+    }
 
-    this.sendJson(responseLog);
+    this.broadcastLog(`Player ${playerName} moved ${cardName} from ${from_zone} to ${to_zone}`);
+
     this.sendJson({
       type: "update_player",
       payload: player,
@@ -142,19 +150,8 @@ class draw_card extends action {
       cards_drawn += 1;
     }
 
-    const responseLog = {
-      type: "log_event",
-      payload:
-        "Player " +
-        player["name"] +
-        " drew " +
-        cards_drawn +
-        " cards from " +
-        zone,
-      sender: this.SERVER,
-    };
+    this.broadcastLog(`Player ${player["name"]} drew ${cards_drawn} cards`);
 
-    this.sendJson(responseLog);
     this.sendJson({
       type: "update_player",
       payload: player,
@@ -174,18 +171,15 @@ class shuffle_library extends action {
     const player_id = this.event.sender["id"];
     const player = this.gameSession.players[player_id];
     player["library"].sort(() => Math.random() - 0.5);
-    const responseLog = {
-      type: "log_event",
-      payload: "Player " + player["name"] + " shuffled their library",
-      sender: this.SERVER,
-    };
-    this.sendJson(responseLog);
+    this.broadcastLog("Player " + player["name"] + " shuffled their library");
     this.playSound("SHUFFLE_SOUND", 1.0, player);
   }
 }
 
 class pass_turn extends action {
   execute() {
+    const previousPlayer = this.gameSession.getPlayer(this.event)["name"];
+    
     const activePlayer = this.gameSession.game.passTurn();
     this.broadcastJson({
       type: "pass_turn",
@@ -194,6 +188,10 @@ class pass_turn extends action {
       },
       sender: this.event.sender,
     });
+
+    const current_player = this.gameSession.getPlayer(activePlayer);
+    this.broadcastLog("Player " + previousPlayer + " passed the turn. Its now " + current_player["name"] + "'s turn.");
+    this.playSound("PASS_TURN_SOUND", 1.0, activePlayer);
   }
 }
 
@@ -205,6 +203,8 @@ class mulligan extends action {
       "hand",
     ).draw(7);
     player.hand = newHand;
+    
+    this.broadcastLog("Player " + player["name"] + " mulliganed to " + newHand.length + " cards");
     this.sendJson({
       type: "update_player",
       payload: player,
@@ -223,12 +223,12 @@ class change_game_phase extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event);
     const phase = this.event.payload["phase"];
-    const responseLog = {
-      type: "log_event",
-      payload: "Player " + player["name"] + " changed game phase to " + phase,
-      sender: this.SERVER,
-    };
-    this.sendJson(responseLog);
+    this.broadcastLog("Player " + player["name"] + " changed game phase to " + phase);
+    this.broadcastJson({
+      type: "change_game_phase",
+      payload: phase,
+      sender: this.event.sender,
+    });
   }
 }
 
@@ -252,6 +252,8 @@ class untap_all extends action {
       payload: player,
       sender: this.event.sender,
     });
+    this.playSound("UNTAP_SOUND", 1.0, player);
+    this.broadcastLog("Player " + player["name"] + " untapped all permanents");
   }
 }
 
@@ -273,6 +275,8 @@ class draw_hand extends action {
       payload: player,
       sender: this.event.sender,
     });
+    this.playSound("DRAW_SOUND", 1.0, player);
+    this.broadcastLog("Player " + player["name"] + " drew their starting hand of 7 cards.");
   }
 }
 
@@ -284,12 +288,8 @@ class view_library extends action {
       payload: player.library.slice().reverse(),
       sender: this.event.sender,
     });
-    this.playSound("PLAY_SOUND", 1.0, player);
-    this.sendJson({
-      type: "log_event",
-      payload: "Player " + player["name"] + " viewed their library",
-      sender: this.SERVER,
-    });
+    this.playSound("OPEN_DECK_SOUND", 1.0, player);
+    this.broadcastLog("Player " + player["name"] + " is viewing their library");
   }
 }
 
@@ -303,17 +303,8 @@ class view_top_x_cards extends action {
       payload: cards,
       sender: this.event.sender,
     });
-    this.playSound("PLAY_SOUND", 1.0, player);
-    this.sendJson({
-      type: "log_event",
-      payload:
-        "Player " +
-        player["name"] +
-        " viewed the top " +
-        number_of_cards +
-        " cards of their library",
-      sender: this.SERVER,
-    });
+    this.playSound("OPEN_DECK_SOUND", 1.0, player);
+    this.broadcastLog("Player " + player["name"] + " is viewing the top " + number_of_cards + " cards of their library");
   }
 }
 
@@ -362,13 +353,7 @@ class change_card_special_value extends action {
     const playerName = player["name"];
     let cardName = permanent.name;
 
-    const responseLog = {
-      type: "log_event",
-      payload: `Player ${playerName} changed ${value} in ${counter} on ${cardName}, total of ${permanent[cardProperty]}`,
-      sender: this.SERVER,
-    };
-
-    this.sendJson(responseLog);
+    this.broadcastLog(`Player ${playerName} changed ${value} in ${counter} on ${cardName}, total of ${permanent[cardProperty]}`);
 
     this.playSound(value > 0 ? "ADD_COUNTER_SOUND" : "REMOVE_COUNTER_SOUND" , 1.0, player);
 
@@ -395,23 +380,47 @@ class request_list_of_tokens extends action {
       sender: this.event.sender,
     });
     this.playSound("OPEN_DECK_SOUND", 1.0, player);
+    this.broadcastLog("Player " + player["name"] + " is viewing the list of tokens");
+  }
+}
+
+class request_token extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event);
+
+    const card_id = this.event.payload["id"];
+
+    const token = ListOfTokens.find((token) => token.id === card_id);
+    
+    const newPermanent = { ...token, is_token: true, _uid: Math.floor(Math.random() * 1000000)};
+    player["front_battlefield"].splice(0, 0, newPermanent);
+    
+    this.sendJson({
+      type: "update_player",
+      payload: player,
+      sender: this.SERVER,
+    });
+
+    this.broadcastJson({
+      type: "update_opp_table",
+      payload: player,
+      sender: this.event.sender,
+    });
+    
+    this.broadcastLog("Player " + player["name"] + " put " +  + token["name"] + " a token into the battlefield.");
+    this.playSound("PLAY_SOUND", 1.0, player);
   }
 }
 
 class request_dice_roll extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event);
-    const dice = this.event.payload["dice"];
+    const dice = this.event.payload["dice"]; // d4, d6, d8, d10, d12, d20, d100
     // dive come as a string in the format d4 or d6 or d12 or d100, we need to isolate the number part of the string and convert it to an integer
     const diceNumber = parseInt(dice.slice(1));
     const result = Math.floor(Math.random() * diceNumber) + 1;
     this.playSound("ROLL_DICE_SOUND", 1.0, player);
-
-    this.broadcastJson({
-      type: "log_event",
-      payload: "Player " + player["name"] + " rolled a " + result + " on a " + dice,
-      sender: this.event.sender,
-    });
+    this.broadcastLog("Player " + player["name"] + " rolled a " + result + " on a " + dice);
   }
 }
 
@@ -422,9 +431,9 @@ class request_duplication_of_card extends action {
     const from_idx = this.event.payload["from_idx"];
     const copies = this.event.payload["copies"];
     const permanent = player[from_zone][from_idx];
+
     for (let i = 0; i < copies; i++) {
-      const newPermanent = { ...permanent };
-      delete newPermanent._uid;
+      const newPermanent = { ...permanent, is_token: true, _uid: Math.floor(Math.random() * 1000000)};
       player[from_zone].splice(from_idx, 0, newPermanent);
     }
 
@@ -439,13 +448,31 @@ class request_duplication_of_card extends action {
       payload: player,
       sender: this.event.sender,
     });
-    
-    this.broadcastJson({
-      type: "log_event",
-      payload: "Player " + player["name"] + " copied " + permanent["name"] + " " + copies + " times",
-      sender: this.event.sender,
-    });
 
+    this.playSound("PLAY_SOUND", 1.0, player);
+    
+    this.broadcastLog("Player " + player["name"] + " copied " + permanent["name"] + " " + copies + " times");
+  }
+}
+
+class no_response extends action {
+  execute() {
+    this.playSound("NO_RESPONSE_SOUND", 1.0, this.player);
+    this.broadcastLog("Player " + this.player["name"] + " has no response.");
+  }
+}
+
+class i_do_not_pay extends action {
+  execute() {
+    this.playSound("I_DO_NOT_PAY_SOUND", 1.0, this.player);
+    this.broadcastLog("Player " + this.player["name"] + " says they do not pay.");
+  }
+}
+
+class response extends action {
+  execute() {
+    this.playSound("ALERT_SOUND", 1.0, this.player);
+    this.broadcastLog("Player " + this.player["name"] + " has a response!");
   }
 }
 
@@ -466,7 +493,11 @@ const ACTION_CONFIG = {
   change_card_special_value,
   request_list_of_tokens,
   request_dice_roll,
-  request_duplication_of_card
+  request_duplication_of_card,
+  request_token,
+  i_do_not_pay,
+  no_response,
+  response,
 };
 
 class ActionFactory {

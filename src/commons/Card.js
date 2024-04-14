@@ -35,6 +35,7 @@ export class Card {
     this.power_modifier = card.power_modifier || 0; // NOT USED BY NOW
     this.toughness_modifier = card.toughness_modifier || 0; // NOT USED BY NOW
     this.misc_counters = card.misc_counters || 0;  // NOT USED BY NOW
+    this.is_token = card.is_token || false;
   }
 
   changeFace() {

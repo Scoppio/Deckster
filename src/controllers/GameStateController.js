@@ -136,6 +136,18 @@ class RequestGameActions extends BaseGameStateController {
 
   ////////////
 
+  response() {
+    this.sendEvent("response");
+  }
+
+  noResponse() {
+    this.sendEvent("no_response");
+  }
+
+  iDoNotPay() {
+    this.sendEvent("i_do_not_pay");
+  }
+
   drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
     this.sendEvent("draw_card", {
       zone: zone,
@@ -344,11 +356,11 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   pass_turn(event) {
-    // TODO: pass turn
+    // FIXME: IMPLEMENT pass turn
   }
 
   change_game_phase(event) {
-    // TODO: change game phase
+    // TODO: IMPLEMENT change game phase
   }
 
   update_opp_table(event) {
