@@ -141,16 +141,18 @@ class draw_card extends action {
     console.log(player_id, player.name);
     const num_cards = this.event.payload["number_of_cards"];
     const zone = this.event.payload["zone"];
+    const destination = this.event.payload["destination"];
     let cards_drawn = 0;
+
     for (let i = 0; i < num_cards; i++) {
       if (player[zone].length <= 0) {
         break;
       }
-      player["hand"].push(player[zone].pop());
+      player[destination].push(player[zone].pop());
       cards_drawn += 1;
     }
 
-    this.broadcastLog(`Player ${player["name"]} drew ${cards_drawn} cards`);
+    this.broadcastLog(`Player ${player["name"]} drew ${cards_drawn} cards to their ${destination}`);
 
     this.sendJson({
       type: "update_player",

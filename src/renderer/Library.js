@@ -125,6 +125,9 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             aria-labelledby={"View top X amount of cards, hit enter to confirm"}
           />
           <Dropdown.Divider />
+          <Dropdown.Item>
+            Library size: {player.library_size}
+          </Dropdown.Item>
           <Dropdown.Item onClick={handleDrawHand}>
             Draw Hand of 7 cards
           </Dropdown.Item>

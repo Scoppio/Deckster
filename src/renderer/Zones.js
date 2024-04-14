@@ -32,8 +32,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
     <div
       className={zoneName}
       role="region"
-      aria-labelledby={playerNumber + "-" + zoneName + "-label"}
-      aria-describedby={playerNumber + "-" + zoneName + "-desc"}
+      aria-describedby={player.name + "'s " + zoneName + ", " + player[zoneName].length + "cards"}
     >
       <Dropdown autoClose="outside">
         <Dropdown.Toggle
@@ -47,6 +46,10 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
         </Dropdown.Toggle>
         <DropdownMenuPortal>
           <Dropdown.Item onClick={viewZone}>View all cards</Dropdown.Item>
+          <Dropdown.Divider />
+          <Dropdown.Item>
+            {zoneName} size: {player[zoneName].length}
+          </Dropdown.Item>
           <Dropdown.Divider />
           {
             // for each zone that is not zoneName
@@ -65,14 +68,6 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
           }
         </DropdownMenuPortal>
       </Dropdown>
-      <p id={playerNumber + "-" + zoneName + "-desc"}>
-        {player[zoneName].length} cards
-      </p>
-      {zoneName === "commander_zone" && (
-        <p id={playerNumber + "-commander-casting-cost"}>
-          Extra casting cost: {player.commander_extra_casting_cost}
-        </p>
-      )}
     </div>
   );
 };
@@ -130,9 +125,7 @@ const TheCommanderZone = ({
           }
         </DropdownMenuPortal>
       </Dropdown>
-      <p id={playerNumber + "-commander-casting-cost"}>
-        Extra casting cost: {player.commander_extra_casting_cost}
-      </p>
+      
     </div>
   );
 };
