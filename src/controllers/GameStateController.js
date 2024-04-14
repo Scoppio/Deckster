@@ -162,49 +162,39 @@ class RequestGameActions extends BaseGameStateController {
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
   }
 
-  moveSelectedToHand() {
-    console.log("TODO");
-  }
-
   moveCardToZoneTop(sourceZone, sourceIndex, destinationZone) {
     const source = { droppableId: sourceZone, index: sourceIndex };
     const destination = { droppableId: destinationZone, index: 0 };
     this.moveCardTo(source, destination);
   }
 
-  moveSelectedToLibrary() {
-    console.log("TODO");
+  requestListOfTokens() {
+    this.sendEvent("request_list_of_tokens");
   }
 
-  moveSelectedToCommandZone() {
-    console.log("TODO");
+  requestDiceRoll(dice) {
+    this.sendEvent("request_dice_roll", { dice });
+  }
+  
+  requestToken(tokenId) {
+    this.sendEvent("request_token", { tokenId });
   }
 
-  tapUntapSelected() {
-    console.log("TODO");
-  }
-
-  declareAttacking() {
-    console.log("TODO");
-  }
-
-  declareBlocking() {
-    console.log("TODO");
+  requestDuplicationOfCard(sourceZone, sourceIndex, copies) {
+    this.sendEvent("request_duplication_of_card", {
+      from_zone: sourceZone,
+      from_idx: sourceIndex,
+      copies
+    });
   }
 
   scry() {
-    console.log("TODO");
-  }
-
-  addCounterOnSelected() {
-    console.log("TODO");
-  }
-
-  removeCounterOnSelected() {
+    // FIXME: Implement scry
     console.log("TODO");
   }
 
   revealCardsInHand() {
+    // FIXME: Implement reveal cards in hand
     console.log("TODO");
   }
 

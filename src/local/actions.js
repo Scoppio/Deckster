@@ -1,3 +1,6 @@
+const ListOfTokens = require("./tokens.js");
+
+
 class action {
   constructor(gameSession, event, sendJson, broadcastJson, playSound) {
     this.gameSession = gameSession;
@@ -325,7 +328,7 @@ class change_card_special_value extends action {
     const value = this.event.payload["value"];
     
     const permanent = player[from_zone][from_idx];
-    console.log("Permanent: ", permanent)
+    console.log("Permanent: ", permanent);
     if (!permanent) {
       console.log("Card not found");
       this.sendJson({
@@ -383,6 +386,69 @@ class change_card_special_value extends action {
   }
 }
 
+class request_list_of_tokens extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event);
+    this.sendJson({
+      type: "list_of_tokens",
+      payload: ListOfTokens,
+      sender: this.event.sender,
+    });
+    this.playSound("OPEN_DECK_SOUND", 1.0, player);
+  }
+}
+
+class request_dice_roll extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event);
+    const dice = this.event.payload["dice"];
+    // dive come as a string in the format d4 or d6 or d12 or d100, we need to isolate the number part of the string and convert it to an integer
+    const diceNumber = parseInt(dice.slice(1));
+    const result = Math.floor(Math.random() * diceNumber) + 1;
+    this.playSound("ROLL_DICE_SOUND", 1.0, player);
+
+    this.broadcastJson({
+      type: "log_event",
+      payload: "Player " + player["name"] + " rolled a " + result + " on a " + dice,
+      sender: this.event.sender,
+    });
+  }
+}
+
+class request_duplication_of_card extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event);
+    const from_zone = this.event.payload["from_zone"];
+    const from_idx = this.event.payload["from_idx"];
+    const copies = this.event.payload["copies"];
+    const permanent = player[from_zone][from_idx];
+    for (let i = 0; i < copies; i++) {
+      const newPermanent = { ...permanent };
+      delete newPermanent._uid;
+      player[from_zone].splice(from_idx, 0, newPermanent);
+    }
+
+    this.sendJson({
+      type: "update_player",
+      payload: player,
+      sender: this.SERVER,
+    });
+
+    this.broadcastJson({
+      type: "update_opp_table",
+      payload: player,
+      sender: this.event.sender,
+    });
+    
+    this.broadcastJson({
+      type: "log_event",
+      payload: "Player " + player["name"] + " copied " + permanent["name"] + " " + copies + " times",
+      sender: this.event.sender,
+    });
+
+  }
+}
+
 const ACTION_CONFIG = {
   action,
   login_player,
@@ -398,6 +464,9 @@ const ACTION_CONFIG = {
   view_library,
   view_top_x_cards,
   change_card_special_value,
+  request_list_of_tokens,
+  request_dice_roll,
+  request_duplication_of_card
 };
 
 class ActionFactory {
