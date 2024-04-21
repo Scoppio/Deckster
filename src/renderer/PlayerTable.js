@@ -291,7 +291,7 @@ SouthTable.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-  isActivePlayer: PropTypes.bool.isRequired
+  isActivePlayer: PropTypes.bool.isRequired,
 };
 
 export const NorthTable = ({
@@ -337,5 +337,5 @@ NorthTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   barSide: PropTypes.string.isRequired,
-  landsOnNorth: PropTypes.bool.isRequired
+  landsOnNorth: PropTypes.bool.isRequired,
 };

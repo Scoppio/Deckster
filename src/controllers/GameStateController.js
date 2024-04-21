@@ -140,6 +140,18 @@ class RequestGameActions extends BaseGameStateController {
 
   ////////////
 
+  response() {
+    this.sendEvent("response");
+  }
+
+  noResponse() {
+    this.sendEvent("no_response");
+  }
+
+  iDoNotPay() {
+    this.sendEvent("i_do_not_pay");
+  }
+
   drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
     this.sendEvent("draw_card", {
       zone: zone,
@@ -158,7 +170,7 @@ class RequestGameActions extends BaseGameStateController {
 
   increaseLife(health_points = 1) {
     this.player.health += health_points;
-    this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
+    this.updatePlayer("ADD_COUNTER_SOUND");
   }
 
   decreaseLife(health_points = 1) {
@@ -166,49 +178,39 @@ class RequestGameActions extends BaseGameStateController {
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
   }
 
-  moveSelectedToHand() {
-    console.log("TODO");
-  }
-
-  moveCardToZoneTop(sourceZone, sourceIndex, destinationZone) {
+  moveCardToZonePosition(sourceZone, sourceIndex, destinationZone, position = 0) {
     const source = { droppableId: sourceZone, index: sourceIndex };
-    const destination = { droppableId: destinationZone, index: 0 };
+    const destination = { droppableId: destinationZone, index: position };
     this.moveCardTo(source, destination);
   }
 
-  moveSelectedToLibrary() {
-    console.log("TODO");
+  requestListOfTokens() {
+    this.sendEvent("request_list_of_tokens");
   }
 
-  moveSelectedToCommandZone() {
-    console.log("TODO");
+  requestDiceRoll(dice) {
+    this.sendEvent("request_dice_roll", { dice });
+  }
+  
+  requestToken(tokenId) {
+    this.sendEvent("request_token", { tokenId });
   }
 
-  tapUntapSelected() {
-    console.log("TODO");
-  }
-
-  declareAttacking() {
-    console.log("TODO");
-  }
-
-  declareBlocking() {
-    console.log("TODO");
+  requestDuplicationOfCard(sourceZone, sourceIndex, copies) {
+    this.sendEvent("request_duplication_of_card", {
+      from_zone: sourceZone,
+      from_idx: sourceIndex,
+      copies
+    });
   }
 
   scry() {
-    console.log("TODO");
-  }
-
-  addCounterOnSelected() {
-    console.log("TODO");
-  }
-
-  removeCounterOnSelected() {
+    // FIXME: Implement scry
     console.log("TODO");
   }
 
   revealCardsInHand() {
+    // FIXME: Implement reveal cards in hand
     console.log("TODO");
   }
 
@@ -287,6 +289,16 @@ class RequestGameActions extends BaseGameStateController {
     return card;
   }
 
+  changeCounter(sourceZone, sourceIndex, value, counterType = "charge") {
+    console.log(`Changing counter ${counterType} by ${value}`);
+    this.sendEvent("change_card_special_value", {
+      from_zone: sourceZone,
+      from_idx: sourceIndex,
+      special_value: counterType,
+      value: value,
+    });
+  }
+
   listCommands(hotkeys) {
     const keyCommandsList = hotkeys.keyCommands
       .map((cmd) => {
@@ -335,7 +347,7 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   handleEvent(event) {
-    console.log(`GameStateController ${event}`);
+    console.log(`GameStateController ${event.type}`);
     this[event.type](event);
     this.changed();
   }
@@ -351,11 +363,11 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   pass_turn(event) {
-    // TODO: pass turn
+    // FIXME: IMPLEMENT pass turn
   }
 
   change_game_phase(event) {
-    // TODO: change game phase
+    // TODO: IMPLEMENT change game phase
   }
 
   update_opp_table(event) {
@@ -391,6 +403,7 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   play_sound(event) {
+    console.log("Playing sound", event.payload?.name, event.payload?.volume ?? 1.0);
     this.playSound(event.payload?.name, event.payload?.volume ?? 1.0);
   }
 }

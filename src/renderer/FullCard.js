@@ -3,9 +3,11 @@ import style from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import emptyCard from "../resources/cards/empty_card.png";
 import FuckedCardBack from "../resources/cards/mtgcardback.png";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const SlimContainer = style.div`
+  position: relative;
+  display: inline-block;
 `;
 
 const HiddenText = style.div`
@@ -19,6 +21,29 @@ const HiddenText = style.div`
   border: 0;
 `;
 
+const Counter = style.div`
+  background-color: blue;
+  border-radius: 25px;
+  width: 25px;
+  height: 25px;
+  bottom: 20px;
+  left: 5px;
+  color: white;
+  padding-left: 5px;
+  position: absolute;
+`;
+
+const BlackBelt = style.div`
+  background-color: black;
+  width: 100%;
+  height: 20px;
+  bottom: 0px;
+  position: absolute;
+  color: white;
+`;
+
+
+
 export const ImgCard = ({
   region,
   idx,
@@ -28,29 +53,32 @@ export const ImgCard = ({
   tabIndex,
   cardHeight,
 }) => {
+  
   const [isTapped, setIsTapped] = useState(card.is_tapped);
   const [cardFace, setCardFace] = useState(card.card_face);
   const cardCurrentRegion = region;
   const positionIdx = idx;
+  const cardRef = useRef(null);
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
-
+  console.log("Counter: ", card.counters);
   const flipCard = () => {
     card.changeFace();
     setCardFace(card.card_face);
-    gameState.updatePlayer("flip_card", 1.0);
+    gameState.updatePlayer("FLIP_SOUND");
     gameState.focusOnCard(card);
   };
 
   const tapCard = () => {
     card.tapped = !card.is_tapped;
-    gameState.updatePlayer("tap_card", 1.0);
+    gameState.updatePlayer("TAP_SOUND");
     setIsTapped(card.tapped);
     gameState.focusOnCard(card);
   };
 
-  const onMouseOver = () => {
+  const onMouseOver = (event) => {
     gameState.focusOnCard(card);
+    cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
@@ -58,11 +86,35 @@ export const ImgCard = ({
   };
 
   const sendToGraveyard = () => {
-    gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "graveyard");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "graveyard");
   };
 
   const sendToExile = () => {
-    gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "exile");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "exile");
+  };
+
+  const addCounterPlusOnePlusOne = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, 1, "+1/+1");
+  };
+
+  const addCounterMinusOneMinusOne = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, -1, "-1/-1");
+  };
+
+  const addCounter = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, 1);
+  };
+
+  const removeCounter = () => {
+    gameState.changeCounter(cardCurrentRegion, positionIdx, -1);
+  };
+
+  const sendToLibraryNthPosition = (n) => {
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "library", n);
+  };
+
+  const sendToHand = () => {
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "hand");
   };
 
   const commands = {
@@ -70,6 +122,19 @@ export const ImgCard = ({
     l: flipCard,
     g: sendToGraveyard,
     e: sendToExile,
+    '1': () => sendToLibraryNthPosition(0),
+    '2': () => sendToLibraryNthPosition(1),
+    '3': () => sendToLibraryNthPosition(2),
+    '4': () => sendToLibraryNthPosition(3),
+    '5': () => sendToLibraryNthPosition(4),
+    '6': () => sendToLibraryNthPosition(5),
+    '7': () => sendToLibraryNthPosition(6),
+    '0': () => sendToLibraryNthPosition(-1),
+    h: sendToHand,
+    o: addCounterPlusOnePlusOne,
+    k: addCounterMinusOneMinusOne,
+    i: addCounter,
+    j: removeCounter,
   };
 
   return (
@@ -80,7 +145,7 @@ export const ImgCard = ({
           uniqueid={card._uid}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          ref={provided.innerRef}
+          ref={(el) => {provided.innerRef(el); cardRef.current = el;} }
           tabIndex={tabIndex}
           onDoubleClick={tapCard}
           onMouseOver={onMouseOver}
@@ -88,12 +153,12 @@ export const ImgCard = ({
           onContextMenu={flipCard}
           onKeyDown={(event) => {
             if (
-              commands[event.key] &&
+              commands[event.key.toLowerCase()] &&
               !event.ctrlKey &&
               !event.altKey &&
               !event.shiftKey
             ) {
-              commands[event.key]();
+              commands[event.key.toLowerCase()]();
             }
           }}
         >
@@ -101,6 +166,8 @@ export const ImgCard = ({
             <div aria-live="polite" aria-atomic="true">
               {isTapped ? "tapped " : ""}
               {card.face_aria_description}
+              {card.counters ? `, ${card.counters} counters` : ","}
+              {card.misc_counters ? `, ${card.misc_counters} miscelaneous counters` : ""}
             </div>
           </HiddenText>
           <HiddenText>
@@ -120,10 +187,26 @@ export const ImgCard = ({
             alt={card.card_face_name_with_mana_cost}
             style={{
               height: `${cardHeight}%`,
+              display: "block",
               borderRadius: "8px",
               transform: card.tapped ? "rotate(90deg)" : "none",
+              width: "100%",
             }}
           />
+          {
+            card.counters !== 0 ?
+              <Counter>
+                {card.counters}
+              </Counter>
+            : null
+          }
+          {
+            card.is_power_and_thoughness_modified ? 
+            <BlackBelt>
+              {card.power_toughness}
+            </BlackBelt>
+            : null
+          }
         </SlimContainer>
       )}
     </Draggable>
@@ -149,7 +232,7 @@ export const ImgCardHand = ({
   cardHeight,
 }) => {
   const [cardFace, setCardFace] = useState(card.card_face);
-
+  const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
 
   const flipCard = () => {
@@ -163,6 +246,7 @@ export const ImgCardHand = ({
     if (gameState) {
       gameState.focusOnCard(card);
     }
+    cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
@@ -176,7 +260,7 @@ export const ImgCardHand = ({
           className="hand_zone ImgCardHand"
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          ref={provided.innerRef}
+          ref={(el) => {provided.innerRef(el); cardRef.current = el;}}
           tabIndex={tabIndex}
           onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}
@@ -235,8 +319,10 @@ export const StaticImgCard = ({
   tabIndex,
   cardHeight,
 }) => {
-  const onMouseOver = () => {
+  const cardRef = useRef(null);
+  const onMouseOver = (event) => {
     gameState.focusOnCard(card);
+    cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
@@ -248,6 +334,7 @@ export const StaticImgCard = ({
       tabIndex={tabIndex}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
+      ref={cardRef}
     >
       <HiddenText>
         <div>

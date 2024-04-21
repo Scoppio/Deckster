@@ -187,7 +187,7 @@ Battlefield.propTypes = {
   gameState: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
-  player: PropTypes.object.isRequired
+  player: PropTypes.object.isRequired,
 };
 
 StaticBattlefield.propTypes = {
@@ -195,5 +195,5 @@ StaticBattlefield.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-  landsOnNorth: PropTypes.bool.isRequired
+  landsOnNorth: PropTypes.bool.isRequired,
 };

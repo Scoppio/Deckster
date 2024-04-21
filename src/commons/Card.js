@@ -30,6 +30,12 @@ export class Card {
     this.tapped = card.tapped || false;
     this.dont_untap = card.dont_untap || false;
     this.hidden = card.hidden || false;
+    this.power_toughness_counters = card.power_toughness_counters || 0;
+    this.counters = card.counters || 0;
+    this.power_modifier = card.power_modifier || 0; // NOT USED BY NOW
+    this.toughness_modifier = card.toughness_modifier || 0; // NOT USED BY NOW
+    this.misc_counters = card.misc_counters || 0;  // NOT USED BY NOW
+    this.is_token = card.is_token || false;
   }
 
   changeFace() {
@@ -161,7 +167,7 @@ export class Card {
     return this.current_face.type_line;
   }
 
-  get card_loaylty() {
+  get card_loyalty() {
     if (this.hidden) return null;
     if (!this.is_two_sided) {
       return this.loyalty;
@@ -179,7 +185,7 @@ export class Card {
   }
 
   read_text(txt) {
-    if (txt === null) {
+    if (txt === null || txt === undefined) {
       return null;
     }
     txt = txt.replace(/\{T\}/g, "tap ");
@@ -195,17 +201,32 @@ export class Card {
     return this.read_text(this.card_oracle_text);
   }
 
+  get is_power_and_thoughness_modified() {
+    return (
+      this.power_toughness_counters !== 0 ||
+      this.power_toughness_counters !== 0
+    );
+  }
+
   get power_toughness() {
     if (this.hidden) return null;
-    if (
-      this.current_face.power === null ||
-      this.current_face.toughness === null ||
-      this.current_face.power === undefined ||
-      this.current_face.toughness === undefined
-    ) {
-      return null;
+    if (!this.is_power_and_thoughness_modified) {
+      if (
+        this.current_face.power === null ||
+        this.current_face.toughness === null ||
+        this.current_face.power === undefined ||
+        this.current_face.toughness === undefined
+      ) {
+        return null;
+      }
     }
-    return this.current_face.power + "/" + this.current_face.toughness;
+    const p = this.current_face.power === "*" ? "0" : this.current_face.power;
+    const t = this.current_face.toughness === "*" ? "0" : this.current_face.toughness;
+
+    const _power = String(Number(p || 0) + Number(this.power_modifier || 0) + Number(this.power_toughness_counters || 0));
+    const _toughness = String(Number(t || 0) + Number(this.toughness_modifier || 0) + Number(this.power_toughness_counters || 0));
+
+    return _power + "/" + _toughness;
   }
 
   get card_image_uris() {
@@ -262,7 +283,7 @@ export class Card {
     return (
       this.card_name_with_mana_cost +
       (this.power_toughness !== null ? `, ${this.power_toughness}` : "") +
-      (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") +
+      (this.card_loyalty ? `, ${this.card_loyalty} starting loyalty` : "") +
       ", "
     );
   }
@@ -272,7 +293,7 @@ export class Card {
     return (
       this.card_face_name_with_mana_cost +
       (this.power_toughness !== null ? `, ${this.power_toughness}` : "") +
-      (this.card_loyalty ? `, ${this.card_loyalty} loyalty` : "") +
+      (this.card_loyalty ? `, ${this.card_loyalty} starting loyalty` : "") +
       (this.is_two_sided
         ? ", other side is " +
           this.card_faces[this.card_face === 0 ? 1 : 0].name

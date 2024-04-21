@@ -184,16 +184,19 @@ server.on("connection", (socket) => {
   };
 
   const playSound = (name, volume, sender) => {
+    console.log("Playing sound: %s", name);
     broadcastJson({ type: "play_sound", payload: { name, volume }, sender });
   };
 
   const sendJson = (message) => {
+    console.log("Sending: %s", message.type);
     socket.send(JSON.stringify(message));
   };
 
   socket.on("message", (message) => {
     const json = JSON.parse(message);
-    console.log("received: %s", message);
+    // console.log("received: %s", message);
+    console.log("received: %s", json.type);
     ActionFactory.create(
       gameSession,
       json,

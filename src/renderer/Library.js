@@ -64,7 +64,8 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
       className={"library"}
       role="region"
       aria-describedby={playerNumber + "-library-desc"}
-    >
+      style={{ display: 'flex', alignItems: 'center' }}
+      >
       <Dropdown drop="up" style={{ maxHeight: "100px" }} autoClose="outside">
         <Dropdown.Toggle
           variant="secondary"
@@ -125,6 +126,9 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             aria-labelledby={"View top X amount of cards, hit enter to confirm"}
           />
           <Dropdown.Divider />
+          <Dropdown.Item>
+            Library size: {player.library_size}
+          </Dropdown.Item>
           <Dropdown.Item onClick={handleDrawHand}>
             Draw Hand of 7 cards
           </Dropdown.Item>
@@ -151,7 +155,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           </Dropdown.Item>
         </DropdownMenuPortal>
       </Dropdown>
-      <p id={playerNumber + "-library-desc"}>{player.library_size} cards</p>
+      <span>({player.library_size})</span>
     </div>
   );
 };
