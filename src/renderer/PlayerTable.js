@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Battlefield, StaticBattlefield } from "./Battlefield";
 import { PlayerBar } from "./PlayerBar";
+import { ZoneModal } from "./ZoneModal";
 import { Hand, HiddenHand } from "./Hand";
 import { DragDropContext } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
@@ -15,6 +16,7 @@ export const SouthTable = ({
   player,
   isActivePlayer,
 }) => {
+
   const onDragStart = (start, provided) => {
     const { source } = start;
     const card = gameState.getCardFrom(source);
@@ -223,37 +225,17 @@ export const SouthTable = ({
     };
   }, [gameState]);
 
-  // return (
-  //   <div
-  //     className={classNames("player-table", {
-  //       "player-table-right": barSide === "right",
-  //     })}
-  //   >
-  //     {barSide === "left" ? PlayerBarRenderer : null}
-  //     <Col>
-  //       {landsOnNorth ? (
-  //         <Row style={{ background: "grey" }}>
-  //           <HiddenHand player={player} playerNumber={playerNumber} />
-  //         </Row>
-  //       ) : null}
-  //       <Row style={{ background: "gold" }}>
-  //         <StaticBattlefield
-  //           gameState={gameState}
-  //           playerRef={playerRef}
-  //           playerNumber={playerNumber}
-  //           player={player}
-  //           landsOnNorth={landsOnNorth}
-  //         />
-  //       </Row>
-  //       {!landsOnNorth ? (
-  //         <Row style={{ background: "grey" }}>
-  //           <HiddenHand player={player} playerNumber={playerNumber} />
-  //         </Row>
-  //       ) : null}
-  //     </Col>
-  //     {barSide === "right" ? PlayerBarRenderer : null}
-  //   </div>
-  // );
+  const [showHiddenCardZone, setShowHiddenCardZone] = useState(false);
+
+  // ...
+
+  // Assuming gameState is an object
+  gameState._showHiddenCardZone = () => setShowHiddenCardZone(true);
+  gameState._hideHiddenCardZone = () => setShowHiddenCardZone(false);
+
+  const closeModal = () => {
+    gameState.closeViewZone();
+  };
 
   return (
     <div className={classNames("player-table")}>
@@ -285,6 +267,19 @@ export const SouthTable = ({
             playerRef={playerRef}
             playerNumber={playerNumber}
           />
+          {
+            showHiddenCardZone && (
+              <>
+              <ZoneModal
+                sourceZone={gameState.open_zone.zone}
+                gameState={gameState}
+                closeModal={closeModal}
+                hideModal={()=> {}}
+                useCloseAndShuffle={false}
+              />
+              </>
+            )
+          }
         </div>
       </DragDropContext>
     </div>

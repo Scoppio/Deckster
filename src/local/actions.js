@@ -43,8 +43,14 @@ class update_player extends action {
       delete payloadPlayer["sound"];
       delete payloadPlayer["volume"];
     }
+    const old_player_state = this.gameSession.players[this.event.payload["id"]];
+    if (old_player_state) {
+      payloadPlayer = { ...old_player_state, ...payloadPlayer };
+    }
+
     this.gameSession.players[this.event.payload["id"]] = payloadPlayer;
     const player = this.gameSession.players[this.event.payload["id"]];
+    player.library_size = player.library.length;
     const ret = {
       type: "update_player",
       payload: player,
@@ -104,12 +110,22 @@ class move_card extends action {
     
     player[from_zone].splice(from_idx, 1);
 
+    player[to_zone].splice(to_idx, 0, card_obj);
+    if (from_zone === "library" && player.viewing_library === true) {
+      this.sendJson({
+        type: "view_library",
+        payload: player.library.slice().reverse(),
+        sender: this.event.sender,
+      });
+    }
+
     const playerName = player["name"];
     let cardName = card_obj["name"];
 
     if (this.is_hidden(from_zone) && this.is_hidden(to_zone)) {
       cardName = "a card";
     }
+
 
     if (this.is_leaving_battlefield(to_zone) && card_obj.is_token) {
       // card is a token, it stop existing when it leaves the battlefield
@@ -119,7 +135,6 @@ class move_card extends action {
     }
 
     this.broadcastLog(`Player ${playerName} moved ${cardName} from ${from_zone} to ${to_zone}`);
-
     this.sendJson({
       type: "update_player",
       payload: player,
@@ -152,6 +167,25 @@ class draw_card extends action {
       player[destination].push(player[zone].pop());
       cards_drawn += 1;
     }
+    player.library_size = player.library.length;
+    if (player.viewing_library === true) {
+      this.sendJson({
+        type: "view_library",
+        payload: player.library.slice().reverse(),
+        sender: this.event.sender,
+      });
+    }
+    const responseLog = {
+      type: "log_event",
+      payload:
+        "Player " +
+        player["name"] +
+        " drew " +
+        cards_drawn +
+        " cards from " +
+        zone,
+      sender: this.SERVER,
+    };
 
     this.broadcastLog(`Player ${player["name"]} drew ${cards_drawn} cards to their ${destination}`);
 
@@ -174,6 +208,14 @@ class shuffle_library extends action {
     const player_id = this.event.sender["id"];
     const player = this.gameSession.players[player_id];
     player["library"].sort(() => Math.random() - 0.5);
+    if (player.viewing_library === true) {
+      this.sendJson({
+        type: "view_library",
+        payload: player.library.slice().reverse(),
+        sender: this.event.sender,
+      });
+    }
+    this.sendJson(responseLog);
     this.broadcastLog("Player " + player["name"] + " shuffled their library");
     this.playSound("SHUFFLE_SOUND", 1.0, player);
   }
@@ -201,11 +243,22 @@ class pass_turn extends action {
 class mulligan extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event);
+    player["library"].push(...player["hand"]);
+
     const [newHand] = new this.gameSession.game.mulliganStrategy(
       player,
-      "hand",
+      "library",
     ).draw(7);
+
     player.hand = newHand;
+    player.library_size = player.library.length;
+    if (player.viewing_library === true) {
+      this.sendJson({
+        type: "view_library",
+        payload: player.library.slice().reverse(),
+        sender: this.event.sender,
+      });
+    }
     
     this.broadcastLog("Player " + player["name"] + " mulliganed to " + newHand.length + " cards");
     this.sendJson({
@@ -267,7 +320,9 @@ class draw_hand extends action {
       player,
       "library",
     ).draw(7);
-    player.hand = hand;
+
+    player.hand.push(...hand);
+    player.library_size = player.library.length;
     this.sendJson({
       type: "update_player",
       payload: player,
@@ -286,6 +341,7 @@ class draw_hand extends action {
 class view_library extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event);
+    player.viewing_library = true;
     this.sendJson({
       type: "view_library",
       payload: player.library.slice().reverse(),
@@ -299,6 +355,7 @@ class view_library extends action {
 class view_top_x_cards extends action {
   execute() {
     const player = this.gameSession.getPlayer(this.event);
+    player.viewing_library = true;
     const number_of_cards = this.event.payload["number_of_cards"];
     const cards = player.library.slice().reverse().slice(0, number_of_cards);
     this.sendJson({
@@ -479,6 +536,24 @@ class response extends action {
   }
 }
 
+class close_view_zone extends action {
+  execute() {
+    const player = this.gameSession.getPlayer(this.event);
+    player.viewing_library = false;
+    this.sendJson({
+      type: "hide_hidden_card_zone",
+      payload: player,
+      sender: this.event.sender,
+    });
+    this.playSound("PLAY_SOUND", 1.0, player);
+    this.sendJson({
+      type: "log_event",
+      payload: "Player " + player["name"] + " viewed their library",
+      sender: this.SERVER,
+    });
+  }
+}
+
 const ACTION_CONFIG = {
   action,
   login_player,
@@ -493,6 +568,7 @@ const ACTION_CONFIG = {
   draw_hand,
   view_library,
   view_top_x_cards,
+  close_view_zone,
   change_card_special_value,
   request_list_of_tokens,
   request_dice_roll,

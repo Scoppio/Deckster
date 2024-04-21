@@ -1,5 +1,8 @@
 import PropTypes from "prop-types";
 import { LogFrame, AnnouncementFrame } from "./LogFrame";
+import { CardListZone } from "./CardListZone";
+import { TabIndices } from "../commons/Player";
+import emptyCard from "../resources/cards/empty_card.png";
 
 import "./gameStateBoard.css";
 
@@ -21,7 +24,7 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
                 {gameState.focus_card.card_mana_cost}
               </h2>
               <img
-                src={gameState.focus_card.card_image_uris.normal}
+                src={gameState.focus_card.card_image_uris?.normal ?? emptyCard}
                 alt={gameState.focus_card.card_name}
                 style={{maxWidth: "220px"}}
               />

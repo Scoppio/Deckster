@@ -252,7 +252,7 @@ export const ImgCardHand = ({
   const onMouseLeave = () => {
     gameState.focusOnCard(null);
   };
-
+  
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {(provided) => (

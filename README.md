@@ -4,11 +4,12 @@
 
 In the project directory, you can run:
 
-### `yarn electron:serve`
-
 ### `yarn build`
 
 ### `yarn electron:build`
+
+### `yarn electron:servelocal`
+
 
 ## UI Design
 
