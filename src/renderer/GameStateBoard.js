@@ -1,56 +1,40 @@
 import PropTypes from "prop-types";
-import Row from "react-bootstrap/Row";
 import { LogFrame, AnnouncementFrame } from "./LogFrame";
-import { CardListZone } from "./CardListZone";
-import { TabIndices } from "../commons/Player";
 
 import "./gameStateBoard.css";
 
 export const GameStateBoard = ({ gameState, playerRef }) => {
   return (
     <div className="game-state-board">
-      <div>
+      <div style={{height: '67vh'}}>
         {gameState.focus_card ? (
           <>
-            <Row>
               <h2
                 style={{
-                  fontSize: "1.5vw",
-                  whiteSpace: "nowrap",
-                  overflow: "visible",
+                  fontSize: "1.0vw",
                   textOverflow: "ellipsis",
+                  overflowWrap: "break-word",
+                  wordWrap: "break-word",
                 }}
               >
                 {gameState.focus_card.card_name}{" "}
                 {gameState.focus_card.card_mana_cost}
               </h2>
-            </Row>
-            <Row>
               <img
                 src={gameState.focus_card.card_image_uris.normal}
                 alt={gameState.focus_card.card_name}
-                style={{ width: "100%" }}
+                style={{maxWidth: "220px"}}
               />
-            </Row>
-            <Row>
               <p>{gameState.focus_card.card_type_line}</p>
-            </Row>
-            <Row>
-              <p>{gameState.focus_card.card_read_oracle_text}</p>
-            </Row>
-            <Row>
+              <p style={{fontSize: "0.75vw"}}>{gameState.focus_card.card_read_oracle_text}</p>
               <p>{gameState.focus_card.power_toughness}</p>
-            </Row>
           </>
-        ) : null}
+        ) : " "}
       </div>
-      <CardListZone
-        gameState={gameState}
-        playerRef={playerRef}
-        tabIndex={TabIndices}
-      />
-      <AnnouncementFrame gameState={gameState} />
-      <LogFrame gameState={gameState} playerRef={playerRef.log} />
+      <div style={{height: '33vh'}}>
+        <AnnouncementFrame gameState={gameState} />
+        <LogFrame gameState={gameState} playerRef={playerRef.log} height={30}/>
+      </div>
     </div>
   );
 };
@@ -58,48 +42,4 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
 GameStateBoard.propTypes = {
   gameState: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
-};
-
-const CardDetail = ({ gameState }) => {
-  return (
-    <div>
-      {gameState.focus_card ? (
-        <>
-          <Row>
-            <h2
-              style={{
-                fontSize: "1.5vw",
-                whiteSpace: "nowrap",
-                overflow: "visible",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {gameState.focus_card.card_name}{" "}
-              {gameState.focus_card.card_mana_cost}
-            </h2>
-          </Row>
-          <Row>
-            <img
-              src={gameState.focus_card.card_image_uris.normal}
-              alt={gameState.focus_card.card_name}
-              style={{ width: "100%" }}
-            />
-          </Row>
-          <Row>
-            <p>{gameState.focus_card.card_type_line}</p>
-          </Row>
-          <Row>
-            <p>{gameState.focus_card.card_read_oracle_text}</p>
-          </Row>
-          <Row>
-            <p>{gameState.focus_card.power_toughness}</p>
-          </Row>
-        </>
-      ) : null}
-    </div>
-  );
-};
-
-CardDetail.propTypes = {
-  gameState: PropTypes.object.isRequired,
 };

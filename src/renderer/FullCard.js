@@ -65,13 +65,13 @@ export const ImgCard = ({
   const flipCard = () => {
     card.changeFace();
     setCardFace(card.card_face);
-    gameState.updatePlayer("flip_card", 1.0);
+    gameState.updatePlayer("FLIP_SOUND");
     gameState.focusOnCard(card);
   };
 
   const tapCard = () => {
     card.tapped = !card.is_tapped;
-    gameState.updatePlayer("tap_card", 1.0);
+    gameState.updatePlayer("TAP_SOUND");
     setIsTapped(card.tapped);
     gameState.focusOnCard(card);
   };
@@ -86,11 +86,11 @@ export const ImgCard = ({
   };
 
   const sendToGraveyard = () => {
-    gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "graveyard");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "graveyard");
   };
 
   const sendToExile = () => {
-    gameState.moveCardToZoneTop(cardCurrentRegion, positionIdx, "exile");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "exile");
   };
 
   const addCounterPlusOnePlusOne = () => {
@@ -109,11 +109,28 @@ export const ImgCard = ({
     gameState.changeCounter(cardCurrentRegion, positionIdx, -1);
   };
 
+  const sendToLibraryNthPosition = (n) => {
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "library", n);
+  };
+
+  const sendToHand = () => {
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "hand");
+  };
+
   const commands = {
     t: tapCard,
     l: flipCard,
     g: sendToGraveyard,
     e: sendToExile,
+    '1': () => sendToLibraryNthPosition(0),
+    '2': () => sendToLibraryNthPosition(1),
+    '3': () => sendToLibraryNthPosition(2),
+    '4': () => sendToLibraryNthPosition(3),
+    '5': () => sendToLibraryNthPosition(4),
+    '6': () => sendToLibraryNthPosition(5),
+    '7': () => sendToLibraryNthPosition(6),
+    '0': () => sendToLibraryNthPosition(-1),
+    h: sendToHand,
     o: addCounterPlusOnePlusOne,
     k: addCounterMinusOneMinusOne,
     i: addCounter,
@@ -136,12 +153,12 @@ export const ImgCard = ({
           onContextMenu={flipCard}
           onKeyDown={(event) => {
             if (
-              commands[event.key] &&
+              commands[event.key.toLowerCase()] &&
               !event.ctrlKey &&
               !event.altKey &&
               !event.shiftKey
             ) {
-              commands[event.key]();
+              commands[event.key.toLowerCase()]();
             }
           }}
         >

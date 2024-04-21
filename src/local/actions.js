@@ -144,6 +144,7 @@ class draw_card extends action {
     const destination = this.event.payload["destination"];
     let cards_drawn = 0;
 
+    
     for (let i = 0; i < num_cards; i++) {
       if (player[zone].length <= 0) {
         break;

@@ -166,7 +166,7 @@ class RequestGameActions extends BaseGameStateController {
 
   increaseLife(health_points = 1) {
     this.player.health += health_points;
-    this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
+    this.updatePlayer("ADD_COUNTER_SOUND");
   }
 
   decreaseLife(health_points = 1) {
@@ -174,9 +174,9 @@ class RequestGameActions extends BaseGameStateController {
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
   }
 
-  moveCardToZoneTop(sourceZone, sourceIndex, destinationZone) {
+  moveCardToZonePosition(sourceZone, sourceIndex, destinationZone, position = 0) {
     const source = { droppableId: sourceZone, index: sourceIndex };
-    const destination = { droppableId: destinationZone, index: 0 };
+    const destination = { droppableId: destinationZone, index: position };
     this.moveCardTo(source, destination);
   }
 

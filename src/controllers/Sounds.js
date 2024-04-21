@@ -45,6 +45,7 @@ export default class Sounds {
       this.sounds[sound_name] ||
       new Audio(SoundTable[sound_name] || placeholder_sound);
     sound.volume = volume;
+    console.log("Playing sound: ", sound);
     sound.cloneNode(true).play();
     this.sounds[sound_name] = sound;
   }

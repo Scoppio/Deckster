@@ -185,7 +185,7 @@ export class Card {
   }
 
   read_text(txt) {
-    if (txt === null) {
+    if (txt === null || txt === undefined) {
       return null;
     }
     txt = txt.replace(/\{T\}/g, "tap ");

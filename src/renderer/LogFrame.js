@@ -15,21 +15,22 @@ const HiddenText = style.div`
 export const LogFrame = ({ gameState, height, playerRef }) => {
   return (
     <div
-      style={{
-        width: "100%",
-        height: `${height}vh`,
-        background: "green",
-        overflowY: "auto",
-        lineHeight: "20px",
-      }}
+    style={{
+      width: "250px",
+      height: "100%",
+      background: "green",
+      overflowY: "auto",
+      overflowX: "hidden",
+      lineHeight: "20px",
+    }}
     >
       {gameState.log.length > 0 && (
         <span aria-live="assertive" aria-atomic="true" ref={playerRef.log}>
-          <p style={{ margin: "0" }}>{gameState.log[0]}</p>
+          <p style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>{gameState.log[0]}</p>
         </span>
       )}
       {gameState.log.slice(1).map((logEntry, idx) => (
-        <p key={idx + 1} style={{ margin: "0" }}>
+        <p key={idx + 1} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>
           {logEntry}
         </p>
       ))}

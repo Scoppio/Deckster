@@ -99,7 +99,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px", "background-color": "red" }}
+            style={{ height: "33.33%", padding: "2px", backgroundColor: "red" }}
             className="Droppable"
             aria-label="front lane"
           >
@@ -129,7 +129,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px", "background-color": "blue" }}
+            style={{ height: "33.33%", padding: "2px", backgroundColor: "blue" }}
             className="Droppable"
             aria-label="back lane"
           >
@@ -159,7 +159,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px", "background-color": "green" }}
+            style={{ height: "33.33%", padding: "2px", backgroundColor: "green" }}
             className="Droppable"
             aria-label="land lane"
           >
@@ -188,7 +188,6 @@ Battlefield.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-  heightVh: PropTypes.number.isRequired,
 };
 
 StaticBattlefield.propTypes = {
@@ -197,5 +196,4 @@ StaticBattlefield.propTypes = {
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
   landsOnNorth: PropTypes.bool.isRequired,
-  heightVh: PropTypes.number.isRequired,
 };

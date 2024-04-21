@@ -64,7 +64,8 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
       className={"library"}
       role="region"
       aria-describedby={playerNumber + "-library-desc"}
-    >
+      style={{ display: 'flex', alignItems: 'center' }}
+      >
       <Dropdown drop="up" style={{ maxHeight: "100px" }} autoClose="outside">
         <Dropdown.Toggle
           variant="secondary"
@@ -154,7 +155,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           </Dropdown.Item>
         </DropdownMenuPortal>
       </Dropdown>
-      <p id={playerNumber + "-library-desc"}>{player.library_size} cards</p>
+      <span>({player.library_size})</span>
     </div>
   );
 };
