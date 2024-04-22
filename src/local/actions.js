@@ -175,18 +175,7 @@ class draw_card extends action {
         sender: this.event.sender,
       });
     }
-    const responseLog = {
-      type: "log_event",
-      payload:
-        "Player " +
-        player["name"] +
-        " drew " +
-        cards_drawn +
-        " cards from " +
-        zone,
-      sender: this.SERVER,
-    };
-
+    
     this.broadcastLog(`Player ${player["name"]} drew ${cards_drawn} cards to their ${destination}`);
 
     this.sendJson({
@@ -215,7 +204,6 @@ class shuffle_library extends action {
         sender: this.event.sender,
       });
     }
-    this.sendJson(responseLog);
     this.broadcastLog("Player " + player["name"] + " shuffled their library");
     this.playSound("SHUFFLE_SOUND", 1.0, player);
   }

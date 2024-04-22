@@ -178,10 +178,10 @@ class RequestGameActions extends BaseGameStateController {
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
   }
 
-  moveCardToZonePosition(sourceZone, sourceIndex, destinationZone, position = 0) {
+  moveCardToZonePosition(sourceZone, sourceIndex, destinationZone, card = null, position = 0) {
     const source = { droppableId: sourceZone, index: sourceIndex };
     const destination = { droppableId: destinationZone, index: position };
-    this.moveCardTo(source, destination);
+    this.moveCardTo(source, destination, card);
   }
 
   requestListOfTokens() {
@@ -268,10 +268,12 @@ class RequestGameActions extends BaseGameStateController {
     this.changed();
   }
 
-  moveCardTo(source, destination) {
+  moveCardTo(source, destination, card = null) {
     const sourceZone = source.droppableId;
     const sourceIndex = source.index;
-    const card = this.player[sourceZone][sourceIndex];
+    if (card === null) {
+      card = this.player[sourceZone][sourceIndex];
+    }
     this.player[sourceZone].splice(sourceIndex, 1);
 
     const destinationZone = destination.droppableId;
@@ -284,6 +286,7 @@ class RequestGameActions extends BaseGameStateController {
       to_zone: destinationZone,
       from_idx: sourceIndex,
       to_idx: destinationIndex,
+      card_uid: card._uid,
     });
 
     return card;
