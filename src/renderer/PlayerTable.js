@@ -53,7 +53,7 @@ export const SouthTable = ({
         gameState.cancelCardMove();
         return;
       }
-
+      
       const destinationZone = destination.droppableId;
       const card = gameState.moveCardTo(source, destination);
       provided.announce(

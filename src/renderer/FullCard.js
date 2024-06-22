@@ -86,11 +86,11 @@ export const ImgCard = ({
   };
 
   const sendToGraveyard = () => {
-    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "graveyard");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "graveyard", card);
   };
 
   const sendToExile = () => {
-    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "exile");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "exile", card);
   };
 
   const addCounterPlusOnePlusOne = () => {
@@ -110,11 +110,11 @@ export const ImgCard = ({
   };
 
   const sendToLibraryNthPosition = (n) => {
-    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "library", n);
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "library", card, n);
   };
 
   const sendToHand = () => {
-    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "hand");
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "hand", card);
   };
 
   const commands = {

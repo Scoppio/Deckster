@@ -105,7 +105,7 @@ export function GameArena({ gameState }) {
   hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone.current.focus(), "Your commander zone.");
   hotkeys.registerCtrlKeyCommand("z", () => hotkeys.playerRefs[1].sideboard.current.focus(), "Your sideboard.");
   hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log.current.focus(), "Game log.");
-  hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone.current.focus(), "Card list zone.");
+  hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current.focus(), "Card list zone.");
 
   hotkeys.registerCtrlShiftKeyCommand("Z", () => gameState.moveSelectedToHand(), "Move selected cards to your hand.");
   hotkeys.registerCtrlShiftKeyCommand("X", () => gameState.moveSelectedToGraveyard(), "Move selected cards to your graveyard.");

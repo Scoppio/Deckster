@@ -1,16 +1,15 @@
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 export class WebSocketClient {
-  constructor(gameName) {
+  constructor(url, gameName) {
     this.listeners = [];
-
+    this.token = "48676c9575d39469d8223388a60930018aef7144";
     this.client = new W3CWebSocket(
-      "ws://" +
-        // + window.location.host
-        "localhost:8000" +
+      "wss://" +
+        url +
         "/ws/vtt/game/" +
         gameName +
-        "/",
+        "/?token=" + this.token
     );
 
     this.client.onclose = (e) => {
@@ -21,6 +20,10 @@ export class WebSocketClient {
       console.log("WebSocket Client Connected");
     };
 
+    this.client.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
+    
     this.client.onmessage = (message) => {
       this.onEventReceived(message);
     };

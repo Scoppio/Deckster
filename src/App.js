@@ -29,14 +29,15 @@ function App() {
     } else {
       const deckA = loadDeck(46); // await fetchDeck(46)
       // const deckB = loadDeck(47) // await fetchDeck(47)
-      const playerA = new Player(1, "Lulu", deckA, 40, TabIndices, true);
+      const playerA = new Player(2, "Lulu", deckA, 40, TabIndices, true);
       const playerB = Player.emptyPlayer();
 
       const gameState = new GameStateController(
         undefined,
         setGameStateController
       );
-      gameState.registerWebSocketClient(new WebSocketClient("test"));
+
+      gameState.registerWebSocketClient(new WebSocketClient("localhost", "test"));
       gameState.addPlayer(playerA);
       gameState.addPlayer(playerB);
       setGameStateController(gameState);

@@ -124,7 +124,7 @@ const TheCommanderZone = ({
               })
               .filter(Boolean)
           }
-        </DropdownMenuPortal>
+        </DropdownMenuPortal> 
       </Dropdown>
       <span>({player[zoneName].length})</span>
     </div>
