@@ -1,14 +1,16 @@
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import { Urls } from "../commons/Urls";
 
 export class WebSocketClient {
-  constructor(url, gameName) {
-    this.listeners = [];
-    this.token = "48676c9575d39469d8223388a60930018aef7144";
+  constructor(authorization) {
+    this.listeners = []; 
+    this.gameName = authorization.gameName;
+    this.token = authorization.token;
+
     this.client = new W3CWebSocket(
-      "wss://" +
-        url +
+      Urls.ws_url +
         "/ws/vtt/game/" +
-        gameName +
+        this.gameName +
         "/?token=" + this.token
     );
 
@@ -27,6 +29,38 @@ export class WebSocketClient {
     this.client.onmessage = (message) => {
       this.onEventReceived(message);
     };
+  }
+
+  setToken(token) {
+    this.token = token;
+    return this;
+  }
+
+  startClient() {
+    this.client = new W3CWebSocket(
+      Urls.ws_url +
+        "/ws/vtt/game/" +
+        this.gameName +
+        "/?token=" + this.token
+    );
+
+    this.client.onclose = (e) => {
+      console.error("Chat socket closed unexpectedly", e);
+    };
+
+    this.client.onopen = () => {
+      console.log("WebSocket Client Connected");
+    };
+
+    this.client.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
+    
+    this.client.onmessage = (message) => {
+      this.onEventReceived(message);
+    };
+    
+    return this;
   }
 
   addListener(listener) {

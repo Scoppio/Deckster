@@ -1,5 +1,6 @@
 import { Card } from "../commons/Card";
 import { DeckB, DeckA } from "../commons/Decks";
+import { Urls } from "./Urls";
 
 export const tyranid_swarm = `1 Aberrant
 1 Abundance
@@ -206,7 +207,7 @@ export const convertTextToDeck = (text) => {
 
 export const fetchDeck = async (deck_id) => {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/vtt/deck/${deck_id}`, {
+    const response = await fetch(`${Urls.api_url}/vtt/deck/${deck_id}`, {
       mode: "cors",
     });
     if (!response.ok) {
