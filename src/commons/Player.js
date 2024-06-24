@@ -17,9 +17,9 @@ export const TabIndices = {
 };
 
 export class Player {
-  constructor(id, name, library, health, tabIndices, isLocal = false) {
-    this.id = id;
-    this.name = name;
+  constructor(user, library, health, tabIndices, isLocal = false) {
+    this.id = user.id;
+    this.name = user.name;
     this.health = health;
     this.counters = {};
     this.library = library.deck;
@@ -38,15 +38,14 @@ export class Player {
     this.selected_cards = [];
     this.tabIndices = { ...tabIndices };
     this.isLocal = isLocal;
-    this.avatar = emptyAvatar;
+    this.avatar = user.avatar || emptyAvatar;
     this._uid = Utils.random_id_str;
     this._is_empty = false;
   }
 
   static emptyPlayer() {
     const player = new Player(
-      Utils.random_id_str,
-      "",
+      {"id": Utils.random_id_str, "name": ""},
       { deck: [], commanders: [] },
       0,
       {

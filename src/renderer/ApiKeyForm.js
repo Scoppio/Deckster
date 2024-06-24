@@ -24,9 +24,10 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
       return;
     }
     const data = await response.json();
-
     const apiKey = data.token;
-    const authorization = new Authorization(game, apiKey);
+    const user = {id: data.id, username: data.username, avatar: data.avatar};
+    const authorization = new Authorization(game, apiKey, user);
+
     onAuthorizationChange(authorization);
   };
   

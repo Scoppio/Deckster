@@ -50,7 +50,8 @@ function App() {
         const deckA = deck || loadDeck(46); 
         // const deckA = await fetchDeck(46)
         // const deckB = await fetchDeck(47)
-        const playerA = new Player(2, "Lulu", deckA, 40, TabIndices, true);
+        const user = authorization.user;
+        const playerA = new Player(user, deckA, 40, TabIndices, true);
         
         const gameState = new GameStateController(
           undefined,
