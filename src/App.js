@@ -3,7 +3,7 @@ import { ApiKeyForm } from "./renderer/ApiKeyForm";
 import { SelectDeck } from "./renderer/SelectDeck";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
-import { Player, TabIndices } from "./commons/Player";
+import { EMPTY_PLAYER, Player, TabIndices } from "./commons/Player";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import GameStateController from "./controllers/GameStateController";
@@ -52,7 +52,7 @@ function App() {
         // const deckB = await fetchDeck(47)
         const user = authorization.user;
         const playerA = new Player(user, deckA, 40, TabIndices, true);
-        
+        const playerB = EMPTY_PLAYER;
         const gameState = new GameStateController(
           undefined,
           setGameStateController
@@ -61,6 +61,11 @@ function App() {
         gameState.authorization = authorization;
         gameState.registerWebSocketClient(webSocket);
         gameState.addPlayer(playerA);
+        gameState.addPlayer(Player.emptyPlayer("Ana"));
+        gameState.addPlayer(Player.emptyPlayer("Barbara"));
+        gameState.addPlayer(Player.emptyPlayer("Carla"));
+        gameState.addPlayer(Player.emptyPlayer("Dani"));
+        gameState.addPlayer(Player.emptyPlayer("Eva"));
 
         setGameStateController(gameState);
         setGameState("game");

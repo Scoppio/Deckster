@@ -20,7 +20,7 @@ const StaticBattlefieldDiv = style.div`
   flex-direction: column;
   width: 100%;
   display: flex;
-  background-color: yellow;
+  background-color: #EEEF;
 `;
 
 export const StaticBattlefield = ({
@@ -39,9 +39,7 @@ export const StaticBattlefield = ({
       aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}
     >
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
-        {player[
-          landsOnNorth ? "land_zone_battlefield" : "front_battlefield"
-        ].map((card, index) => (
+        {player["land_zone_battlefield"].map((card, index) => (
           <StaticImgCard
             gameState={gameState}
             card={card}
@@ -64,9 +62,7 @@ export const StaticBattlefield = ({
         ))}
       </CardHolder>
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
-        {player[
-          landsOnNorth ? "front_battlefield" : "land_zone_battlefield"
-        ].map((card, index) => (
+        {player["front_battlefield"].map((card, index) => (
           <StaticImgCard
             gameState={gameState}
             card={card}
@@ -80,6 +76,14 @@ export const StaticBattlefield = ({
     </StaticBattlefieldDiv>
   );
 };
+
+StaticBattlefield.propTypes = {
+  gameState: PropTypes.object.isRequired,
+  playerRef: PropTypes.object.isRequired,
+  playerNumber: PropTypes.number.isRequired,
+  player: PropTypes.object.isRequired,
+};
+
 
 export const Battlefield = ({ gameState, playerRef, player }) => {
   return (
@@ -188,12 +192,4 @@ Battlefield.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
-};
-
-StaticBattlefield.propTypes = {
-  gameState: PropTypes.object.isRequired,
-  playerRef: PropTypes.object.isRequired,
-  playerNumber: PropTypes.number.isRequired,
-  player: PropTypes.object.isRequired,
-  landsOnNorth: PropTypes.bool.isRequired,
 };

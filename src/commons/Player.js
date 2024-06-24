@@ -19,7 +19,7 @@ export const TabIndices = {
 export class Player {
   constructor(user, library, health, tabIndices, isLocal = false) {
     this.id = user.id;
-    this.name = user.name;
+    this.name = user.username;
     this.health = health;
     this.counters = {};
     this.library = library.deck;
@@ -43,9 +43,9 @@ export class Player {
     this._is_empty = false;
   }
 
-  static emptyPlayer() {
+  static emptyPlayer(name="") {
     const player = new Player(
-      {"id": Utils.random_id_str, "name": ""},
+      {"id": Utils.random_id_str, "username": name},
       { deck: [], commanders: [] },
       0,
       {

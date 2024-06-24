@@ -13,7 +13,8 @@ class BaseGameStateController extends EventEmitter {
       this.fromPreviousState(state);
     } else {
       this.players = [];
-      this.activePlayer = 0;
+      this.players_initiative = {};
+      this.activePlayer = null;
       this.player_number = 0;
       this.webSocketClient = null;
       this.ariaHelper = new AriaHelper(this);
@@ -29,6 +30,7 @@ class BaseGameStateController extends EventEmitter {
 
   fromPreviousState(previousState) {
     this.players = previousState.players;
+    this.players_initiative = {};
     this.activePlayer = previousState.activePlayer;
     this.player_number = previousState.player_number;
     
@@ -54,6 +56,10 @@ class BaseGameStateController extends EventEmitter {
 
   get active_player_number() {
     return this.activePlayer;
+  }
+
+  get players_sequence() {
+    return this.players;
   }
 
   get sender() {

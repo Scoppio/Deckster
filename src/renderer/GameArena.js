@@ -6,6 +6,7 @@ import { NorthTable, SouthTable } from "./PlayerTable";
 import "./gameArena.css";
 
 import PropTypes from "prop-types";
+import { GameArenaTable } from "./GameArenaTable";
 
 export function GameArena({ gameState }) {
   const player1StatsRef = useRef(null);
@@ -136,30 +137,11 @@ export function GameArena({ gameState }) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [hotkeys]);
-  // For now, only support 2 players
+  
   return (
     <div className="main">
       <section className="main-left">
-        <div className="main-arena">
-          <NorthTable
-            barSide="left"
-            gameState={gameState}
-            playerRef={player2References}
-            playerNumber={1}
-            player={gameState.players[1]}
-            isActivePlayer={gameState.activePlayer === 1}
-            landsOnNorth={true}
-          />
-          <SouthTable
-            barSide="left"
-            gameState={gameState}
-            playerRef={player1References}
-            playerNumber={0}
-            player={gameState.players[0]}
-            isActivePlayer={gameState.activePlayer === 0}
-            landsOnNorth={true}
-          />
-        </div>
+        <GameArenaTable {...{gameState, player1References, player2References, player3References, player4References, player5References, player6References}} />
       </section>
       <section className="main-right">
         <GameStateBoard gameState={gameState} playerRef={player1References} />

@@ -33,7 +33,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
       className={zoneName}
       role="region"
       aria-describedby={player.name + "'s " + zoneName + ", " + player[zoneName].length + "cards"}
-      style={{ display: 'flex', alignItems: 'center' }}
+      style={{ display: 'flex', alignItems: 'center', marginTop: '3px' }}
     >
       <Dropdown autoClose="outside">
         <Dropdown.Toggle
@@ -89,7 +89,7 @@ const TheCommanderZone = ({
       role="region"
       aria-labelledby={playerNumber + "-" + zoneName + "-label"}
       aria-describedby={playerNumber + "-" + zoneName + "-desc"}
-      style={{ display: 'flex', alignItems: 'center' }}
+      style={{ display: 'flex', alignItems: 'center', marginTop: '3px' }}
     >
       <Dropdown autoClose="outside">
         <Dropdown.Toggle

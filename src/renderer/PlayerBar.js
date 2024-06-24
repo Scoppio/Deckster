@@ -8,8 +8,8 @@ import { PlayerHandZone } from "./PlayerHandZone";
 import "./playerBar.css";
 
 const PlayerContainer = style.div`
-  min-width: 200px;
-  background: grey;
+  min-width: 180px;
+  background: #dddf;
 `;
 
 const PlayerAvatarImg = style.img`
@@ -121,6 +121,9 @@ export const PlayerBar = ({
           <Exile {...{ player, playerRef, playerNumber, gameState }} />
           <FaceDown {...{ player, playerRef, playerNumber, gameState }} />
           <CommanderZone {...{ player, playerRef, playerNumber, gameState }} />
+          <p id={playerNumber + "-commander-casting-cost"}>
+            Cmd Tax: {player.commander_extra_casting_cost}
+          </p>
         </div>
       </div>
     </PlayerContainer>

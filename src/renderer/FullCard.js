@@ -188,6 +188,7 @@ export const ImgCard = ({
             style={{
               height: `${cardHeight}%`,
               display: "block",
+              'object-fit': 'contain',
               borderRadius: "8px",
               transform: card.tapped ? "rotate(90deg)" : "none",
               width: "100%",
@@ -292,7 +293,8 @@ export const ImgCardHand = ({
             }
             alt={card.name}
             style={{
-              height: `${cardHeight}%`,
+              maxHeight: `${cardHeight}%`,
+              'object-fit': 'contain',
               maxWidth: "100%",
               borderRadius: "8px",
             }}
@@ -355,6 +357,7 @@ export const StaticImgCard = ({
         alt={card.card_name_with_mana_cost}
         style={{
           height: `${cardHeight}%`,
+          'object-fit': 'contain',
           borderRadius: "8px",
           transform: card.is_tapped ? "rotate(90deg)" : "none",
         }}

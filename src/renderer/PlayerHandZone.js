@@ -24,6 +24,7 @@ const TheHandZone = ({
       className={"hand"}
       role="region"
       aria-describedby={`${player.hand.length} cards in hand.`}
+      style={{ display: 'flex', alignItems: 'center', marginBottom: '3px' }}
     >
       <Dropdown autoClose="outside">
         <Dropdown.Toggle
@@ -56,9 +57,7 @@ const TheHandZone = ({
           <Dropdown.Item onClick={handleMulligan}>Mulligan hand</Dropdown.Item>
         </DropdownMenuPortal>
       </Dropdown>
-      <p id={playerNumber + "-commander-casting-cost"}>
-        Extra casting cost: {player.commander_extra_casting_cost}
-      </p>
+      <span>({player[zoneName].length})</span>
     </div>
   );
 };
