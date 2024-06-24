@@ -15,7 +15,7 @@ import "mana-font/css/mana.css";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
-  const [gameState, setGameState] = useState("login");
+  const [gameState, setGameState] = useState("bypassLogin"); // bypassLogin | login | selectDeck | loadGame | game // login is the "first screen"
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
@@ -45,14 +45,33 @@ function App() {
         gameStateController.off("stateChanged", handleStateChange);
       };
     } else {
-      if (gameState === "loadGame" && webSocket && authorization && deck) {
+
+      if (gameState === "bypassLogin") {
         
-        const deckA = deck || loadDeck(46); 
-        // const deckA = await fetchDeck(46)
-        // const deckB = await fetchDeck(47)
+        const deckA = loadDeck(46); 
+        const playerA = new Player({id: 2, username: "Luana"}, deckA, 40, TabIndices, true);
+        const gameState = new GameStateController(
+          undefined,
+          setGameStateController
+        );
+
+        gameState.authorization = {gameName: 'mesa', token: 'token'};
+        gameState.registerWebSocketClient(new WebSocketClient(gameState.authorization));
+        gameState.addPlayer(playerA);
+        gameState.addPlayer(Player.emptyPlayer("Ana"));
+        gameState.addPlayer(Player.emptyPlayer("Barbara"));
+        gameState.addPlayer(Player.emptyPlayer("Carla"));
+        gameState.addPlayer(Player.emptyPlayer("Dani"));
+        gameState.addPlayer(Player.emptyPlayer("Eva"));
+
+        setGameStateController(gameState);
+        setGameState("game");
+        
+      } else if (gameState === "loadGame" && webSocket && authorization && deck) {
+        
+        const deckA = deck;
         const user = authorization.user;
         const playerA = new Player(user, deckA, 40, TabIndices, true);
-        const playerB = EMPTY_PLAYER;
         const gameState = new GameStateController(
           undefined,
           setGameStateController
