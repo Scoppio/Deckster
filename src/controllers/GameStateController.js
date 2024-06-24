@@ -23,6 +23,7 @@ class BaseGameStateController extends EventEmitter {
       this.focus_card = null;
       this.sounds = new Sounds();
       this.open_zone = { zone: null, cards: [] };
+      this.authorization = null;
     }
   }
 
@@ -30,7 +31,10 @@ class BaseGameStateController extends EventEmitter {
     this.players = previousState.players;
     this.activePlayer = previousState.activePlayer;
     this.player_number = previousState.player_number;
+    
     this.webSocketClient = previousState.webSocketClient;
+    this.authorization = previousState.authorization;
+
     this.ariaHelper = previousState.ariaHelper;
     this.online = previousState.online;
     this.game_log = previousState.game_log;

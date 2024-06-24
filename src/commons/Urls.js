@@ -1,9 +1,13 @@
+const ADDR = "localhost";
+const PORT = ":8000";
+
 export class Urls {
+
   static get api_url() {
-    return "http://localhost:8080";
+    return "http://" + ADDR + PORT;
   }
 
   static get ws_url() {
-    return "ws://localhost:8080";
+    return "ws://" + ADDR + PORT;
   }
 }

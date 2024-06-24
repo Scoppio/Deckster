@@ -1,24 +1,34 @@
 import { GameArena } from "./renderer/GameArena";
 import { ApiKeyForm } from "./renderer/ApiKeyForm";
+import { SelectDeck } from "./renderer/SelectDeck";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
+import { Player, TabIndices } from "./commons/Player";
+import { RemoveScrollBar } from "react-remove-scroll-bar";
+
 import GameStateController from "./controllers/GameStateController";
 import { WebSocketClient } from "./controllers/WebSocketClient";
 
 import "./App.css";
 import "mana-font/css/mana.css";
 
-import { Player, TabIndices } from "./commons/Player";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
-
+  const [gameState, setGameState] = useState("login");
   const [authorization, setAuthorization] = useState(null);
+  const [deck, setDeck] = useState(null);
+  const [webSocket, setWebSocket] = useState(null);
 
   const handleAuthorizationChange = (auth) => {
     setAuthorization(auth);
-    console.log('Authorization object updated:', auth);
+    setWebSocket(new WebSocketClient(auth));
+    setGameState("selectDeck");
+  };
+
+  const handleDeckSelectionChange = (deck) => {
+    setDeck(deck);
+    setGameState("loadGame");
   };
 
   useEffect(() => {
@@ -35,41 +45,57 @@ function App() {
         gameStateController.off("stateChanged", handleStateChange);
       };
     } else {
-      if (authorization) {
+      if (gameState === "loadGame" && webSocket && authorization && deck) {
         
-        const deckA = loadDeck(46); // await fetchDeck(46)
-        // const deckB = loadDeck(47) // await fetchDeck(47)
+        const deckA = deck || loadDeck(46); 
+        // const deckA = await fetchDeck(46)
+        // const deckB = await fetchDeck(47)
         const playerA = new Player(2, "Lulu", deckA, 40, TabIndices, true);
-        const playerB = Player.emptyPlayer();
-
+        
         const gameState = new GameStateController(
           undefined,
           setGameStateController
         );
 
-        gameState.registerWebSocketClient(new WebSocketClient(authorization));
+        gameState.authorization = authorization;
+        gameState.registerWebSocketClient(webSocket);
         gameState.addPlayer(playerA);
-        gameState.addPlayer(playerB);
+
         setGameStateController(gameState);
-        
+        setGameState("game");
       }
     }
-  }, [gameStateController, authorization]);
+  }, [gameStateController, authorization, deck, gameState, webSocket]);
 
-  if (!gameStateController || !authorization) {
+  if (gameState === "login") {
     return (
       <div role="application" className="app">
       <ApiKeyForm onAuthorizationChange={handleAuthorizationChange} />
     </div>
     );
   }
-
-  return (
-    <div role="application" className="app">
-      <GameArena gameState={gameStateController} />
-      <RemoveScrollBar />
-    </div>
-  );
+  else if (gameState === "selectDeck") {
+    return (
+      <div role="application" className="app">
+        <SelectDeck authorization={authorization} handleDeckSelectionChange={handleDeckSelectionChange} />
+      </div>
+    );
+  }
+  else if (gameState === "game") {
+    return (
+      <div role="application" className="app">
+        <GameArena gameState={gameStateController} />
+        <RemoveScrollBar />
+      </div>
+    );
+  }
+  else {
+    return (
+      <div role="application" className="app">
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
 }
 
 export default App;

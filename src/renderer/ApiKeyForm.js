@@ -1,14 +1,31 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from "prop-types";
+import { Urls } from "../commons/Urls";
 import { Authorization } from "../controllers/Authorization";
 import './apiKeyForm.css';
 
 export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [game, setGame] = useState('');
-  const [apiKey, setApiKey] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const response = await fetch(`${Urls.api_url}/api/token/`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+     });
+    if (!response.ok) {
+      console.error("Error:", response);
+      return;
+    }
+    const data = await response.json();
+
+    const apiKey = data.token;
     const authorization = new Authorization(game, apiKey);
     onAuthorizationChange(authorization);
   };
@@ -21,7 +38,8 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
           <div className="form-group">
             <input
               type="text"
-              placeholder="Game"
+              placeholder="Game Name"
+              aria-label="Game Name"
               value={game}
               onChange={(e) => setGame(e.target.value)}
               className="form-control"
@@ -29,10 +47,20 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
           </div>
           <div className="form-group">
             <input
+              type="text"
+              placeholder="Username"
+              aria-label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="form-control"
+            />
+          </div><div className="form-group">
+            <input
               type="password"
-              placeholder="User Token"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="Password"
+              aria-label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="form-control"
             />
           </div>
@@ -45,5 +73,5 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
 
 
 ApiKeyForm.propTypes = {
-  gameState: PropTypes.object.isRequired, 
+  onAuthorizationChange: PropTypes.func.isRequired,
 };

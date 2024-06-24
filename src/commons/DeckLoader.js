@@ -205,10 +205,13 @@ export const convertTextToDeck = (text) => {
   return { deck, commanders };
 };
 
-export const fetchDeck = async (deck_id) => {
+export const fetchDeck = async (deck_id, authorization) => {
   try {
-    const response = await fetch(`${Urls.api_url}/vtt/deck/${deck_id}`, {
-      mode: "cors",
+    const response = await fetch(`${Urls.api_url}/deck/${deck_id}/json?format=json`, {
+      headers: {
+        'Authorization': `token ${authorization.token}`,
+        'Content-Type': 'application/json'
+      },
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
