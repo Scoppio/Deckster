@@ -15,5 +15,5 @@
 .main-arena.three-rows {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 33.3vh); /* Fixed height for three rows */
+  grid-template-rows: repeat(3, 33.3vh);
 }

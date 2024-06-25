@@ -62,6 +62,12 @@ export function GameArenaTable({ gameState, player1References, player2References
   } else {
     return (
       <div className={`main-arena  ${determineLayoutClass(gameState.players_sequence.length - 1)}`}>
+        
+        {/* Conditionally render an empty table if the number of tables is odd */}
+        {((gameState.players_sequence.length) % 2 !== 0) && (
+          <div/>
+        )}
+
         {gameState.players_sequence.slice(1).map((player, index) => (
           <NorthTable
             barSide={barSide(index+1)}
@@ -74,7 +80,7 @@ export function GameArenaTable({ gameState, player1References, player2References
             key={player.id}
           />
         ))}
-        
+              
         <SouthTable
           barSide="left"
           gameState={gameState}

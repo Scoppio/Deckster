@@ -1,14 +1,13 @@
 import { useEffect, useRef, useMemo } from "react";
 import { HotKeys } from "../controllers/Hotkeys";
 import { GameStateBoard } from "./GameStateBoard";
-import { NorthTable, SouthTable } from "./PlayerTable";
 
 import "./gameArena.css";
 
 import PropTypes from "prop-types";
 import { GameArenaTable } from "./GameArenaTable";
 
-export function GameArena({ gameState }) {
+export function GameArena({ gameState, handleChangeGameState }) {
   const player1StatsRef = useRef(null);
   const player1HandRef = useRef(null);
   const player1GraveyardRef = useRef(null);
@@ -90,6 +89,7 @@ export function GameArena({ gameState }) {
   );
 
   hotkeys.registerKeyCommand("F1", () => gameState.listCommands(hotkeys), "List all commands.");
+  hotkeys.registerKeyCommand("Escape", () => handleChangeGameState("settings"), "Opens Settings");
   hotkeys.registerCtrlKeyCommand("1", () => hotkeys.playerRefs[1].playerStats.current.focus(), "Player 1 (Your) stats.");
   hotkeys.registerCtrlKeyCommand("2", () => hotkeys.playerRefs[2].playerStats.current.focus(), "Player 2 stats.");
   hotkeys.registerCtrlKeyCommand("3", () => hotkeys.playerRefs[3].playerStats.current.focus(), "Player 3 stats.");
@@ -150,171 +150,7 @@ export function GameArena({ gameState }) {
   );
 }
 
-// return (
-//   <Row>
-//     <Col>
-//       {gameState.players.length === 1 || gameState.players.length === 2 ? (
-//         <>
-//           <Row>
-//             <NorthTable
-//               barSide="left"
-//               gameState={gameState}
-//               playerRef={player2References}
-//               heightVh={100 / 2}
-//               playerNumber={1}
-//               player={gameState.players[1]}
-//               isActivePlayer={gameState.activePlayer === 1}
-//               landsOnNorth={true}
-//             />
-//           </Row>
-//           <Row>
-//             <SouthTable
-//               gameState={gameState}
-//               playerRef={player1References}
-//               playerNumber={0}
-//               heightVh={100 / 2}
-//               player={gameState.players[0]}
-//               isActivePlayer={gameState.activePlayer === 0}
-//             />
-//           </Row>
-//         </>
-//       ) : gameState.players.length === 3 || gameState.players.length === 4 ? (
-//         <>
-//           <Row>
-//             <NorthTable
-//               barSide="left"
-//               gameState={gameState}
-//               playerRef={player2References}
-//               heightVh={100 / 2}
-//               playerNumber={1}
-//               player={gameState.players[1]}
-//               isActivePlayer={gameState.activePlayer === 1}
-//               landsOnNorth={true}
-//             />
-//           </Row>
-//           <Row>
-//             <SouthTable
-//               gameState={gameState}
-//               playerRef={player1References}
-//               playerNumber={0}
-//               heightVh={100 / 2}
-//               player={gameState.players[0]}
-//               isActivePlayer={gameState.activePlayer === 0}
-//             />
-//           </Row>
-//         </>
-//       ) : (
-//         <>
-//           <Row>
-//             <NorthTable
-//               barSide="left"
-//               gameState={gameState}
-//               playerRef={player2References}
-//               heightVh={100 / 3}
-//               playerNumber={1}
-//               player={gameState.players[1]}
-//               isActivePlayer={gameState.activePlayer === 1}
-//               landsOnNorth={true}
-//             />
-//           </Row>
-//           <Row>
-//             <NorthTable
-//               barSide="left"
-//               gameState={gameState}
-//               playerRef={player2References}
-//               heightVh={100 / 3}
-//               playerNumber={1}
-//               player={gameState.players[1]}
-//               isActivePlayer={gameState.activePlayer === 1}
-//               landsOnNorth={true}
-//             />
-//           </Row>
-//           <Row>
-//             <SouthTable
-//               gameState={gameState}
-//               playerRef={player1References}
-//               playerNumber={0}
-//               heightVh={100 / 3}
-//               player={gameState.players[0]}
-//               isActivePlayer={gameState.activePlayer === 0}
-//             />
-//           </Row>
-//         </>
-//       )}
-//     </Col>
-//     {gameState.players.length === 3 || gameState.players.length === 4 ? (
-//       <Col>
-//         <Row>
-//           <NorthTable
-//             barSide="right"
-//             gameState={gameState}
-//             playerRef={player2References}
-//             heightVh={100 / 2}
-//             playerNumber={1}
-//             player={gameState.players[1]}
-//             isActivePlayer={gameState.activePlayer === 1}
-//             landsOnNorth={true}
-//           />
-//         </Row>
-//         <Row>
-//           <NorthTable
-//             barSide="right"
-//             gameState={gameState}
-//             playerRef={player2References}
-//             heightVh={100 / 2}
-//             playerNumber={1}
-//             player={gameState.players[1]}
-//             isActivePlayer={gameState.activePlayer === 1}
-//             landsOnNorth={false}
-//           />
-//         </Row>
-//       </Col>
-//     ) : gameState.players.length === 5 || gameState.players.length === 6 ? (
-//       <Col>
-//         <Row>
-//           <NorthTable
-//             barSide="right"
-//             gameState={gameState}
-//             playerRef={player2References}
-//             heightVh={100 / 3}
-//             playerNumber={1}
-//             player={gameState.players[1]}
-//             isActivePlayer={gameState.activePlayer === 1}
-//             landsOnNorth={true}
-//           />
-//         </Row>
-//         <Row>
-//           <NorthTable
-//             barSide="right"
-//             gameState={gameState}
-//             playerRef={player2References}
-//             heightVh={100 / 3}
-//             playerNumber={1}
-//             player={gameState.players[1]}
-//             isActivePlayer={gameState.activePlayer === 1}
-//             landsOnNorth={true}
-//           />
-//         </Row>
-//         <Row>
-//           <NorthTable
-//             barSide="right"
-//             gameState={gameState}
-//             playerRef={player2References}
-//             heightVh={100 / 3}
-//             playerNumber={1}
-//             player={gameState.players[1]}
-//             isActivePlayer={gameState.activePlayer === 1}
-//             landsOnNorth={false}
-//           />
-//         </Row>
-//       </Col>
-//     ) : null}
-//     <Col md="auto" style={{ backgroundColor: "green" }}>
-//       <GameStateBoard gameState={gameState} playerRef={player1References} />
-//     </Col>
-//   </Row>
-// );
-
 GameArena.propTypes = {
   gameState: PropTypes.object.isRequired,
+  handleChangeGameState: PropTypes.func.isRequired,
 };

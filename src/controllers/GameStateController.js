@@ -162,6 +162,24 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("i_do_not_pay");
   }
 
+  exitGame() {
+    this.sendEvent("player_quit", {
+      player_id: this.player.id,
+      player_username: this.player.name,
+    });
+  }
+
+  changePlayerInitiative(player, index_change) {
+    this.sendEvent("change_player_initiative", { player_id: player.id, index_change });
+  }
+
+  kickPlayer(player) {
+    this.sendEvent("kick_player", { 
+      player_id: player.id, 
+      player_username: player.name 
+    });
+  }
+
   drawCard(number_of_cards = 1, zone = "library", destination = "hand") {
     this.sendEvent("draw_card", {
       zone: zone,
@@ -382,10 +400,15 @@ class ExecuteGameActions extends RequestGameActions {
   change_game_phase(event) {
     // TODO: IMPLEMENT change game phase
   }
+  update_player_sequence(event) {
+    this.player_sequence = event.payload;
+    this.changed();
+  }
 
   update_opp_table(event) {
     if (this.player_number !== event.sender.idx) {
       this.players[event.sender.idx].updateFromPayload(event.payload);
+      this.changed();
     }
   }
 

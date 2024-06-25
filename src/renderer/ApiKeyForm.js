@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { Urls } from "../commons/Urls";
 import { Authorization } from "../controllers/Authorization";
@@ -8,9 +8,39 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [game, setGame] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [authorization, setAuthorization] = useState(null);
+  const [enableEnter, setEnableEnter] = useState(false);
+
+
+  useEffect(() => {
+    const rememberMe = window.localStorage.getItem("rememberMe");
+    setRememberMe(rememberMe === "true");
+    
+    const gameName = window.localStorage.getItem("gameName");
+    const token = window.localStorage.getItem("token");
+    const userString = window.localStorage.getItem("user");
+
+    if (gameName && token && userString) {
+      const user = JSON.parse(userString);
+      setAuthorization(new Authorization(gameName, token, user));
+      setEnableEnter(true);
+    }
+  }, [onAuthorizationChange]);
+
+  useEffect(() => {
+    if (game && password && username) {
+      setEnableEnter(true);
+    }
+  }, [game, password, username]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (authorization) {
+      onAuthorizationChange(authorization);
+      return;
+    }
 
     const response = await fetch(`${Urls.api_url}/api/token/`, {
       method: 'POST',
@@ -26,9 +56,20 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     const data = await response.json();
     const apiKey = data.token;
     const user = {id: data.id, username: data.username, avatar: data.avatar};
-    const authorization = new Authorization(game, apiKey, user);
+    const auth = new Authorization(game, apiKey, user);
 
-    onAuthorizationChange(authorization);
+    window.localStorage.setItem("rememberMe", rememberMe);
+    window.localStorage.setItem("gameName", game);
+
+    if (rememberMe) {
+      window.localStorage.setItem("token", apiKey);
+      window.localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("user");
+    }
+
+    onAuthorizationChange(auth);
   };
   
   return (
@@ -64,8 +105,16 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
             />
+          </div><div className="form-group">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <label htmlFor="rememberMe">Remember Me</label>
           </div>
-          <button type="submit" className="btn-submit">Enter</button>
+          <button type="submit" className="btn-submit" disabled={!enableEnter}>Enter</button>
         </form>
       </div>
     </div>

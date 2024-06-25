@@ -5,11 +5,11 @@
 
 .main-left {
   flex: 1;
-  background-color: red;
+  background-color: cornsilk;
 }
 
 .main-right {
-  background-color: pink;
+  background-color: gainsboro;
 }
 
 .main-arena {

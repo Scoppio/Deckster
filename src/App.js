@@ -1,9 +1,10 @@
 import { GameArena } from "./renderer/GameArena";
+import { SettingsScreen } from "./renderer/SettingsScreen";
 import { ApiKeyForm } from "./renderer/ApiKeyForm";
 import { SelectDeck } from "./renderer/SelectDeck";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
-import { EMPTY_PLAYER, Player, TabIndices } from "./commons/Player";
+import { Player, TabIndices } from "./commons/Player";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import GameStateController from "./controllers/GameStateController";
@@ -15,7 +16,7 @@ import "mana-font/css/mana.css";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
-  const [gameState, setGameState] = useState("bypassLogin"); // bypassLogin | login | selectDeck | loadGame | game // login is the "first screen"
+  const [gameState, setGameState] = useState("login"); // bypassLogin | login | selectDeck | loadGame | game // login is the "first screen"
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
@@ -30,6 +31,11 @@ function App() {
     setDeck(deck);
     setGameState("loadGame");
   };
+
+  const handleChangeGameState = (newGameState) => {
+    setGameState(newGameState);
+  };
+
 
   useEffect(() => {
     if (gameStateController) {
@@ -84,7 +90,7 @@ function App() {
         gameState.addPlayer(Player.emptyPlayer("Barbara"));
         gameState.addPlayer(Player.emptyPlayer("Carla"));
         gameState.addPlayer(Player.emptyPlayer("Dani"));
-        gameState.addPlayer(Player.emptyPlayer("Eva"));
+        // gameState.addPlayer(Player.emptyPlayer("Eva"));
 
         setGameStateController(gameState);
         setGameState("game");
@@ -96,6 +102,7 @@ function App() {
     return (
       <div role="application" className="app">
       <ApiKeyForm onAuthorizationChange={handleAuthorizationChange} />
+      <RemoveScrollBar />
     </div>
     );
   }
@@ -107,6 +114,22 @@ function App() {
     );
   }
   else if (gameState === "game") {
+    return (
+      <div role="application" className="app">
+        <GameArena gameState={gameStateController} handleChangeGameState={handleChangeGameState}/>
+        <RemoveScrollBar />
+      </div>
+    );
+  }
+  else if (gameState === "settings") {
+    return (
+      <div role="application" className="app">
+        <SettingsScreen gameState={gameStateController} handleChangeGameState={handleChangeGameState}/>
+        <RemoveScrollBar />
+      </div>
+    );
+  }
+  else if (gameState === "tokens") {
     return (
       <div role="application" className="app">
         <GameArena gameState={gameStateController} />

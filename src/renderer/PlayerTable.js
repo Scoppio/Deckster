@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Battlefield, StaticBattlefield } from "./Battlefield";
 import { PlayerBar } from "./PlayerBar";
 import { ZoneModal } from "./ZoneModal";
@@ -300,8 +300,7 @@ export const NorthTable = ({
   playerNumber,
   player,
   isActivePlayer,
-  barSide,
-  landsOnNorth,
+  barSide
 }) => {
   return (
     <div
@@ -323,7 +322,6 @@ export const NorthTable = ({
           playerRef={playerRef}
           playerNumber={playerNumber}
           player={player}
-          landsOnNorth={landsOnNorth}
         />
       </div>
     </div>
@@ -337,5 +335,4 @@ NorthTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   barSide: PropTypes.string.isRequired,
-  landsOnNorth: PropTypes.bool.isRequired,
 };

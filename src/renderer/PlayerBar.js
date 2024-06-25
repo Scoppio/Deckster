@@ -8,7 +8,7 @@ import { PlayerHandZone } from "./PlayerHandZone";
 import "./playerBar.css";
 
 const PlayerContainer = style.div`
-  min-width: 180px;
+  min-width: 18c0px;
   background: #dddf;
 `;
 

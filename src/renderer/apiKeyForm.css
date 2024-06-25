@@ -36,6 +36,13 @@
   font-size: 16px;
 }
 
+.btn-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 .btn-submit:hover {
   opacity: 0.9;
 }
+

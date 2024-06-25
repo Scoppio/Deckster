@@ -28,7 +28,6 @@ export const StaticBattlefield = ({
   playerRef,
   playerNumber,
   player,
-  landsOnNorth,
 }) => {
   return (
     <StaticBattlefieldDiv
@@ -83,7 +82,6 @@ StaticBattlefield.propTypes = {
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
 };
-
 
 export const Battlefield = ({ gameState, playerRef, player }) => {
   return (
