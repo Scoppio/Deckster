@@ -1,8 +1,15 @@
 import AriaHelper from "./AriaHelper";
 import { EventEmitter } from "events";
 import Sounds from "./Sounds";
-import { EMPTY_PLAYER } from "../commons/Player";
 import { Card } from "../commons/Card";
+
+
+const GamePhase = {
+  MAIN: 0,
+  COMBAT: 1,
+  MAIN_2: 2,
+  END: 3
+};
 
 
 class BaseGameStateController extends EventEmitter {
@@ -12,11 +19,13 @@ class BaseGameStateController extends EventEmitter {
     if (state) {
       this.fromPreviousState(state);
     } else {
-      this.players = [];
+      this.players = {};
       this.players_initiative = {};
-      this.activePlayer = null;
-      this.player_number = 0;
+      this.players_sequence = [];
+      this.active_player_id = null;
+      this.player_number = null;
       this.webSocketClient = null;
+      this.game_phase = GamePhase["MAIN"];
       this.ariaHelper = new AriaHelper(this);
       this.online = false;
       this.game_log = [];
@@ -30,12 +39,14 @@ class BaseGameStateController extends EventEmitter {
 
   fromPreviousState(previousState) {
     this.players = previousState.players;
-    this.players_initiative = {};
-    this.activePlayer = previousState.activePlayer;
+    this.players_initiative = previousState.players_initiative;
+    this.players_sequence = previousState.players_sequence;
+    this.active_player_id = previousState.active_player_id;
     this.player_number = previousState.player_number;
     
     this.webSocketClient = previousState.webSocketClient;
     this.authorization = previousState.authorization;
+    this.game_phase = previousState.game_phase;
 
     this.ariaHelper = previousState.ariaHelper;
     this.online = previousState.online;
@@ -46,20 +57,24 @@ class BaseGameStateController extends EventEmitter {
     this.open_zone = previousState.open_zone;
   }
 
+  get game_phase_name () {
+    return Object.keys(GamePhase).find(key => GamePhase[key] === this.game_phase);
+  }
+
   get player() {
     return this.players[this.player_number];
   }
 
   get active_player() {
-    return this.players[this.activePlayer];
+    return this.players[this.active_player_id];
+  }
+
+  get isActivePlayer() {
+    return this.player_number === this.active_player_id;
   }
 
   get active_player_number() {
-    return this.activePlayer;
-  }
-
-  get players_sequence() {
-    return this.players;
+    return this.active_player_id;
   }
 
   get sender() {
@@ -95,12 +110,8 @@ class BaseGameStateController extends EventEmitter {
   }
 
   getPlayer(playerNumber) {
-    if (playerNumber < 0 || playerNumber >= this.players.length) {
-      return EMPTY_PLAYER;
-    }
     return this.players[playerNumber];
   }
-
 
   getCardFrom(source) {
     const sourceZone = source.droppableId;
@@ -138,13 +149,13 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   addPlayer(player) {
-    this.players.push(player);
-    const playerNumber = this.players.length - 1;
+    this.players[player.id] = player;
+    const playerNumber = player.id;
 
     if (player.isLocal && !player._is_empty) {
       this.player_number = playerNumber;
     }
-
+    this.players_sequence.push(player);
     this.sendEvent("login_player", player);
   }
 
@@ -274,6 +285,10 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("pass_turn");
   }
 
+  changeGamePhase(phase=null) {
+    this.sendEvent("change_game_phase", { phase });
+  }
+
   viewLibrary() {
     this.sendEvent("view_library");
   }
@@ -395,13 +410,13 @@ class ExecuteGameActions extends RequestGameActions {
 
   pass_turn(event) {
     // FIXME: IMPLEMENT pass turn
+    const new_active_player = event.payload.active_player;
+    this.active_player_id = new_active_player.id;
+    // {"active_player": {"id": active_player_id, "name": active_player["name"]}}
   }
 
   change_game_phase(event) {
-    // TODO: IMPLEMENT change game phase
-  }
-  update_player_sequence(event) {
-    this.player_sequence = event.payload;
+    this.game_phase = event.payload.phase;
     this.changed();
   }
 
@@ -436,6 +451,16 @@ class ExecuteGameActions extends RequestGameActions {
 
   hide_hidden_card_zone(event) {
     this.player.updateFromPayload(event.payload);
+  }
+
+  update_player_sequence(event) {
+    const players_sequence_ids = event.payload.players_sequence_ids;
+    this.active_player_id = event.payload.active_player_id;
+    
+    this.players_sequence = players_sequence_ids
+      .map(player_id => this.players[player_id])
+      .filter(player => player !== null && player !== undefined);
+    this.changed();
   }
 
   play_sound(event) {

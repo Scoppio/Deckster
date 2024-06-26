@@ -9,7 +9,7 @@ import "./playerBar.css";
 
 const PlayerContainer = style.div`
   min-width: 18c0px;
-  background: #dddf;
+  background: #ddda;
 `;
 
 const PlayerAvatarImg = style.img`

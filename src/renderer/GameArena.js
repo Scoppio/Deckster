@@ -91,11 +91,11 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerKeyCommand("F1", () => gameState.listCommands(hotkeys), "List all commands.");
   hotkeys.registerKeyCommand("Escape", () => handleChangeGameState("settings"), "Opens Settings");
   hotkeys.registerCtrlKeyCommand("1", () => hotkeys.playerRefs[1].playerStats.current.focus(), "Player 1 (Your) stats.");
-  hotkeys.registerCtrlKeyCommand("2", () => hotkeys.playerRefs[2].playerStats.current.focus(), "Player 2 stats.");
-  hotkeys.registerCtrlKeyCommand("3", () => hotkeys.playerRefs[3].playerStats.current.focus(), "Player 3 stats.");
-  hotkeys.registerCtrlKeyCommand("4", () => hotkeys.playerRefs[4].playerStats.current.focus(), "Player 4 stats.");
-  hotkeys.registerCtrlKeyCommand("5", () => hotkeys.playerRefs[5].playerStats.current.focus(), "Player 5 stats.");
-  hotkeys.registerCtrlKeyCommand("6", () => hotkeys.playerRefs[6].playerStats.current.focus(), "Player 6 stats.");
+  hotkeys.registerCtrlKeyCommand("2", () => hotkeys.playerRefs[2]?.playerStats?.current?.focus(), "Player 2 stats.");
+  hotkeys.registerCtrlKeyCommand("3", () => hotkeys.playerRefs[3]?.playerStats?.current?.focus(), "Player 3 stats.");
+  hotkeys.registerCtrlKeyCommand("4", () => hotkeys.playerRefs[4]?.playerStats?.current?.focus(), "Player 4 stats.");
+  hotkeys.registerCtrlKeyCommand("5", () => hotkeys.playerRefs[5]?.playerStats?.current?.focus(), "Player 5 stats.");
+  hotkeys.registerCtrlKeyCommand("6", () => hotkeys.playerRefs[6]?.playerStats?.current?.focus(), "Player 6 stats.");
 
   hotkeys.registerCtrlKeyCommand("e", () => hotkeys.playerRefs[1].hand.current.focus(), "Your hand.");
   hotkeys.registerCtrlKeyCommand("s", () => hotkeys.playerRefs[1].battlefield.current.focus(), "Your battlefield.");
@@ -106,7 +106,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone.current.focus(), "Your commander zone.");
   hotkeys.registerCtrlKeyCommand("z", () => hotkeys.playerRefs[1].sideboard.current.focus(), "Your sideboard.");
   hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log.current.focus(), "Game log.");
-  hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current.focus(), "Card list zone.");
+  hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current?.focus(), "Card list zone.");
 
   hotkeys.registerCtrlShiftKeyCommand("Z", () => gameState.moveSelectedToHand(), "Move selected cards to your hand.");
   hotkeys.registerCtrlShiftKeyCommand("X", () => gameState.moveSelectedToGraveyard(), "Move selected cards to your graveyard.");
@@ -116,7 +116,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlShiftKeyCommand("J", () => gameState.tapUntapSelected(), "Tap/Untap selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("L", () => gameState.declareAttacking(), "Declare attacking with selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("U", () => gameState.declareBlocking(), "Declare blocking with selected cards.");
-  hotkeys.registerCtrlShiftKeyCommand("I", () => gameState.scry(), "Scry the top card of your library.");
+  hotkeys.registerCtrlShiftKeyCommand("I", () => gameState.scry(), "Scry the top card of your library."); // NOT IMPLEMENTED
   hotkeys.registerCtrlShiftKeyCommand("P", () => gameState.addCounterOnSelected(), "Add a counter on selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("M", () => gameState.removeCounterOnSelected(), "Remove a counter on selected cards.");
 
@@ -127,6 +127,9 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerKeyCommand("-", () => gameState.decreaseLife(), "Decrease your life total.");
   hotkeys.registerKeyCommand("=", () => gameState.increaseLife(), "Increase your life total.");
   hotkeys.registerKeyCommand("*", () => gameState.increaseLife(), "Increase your life total.");
+  hotkeys.registerKeyCommand("e", () => gameState.passTurn(), "Pass the turn.");
+  hotkeys.registerKeyCommand("n", () => gameState.changeGamePhase(), "Pass the phase.");
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       hotkeys.handleKeyDown(event);

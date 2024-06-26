@@ -1,15 +1,21 @@
 .main {
   display: flex;
   height: 100%;
+  background: url(
+'https://i0.wp.com/mtgazone.com/wp-content/uploads/2020/01/thb-071-thassa-deep-dwelling-art-by-zack-stella.jpg?fit=1439%2C1056&ssl=1');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
 }
 
 .main-left {
   flex: 1;
-  background-color: cornsilk;
+  /* background-color: cornsilk; */
 }
 
 .main-right {
-  background-color: gainsboro;
+  /* background-color: gainsboro; */
 }
 
 .main-arena {

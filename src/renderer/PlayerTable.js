@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Battlefield, StaticBattlefield } from "./Battlefield";
 import { PlayerBar } from "./PlayerBar";
-import { ZoneModal } from "./ZoneModal";
 import { Hand, HiddenHand } from "./Hand";
 import { DragDropContext } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
 import "./playerTable.css";
-import classNames from "classnames";
 
 export const SouthTable = ({
   gameState,
@@ -227,15 +226,14 @@ export const SouthTable = ({
 
   const [showHiddenCardZone, setShowHiddenCardZone] = useState(false);
 
-  // ...
+  useEffect(() => {
+    if (gameState._showHiddenCardZone) {
+      setShowHiddenCardZone(true);
+    } else if (gameState._hideHiddenCardZone) {
+      setShowHiddenCardZone(false);
+    }
+  }, [gameState, setShowHiddenCardZone]);
 
-  // Assuming gameState is an object
-  gameState._showHiddenCardZone = () => setShowHiddenCardZone(true);
-  gameState._hideHiddenCardZone = () => setShowHiddenCardZone(false);
-
-  const closeModal = () => {
-    gameState.closeViewZone();
-  };
 
   return (
     <div className={classNames("player-table")}>
@@ -253,7 +251,12 @@ export const SouthTable = ({
         onDragUpdate={onDragUpdate}
         onDragStart={onDragStart}
       >
-        <div className="player-table-arena-south">
+        <div className="player-table-arena-south" style={{
+          flex: "1",
+          display: "grid",
+          gridTemplateRows: "minmax(0, 1fr) 100px",
+          boxShadow: isActivePlayer ? "inset 5px 5px 5px 5px orangered" : "none"
+        }}>
           <Battlefield
             gameState={gameState}
             playerRef={playerRef}
@@ -267,19 +270,6 @@ export const SouthTable = ({
             playerRef={playerRef}
             playerNumber={playerNumber}
           />
-          {
-            showHiddenCardZone && (
-              <>
-              <ZoneModal
-                sourceZone={gameState.open_zone.zone}
-                gameState={gameState}
-                closeModal={closeModal}
-                hideModal={()=> {}}
-                useCloseAndShuffle={false}
-              />
-              </>
-            )
-          }
         </div>
       </DragDropContext>
     </div>
@@ -315,7 +305,12 @@ export const NorthTable = ({
         isActivePlayer={isActivePlayer}
         gameState={gameState}
       />
-      <div className="player-table-arena-north">
+      <div className="player-table-arena-north" style={{
+        flex: "1",
+        display: "grid",
+        gridTemplateRows: "100px minmax(0, 1fr)",
+        boxShadow: isActivePlayer ? "inset 5px 5px 5px 5px orangered" : "none"
+      }}>
         <HiddenHand player={player} playerNumber={playerNumber} />
         <StaticBattlefield
           gameState={gameState}

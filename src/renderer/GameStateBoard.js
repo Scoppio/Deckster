@@ -1,14 +1,26 @@
 import PropTypes from "prop-types";
 import { LogFrame, AnnouncementFrame } from "./LogFrame";
-import { CardListZone } from "./CardListZone";
-import { TabIndices } from "../commons/Player";
 import emptyCard from "../resources/cards/empty_card.png";
 
 import "./gameStateBoard.css";
 
 export const GameStateBoard = ({ gameState, playerRef }) => {
+
+  const game_phase_name = {
+    0: "Main Phase",
+    1: "Combat Phase",
+    2: "Second Main Phase",
+    3: "End Phase",
+  };
+
   return (
     <div className="game-state-board">
+      <div className="inner" style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {gameState.players_sequence.map((player, index) => (
+            <div key={player.id} className="player-box">{`${index + 1} - ${player.name}`}</div>
+        ))}
+        <p>{game_phase_name[gameState.game_phase]}</p>
+      </div>
       <div style={{height: '67vh'}}>
         {gameState.focus_card ? (
           <>

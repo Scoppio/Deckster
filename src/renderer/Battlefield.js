@@ -13,14 +13,13 @@ const BattlefieldDiv = style.div`
   flex-direction: column;
   width: 100%;
   display: flex;
-  background-color: purple;
 `;
 
 const StaticBattlefieldDiv = style.div`
   flex-direction: column;
   width: 100%;
   display: flex;
-  background-color: #EEEF;
+  background-color: #EEEB;
 `;
 
 export const StaticBattlefield = ({
@@ -35,7 +34,7 @@ export const StaticBattlefield = ({
       tabIndex={player.tabIndices.battlefield}
       role="region"
       aria-label={player.name + " Battlefield"}
-      aria-describedby={gameState.ariaHelper.cardsOnTheTable(playerNumber)}
+      aria-describedby={gameState.ariaHelper.cardsOnTheTable(player.id)}
     >
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player["land_zone_battlefield"].map((card, index) => (
@@ -101,7 +100,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px", backgroundColor: "red" }}
+            style={{ height: "33.33%", padding: "2px", backgroundColor: "#BBBBBBAA" }}
             className="Droppable"
             aria-label="front lane"
           >
@@ -131,7 +130,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px", backgroundColor: "blue" }}
+            style={{ height: "33.33%", padding: "2px", backgroundColor: "#EEEEEEAA" }}
             className="Droppable"
             aria-label="back lane"
           >
@@ -161,7 +160,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
           <CardHolder
             {...provided.droppableProps}
             ref={provided.innerRef}
-            style={{ height: "33.33%", padding: "2px", backgroundColor: "green" }}
+            style={{ height: "33.33%", padding: "2px", backgroundColor: "#BBBBBBAA" }}
             className="Droppable"
             aria-label="land lane"
           >

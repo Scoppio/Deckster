@@ -28,7 +28,7 @@ export const HiddenHand = ({ player, playerNumber }) => {
       aria-labelledby={playerNumber + "-player-hand-label"}
       aria-describedby={playerNumber + "-hand-desc"}
     >
-      <div style={{ height: "100px", backgroundColor: "#DDDF" }}>
+      <div style={{ height: "100px", backgroundColor: "#DDDA" }}>
         {player.hand.map((card, idx) => (
           <CardBackImg key={card._uid} scale={100} />
         ))}
@@ -60,7 +60,7 @@ Hand.propTypes = {
 
 export const ShownHand = ({ cards, gameState, tabIndex }) => {
   return (
-    <div style={{ background: "gold", padding: "0px" }}>
+    <div style={{ background: "#EEEEEE88", padding: "0px" }}>
       <Droppable
         droppableId="hand"
         direction="horizontal"

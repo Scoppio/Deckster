@@ -12,20 +12,29 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [authorization, setAuthorization] = useState(null);
   const [enableEnter, setEnableEnter] = useState(false);
 
-
   useEffect(() => {
-    const rememberMe = window.localStorage.getItem("rememberMe");
-    setRememberMe(rememberMe === "true");
-    
-    const gameName = window.localStorage.getItem("gameName");
-    const token = window.localStorage.getItem("token");
-    const userString = window.localStorage.getItem("user");
+    const previousRememberMe = window.localStorage.getItem("rememberMe");
+    let gameName = null;
+    setRememberMe(previousRememberMe === "true");
 
-    if (gameName && token && userString) {
-      const user = JSON.parse(userString);
-      setAuthorization(new Authorization(gameName, token, user));
-      setEnableEnter(true);
+    if (previousRememberMe === false) {
+      window.localStorage.removeItem("gameName");
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("user");
+    } else {  
+      gameName = window.localStorage.getItem("gameName");
+      const token = window.localStorage.getItem("token");
+      const userString = window.localStorage.getItem("user");
+      setGame(gameName);
+
+      if (gameName && token && userString) {
+        const user = JSON.parse(userString);
+        setAuthorization(new Authorization(gameName, token, user));
+        setEnableEnter(true);
+      }
     }
+    
+    
   }, [onAuthorizationChange]);
 
   useEffect(() => {
@@ -37,7 +46,7 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (authorization) {
+    if (authorization && password === "" && username === "") {
       onAuthorizationChange(authorization);
       return;
     }
@@ -59,6 +68,8 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     const auth = new Authorization(game, apiKey, user);
 
     window.localStorage.setItem("rememberMe", rememberMe);
+
+    window.localStorage.removeItem("gameName");
     window.localStorage.setItem("gameName", game);
 
     if (rememberMe) {

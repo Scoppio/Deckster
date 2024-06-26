@@ -2,7 +2,20 @@
   height: 100%;
   width: 220px;
   max-width: 220px;
-
+  background-color: rgba(255, 255, 255, 0.5);
   display: grid;
   grid-template-rows: minmax(0, 1fr) minmax(0.25, 0.25fr);
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.player-box {
+  font-size: 10px;
+  border: 1px solid black;
+  padding: 2px;
+  margin: 2px;
+  white-space: nowrap; /* Prevents text from wrapping inside the box */
 }

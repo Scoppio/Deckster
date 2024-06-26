@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import style from "styled-components";
 import PropTypes from "prop-types";
@@ -11,10 +12,16 @@ const CardHolder = style.div`
 `;
 
 
-export function ZoneModal({gameState, sourceZone, closeModal, hideModal, useCloseAndShuffle}) {
-
+export function ZoneModal({gameState, sourceZone, closeModal, useCloseAndShuffle}) {
+  const [openZone, setOpenZone] = useState(gameState.open_zone);
   const player = gameState.player;
   const usingCloseAndShuffle = useCloseAndShuffle;
+
+  useEffect(() => {
+    setOpenZone(gameState.open_zone);
+  }, [gameState.open_zone]);
+  
+
   const closeAndShuffle = () => {
     gameState.shuffleLibrary();
     closeModal();
@@ -29,7 +36,6 @@ export function ZoneModal({gameState, sourceZone, closeModal, hideModal, useClos
               <button onClick={closeAndShuffle}>Close & Shuffle</button> :
               <button onClick={closeModal}>Close</button>
           }
-          <button onClick={hideModal}>Hide Modal</button>
           <label>Search</label>
           <input type="text" />
           <button>Search</button>

@@ -33,65 +33,59 @@ export function GameArenaTable({ gameState, player1References, player2References
     return "left";
   };
 
-  const landsNorth = ( index ) => {
-    if ((numberOfTables === 4 && index === 3) || (numberOfTables === 6 && index === 5)) {
-      return false;
-    }
-    return true;
-  };
-
   function determineLayoutClass(playerCount) {
     if (playerCount === 1) return "single-row";
     if (playerCount <= 3) return "two-rows";
     return "three-rows";
   }
-
-  if (numberOfTables === 1) {
-    return (
-      <div className="main-arena">
-      <SouthTable
-        barSide={barSide(0)}
-        gameState={gameState}
-        playerRef={player1References}
-        playerNumber={0}
-        player={gameState.players[0]}
-        isActivePlayer={gameState.activePlayer === 0}
-      />
-    </div>
-    );
-  } else {
-    return (
-      <div className={`main-arena  ${determineLayoutClass(gameState.players_sequence.length - 1)}`}>
-        
-        {/* Conditionally render an empty table if the number of tables is odd */}
-        {((gameState.players_sequence.length) % 2 !== 0) && (
-          <div/>
-        )}
-
-        {gameState.players_sequence.slice(1).map((player, index) => (
-          <NorthTable
-            barSide={barSide(index+1)}
-            gameState={gameState}
-            playerRef={playerReferences[index]}
-            playerNumber={index+1}
-            player={player}
-            isActivePlayer={false}
-            landsOnNorth={landsNorth(index+1)}
-            key={player.id}
-          />
-        ))}
-              
-        <SouthTable
-          barSide="left"
-          gameState={gameState}
-          playerRef={player1References}
-          playerNumber={0}
-          player={gameState.player}
-          isActivePlayer={true}
-        />
-      </div>
-    );
+  
+  function getPlayerReference(playerId, index, playersSequence) {
+    if (playerId === gameState.player.id) {
+      return player1References;
+    } else {
+      // Calculate the correct index for playerReferences
+      const adjustedIndex = playersSequence.slice(0, index).filter(p => p.id !== gameState.player.id).length;
+      return playerReferences[adjustedIndex];
+    }
   }
+
+  return (
+    <div className={`main-arena  ${determineLayoutClass(gameState.players_sequence.length - 1)}`}>
+      {gameState.players_sequence.map((player, index) => {
+        const playerRef = getPlayerReference(player.id, index, gameState.players_sequence);
+        
+        if (player.id === gameState.player.id) {
+          return (
+            <SouthTable
+              barSide={barSide(index + 1)}
+              gameState={gameState}
+              playerRef={playerRef}
+              playerNumber={player.id}
+              player={player}
+              isActivePlayer={gameState.isActivePlayer}
+              key={player.id}
+            />
+          );
+        } else {
+          return (
+            <NorthTable
+              barSide={barSide(index + 1)}
+              gameState={gameState}
+              playerRef={playerRef}
+              playerNumber={player.id}
+              player={player}
+              isActivePlayer={player.id === gameState.active_player_id}
+              key={player.id}
+            />
+          );
+        }
+    })}
+    {/* Conditionally render an empty table if the number of tables is odd */}
+    {((gameState.players_sequence.length) % 2 !== 0) && (
+      <div/>
+    )} 
+    </div>
+  );
 }
 
 
