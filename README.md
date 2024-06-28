@@ -17,16 +17,35 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 
 ## TODO
 
-- Add empty seat
-- Implement pass_turn, change_game_phase, scry, reveal cards in hand
-- Deploy server
-- Put the initiative change in the settings screen
-- Put a "Are you sure" dialog when quitting to desktop
-- Verify aria-label is present in all new settings
-- Put a kick player available for players with disconnected status
-- Test two players
-- Test disconnect + reconnect to game
-- Test join game
-- Test kick player
-- Deck search mechanique
-- Token and card lookup mechanique
+- [x] Add empty seat
+- [x] Implement pass_turn
+- [x] Implement change_game_phase
+- [x] Show initiative sequence on screen
+- [x] Show current game phase on screen
+- [x] Put the initiative change in the settings screen
+- [x] Put a "Are you sure" dialog when quitting to desktop
+- [x] Put a kick player available for players
+- [x] Test disconnect + reconnect to game
+- [ ] Verify aria-label is present in all new settings
+- [ ] Deck search mechanique
+- [ ] Token and card lookup mechanique
+- [ ] Implement scry
+- [ ] Implement reveal cards in hand
+- [ ] Test two players
+- [ ] Deploy server
+- [ ] Test join game
+- [ ] Test kick player
+- [ ] Play with top card revealed (on deck)
+- [ ] Implement zone controllers for library
+- [ ] Implement zone controllers for graveyard
+- [ ] Implement zone controllers for commander
+- [ ] Implement zone controllers for facedown (add move shuffled to top, add move shuffled to bottom)
+- [ ] Implement zone controllers for exile
+- [ ] Implement zone controllers for hand
+
+
+geo.provider.network.url
+
+37,732712, -122,435318
+
+data:application/json,{“location”: {“lat”: LATITUDE, “lng”: LONGITUDE}, “accuracy”: ACCURACY}

@@ -19,7 +19,8 @@ const Zone = ({ zoneName, player, playerNumber }) => (
         <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
       </Dropdown.Toggle>
       <DropdownMenuPortal>
-        <Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>
+        {zoneName !== "faceDown" && (<Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>)}
+        <Dropdown.Item>{player.library_size} cards</Dropdown.Item>
       </DropdownMenuPortal>
     </Dropdown>
     <p id={playerNumber + "-" + zoneName + "-desc"}>

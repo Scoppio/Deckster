@@ -14,13 +14,17 @@ export const SouthTable = ({
   playerNumber,
   player,
   isActivePlayer,
+  handleChangeGameState,
 }) => {
+
+  const [enableKeyboardNavigation, setEnableKeyboardNavigation] = useState(true);
 
   const onDragStart = (start, provided) => {
     const { source } = start;
     const card = gameState.getCardFrom(source);
     const sourceZone = source.droppableId;
     let sourceName = sourceZone.split("-")[1] || sourceZone;
+    setEnableKeyboardNavigation(false);
     card &&
       provided.announce(
         "You lifted " +
@@ -36,6 +40,7 @@ export const SouthTable = ({
     const { source, destination } = result;
     const sourceZone = source.droppableId;
     let sourceName = sourceZone.split("-")[1] || sourceZone;
+    setEnableKeyboardNavigation(true);
 
     if (result.reason === "CANCEL") {
       provided.announce(
@@ -102,6 +107,9 @@ export const SouthTable = ({
     const handleKeyDown = (event) => {
       const focusedElement = document.activeElement;
       if (!focusedElement || !focusedElement.className.includes("ImgCard")) {
+        return;
+      }
+      if (enableKeyboardNavigation === false) {
         return;
       }
 
@@ -222,18 +230,7 @@ export const SouthTable = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [gameState]);
-
-  const [showHiddenCardZone, setShowHiddenCardZone] = useState(false);
-
-  useEffect(() => {
-    if (gameState._showHiddenCardZone) {
-      setShowHiddenCardZone(true);
-    } else if (gameState._hideHiddenCardZone) {
-      setShowHiddenCardZone(false);
-    }
-  }, [gameState, setShowHiddenCardZone]);
-
+  }, [gameState, enableKeyboardNavigation]);
 
   return (
     <div className={classNames("player-table")}>
@@ -244,6 +241,7 @@ export const SouthTable = ({
           playerNumber,
           isActivePlayer,
           gameState,
+          handleChangeGameState,
         }}
       />
       <DragDropContext
@@ -255,7 +253,7 @@ export const SouthTable = ({
           flex: "1",
           display: "grid",
           gridTemplateRows: "minmax(0, 1fr) 100px",
-          boxShadow: isActivePlayer ? "inset 5px 5px 5px 5px orangered" : "none"
+          boxShadow: isActivePlayer ? "inset 0px 3px 30px 10px gold" : "none"
         }}>
           <Battlefield
             gameState={gameState}
@@ -282,6 +280,7 @@ SouthTable.propTypes = {
   playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
+  handleChangeGameState: PropTypes.func.isRequired,
 };
 
 export const NorthTable = ({
@@ -290,7 +289,8 @@ export const NorthTable = ({
   playerNumber,
   player,
   isActivePlayer,
-  barSide
+  barSide,
+  handleChangeGameState,
 }) => {
   return (
     <div
@@ -304,12 +304,13 @@ export const NorthTable = ({
         playerNumber={playerNumber}
         isActivePlayer={isActivePlayer}
         gameState={gameState}
+        handleChangeGameState={handleChangeGameState}
       />
       <div className="player-table-arena-north" style={{
         flex: "1",
         display: "grid",
         gridTemplateRows: "100px minmax(0, 1fr)",
-        boxShadow: isActivePlayer ? "inset 5px 5px 5px 5px orangered" : "none"
+        boxShadow: isActivePlayer ? "inset 0px 3px 30px 10px orangered" : "none"
       }}>
         <HiddenHand player={player} playerNumber={playerNumber} />
         <StaticBattlefield
@@ -330,4 +331,5 @@ NorthTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   barSide: PropTypes.string.isRequired,
+  handleChangeGameState: PropTypes.func.isRequired,
 };

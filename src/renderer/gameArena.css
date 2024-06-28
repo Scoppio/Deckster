@@ -6,16 +6,21 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-
+  display: grid;
+  height: 100%;
+  grid-template-columns: minmax(0, 1fr) 225px;
 }
 
 .main-left {
   flex: 1;
-  /* background-color: cornsilk; */
+  height: 100vh;
 }
 
 .main-right {
-  /* background-color: gainsboro; */
+  flex: 1;
+  width: 220px;
+  height: 100vh;
+  display: flex;
 }
 
 .main-arena {

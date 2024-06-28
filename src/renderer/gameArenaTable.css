@@ -1,19 +1,19 @@
 /* Single row layout */
 .main-arena.single-row {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 50% 50%;
 }
 
 /* Two rows, two columns layout */
 .main-arena.two-rows {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(2, 50vh); /* Fixed height for three rows */
+  grid-template-rows: 50% 50%; /* Fixed height for three rows */
 }
 
 /* Three rows, two columns layout */
 .main-arena.three-rows {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 33.3vh);
+  grid-template-rows:  33.3%  33.3%  33.4%;
 }

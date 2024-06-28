@@ -21,7 +21,7 @@ const gamezoneNames = [
   "Commander Zone",
 ];
 
-const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
+const Zone = ({ gameState, zoneName, player, playerRef }) => {
   const zone_name = zoneName;
   const viewZone = () => {
     console.log("viewing commander zone");
@@ -32,7 +32,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
     <div
       className={zoneName}
       role="region"
-      aria-describedby={player.name + "'s " + zoneName + ", " + player[zoneName].length + "cards"}
+      aria-label={player.name + "'s " + zoneName + ", " + player[zoneName].length + "cards"}
       style={{ display: 'flex', alignItems: 'center', marginTop: '3px' }}
     >
       <Dropdown autoClose="outside">
@@ -43,7 +43,7 @@ const Zone = ({ gameState, zoneName, player, playerRef, playerNumber }) => {
           tabIndex={player.tabIndices[zoneName]}
           size="sm"
         >
-          <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
+          <span style={{fontSize: "12px"}}>{zoneName}</span>
         </Dropdown.Toggle>
         <DropdownMenuPortal>
           <Dropdown.Item onClick={viewZone}>View all cards</Dropdown.Item>
@@ -83,6 +83,12 @@ const TheCommanderZone = ({
     gameState.viewZone("commander_zone");
   };
 
+  const changeCmdrTax = (value) => {
+    console.log("changing commander tax by " + value);
+    gameState.player.commander_extra_casting_cost += value;
+    gameState.updatePlayer("CHANGE_COMMANDER_TAX");
+  };
+
   return (
     <div
       className={zoneName}
@@ -106,8 +112,8 @@ const TheCommanderZone = ({
           <Dropdown.Item>
             Commander casting cost: {player.commander_extra_casting_cost}
           </Dropdown.Item>
-          <Dropdown.Item>Increase commander casting cost by 2</Dropdown.Item>
-          <Dropdown.Item>Decrease commander casting cost by 2</Dropdown.Item>
+          <Dropdown.Item onClick={() => (changeCmdrTax(2))}>Increase commander casting cost by 2</Dropdown.Item>
+          <Dropdown.Item onClick={() => (changeCmdrTax(-2))}>Decrease commander casting cost by 2</Dropdown.Item>
           <Dropdown.Divider />
           {
             // for each zone that is not zoneName
@@ -154,6 +160,7 @@ export const CommanderZone = ({
   player,
   playerRef,
   playerNumber,
+  
 }) => (
   <TheCommanderZone
     zoneName="commander_zone"

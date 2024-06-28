@@ -16,12 +16,14 @@ export const LogFrame = ({ gameState, height, playerRef }) => {
   return (
     <div
     style={{
-      width: "250px",
+      width: "100%",
       height: "100%",
-      background: "green",
+      background: "#f0f0f0bb",
       overflowY: "auto",
       overflowX: "hidden",
       lineHeight: "20px",
+      fontSize: "12px",
+      margin: "1px"
     }}
     >
       {gameState.log.length > 0 && (

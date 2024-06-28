@@ -3,6 +3,8 @@ import { EventEmitter } from "events";
 import Sounds from "./Sounds";
 import { Card } from "../commons/Card";
 
+import { Utils } from "../commons/Utils";
+
 
 const GamePhase = {
   MAIN: 0,
@@ -34,10 +36,14 @@ class BaseGameStateController extends EventEmitter {
       this.sounds = new Sounds();
       this.open_zone = { zone: null, cards: [] };
       this.authorization = null;
+      this.gameStateHandler = null;
+      this.searchCardConfig = {};
+      this.game_state_handler = [];
     }
   }
 
   fromPreviousState(previousState) {
+    this.searchCardConfig = previousState.searchCardConfig;
     this.players = previousState.players;
     this.players_initiative = previousState.players_initiative;
     this.players_sequence = previousState.players_sequence;
@@ -47,6 +53,7 @@ class BaseGameStateController extends EventEmitter {
     this.webSocketClient = previousState.webSocketClient;
     this.authorization = previousState.authorization;
     this.game_phase = previousState.game_phase;
+    this.game_state_handler = previousState.game_state_handler;
 
     this.ariaHelper = previousState.ariaHelper;
     this.online = previousState.online;
@@ -84,10 +91,7 @@ class BaseGameStateController extends EventEmitter {
   get log() {
     return this.game_log;
   }
-
-  _hideHiddenCardZone() {}
-  _showHiddenCardZone() {}
-
+  
   announce(message) {
     this.announcement_message = message;
     this.changed();
@@ -290,25 +294,43 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   viewLibrary() {
+    this.searchCardConfig["usingCloseAndShuffle"] = true;
+    this.searchCardConfig["sourceZone"] = "library";
+    this.searchCardConfig["targetZones"] = ["hand", "battlefield", "graveyard", "exile", "faceDown"];
+    
     this.sendEvent("view_library");
   }
 
   viewTopXCards(number_of_cards) {
+    this.searchCardConfig["usingCloseAndShuffle"] = false;
+    this.searchCardConfig["sourceZone"] = "library";
+    this.searchCardConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "faceDown"];
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
   viewZone(zone) {
     this.announce(`Viewing ${zone}`);
+    this.searchCardConfig["usingCloseAndShuffle"] = false;
+    this.searchCardConfig["sourceZone"] = zone;
+    const targetZones = ["hand", "battlefield", "graveyard", "exile", "faceDown"].filter((targetZone) => targetZone !== zone);
+    this.searchCardConfig["targetZones"] = targetZones;
     this.open_zone = { zone: zone, cards: this.player[zone] };
-    this._showHiddenCardZone();
     this.changed();
   }
 
   closeViewZone() {
     this.open_zone = { zone: null, cards: [] };
+    this.searchCardConfig["usingCloseAndShuffle"] = false;
+    this.searchCardConfig["sourceZone"] = "exile";
+    this.searchCardConfig["targetZones"] = [];
+    
     this.sendEvent("close_view_zone");
-    this._hideHiddenCardZone();
+    this.gameStateHandler("game");
     this.changed();
+  }
+
+  closeSearchCardsAndMoveCards(cardPiles) {
+    console.log("Closing search cards and moving cards");
   }
 
   moveCardTo(source, destination, card = null) {
@@ -401,7 +423,8 @@ class ExecuteGameActions extends RequestGameActions {
   log_event(event) {
     console.log(event);
     const currentTime = new Date();
-    const formattedTime = `${currentTime.getHours()}:${currentTime.getMinutes()}:${currentTime.getSeconds()}`;
+    const formattedTime = Utils.strftime("%H:%M:%S", currentTime);
+    
     this.game_log.unshift(`${event.payload} - ${formattedTime}`);
     if (this.game_log.length > 100) {
       this.game_log = this.game_log.slice(0, 100);
@@ -434,15 +457,25 @@ class ExecuteGameActions extends RequestGameActions {
   view_library(event) {
     this.announce(`Viewing library`);
     this.open_zone = { zone: "library", cards: this.createCardInstances(event.payload) };
+
+    if (Array.isArray(this.game_state_handler) && this.game_state_handler.length > 0) {
+      // Grab the first element
+      const firstElement = this.game_state_handler[0];
+      
+      // Check if the first element has a func method and call it if exists
+      if (firstElement && typeof firstElement.func === 'function') {
+          firstElement.func("view_zone");
+      }
+    }
+    
     this.changed();
-    this._showHiddenCardZone();
   }
 
   view_top_x_cards(event) {
     this.announce(`Viewing top ${event.payload.number_of_cards} cards`);
     this.open_zone = { zone: "library", cards: this.createCardInstances(event.payload) };
     this.changed();
-    this._showHiddenCardZone();
+    this.gameStateHandler("view_zone");
   }
 
   update_player(event) {

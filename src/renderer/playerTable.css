@@ -1,6 +1,7 @@
 .player-table {
   height: 100%;
   display: flex;
+  text-align: center;
 }
 
 .player-table-arena-south {
@@ -11,6 +12,7 @@
 
 .player-table-arena-north {
   flex: 1;
+  text-align: center;
   display: grid;
   grid-template-rows: 100px minmax(0, 1fr);
 }

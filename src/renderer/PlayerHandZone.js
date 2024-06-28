@@ -32,6 +32,7 @@ const TheHandZone = ({
           id="dropdown-autoclose-outside"
           ref={playerRef.hand}
           tabIndex={player.tabIndices.hand}
+          aria-label={`${player.hand.length} cards in hand.`}
           size="sm"
         >
           <span id={playerNumber + "-hand-label"}>hand</span>

@@ -10,6 +10,7 @@ import "./playerBar.css";
 const PlayerContainer = style.div`
   min-width: 18c0px;
   background: #ddda;
+  font-size: 12px;
 `;
 
 const PlayerAvatarImg = style.img`
@@ -47,10 +48,10 @@ const PlayerHealthBox = style.div`
   font-size: 16px;
 `;
 
-export const GenericCounter = ({ value, color, aria_description }) => {
+export const GenericCounter = ({ value, color, aria_description, onClick, onContextMenu }) => {
   return (
     <div>
-      <CounterSphere color={color} aria-describedby={aria_description}>
+      <CounterSphere color={color} aria-describedby={aria_description} onClick={onClick} onContextMenu={onContextMenu}>
         {value}
       </CounterSphere>
     </div>
@@ -63,14 +64,22 @@ export const PlayerBar = ({
   playerNumber,
   isActivePlayer,
   gameState,
+  handleChangeGameState,
 }) => {
   const poisonCounters = player.counters?.["poison"] ?? 0;
   const energyCounters = player.counters?.["energy"] ?? 0;
   const otherCounters = player.counters?.["other"] ?? 0;
 
+  const handleChangeCounters = (counterName, value) => {
+    if (player.id === gameState.player.id) {
+      player.counters[counterName] += value;
+      const selectedSound = value > 0 ? "ADD_COUNTER_SOUND" : "REMOVE_COUNTER_SOUND";
+      gameState.updatePlayer(selectedSound);
+    }
+  };
+
   return (
     <PlayerContainer
-      role="region"
       aria-label={`${player.name} ${isActivePlayer ? "active player" : ""} / ${
         player.health
       } life, 
@@ -94,6 +103,8 @@ export const PlayerBar = ({
               value={poisonCounters}
               color={"green"}
               aria_description={`${poisonCounters} poison`}
+              onContextMenu={() => {handleChangeCounters("poison", -1);}}
+              onClick={() => {handleChangeCounters("poison", 1);}}
             />
           </Row>
           <Row>
@@ -101,6 +112,8 @@ export const PlayerBar = ({
               value={energyCounters}
               color={"blue"}
               aria_description={`${energyCounters} energy`}
+              onContextMenu={() => {handleChangeCounters("energy", -1);}}
+              onClick={() => {handleChangeCounters("energy", 1);}}
             />
           </Row>
           <Row>
@@ -108,6 +121,8 @@ export const PlayerBar = ({
               value={otherCounters}
               color={"grey"}
               aria_description={`${otherCounters} other`}
+              onContextMenu={() => {handleChangeCounters("other", -1);}}
+              onClick={() => {handleChangeCounters("other", 1);}}
             />
           </Row>
         </div>
@@ -116,11 +131,11 @@ export const PlayerBar = ({
           <PlayerHealthBox>{player.health}</PlayerHealthBox>
           <br />
           <PlayerHandZone {...{ player, playerRef, playerNumber, gameState }} />
-          <Library {...{ player, playerRef, playerNumber, gameState }} />
-          <Graveyard {...{ player, playerRef, playerNumber, gameState }} />
-          <Exile {...{ player, playerRef, playerNumber, gameState }} />
-          <FaceDown {...{ player, playerRef, playerNumber, gameState }} />
-          <CommanderZone {...{ player, playerRef, playerNumber, gameState }} />
+          <Library {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
+          <Graveyard {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
+          <Exile {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
+          <FaceDown {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
+          <CommanderZone {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
           <p id={playerNumber + "-commander-casting-cost"}>
             Cmd Tax: {player.commander_extra_casting_cost}
           </p>
@@ -135,6 +150,7 @@ PlayerBar.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
+  handleChangeGameState: PropTypes.func.isRequired,
 };
 
 export const Avatar = ({ player, playerRef, playerNumber }) => (

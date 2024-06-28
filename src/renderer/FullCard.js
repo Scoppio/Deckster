@@ -59,9 +59,10 @@ export const ImgCard = ({
   const cardCurrentRegion = region;
   const positionIdx = idx;
   const cardRef = useRef(null);
+
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
-  console.log("Counter: ", card.counters);
+  
   const flipCard = () => {
     card.changeFace();
     setCardFace(card.card_face);
@@ -235,6 +236,7 @@ export const ImgCardHand = ({
   const [cardFace, setCardFace] = useState(card.card_face);
   const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
+  const positionIdx = idx;
 
   const flipCard = () => {
     card.changeFace();
@@ -254,6 +256,37 @@ export const ImgCardHand = ({
     gameState.focusOnCard(null);
   };
   
+
+  const sendToGraveyard = () => {
+    gameState.moveCardToZonePosition("hand", positionIdx, "graveyard", card);
+  };
+
+  const sendToExile = () => {
+    gameState.moveCardToZonePosition("hand", positionIdx, "exile", card);
+  };
+
+  const sendToFaceDown = () => {
+    gameState.moveCardToZonePosition("hand", positionIdx, "faceDown", card);
+  };
+
+  const sendToLibraryTop = () => {
+    gameState.moveCardToZonePosition("hand", positionIdx, "library", card, 0);
+  };
+
+  const sendToLibraryBottom = () => {
+    const lastIdx = gameState.player.library.length;
+    gameState.moveCardToZonePosition("hand", positionIdx, "library", card, lastIdx);
+  };
+
+  const commands = {
+    l: flipCard,
+    g: sendToGraveyard,
+    e: sendToExile,
+    t: sendToLibraryTop,
+    b: sendToLibraryBottom,
+    f: sendToFaceDown,
+  };
+
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {(provided) => (
@@ -267,8 +300,14 @@ export const ImgCardHand = ({
           onMouseLeave={onMouseLeave}
           onContextMenu={flipCard}
           onKeyDown={(event) => {
-            if (event.key === "l") {
-              flipCard();
+            if (
+              commands[event.key.toLowerCase()] &&
+              !event.ctrlKey &&
+              !event.altKey &&
+              !event.shiftKey
+            ) {
+              event.preventDefault();
+              commands[event.key.toLowerCase()]();
             }
           }}
         >
@@ -314,6 +353,133 @@ ImgCardHand.propTypes = {
   gameState: PropTypes.object.isRequired,
 };
 
+export const ImgCardSearch = ({
+  idx,
+  gameState,
+  card,
+  size,
+  tabIndex,
+  cardHeight,
+}) => {
+  const [cardFace, setCardFace] = useState(card.card_face);
+  const cardRef = useRef(null);
+  cardFace !== card.card_face && setCardFace(card.card_face);
+  const positionIdx = idx;
+
+  const flipCard = () => {
+    card.changeFace();
+    setCardFace(card.card_face);
+    gameState.updatePlayer();
+    gameState.focusOnCard(card);
+  };
+
+  const onMouseOver = () => {
+    if (gameState) {
+      gameState?.focusOnCard(card);
+    }
+    cardRef.current.focus();
+  };
+
+  const onMouseLeave = () => {
+    gameState?.focusOnCard(null);
+  };
+  
+  const sendToGraveyard = () => {
+    // gameState.moveCardToZonePosition("hand", positionIdx, "graveyard", card);
+  };
+
+  const sendToExile = () => {
+    // gameState.moveCardToZonePosition("hand", positionIdx, "exile", card);
+  };
+
+  const sendToFaceDown = () => {
+    // gameState.moveCardToZonePosition("hand", positionIdx, "faceDown", card);
+  };
+
+  const sendToLibraryTop = () => {
+    // gameState.moveCardToZonePosition("hand", positionIdx, "library", card, 0);
+  };
+
+  const sendToLibraryBottom = () => {
+    // const lastIdx = gameState.player.library.length;
+    // gameState.moveCardToZonePosition("hand", positionIdx, "library", card, lastIdx);
+  };
+
+  const commands = {
+    l: flipCard,
+    g: sendToGraveyard,
+    e: sendToExile,
+    t: sendToLibraryTop,
+    b: sendToLibraryBottom,
+    f: sendToFaceDown,
+  };
+
+  return (
+    <Draggable draggableId={card._uid} index={idx} key={card._uid}>
+      {(provided) => (
+        <SlimContainer
+          className="hand_zone ImgCardHand"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={(el) => {provided.innerRef(el); cardRef.current = el;}}
+          tabIndex={tabIndex}
+          onMouseOver={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          onContextMenu={flipCard}
+          onKeyDown={(event) => {
+            if (
+              commands[event.key.toLowerCase()] &&
+              !event.ctrlKey &&
+              !event.altKey &&
+              !event.shiftKey
+            ) {
+              event.preventDefault();
+              commands[event.key.toLowerCase()]();
+            }
+          }}
+        >
+          <HiddenText>
+            <div aria-live="polite" aria-atomic="true">
+              {card.aria_description}
+            </div>
+          </HiddenText>
+          <HiddenText>
+            <div aria-live="polite" aria-atomic="true">
+              {card.type_line + ", "}
+            </div>
+            <div aria-live="polite" aria-atomic="true">
+              {card.card_read_oracle_text}
+            </div>
+          </HiddenText>
+          <img
+            src={
+              card.hidden
+                ? FuckedCardBack
+                : card.card_image_uris?.[size] ?? emptyCard
+            }
+            alt={card.name}
+            style={{
+              maxHeight: `${cardHeight}`,
+              objectFit: 'contain',
+              maxWidth: "100%",
+              borderRadius: "4px",
+            }}
+          />
+        </SlimContainer>
+      )}
+    </Draggable>
+  );
+};
+
+ImgCardSearch.propTypes = {
+  idx: PropTypes.number.isRequired,
+  card: PropTypes.object.isRequired,
+  size: PropTypes.string.isRequired,
+  tabIndex: PropTypes.number.isRequired,
+  cardHeight: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
+};
+
 export const StaticImgCard = ({
   card,
   gameState,
@@ -323,12 +489,12 @@ export const StaticImgCard = ({
 }) => {
   const cardRef = useRef(null);
   const onMouseOver = (event) => {
-    gameState.focusOnCard(card);
+    gameState?.focusOnCard(card);
     cardRef.current.focus();
   };
 
   const onMouseLeave = () => {
-    gameState.focusOnCard(null);
+    gameState?.focusOnCard(null);
   };
 
   return (

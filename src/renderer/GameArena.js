@@ -144,7 +144,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   return (
     <div className="main">
       <section className="main-left">
-        <GameArenaTable {...{gameState, player1References, player2References, player3References, player4References, player5References, player6References}} />
+        <GameArenaTable {...{gameState, handleChangeGameState, player1References, player2References, player3References, player4References, player5References, player6References}} />
       </section>
       <section className="main-right">
         <GameStateBoard gameState={gameState} playerRef={player1References} />

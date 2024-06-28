@@ -45,7 +45,7 @@ export class Player {
 
   static emptyPlayer(name="") {
     const player = new Player(
-      {"id": Utils.random_id, "username": name},
+      {"id": Utils.hash(name), "username": name},
       { deck: [], commanders: [] },
       0,
       {

@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
-const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
+const TheLibrary = ({ player, playerRef, playerNumber, gameState, handleChangeGameState }) => {
   const handleDrawHand = () => {
     gameState.drawHand();
   };
@@ -53,10 +53,12 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
 
   const openLibrary = () => {
     gameState.viewLibrary();
+    // handleChangeGameState("view_zone");
   };
 
   const viewTopXCards = (number_of_cards) => {
     gameState.viewTopXCards(number_of_cards);
+    // handleChangeGameState("view_zone");
   };
 
   return (
@@ -66,7 +68,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
       aria-describedby={playerNumber + "-library-desc"}
       style={{ display: 'flex', alignItems: 'center' }}
       >
-      <Dropdown drop="up" style={{ maxHeight: "100px" }} autoClose="outside">
+      <Dropdown drop="up" style={{ maxHeight: "100px", fontSize: "12px" }} autoClose="outside">
         <Dropdown.Toggle
           variant="secondary"
           id="dropdown-autoclose-outside"
@@ -160,12 +162,13 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
   );
 };
 
-export const Library = ({ player, playerRef, playerNumber, gameState }) => (
+export const Library = ({ player, playerRef, playerNumber, gameState, handleChangeGameState }) => (
   <TheLibrary
     player={player}
     playerRef={playerRef}
     playerNumber={playerNumber}
     gameState={gameState}
+    handleChangeGameState={handleChangeGameState}
   />
 );
 
@@ -174,6 +177,7 @@ Library.propTypes = {
   playerRef: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
+  handleChangeGameState: PropTypes.func.isRequired,
 };
 
 const CustomItem = React.forwardRef(

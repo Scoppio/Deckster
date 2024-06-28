@@ -2,6 +2,7 @@ import { GameArena } from "./renderer/GameArena";
 import { SettingsScreen } from "./renderer/SettingsScreen";
 import { ApiKeyForm } from "./renderer/ApiKeyForm";
 import { SelectDeck } from "./renderer/SelectDeck";
+import { SearchCard } from "./renderer/SearchCard";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
 import { Player, TabIndices } from "./commons/Player";
@@ -16,7 +17,7 @@ import "mana-font/css/mana.css";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
-  const [gameState, setGameState] = useState("login"); // bypassLogin | login | selectDeck | loadGame | game // login is the "first screen"
+  const [gameState, setGameState] = useState("login"); // bypassLogin | login | selectDeck | loadGame | game | search_card // login is the "first screen"
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
@@ -36,6 +37,10 @@ function App() {
     setGameState(newGameState);
   };
 
+  const handleCloseCardOpenZone = (cardPiles) => {
+    gameStateController.closeSearchCardsAndMoveCards(cardPiles);
+    setGameState("game");
+  };
 
   useEffect(() => {
     if (gameStateController) {
@@ -69,7 +74,7 @@ function App() {
         gameState.addPlayer(Player.emptyPlayer("Carla"));
         gameState.addPlayer(Player.emptyPlayer("Dani"));
         gameState.addPlayer(Player.emptyPlayer("Eva"));
-
+        gameState.game_state_handler.push({ func: handleChangeGameState });
         setGameStateController(gameState);
         setGameState("game");
         
@@ -90,8 +95,8 @@ function App() {
         gameState.addPlayer(Player.emptyPlayer("Barbara"));
         gameState.addPlayer(Player.emptyPlayer("Carla"));
         gameState.addPlayer(Player.emptyPlayer("Dani"));
-        // gameState.addPlayer(Player.emptyPlayer("Eva"));
-
+        gameState.addPlayer(Player.emptyPlayer("Eva"));
+        gameState.game_state_handler.push({ func: handleChangeGameState });
         setGameStateController(gameState);
         setGameState("game");
       }
@@ -132,8 +137,16 @@ function App() {
   else if (gameState === "tokens") {
     return (
       <div role="application" className="app">
-        <GameArena gameState={gameStateController} />
+        <GameArena gameState={gameStateController} handleChangeGameState={handleChangeGameState}/>
         <RemoveScrollBar />
+      </div>
+    );
+  }
+  else if (gameState === "view_zone") {
+    return (
+      <div role="application" className="app">
+        <SearchCard gameState={gameStateController} handleCloseCardOpenZone={handleCloseCardOpenZone} />
+        {/* <RemoveScrollBar /> */}
       </div>
     );
   }

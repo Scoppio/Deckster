@@ -5,7 +5,7 @@ import "./gameArenaTable.css";
 
 import PropTypes from "prop-types";
 
-export function GameArenaTable({ gameState, player1References, player2References, player3References, player4References, player5References, player6References}) {
+export function GameArenaTable({ gameState, handleChangeGameState,  player1References, player2References, player3References, player4References, player5References, player6References}) {
   const playerReferences = [player2References, player3References, player4References, player5References, player6References];
   const [numberOfTables, setNumberOfTables] = useState(1);
 
@@ -63,6 +63,7 @@ export function GameArenaTable({ gameState, player1References, player2References
               playerNumber={player.id}
               player={player}
               isActivePlayer={gameState.isActivePlayer}
+              handleChangeGameState={handleChangeGameState}
               key={player.id}
             />
           );
@@ -75,6 +76,7 @@ export function GameArenaTable({ gameState, player1References, player2References
               playerNumber={player.id}
               player={player}
               isActivePlayer={player.id === gameState.active_player_id}
+              handleChangeGameState={handleChangeGameState}
               key={player.id}
             />
           );
@@ -91,6 +93,7 @@ export function GameArenaTable({ gameState, player1References, player2References
 
 GameArenaTable.propTypes = {
   gameState: PropTypes.object.isRequired,
+  handleChangeGameState: PropTypes.func.isRequired,
   player1References: PropTypes.object.isRequired,
   player2References: PropTypes.object.isRequired,
   player3References: PropTypes.object.isRequired,
