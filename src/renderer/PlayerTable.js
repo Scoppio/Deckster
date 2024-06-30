@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Battlefield, StaticBattlefield } from "./Battlefield";
-import { PlayerBar } from "./PlayerBar";
+import { PlayerBar, OpponentBar } from "./PlayerBar";
 import { Hand, HiddenHand } from "./Hand";
 import { DragDropContext } from "react-beautiful-dnd";
 import PropTypes from "prop-types";
@@ -298,13 +298,11 @@ export const NorthTable = ({
         "player-table-right": barSide === "right",
       })}
     >
-      <PlayerBar
+      <OpponentBar
         player={player}
         playerRef={playerRef}
-        playerNumber={playerNumber}
         isActivePlayer={isActivePlayer}
-        gameState={gameState}
-        handleChangeGameState={handleChangeGameState}
+        playerNumber={playerNumber}
       />
       <div className="player-table-arena-north" style={{
         flex: "1",

@@ -24,7 +24,7 @@ export const HiddenHand = ({ player, playerNumber }) => {
     <div
       className="hand"
       role="region"
-      tabIndex={player.tabIndices.hand}
+      tabIndex={100000 * playerNumber + 1}
       aria-labelledby={playerNumber + "-player-hand-label"}
       aria-describedby={playerNumber + "-hand-desc"}
     >

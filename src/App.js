@@ -44,6 +44,12 @@ function App() {
   };
 
   useEffect(() => {
+    window.electron.ipcRenderer.on('search-cards', () => {
+      setGameState("tokens");
+    });
+  }, []);
+
+  useEffect(() => {
     if (gameStateController) {
       const handleStateChange = (newState) => {
         setGameStateController(

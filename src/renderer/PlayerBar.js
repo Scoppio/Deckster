@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import style from "styled-components";
 import Row from "react-bootstrap/Row";
 import { Library } from "./Library";
 import { Graveyard, Exile, FaceDown, CommanderZone } from "./Zones";
+import { OppExile, OppFaceDown, OppGraveyard, OppLibrary, OppCommanderZone, OppPlayerHandZone } from "./OpponentZones";
 import { PlayerHandZone } from "./PlayerHandZone";
 
 import "./playerBar.css";
@@ -14,6 +16,7 @@ const PlayerContainer = style.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  overflow: hidden;
 `;
 
 const PlayerAvatarImg = style.img`
@@ -69,10 +72,16 @@ export const PlayerBar = ({
   gameState,
   handleChangeGameState,
 }) => {
-  const poisonCounters = player.counters?.["poison"] ?? 0;
-  const energyCounters = player.counters?.["energy"] ?? 0;
-  const otherCounters = player.counters?.["other"] ?? 0;
-
+  const [poisonCounters, setPoisonCounter] = useState(player.counters?.["poison"] ?? 0);
+  const [energyCounters, setEnergyCounter] = useState(player.counters?.["energy"] ?? 0);
+  const [otherCounters, setOtherCounter] = useState(player.counters?.["other"] ?? 0);
+  
+  useEffect(() => {
+    setPoisonCounter(player.counters?.["poison"] ?? 0);
+    setEnergyCounter(player.counters?.["energy"] ?? 0);
+    setOtherCounter(player.counters?.["other"] ?? 0);
+  }, [player]);
+  
   const handleChangeCounters = (counterName, value) => {
     if (player.id === gameState.player.id) {
       player.counters[counterName] += value;
@@ -139,7 +148,7 @@ export const PlayerBar = ({
           <Exile {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
           <FaceDown {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
           <CommanderZone {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
-          <p id={playerNumber + "-commander-casting-cost"}>
+          <p>
             Cmd Tax: {player.commander_extra_casting_cost}
           </p>
         </div>
@@ -156,29 +165,84 @@ PlayerBar.propTypes = {
   handleChangeGameState: PropTypes.func.isRequired,
 };
 
-export const Avatar = ({ player, playerRef, playerNumber }) => (
-  <div
-    className="player-stats"
-    role="region"
-    tabIndex={player.tabIndices.playerStats}
-    ref={playerRef.playerStats}
-    aria-labelledby={playerNumber + "-player-name-label"}
-    aria-describedby={
-      playerNumber + "-health-desc " + playerNumber + "-counter-desc"
-    }
-  >
-    <h2 id={playerNumber + "-player-name-label"}>{player.name}</h2>
-    <div>
-      <p id={playerNumber + "-health-desc"}>health {player.health},</p>
-    </div>
-    <div>
-      <p id={playerNumber + "-counter-desc"}>counter {player.counter}</p>
-    </div>
-  </div>
-);
 
-Avatar.propTypes = {
+export const OpponentBar = ({
+  player,
+  playerRef,
+  isActivePlayer,
+  playerNumber,
+}) => {
+  const [poisonCounters, setPoisonCounter] = useState(player.counters?.["poison"] ?? 0);
+  const [energyCounters, setEnergyCounter] = useState(player.counters?.["energy"] ?? 0);
+  const [otherCounters, setOtherCounter] = useState(player.counters?.["other"] ?? 0);
+  
+  useEffect(() => {
+    setPoisonCounter(player.counters?.["poison"] ?? 0);
+    setEnergyCounter(player.counters?.["energy"] ?? 0);
+    setOtherCounter(player.counters?.["other"] ?? 0);
+  }, [player]);
+
+  return (
+    <PlayerContainer
+      aria-label={
+`${player.name} ${isActivePlayer ? "active player" : ""}
+${player.health} life, 
+${poisonCounters > 0 ? poisonCounters + " poison,\n" : ""}${energyCounters > 0 ? energyCounters + " energy,\n" : ""}${otherCounters > 0 ? otherCounters + " other counter,\n" : ""}${player.hand.length} in hand,
+${player.graveyard.length} in graveyard,
+${player.library.length} in library,
+${player.commander_zone.length} in command,
+${player.exile.length} in exile,
+${player.faceDown.length} face down.`}
+      // tabIndex={100000 * playerNumber + 1}
+      // ref={playerRef.playerStats}
+      tabIndex={player.tabIndices.playerStats}
+      ref={playerRef.playerStats}
+    >
+      <div className="player-bar">
+        <div className="player-counters">
+          <PlayerAvatarImg src={player.avatar} alt={player.name} />
+          <Row>
+            <GenericCounter
+              value={poisonCounters}
+              color={"green"}
+              aria_description={`${poisonCounters} poison`}
+            />
+          </Row>
+          <Row>
+            <GenericCounter
+              value={energyCounters}
+              color={"blue"}
+              aria_description={`${energyCounters} energy`}
+            />
+          </Row>
+          <Row>
+            <GenericCounter
+              value={otherCounters}
+              color={"grey"}
+              aria_description={`${otherCounters} other`}
+            />
+          </Row>
+        </div>
+        
+        <div className="player-actions">
+          <PlayerName>{player.name}</PlayerName>
+          <PlayerHealthBox>{player.health}</PlayerHealthBox>
+          <br />
+          <OppPlayerHandZone {...{player, tabIndex: 100000 * playerNumber + 11}} />
+          <OppLibrary {...{player, tabIndex: 100000 * playerNumber + 12}} />
+          <OppGraveyard {...{player, tabIndex: 100000 * playerNumber + 13}} />
+          <OppExile {...{player, tabIndex: 100000 * playerNumber + 14}} />
+          <OppFaceDown {...{player, tabIndex: 100000 * playerNumber + 15}} />
+          <OppCommanderZone {...{player, tabIndex: 100000 * playerNumber + 16}} />
+        </div>
+      </div>
+    </PlayerContainer>
+  );
+};
+
+OpponentBar.propTypes = {
   player: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
+  isActivePlayer: PropTypes.bool.isRequired,
   playerNumber: PropTypes.number.isRequired,
 };

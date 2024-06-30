@@ -1,225 +1,143 @@
-const path = require("path");
-const { app, BrowserWindow, Menu } = require("electron");
+// const path = require("path");
+// const { app, BrowserWindow, Menu } = require("electron");
 
-require("@electron/remote/main").initialize();
-
-
-const isDev = true; // process.env.NODE_ENV !== "production";
-const isMac = process.platform === "darwin";
+// require("@electron/remote/main").initialize();
 
 
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: isDev ? 1200 : 800,
-    height: 600,
-    webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true,
-      enableRemoteModule: true,
-      preload: path.resolve('.src/preload.js'),
-    },
-  });
-  win.loadURL("http://localhost:3010");
-};
+// const isDev = true; // process.env.NODE_ENV !== "production";
+// const isMac = process.platform === "darwin";
 
+// const createMenu = () => {
+//   const template = [
+//       {
+//           label: 'File',
+//           submenu: [
+//               {
+//                   label: 'New File',
+//                   click: () => {
+//                       console.log('New File clicked');
+//                   }
+//               },
+//               {
+//                   label: 'Open File',
+//                   click: () => {
+//                       console.log('Open File clicked');
+//                   }
+//               },
+//               {
+//                   type: 'separator'
+//               },
+//               {
+//                   label: 'Exit',
+//                   role: 'quit'
+//               }
+//           ]
+//       },
+//       {
+//           label: 'Edit',
+//           submenu: [
+//               {
+//                   label: 'Undo',
+//                   role: 'undo'
+//               },
+//               {
+//                   label: 'Redo',
+//                   role: 'redo'
+//               },
+//               {
+//                   type: 'separator'
+//               },
+//               {
+//                   label: 'Cut',
+//                   role: 'cut'
+//               },
+//               {
+//                   label: 'Copy',
+//                   role: 'copy'
+//               },
+//               {
+//                   label: 'Paste',
+//                   role: 'paste'
+//               }
+//           ]
+//       },
+//       {
+//           label: 'View',
+//           submenu: [
+//               {
+//                   label: 'Reload',
+//                   role: 'reload'
+//               },
+//               {
+//                   label: 'Toggle Full Screen',
+//                   role: 'togglefullscreen'
+//               }
+//           ]
+//       },
+//       {
+//           label: 'Help',
+//           submenu: [
+//               {
+//                   label: 'About',
+//                   click: () => {
+//                       console.log('About clicked');
+//                   }
+//               }
+//           ]
+//       }
+//   ];
 
-app.setAccessibilitySupportEnabled(true);
-
-app.whenReady().then(() => {
-  createWindow();
+//   // Build the menu from the template
+//   const menu = Menu.buildFromTemplate(template);
   
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
-
-app.on("window-all-closed", () => {
-  if (!isMac) {
-    app.quit();
-  }
-});
-
-app.on("browser-window-created", (_, window) => {
-  require("@electron/remote/main").enable(window.webContents);
-  if (isDev) {
-    window.webContents.openDevTools();
-  }
-});
+//   // Set the application menu
+//   Menu.setApplicationMenu(menu);
+// };
 
 
-const template = [
-  {
-    label: 'Edit',
-    submenu: [
-      {
-        role: 'undo'
-      },
-      {
-        role: 'redo'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'cut'
-      },
-      {
-        role: 'copy'
-      },
-      {
-        role: 'paste'
-      },
-      {
-        role: 'pasteandmatchstyle'
-      },
-      {
-        role: 'delete'
-      },
-      {
-        role: 'selectall'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {
-        label: 'Reload',
-        accelerator: 'CmdOrCtrl+R',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.reload();
-        }
-      },
-      {
-        label: 'Toggle Developer Tools',
-        accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.webContents.toggleDevTools();
-        }
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'resetzoom'
-      },
-      {
-        role: 'zoomin'
-      },
-      {
-        role: 'zoomout'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'togglefullscreen'
-      }
-    ]
-  },
-  {
-    role: 'window',
-    submenu: [
-      {
-        role: 'minimize'
-      },
-      {
-        role: 'close'
-      }
-    ]
-  },
-  {
-    role: 'help',
-    submenu: [
-      {
-        label: 'Learn More',
-        click () { 
-          require('electron').shell.openExternal('http://electron.atom.io'); 
-        }
-      }
-    ]
-  }
-];
+//   // Remove default menus
+//   const menu = Menu.buildFromTemplate(template);
+//   Menu.setApplicationMenu(menu);
+// };
 
-if (process.platform === 'darwin') {
-  const name = app.getName();
-  template.unshift({
-    label: name,
-    submenu: [
-      {
-        role: 'about'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'services',
-        submenu: []
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'hide'
-      },
-      {
-        role: 'hideothers'
-      },
-      {
-        role: 'unhide'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'quit'
-      }
-    ]
-  });
-  // Edit menu.
-  template[1].submenu.push(
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Speech',
-      submenu: [
-        {
-          role: 'startspeaking'
-        },
-        {
-          role: 'stopspeaking'
-        }
-      ]
-    }
-  );
-  // Window menu.
-  template[3].submenu = [
-    {
-      label: 'Close',
-      accelerator: 'CmdOrCtrl+W',
-      role: 'close'
-    },
-    {
-      label: 'Minimize',
-      accelerator: 'CmdOrCtrl+M',
-      role: 'minimize'
-    },
-    {
-      label: 'Zoom',
-      role: 'zoom'
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: 'Bring All to Front',
-      role: 'front'
-    }
-  ];
-}
+// const createWindow = () => {
+//   const win = new BrowserWindow({
+//     width: isDev ? 1200 : 800,
+//     height: 600,
+//     webPreferences: {
+//       contextIsolation: false,
+//       nodeIntegration: true,
+//       enableRemoteModule: true,
+//       preload: path.resolve('.src/preload.js'),
+//     },
+//   });
+//   win.loadURL("http://localhost:3010");
+// };
 
-const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+
+// app.setAccessibilitySupportEnabled(true);
+
+// app.whenReady().then(() => {
+//   createWindow();
+//   createMenu();
+//   app.on("activate", () => {
+//     if (BrowserWindow.getAllWindows().length === 0) {
+//       createWindow();
+//     }
+//   });
+// });
+
+// app.on("window-all-closed", () => {
+//   if (!isMac) {
+//     app.quit();
+//   }
+// });
+
+// app.on("browser-window-created", (_, window) => {
+//   require("@electron/remote/main").enable(window.webContents);
+//   if (isDev) {
+//     window.webContents.openDevTools();
+//   }
+  
+// });
+

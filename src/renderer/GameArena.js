@@ -131,6 +131,10 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerKeyCommand("e", () => gameState.passTurn(), "Pass the turn.");
   hotkeys.registerKeyCommand("n", () => gameState.changeGamePhase(), "Pass the phase.");
 
+
+  hotkeys.registerKeyCommand("_", () => gameState.decreaseLife(), "Decrease your poison counters total.");
+  hotkeys.registerKeyCommand("+", () => gameState.increaseLife(), "Increase your poiton counters total.");
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       hotkeys.handleKeyDown(event);
