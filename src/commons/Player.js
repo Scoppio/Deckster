@@ -18,6 +18,7 @@ export const TabIndices = {
 
 export class Player {
   constructor(user, library, health, tabIndices, isLocal = false) {
+    this._uid = Utils.random_id_str;
     this.id = user.id;
     this.name = user.username;
     this.health = health;
@@ -39,8 +40,8 @@ export class Player {
     this.tabIndices = { ...tabIndices };
     this.isLocal = isLocal;
     this.avatar = user.avatar || emptyAvatar;
-    this._uid = Utils.random_id_str;
     this._is_empty = false;
+    this.reveal_top_of_library = false;
   }
 
   static emptyPlayer(name="") {
@@ -92,6 +93,7 @@ export class Player {
     this.sideboard = this.createCardInstances(payload.sideboard);
     this.library_size = payload.library_size;
     this.counters = payload.counters;
+    this.reveal_top_of_library = payload.reveal_top_of_library;
   }
 
   get cards_in_hand() {

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
@@ -6,8 +7,7 @@ const Zone = ({ zoneName, player, playerNumber }) => (
   <div
     className={zoneName + " row"}
     role="region"
-    aria-labelledby={playerNumber + "-" + zoneName + "-label"}
-    aria-describedby={playerNumber + "-" + zoneName + "-desc"}
+    aria-label={player.name + "'s " + zoneName + player[zoneName].length + " cards" + (zoneName === "commander_zone" ? ", commander tax currently is " + player.commander_extra_casting_cost + " mana." : "")}
   >
     <Dropdown autoClose="outside">
       <Dropdown.Toggle
@@ -16,30 +16,35 @@ const Zone = ({ zoneName, player, playerNumber }) => (
         tabIndex={player.tabIndices[zoneName]}
         size="sm"
       >
-        <span id={playerNumber + "-" + zoneName + "-label"}>{zoneName}</span>
+        <span id>{zoneName}</span>
       </Dropdown.Toggle>
       <DropdownMenuPortal>
         {zoneName !== "faceDown" && (<Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>)}
         <Dropdown.Item>{player.library_size} cards</Dropdown.Item>
       </DropdownMenuPortal>
     </Dropdown>
-    <p id={playerNumber + "-" + zoneName + "-desc"}>
+    <p>
       {player[zoneName].length} cards
     </p>
     {zoneName === "commander_zone" && (
       <p id={playerNumber + "-commander-casting-cost"}>
-        Extra casting cost: {player.commander_extra_casting_cost}
+        Cmd Tax: {player.commander_extra_casting_cost}
       </p>
     )}
   </div>
 );
 
-export const OppLibrary = ({ player, playerNumber }) => (
+export const OppLibrary = ({ player, playerNumber }) => {
+  const [revealTopOfLibrary, setRevealTopOfLibrary] = useState(player.reveal_top_of_library);
+
+  useEffect(() => { 
+    setRevealTopOfLibrary(!!player.reveal_top_of_library);
+  }, [player]);
+
+  return (
   <div
     className={"library row"}
-    role="region"
-    aria-labelledby={playerNumber + "-library-label"}
-    aria-describedby={playerNumber + "-library-desc"}
+    aria-label={`${player.name}'s library with ${player.library_size} cards`} 
   >
     <Dropdown autoClose="outside">
       <Dropdown.Toggle
@@ -48,14 +53,19 @@ export const OppLibrary = ({ player, playerNumber }) => (
         tabIndex={player.tabIndices.library}
         size="sm"
       >
-        <span id={playerNumber + "-library-label"}>{"library"}</span>
+        <span style={{ fontSize: '12px'}}>{"Library"}</span>
       </Dropdown.Toggle>
       <DropdownMenuPortal>
         <Dropdown.Item>{player.library_size} cards</Dropdown.Item>
       </DropdownMenuPortal>
     </Dropdown>
+    <span>({player.library_size})</span>
+    {revealTopOfLibrary && (
+         <p style={{ fontSize: '10px' ,overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{player.library_size > 0 && player.library[0].name}</p>)}
+
   </div>
 );
+};
 
 export const OppGraveyard = ({ player, playerNumber }) => (
   <Zone zoneName="graveyard" player={player} playerNumber={playerNumber} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Dropdown from "react-bootstrap/Dropdown";
 import Row from "react-bootstrap/Container";
@@ -6,7 +6,14 @@ import Col from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
-const TheLibrary = ({ player, playerRef, playerNumber, gameState, handleChangeGameState }) => {
+const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
+
+  const [revealTopOfLibrary, setRevealTopOfLibrary] = useState(player.reveal_top_of_library);
+
+  useEffect(() => { 
+    setRevealTopOfLibrary(!!player.reveal_top_of_library);
+  }, [player]);
+
   const handleDrawHand = () => {
     gameState.drawHand();
   };
@@ -53,12 +60,10 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState, handleChangeGa
 
   const openLibrary = () => {
     gameState.viewLibrary();
-    // handleChangeGameState("view_zone");
   };
 
   const viewTopXCards = (number_of_cards) => {
     gameState.viewTopXCards(number_of_cards);
-    // handleChangeGameState("view_zone");
   };
 
   return (
@@ -66,8 +71,9 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState, handleChangeGa
       className={"library"}
       role="region"
       aria-describedby={playerNumber + "-library-desc"}
-      style={{ display: 'flex', alignItems: 'center' }}
       >
+        
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Dropdown drop="up" style={{ maxHeight: "100px", fontSize: "12px" }} autoClose="outside">
         <Dropdown.Toggle
           variant="secondary"
@@ -158,6 +164,9 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState, handleChangeGa
         </DropdownMenuPortal>
       </Dropdown>
       <span>({player.library_size})</span>
+      </div>
+      {revealTopOfLibrary && (
+         <p style={{ fontSize: '10px' ,overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{player.library_size > 0 && player.library[0].name}</p>)}
     </div>
   );
 };

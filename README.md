@@ -26,22 +26,24 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [x] Put a "Are you sure" dialog when quitting to desktop
 - [x] Put a kick player available for players
 - [x] Test disconnect + reconnect to game
+- [ ] Implement Opponent Zones and fix Settings
 - [ ] Verify aria-label is present in all new settings
-- [ ] Deck search mechanique
-- [ ] Token and card lookup mechanique
+- [x] Deck search mechanique
+- [x] Token and card lookup mechanique
 - [ ] Implement scry
 - [ ] Implement reveal cards in hand
 - [ ] Test two players
 - [ ] Deploy server
 - [ ] Test join game
-- [ ] Test kick player
+- [x] Test kick player
 - [ ] Play with top card revealed (on deck)
-- [ ] Implement zone controllers for library
-- [ ] Implement zone controllers for graveyard
-- [ ] Implement zone controllers for commander
-- [ ] Implement zone controllers for facedown (add move shuffled to top, add move shuffled to bottom)
-- [ ] Implement zone controllers for exile
-- [ ] Implement zone controllers for hand
+- [x] Implement card-view for library
+- [ ] Implement card-view for graveyard
+- [ ] Implement card-view for commander
+- [ ] Implement card-view for facedown 
+- [ ] Implement send cards from facedown to bottom shuffled
+- [ ] Implement send cards from facedown to top shuffled
+- [ ] Implement card-view for exile
 
 
 geo.provider.network.url

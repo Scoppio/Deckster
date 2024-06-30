@@ -119,6 +119,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlShiftKeyCommand("I", () => gameState.scry(), "Scry the top card of your library."); // NOT IMPLEMENTED
   hotkeys.registerCtrlShiftKeyCommand("P", () => gameState.addCounterOnSelected(), "Add a counter on selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("M", () => gameState.removeCounterOnSelected(), "Remove a counter on selected cards.");
+  hotkeys.registerCtrlShiftKeyCommand("T", () => gameState.requestListOfTokens(), "Search cards and tokens.");
 
   hotkeys.registerKeyCommand("x", () => gameState.untapAll(), "Untap all your permanents.");
   hotkeys.registerKeyCommand("<", () => gameState.untapAll(), "Untap all your permanents.");

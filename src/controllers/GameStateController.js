@@ -37,13 +37,13 @@ class BaseGameStateController extends EventEmitter {
       this.open_zone = { zone: null, cards: [] };
       this.authorization = null;
       this.gameStateHandler = null;
-      this.searchCardConfig = {};
+      this.searchZoneConfig = {};
       this.game_state_handler = [];
     }
   }
 
   fromPreviousState(previousState) {
-    this.searchCardConfig = previousState.searchCardConfig;
+    this.searchZoneConfig = previousState.searchZoneConfig;
     this.players = previousState.players;
     this.players_initiative = previousState.players_initiative;
     this.players_sequence = previousState.players_sequence;
@@ -132,6 +132,18 @@ class BaseGameStateController extends EventEmitter {
   playSound(sound_name, volume = 1.0) {
     this.sounds.playSound(sound_name, volume);
   }
+
+  changeAppState(appState="view_zone") {
+    if (Array.isArray(this.game_state_handler) && this.game_state_handler.length > 0) {
+      // Grab the first element
+      const firstElement = this.game_state_handler[0];
+      
+      // Check if the first element has a func method and call it if exists
+      if (firstElement && typeof firstElement.func === 'function') {
+          firstElement.func(appState);
+      }
+    }
+  }
 }
 
 class RequestGameActions extends BaseGameStateController {
@@ -203,8 +215,16 @@ class RequestGameActions extends BaseGameStateController {
     });
   }
 
+  addCardsToBattlefield(cards) {
+    this.sendEvent("add_cards_to_battlefield", { cards });
+  }
+
   untapAll() {
     this.sendEvent("untap_all");
+  }
+
+  revealTopOfLibrary(variation="reveal") { // can be reveal, play revealed, hide
+    this.sendEvent("reveal_top_card", { variation });
   }
 
   updatePlayer(sound, volume = 1.0) {
@@ -228,7 +248,7 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   requestListOfTokens() {
-    this.sendEvent("request_list_of_tokens");
+    this.changeAppState("tokens");
   }
 
   requestDiceRoll(dice) {
@@ -294,35 +314,35 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   viewLibrary() {
-    this.searchCardConfig["usingCloseAndShuffle"] = true;
-    this.searchCardConfig["sourceZone"] = "library";
-    this.searchCardConfig["targetZones"] = ["hand", "battlefield", "graveyard", "exile", "faceDown"];
+    this.searchZoneConfig["usingCloseAndShuffle"] = true;
+    this.searchZoneConfig["sourceZone"] = "library";
+    this.searchZoneConfig["targetZones"] = ["hand", "battlefield", "graveyard", "exile", "faceDown"];
     
     this.sendEvent("view_library");
   }
 
   viewTopXCards(number_of_cards) {
-    this.searchCardConfig["usingCloseAndShuffle"] = false;
-    this.searchCardConfig["sourceZone"] = "library";
-    this.searchCardConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "faceDown"];
+    this.searchZoneConfig["usingCloseAndShuffle"] = false;
+    this.searchZoneConfig["sourceZone"] = "library";
+    this.searchZoneConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "faceDown"];
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
   viewZone(zone) {
     this.announce(`Viewing ${zone}`);
-    this.searchCardConfig["usingCloseAndShuffle"] = false;
-    this.searchCardConfig["sourceZone"] = zone;
+    this.searchZoneConfig["usingCloseAndShuffle"] = false;
+    this.searchZoneConfig["sourceZone"] = zone;
     const targetZones = ["hand", "battlefield", "graveyard", "exile", "faceDown"].filter((targetZone) => targetZone !== zone);
-    this.searchCardConfig["targetZones"] = targetZones;
+    this.searchZoneConfig["targetZones"] = targetZones;
     this.open_zone = { zone: zone, cards: this.player[zone] };
     this.changed();
   }
 
   closeViewZone() {
     this.open_zone = { zone: null, cards: [] };
-    this.searchCardConfig["usingCloseAndShuffle"] = false;
-    this.searchCardConfig["sourceZone"] = "exile";
-    this.searchCardConfig["targetZones"] = [];
+    this.searchZoneConfig["usingCloseAndShuffle"] = false;
+    this.searchZoneConfig["sourceZone"] = "exile";
+    this.searchZoneConfig["targetZones"] = [];
     
     this.sendEvent("close_view_zone");
     this.gameStateHandler("game");
@@ -457,17 +477,7 @@ class ExecuteGameActions extends RequestGameActions {
   view_library(event) {
     this.announce(`Viewing library`);
     this.open_zone = { zone: "library", cards: this.createCardInstances(event.payload) };
-
-    if (Array.isArray(this.game_state_handler) && this.game_state_handler.length > 0) {
-      // Grab the first element
-      const firstElement = this.game_state_handler[0];
-      
-      // Check if the first element has a func method and call it if exists
-      if (firstElement && typeof firstElement.func === 'function') {
-          firstElement.func("view_zone");
-      }
-    }
-    
+    this.changeAppState("view_zone");
     this.changed();
   }
 

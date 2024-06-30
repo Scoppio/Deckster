@@ -2,6 +2,7 @@ import { GameArena } from "./renderer/GameArena";
 import { SettingsScreen } from "./renderer/SettingsScreen";
 import { ApiKeyForm } from "./renderer/ApiKeyForm";
 import { SelectDeck } from "./renderer/SelectDeck";
+import { SearchZone } from "./renderer/SearchZone";
 import { SearchCard } from "./renderer/SearchCard";
 import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
@@ -17,7 +18,7 @@ import "mana-font/css/mana.css";
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
-  const [gameState, setGameState] = useState("login"); // bypassLogin | login | selectDeck | loadGame | game | search_card // login is the "first screen"
+  const [gameState, setGameState] = useState("login"); // bypassLogin | login | selectDeck | loadGame | game | search_card | tokens // login is the "first screen"
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
@@ -137,7 +138,7 @@ function App() {
   else if (gameState === "tokens") {
     return (
       <div role="application" className="app">
-        <GameArena gameState={gameStateController} handleChangeGameState={handleChangeGameState}/>
+        <SearchCard gameState={gameStateController} handleChangeGameState={handleChangeGameState}/>
         <RemoveScrollBar />
       </div>
     );
@@ -145,7 +146,7 @@ function App() {
   else if (gameState === "view_zone") {
     return (
       <div role="application" className="app">
-        <SearchCard gameState={gameStateController} handleCloseCardOpenZone={handleCloseCardOpenZone} />
+        <SearchZone gameState={gameStateController} handleCloseCardOpenZone={handleCloseCardOpenZone} />
         {/* <RemoveScrollBar /> */}
       </div>
     );

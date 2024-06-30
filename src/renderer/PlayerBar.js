@@ -8,9 +8,12 @@ import { PlayerHandZone } from "./PlayerHandZone";
 import "./playerBar.css";
 
 const PlayerContainer = style.div`
-  min-width: 18c0px;
+  max-width: 180px;
   background: #ddda;
   font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 `;
 
 const PlayerAvatarImg = style.img`
