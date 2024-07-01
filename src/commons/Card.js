@@ -32,10 +32,11 @@ export class Card {
     this.hidden = card.hidden || false;
     this.power_toughness_counters = card.power_toughness_counters || 0;
     this.counters = card.counters || 0;
-    this.power_modifier = card.power_modifier || 0; // NOT USED BY NOW
-    this.toughness_modifier = card.toughness_modifier || 0; // NOT USED BY NOW
-    this.misc_counters = card.misc_counters || 0;  // NOT USED BY NOW
+    this.power_modifier = card.power_modifier || 0;
+    this.toughness_modifier = card.toughness_modifier || 0;
+    this.misc_counters = card.misc_counters || 0; 
     this.is_token = card.is_token || false;
+    this.is_dragged = card.is_dragged || false;
   }
 
   changeFace() {

@@ -74,6 +74,7 @@ Menu.setApplicationMenu(menu);
 
 app.on('ready', () => {
   createWindow();
+  
   app.setAccessibilitySupportEnabled(true);
 });
 

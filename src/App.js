@@ -44,7 +44,7 @@ function App() {
   };
 
   useEffect(() => {
-    window.electron.ipcRenderer.on('search-cards', () => {
+    window.electron?.ipcRenderer?.on('search-cards', () => {
       setGameState("tokens");
     });
   }, []);

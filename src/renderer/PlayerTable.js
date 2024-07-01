@@ -22,6 +22,7 @@ export const SouthTable = ({
   const onDragStart = (start, provided) => {
     const { source } = start;
     const card = gameState.getCardFrom(source);
+    card.is_dragged = true;
     const sourceZone = source.droppableId;
     let sourceName = sourceZone.split("-")[1] || sourceZone;
     setEnableKeyboardNavigation(false);
@@ -46,7 +47,6 @@ export const SouthTable = ({
       provided.announce(
         `Cancelling card movement, returning card to ${sourceName}`
       );
-      gameState.cancelCardMove();
       return;
     }
     if (result.reason === "DROP") {
@@ -54,7 +54,6 @@ export const SouthTable = ({
         provided.announce(
           `Dropped in an invalid location, returning card to ${sourceName}`
         );
-        gameState.cancelCardMove();
         return;
       }
       
@@ -233,7 +232,7 @@ export const SouthTable = ({
   }, [gameState, enableKeyboardNavigation]);
 
   return (
-    <div className={classNames("player-table")}>
+    <div role="region" className={classNames("player-table")}>
       <PlayerBar
         {...{
           player,

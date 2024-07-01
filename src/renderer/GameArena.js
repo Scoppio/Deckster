@@ -89,7 +89,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   );
 
   hotkeys.registerKeyCommand("F1", () => gameState.listCommands(hotkeys), "List all commands.");
-  hotkeys.registerKeyCommand("Escape", () => handleChangeGameState("settings"), "Opens Settings");
+  hotkeys.registerCtrlKeyCommand("P", () => handleChangeGameState("settings"), "Opens Settings");
   hotkeys.registerCtrlKeyCommand("1", () => hotkeys.playerRefs[1].playerStats.current.focus(), "Player 1 (Your) stats.");
   hotkeys.registerCtrlKeyCommand("2", () => hotkeys.playerRefs[2]?.playerStats?.current?.focus(), "Player 2 stats.");
   hotkeys.registerCtrlKeyCommand("3", () => hotkeys.playerRefs[3]?.playerStats?.current?.focus(), "Player 3 stats.");
@@ -108,18 +108,9 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log.current.focus(), "Game log.");
   hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current?.focus(), "Card list zone.");
 
-  hotkeys.registerCtrlShiftKeyCommand("Z", () => gameState.moveSelectedToHand(), "Move selected cards to your hand.");
-  hotkeys.registerCtrlShiftKeyCommand("X", () => gameState.moveSelectedToGraveyard(), "Move selected cards to your graveyard.");
-  hotkeys.registerCtrlShiftKeyCommand("C", () => gameState.moveSelectedToExile(), "Move selected cards to your exile zone.");
-  hotkeys.registerCtrlShiftKeyCommand("V", () => gameState.moveSelectedToLibrary(), "Move selected cards to your library.");
-  hotkeys.registerCtrlShiftKeyCommand("B", () => gameState.moveSelectedToCommandZone(), "Move selected cards to your command zone.");
   hotkeys.registerCtrlShiftKeyCommand("J", () => gameState.tapUntapSelected(), "Tap/Untap selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("L", () => gameState.declareAttacking(), "Declare attacking with selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("U", () => gameState.declareBlocking(), "Declare blocking with selected cards.");
-  hotkeys.registerCtrlShiftKeyCommand("I", () => gameState.scry(), "Scry the top card of your library."); // NOT IMPLEMENTED
-  hotkeys.registerCtrlShiftKeyCommand("P", () => gameState.addCounterOnSelected(), "Add a counter on selected cards.");
-  hotkeys.registerCtrlShiftKeyCommand("M", () => gameState.removeCounterOnSelected(), "Remove a counter on selected cards.");
-  hotkeys.registerCtrlShiftKeyCommand("T", () => gameState.requestListOfTokens(), "Search cards and tokens.");
 
   hotkeys.registerKeyCommand("x", () => gameState.untapAll(), "Untap all your permanents.");
   hotkeys.registerKeyCommand("<", () => gameState.untapAll(), "Untap all your permanents.");

@@ -25,11 +25,10 @@ export const HiddenHand = ({ player, playerNumber }) => {
       className="hand"
       role="region"
       tabIndex={100000 * playerNumber + 1}
-      aria-labelledby={playerNumber + "-player-hand-label"}
-      aria-describedby={playerNumber + "-hand-desc"}
+      aria-label={player.name + " hand"}
     >
       <div style={{ height: "100px", backgroundColor: "#DDDA" }}>
-        {player.hand.map((card, idx) => (
+        {player.hand.map((card) => (
           <CardBackImg key={card._uid} scale={100} />
         ))}
       </div>

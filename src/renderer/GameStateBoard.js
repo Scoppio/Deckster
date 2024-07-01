@@ -1,10 +1,17 @@
 import PropTypes from "prop-types";
 import { LogFrame, AnnouncementFrame } from "./LogFrame";
 import emptyCard from "../resources/cards/empty_card.png";
+import { useState, useEffect } from "react";
 
 import "./gameStateBoard.css";
 
 export const GameStateBoard = ({ gameState, playerRef }) => {
+
+  const [focusCard, setFocusCard] = useState(gameState.focus_card);
+
+  useEffect(() => {
+    setFocusCard(gameState.focus_card);
+  }, [gameState.focus_card]);
 
   const game_phase_name = {
     0: "Main Phase",
@@ -15,14 +22,19 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
 
   return (
     <div className="game-state-board">
-      <div className="inner" style={{ height: '4vh', display: 'flex', flexWrap: 'wrap', alignContent: 'center' }} tabIndex={20000}>
+      <div className="inner" 
+        role="region"
+        style={{ height: '4vh', display: 'flex', flexWrap: 'wrap', alignContent: 'center' }} tabIndex={20000}
+        aria-label={`Turn sequence: ${gameState.players_sequence.map((player, idx) => ((idx + 1) + "-" + player.name)).join(", ")}`} >
         {gameState.players_sequence.map((player, index) => (
             <div key={player.id} className="player-box">{`${index + 1} - ${player.name}`}</div>
         ))}
       </div>
-      <div style={{height: '71vh'}} tabIndex={20001}>
-        <p >{gameState.active_player?.name}: {game_phase_name[gameState.game_phase]}</p>
-        {gameState.focus_card ? (
+      <div  style={{height: '2vh'}} tabIndex={20001}>
+      <p><b>{gameState.active_player?.name} :: {game_phase_name[gameState.game_phase]}</b></p>
+      </div>
+      <div style={{height: '69vh'}} tabIndex={20001}>
+        {focusCard ? (
           <>
               <h2
                 style={{
@@ -32,17 +44,17 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
                   wordWrap: "break-word",
                 }}
               >
-                {gameState.focus_card.card_name}{" "}
-                {gameState.focus_card.card_mana_cost}
+                {focusCard.card_name}{" "}
+                {focusCard.card_mana_cost}
               </h2>
               <img
-                src={gameState.focus_card.card_image_uris?.normal ?? emptyCard}
-                alt={gameState.focus_card.card_image_description || gameState.focus_card.card_name}
+                src={focusCard.card_image_uris?.normal ?? emptyCard}
+                alt={focusCard.card_image_description || focusCard.card_name}
                 style={{maxWidth: "220px"}}
               />
-              <p style={{fontSize: "12px"}}><b>{gameState.focus_card.card_type_line}</b></p>
-              <p style={{fontSize: "12px"}}>{gameState.focus_card.card_read_oracle_text}</p>
-              <p>{gameState.focus_card.power_toughness}</p>
+              <p style={{fontSize: "12px"}}><b>{focusCard.card_type_line}</b></p>
+              <p style={{fontSize: "12px"}}>{focusCard.card_read_oracle_text}</p>
+              <p>{focusCard.power_toughness}</p>
           </>
         ) : " "}
       </div>

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import style from "styled-components";
 
@@ -13,8 +14,43 @@ const HiddenText = style.div`
 `;
 
 export const LogFrame = ({ gameState, height, playerRef }) => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === ";") {
+        if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
+          inputRef.current.focus();
+          event.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const handleKeyDown = (event) => {
+    event.stopPropagation();
+    if (event.key === "Enter") {
+      if (onEnterPress) {
+        onEnterPress(event.target.value);
+      }
+      event.target.value = "";
+    }
+  };
+
+  const onEnterPress = (value) => {
+    if (value) {
+      gameState.sendChatMessage(value);
+    }
+  };
+
   return (
     <div
+    aria-label={gameState.log[0]}
     style={{
       width: "100%",
       height: "100%",
@@ -26,6 +62,12 @@ export const LogFrame = ({ gameState, height, playerRef }) => {
       margin: "1px"
     }}
     >
+      <input
+        type="text"
+        ref={inputRef}
+        onKeyDown={handleKeyDown}
+        style={{ width: "100%", marginBottom: "10px" }}
+      />
       {gameState.log.length > 0 && (
         <span aria-live="assertive" aria-atomic="true" ref={playerRef.log}>
           <p style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>{gameState.log[0]}</p>

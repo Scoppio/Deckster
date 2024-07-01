@@ -109,8 +109,29 @@ class BaseGameStateController extends EventEmitter {
 
   // Local actions
   focusOnCard(card) {
-    this.focus_card = card;
-    this.changed();
+    console.log("Focusing on " + (card !== null ? card.name : "null"));
+    if (this.focus_card !== null && card !== null){ 
+      if (this.focus_card._uid !== card._uid) {
+        this.focus_card = card;
+        console.log("Focused on " + card.name);
+        this.changed();
+      }
+    }
+    else {
+      this.focus_card = card;
+      console.log("Focused on " + (card !== null ? card.name : "null"));
+      this.changed();
+    }
+    console.log("Conclused with focus on " + (card !== null ? card.name : "null"));
+  }
+
+  removeFocusOnCard(card) {
+    if (this.focus_card !== null && card !== null) {
+      if (this.focus_card._uid === card._uid) {
+        this.focus_card = null;
+        this.changed();
+      }
+    }
   }
 
   getPlayer(playerNumber) {
@@ -125,8 +146,8 @@ class BaseGameStateController extends EventEmitter {
     return card;
   }
 
-  cancelCardMove() {
-    this.focusOnCard(null);
+  cancelCardMove(card) {
+    this.removeFocusOnCard(card);
   }
 
   playSound(sound_name, volume = 1.0) {
@@ -177,6 +198,10 @@ class RequestGameActions extends BaseGameStateController {
 
   ////////////
 
+  sendChatMessage(message) {
+    this.sendEvent("chat_message", { message });
+  }
+
   response() {
     this.sendEvent("response");
   }
@@ -223,6 +248,10 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("untap_all");
   }
 
+  cloneCard(card) {
+    this.sendEvent("request_duplication_of_card", { cards: [card] });
+  }
+
   revealTopOfLibrary(variation="reveal") { // can be reveal, play revealed, hide
     this.sendEvent("reveal_top_card", { variation });
   }
@@ -257,14 +286,6 @@ class RequestGameActions extends BaseGameStateController {
   
   requestToken(tokenId) {
     this.sendEvent("request_token", { tokenId });
-  }
-
-  requestDuplicationOfCard(sourceZone, sourceIndex, copies) {
-    this.sendEvent("request_duplication_of_card", {
-      from_zone: sourceZone,
-      from_idx: sourceIndex,
-      copies
-    });
   }
 
   scry() {
@@ -364,7 +385,6 @@ class RequestGameActions extends BaseGameStateController {
     const destinationZone = destination.droppableId;
     const destinationIndex = destination.index;
     this.player[destinationZone].splice(destinationIndex, 0, card);
-    this.focusOnCard(null);
 
     this.sendEvent("move_card", {
       from_zone: sourceZone,

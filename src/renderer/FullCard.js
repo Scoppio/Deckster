@@ -3,7 +3,7 @@ import style from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import emptyCard from "../resources/cards/empty_card.png";
 import FuckedCardBack from "../resources/cards/mtgcardback.png";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const SlimContainer = style.div`
   position: relative;
@@ -54,6 +54,11 @@ export const ImgCard = ({
   cardHeight,
 }) => {
   
+  const [cardBeingDragged, setCardBeingDragged] = useState(card.is_dragged);
+  useEffect(() => {
+    setCardBeingDragged(card.is_dragged);
+  }, [card.is_dragged]);
+
   const [isTapped, setIsTapped] = useState(card.is_tapped);
   const [cardFace, setCardFace] = useState(card.card_face);
   const cardCurrentRegion = region;
@@ -63,6 +68,10 @@ export const ImgCard = ({
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
   
+  useEffect(() => {
+    setIsTapped(!!card.tapped);
+  }, [card.tapped]);
+
   const flipCard = () => {
     card.changeFace();
     setCardFace(card.card_face);
@@ -72,9 +81,18 @@ export const ImgCard = ({
 
   const tapCard = () => {
     card.tapped = !card.is_tapped;
+    gameState.sendChatMessage(card.tapped ? "Tapped " + card.card_name : "Untapped " + card.card_name);
     gameState.updatePlayer("TAP_SOUND");
-    setIsTapped(card.tapped);
     gameState.focusOnCard(card);
+  };
+
+  const onFocus = () => {
+    gameState.focusOnCard(card);
+  };
+
+  const onBlur = () => {
+    console.log("onBlur " + card.name);
+    gameState.removeFocusOnCard(card);
   };
 
   const onMouseOver = (event) => {
@@ -83,7 +101,7 @@ export const ImgCard = ({
   };
 
   const onMouseLeave = () => {
-    gameState.focusOnCard(null);
+    gameState.removeFocusOnCard(card);
   };
 
   const sendToGraveyard = () => {
@@ -118,8 +136,30 @@ export const ImgCard = ({
     gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "hand", card);
   };
 
+  const cloneCard = () => {
+    gameState.cloneCard(card);
+  };
+
+  const sendToCommandZone = () => {
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "commander_zone", card);
+  };
+
+  const sendToFaceDown = () => {
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "faceDown", card);
+  };
+
+  const declareAttacker = () => {
+    gameState.sendChatMessage("Attacking with " + card.card_name);
+  };
+
+  const declareBlocker = () => {
+    gameState.sendChatMessage("Blocking with " + card.card_name);
+  };
+
   const commands = {
     t: tapCard,
+    a: declareAttacker,
+    s: declareBlocker,
     l: flipCard,
     g: sendToGraveyard,
     e: sendToExile,
@@ -136,6 +176,9 @@ export const ImgCard = ({
     k: addCounterMinusOneMinusOne,
     i: addCounter,
     j: removeCounter,
+    y: cloneCard,
+    z: sendToCommandZone,
+    v: sendToFaceDown,
   };
 
   return (
@@ -143,7 +186,7 @@ export const ImgCard = ({
       {(provided) => (
         <SlimContainer
           className={`${region} ImgCard`}
-          uniqueid={card._uid}
+          // uniqueid={card._uid}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={(el) => {provided.innerRef(el); cardRef.current = el;} }
@@ -152,6 +195,8 @@ export const ImgCard = ({
           onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}
           onContextMenu={flipCard}
+          onFocus={onFocus}
+          onBlur={onBlur}
           onKeyDown={(event) => {
             if (
               commands[event.key.toLowerCase()] &&
@@ -159,6 +204,8 @@ export const ImgCard = ({
               !event.altKey &&
               !event.shiftKey
             ) {
+              if (cardBeingDragged) return;
+              event.preventDefault();
               commands[event.key.toLowerCase()]();
             }
           }}
@@ -189,7 +236,7 @@ export const ImgCard = ({
             style={{
               height: `${cardHeight}%`,
               display: "block",
-              'object-fit': 'contain',
+              objectFit: 'contain',
               borderRadius: "8px",
               transform: card.tapped ? "rotate(90deg)" : "none",
               width: "100%",
@@ -237,6 +284,12 @@ export const ImgCardHand = ({
   const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
   const positionIdx = idx;
+  
+  const [cardBeingDragged, setCardBeingDragged] = useState(card.is_dragged);
+  useEffect(() => {
+    setCardBeingDragged(card.is_dragged);
+  }, [card.is_dragged]);
+
 
   const flipCard = () => {
     card.changeFace();
@@ -253,10 +306,9 @@ export const ImgCardHand = ({
   };
 
   const onMouseLeave = () => {
-    gameState.focusOnCard(null);
+    gameState.removeFocusOnCard(card);
   };
   
-
   const sendToGraveyard = () => {
     gameState.moveCardToZonePosition("hand", positionIdx, "graveyard", card);
   };
@@ -276,6 +328,15 @@ export const ImgCardHand = ({
   const sendToLibraryBottom = () => {
     const lastIdx = gameState.player.library.length;
     gameState.moveCardToZonePosition("hand", positionIdx, "library", card, lastIdx);
+  };
+
+  const onFocus = () => {
+    gameState.focusOnCard(card);
+  };
+
+  const onBlur = () => {
+    gameState.removeFocusOnCard(card);
+    console.log("onBlur " + card.name);
   };
 
   const commands = {
@@ -299,6 +360,8 @@ export const ImgCardHand = ({
           onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}
           onContextMenu={flipCard}
+          onFocus={onFocus}
+          onBlur={onBlur}
           onKeyDown={(event) => {
             if (
               commands[event.key.toLowerCase()] &&
@@ -307,6 +370,7 @@ export const ImgCardHand = ({
               !event.shiftKey
             ) {
               event.preventDefault();
+              if (cardBeingDragged) return;
               commands[event.key.toLowerCase()]();
             }
           }}
@@ -333,7 +397,7 @@ export const ImgCardHand = ({
             alt={card.name}
             style={{
               maxHeight: `${cardHeight}%`,
-              'object-fit': 'contain',
+              objectFit: 'contain',
               maxWidth: "100%",
               borderRadius: "8px",
             }}
@@ -364,7 +428,7 @@ export const ImgCardSearch = ({
   const [cardFace, setCardFace] = useState(card.card_face);
   const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
-  const positionIdx = idx;
+  // const positionIdx = idx;
 
   const flipCard = () => {
     card.changeFace();
@@ -381,7 +445,7 @@ export const ImgCardSearch = ({
   };
 
   const onMouseLeave = () => {
-    gameState?.focusOnCard(null);
+    gameState?.removeFocusOnCard(card);
   };
   
   const sendToGraveyard = () => {
@@ -493,8 +557,16 @@ export const StaticImgCard = ({
     cardRef.current.focus();
   };
 
+  const onFocus = () => {
+    gameState?.focusOnCard(card);
+  };
+
+  const onBlur = () => {
+    gameState?.removeFocusOnCard(card);
+  };
+
   const onMouseLeave = () => {
-    gameState?.focusOnCard(null);
+    gameState?.removeFocusOnCard(card);
   };
 
   return (
@@ -502,6 +574,8 @@ export const StaticImgCard = ({
       tabIndex={tabIndex}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
+      onFocus={onFocus}
+      onBlur={onBlur}
       ref={cardRef}
     >
       <HiddenText>
@@ -523,7 +597,7 @@ export const StaticImgCard = ({
         alt={card.card_name_with_mana_cost}
         style={{
           height: `${cardHeight}%`,
-          'object-fit': 'contain',
+          objectFit: 'contain',
           borderRadius: "8px",
           transform: card.is_tapped ? "rotate(90deg)" : "none",
         }}

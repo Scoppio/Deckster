@@ -2,7 +2,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
-const Zone = ({ zoneName, player, ariaLabel, tabIndex }) => (
+const Zone = ({ zoneName, player, ariaLabel }) => (
   <>
   <div
     aria-label={ariaLabel}
@@ -12,10 +12,9 @@ const Zone = ({ zoneName, player, ariaLabel, tabIndex }) => (
       <Dropdown.Toggle
         variant="secondary"
         id="dropdown-autoclose-outside"
-        tabIndex={tabIndex}
         size="sm"
       >
-        <span id>{zoneName === 'commander_zone' ? 'commander' : zoneName}</span>
+        <span>{zoneName === 'commander_zone' ? 'commander' : zoneName}</span>
       </Dropdown.Toggle>
       <DropdownMenuPortal>
         {(zoneName !== "faceDown" || zoneName !== "library") && (<Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>)}
@@ -36,27 +35,27 @@ const Zone = ({ zoneName, player, ariaLabel, tabIndex }) => (
 );
 
 export const OppLibrary = ({ player, tabIndex }) => (
-  <Zone zoneName="library" player={player} tabIndex={tabIndex} ariaLabel={player.name + "'s library has " + player["library"].length + " cards" + (player.reveal_top_of_library ? ", the top card is " + player["library"][0].name : "")} />
+  <Zone zoneName="library" player={player} ariaLabel={player.name + "'s library has " + player["library"].length + " cards" + (player.reveal_top_of_library ? ", the top card is " + player["library"][0].name : "")} />
 );
 
 export const OppGraveyard = ({ player, tabIndex }) => (
-  <Zone zoneName="graveyard" player={player} tabIndex={tabIndex} ariaLabel={player.name + "'s graveyard has " + player["graveyard"].length + " cards"} />
+  <Zone zoneName="graveyard" player={player} ariaLabel={player.name + "'s graveyard has " + player["graveyard"].length + " cards"} />
 );
 
 export const OppExile = ({ player, tabIndex }) => (
-  <Zone zoneName="exile" player={player} tabIndex={tabIndex} ariaLabel={player.name + "'s exile zone has " + player["exile"].length + " cards"} />
+  <Zone zoneName="exile" player={player} ariaLabel={player.name + "'s exile zone has " + player["exile"].length + " cards"} />
 );
 
 export const OppFaceDown = ({ player, tabIndex }) => (
-  <Zone zoneName="faceDown" player={player} tabIndex={tabIndex} ariaLabel={player.name + "'s face down zone has " + player["faceDown"].length + " cards"} />
+  <Zone zoneName="faceDown" player={player} ariaLabel={player.name + "'s face down zone has " + player["faceDown"].length + " cards"} />
 );
 
 export const OppCommanderZone = ({ player, tabIndex }) => (
-  <Zone zoneName="commander_zone" player={player} tabIndex={tabIndex} ariaLabel={player.name + "'s commander zone has " + player["commander_zone"].length + " cards, commander tax is " + player.commander_extra_casting_cost + " mana."} />
+  <Zone zoneName="commander_zone" player={player} ariaLabel={player.name + "'s commander zone has " + player["commander_zone"].length + " cards, commander tax is " + player.commander_extra_casting_cost + " mana."} />
 );
 
 export const OppPlayerHandZone = ({ player, tabIndex }) => (
-  <Zone zoneName="hand" player={player} tabIndex={tabIndex} ariaLabel={player.name + "'s hand has " + player["hand"].length + " cards"} />
+  <Zone zoneName="hand" player={player} ariaLabel={player.name + "'s hand has " + player["hand"].length + " cards"} />
 );
 
 OppLibrary.propTypes = {

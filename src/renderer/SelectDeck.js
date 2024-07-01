@@ -57,7 +57,14 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
             <div 
               key={index} 
               className="deck" 
+              tabIndex={index + 1}
+              aria-label={`${deck.name} - ${deck.description}`}
               onClick={() => setSelectedDeck(deck)}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') {
+                  setSelectedDeck(deck);
+                }
+              }}
             >
               <h2>{deck.name}</h2>
               <img 

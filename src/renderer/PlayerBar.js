@@ -184,6 +184,7 @@ export const OpponentBar = ({
 
   return (
     <PlayerContainer
+      role="region"
       aria-label={
 `${player.name} ${isActivePlayer ? "active player" : ""}
 ${player.health} life, 
@@ -194,9 +195,9 @@ ${player.commander_zone.length} in command,
 ${player.exile.length} in exile,
 ${player.faceDown.length} face down.`}
       // tabIndex={100000 * playerNumber + 1}
-      // ref={playerRef.playerStats}
-      tabIndex={player.tabIndices.playerStats}
       ref={playerRef.playerStats}
+      tabIndex={player.tabIndices.playerStats}
+      // ref={(el)=> playerRef.playerStats = el}
     >
       <div className="player-bar">
         <div className="player-counters">
