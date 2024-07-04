@@ -26,17 +26,12 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [x] Put a "Are you sure" dialog when quitting to desktop
 - [x] Put a kick player available for players
 - [x] Test disconnect + reconnect to game
-- [ ] Implement Opponent Zones and fix Settings
-- [ ] Verify aria-label is present in all new settings
+- [x] Implement Opponent Zones
+- [x] Implement Chat
 - [x] Deck search mechanique
 - [x] Token and card lookup mechanique
-- [ ] Implement scry
-- [ ] Implement reveal cards in hand
-- [ ] Test two players
-- [ ] Deploy server
-- [ ] Test join game
 - [x] Test kick player
-- [ ] Play with top card revealed (on deck)
+- [x] Play with top card revealed (on deck)
 - [x] Implement card-view for library
 - [ ] Implement card-view for graveyard
 - [ ] Implement card-view for commander
@@ -44,10 +39,9 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [ ] Implement send cards from facedown to bottom shuffled
 - [ ] Implement send cards from facedown to top shuffled
 - [ ] Implement card-view for exile
-
-
-geo.provider.network.url
-
-37,732712, -122,435318
-
-data:application/json,{“location”: {“lat”: LATITUDE, “lng”: LONGITUDE}, “accuracy”: ACCURACY}
+- [ ] Verify aria-label is present in all new settings
+- [ ] Implement reveal cards in hand
+- [ ] Test two players
+- [ ] Implement scry
+- [x] Deploy server
+- [ ] Test join game

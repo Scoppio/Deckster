@@ -29,7 +29,7 @@ export class Card {
     this.card_face = card.card_face || 0;
     this.tapped = card.tapped || false;
     this.dont_untap = card.dont_untap || false;
-    this.hidden = card.hidden || false;
+    this._hidden = card._hidden || false;
     this.power_toughness_counters = card.power_toughness_counters || 0;
     this.counters = card.counters || 0;
     this.power_modifier = card.power_modifier || 0;
@@ -37,15 +37,21 @@ export class Card {
     this.misc_counters = card.misc_counters || 0; 
     this.is_token = card.is_token || false;
     this.is_dragged = card.is_dragged || false;
+    this.revealed = card.revealed || false;
+    this.revealed_to = card.revealed_to || [];
   }
 
   changeFace() {
     this.card_face = this.card_face === 0 ? 1 : 0;
     if (!this.is_two_sided && this.card_face === 1) {
-      this.hidden = true;
+      this._hidden = true;
     } else if (!this.is_two_sided && this.card_face === 0) {
-      this.hidden = false;
+      this._hidden = false;
     }
+  }
+
+  get hidden() {
+    return this._hidden;
   }
 
   get is_tapped() {

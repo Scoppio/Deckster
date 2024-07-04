@@ -1,6 +1,7 @@
 import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
+import { CardPiles } from "../commons/CardPiles";
 
 const gameZones = [
   "battlefield",
@@ -28,6 +29,23 @@ const Zone = ({ gameState, zoneName, player, playerRef }) => {
     gameState.viewZone(zone_name);
   };
 
+  const moveAllCardsFromTo = (fromZone, toZone, shuffle_pile = false, bottom_pile = false) => {
+    let cardPiles = new CardPiles().setSourceZone(fromZone, []);
+    cardPiles[toZone] = player[fromZone];
+    gameState.cardsFromZone(cardPiles, false, shuffle_pile, bottom_pile);
+  };
+
+  const moveTopCardFromTo = (fromZone, toZone, shuffle_pile = false, bottom_pile = false) => {
+    console.log("moving card from " + fromZone + " to " + toZone);
+    let cardPiles = new CardPiles().setSourceZone(fromZone, []);
+    if (player[fromZone].length === 0) {
+      console.log("no cards to move");
+      return;
+    }
+    cardPiles[toZone] = [player[fromZone][0]];
+    gameState.cardsFromZone(cardPiles, false, shuffle_pile, bottom_pile);
+  };
+
   return (
     <div
       className={zoneName}
@@ -48,6 +66,24 @@ const Zone = ({ gameState, zoneName, player, playerRef }) => {
         <DropdownMenuPortal>
           <Dropdown.Item onClick={viewZone}>View all cards</Dropdown.Item>
           <Dropdown.Divider />
+          {
+            // for each zone that is not zoneName
+            gameZones
+              .map((gameZone, index) => {
+                if (gameZone === zoneName) {
+                  return null;
+                }
+                return (
+                  <Dropdown.Item key={index} onClick={() => moveTopCardFromTo(zone_name, gameZones[index])}>
+                    {gamezoneNames[index]}, Move top card to{" "}
+                  </Dropdown.Item>
+                );
+              })
+              .filter(Boolean)
+          }
+          { zoneName !== "library" && <Dropdown.Item onClick={() => moveTopCardFromTo(zone_name, "library", false, true)}>
+            Bottom of library, Move top cards to{" "}
+          </Dropdown.Item>}
           <Dropdown.Divider />
           {
             // for each zone that is not zoneName
@@ -57,13 +93,40 @@ const Zone = ({ gameState, zoneName, player, playerRef }) => {
                   return null;
                 }
                 return (
-                  <Dropdown.Item href={"#/" + gameZone} key={index}>
+                  <Dropdown.Item key={index} onClick={() => moveAllCardsFromTo(zone_name, gameZones[index])}>
                     {gamezoneNames[index]}, Move all cards to{" "}
                   </Dropdown.Item>
                 );
               })
               .filter(Boolean)
           }
+          {zoneName === 'faceDown' && <Dropdown.Divider />}
+          { zoneName === "faceDown" ? (
+              gameZones.map((gameZone, index) => {
+                  if (gameZone === zoneName) {
+                    return null;
+                  }
+                  return (
+                    <Dropdown.Item key={index} onClick={() => moveAllCardsFromTo(zone_name, gameZones[index])}>
+                      {gamezoneNames[index]}, Shuffle and move all cards to{" "}
+                    </Dropdown.Item>
+                  );
+                })
+                .filter(Boolean)
+               ) : null
+          }
+          { zoneName !== 'library' && <Dropdown.Divider />}
+          { zoneName !== "library" && <Dropdown.Item onClick={() => moveAllCardsFromTo(zone_name, "library", true, false)}>
+            Library, Shuffle and move all cards to{" "}
+          </Dropdown.Item>
+          }
+          { zoneName !== "library" && <Dropdown.Item onClick={() => moveAllCardsFromTo(zone_name, "library", true, true)}>
+            Bottom of library, Shuffle and move all cards to{" "}
+          </Dropdown.Item>}
+          { zoneName !== "library" && <Dropdown.Item onClick={() => moveAllCardsFromTo(zone_name, "library", true, true)}>
+            Bottom of library, Move all cards to{" "}
+          </Dropdown.Item>}
+          
         </DropdownMenuPortal>
       </Dropdown>
       <span>({player[zoneName].length})</span>

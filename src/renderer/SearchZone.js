@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Droppable, DragDropContext } from "react-beautiful-dnd";
 import {  ImgCardSearch } from "./FullCard";
+import { CardPiles } from "../commons/CardPiles";
 import style from "styled-components";
 import PropTypes from "prop-types";
 
@@ -12,27 +13,6 @@ const CsCardHolder = style.div`
   flex-grow: 1;
 `;
 
-class CardPiles {
-  constructor(cardPiles) {
-    this.library = (cardPiles && [...cardPiles.library] )|| [];
-    this.hand = (cardPiles && [...cardPiles.hand]) || [];
-    this.exile = (cardPiles && [...cardPiles.exile]) || [];
-    this.commander_zone = (cardPiles && [...cardPiles.commander_zone]) || [];
-    this.faceDown = (cardPiles && [...cardPiles.faceDown]) || [];
-    this.graveyard = (cardPiles && [...cardPiles.graveyard]) || [];
-    this.libraryTop = (cardPiles && [...cardPiles.libraryTop]) || [];
-    this.battlefield = (cardPiles && [...cardPiles.battlefield]) || [];
-    this.libraryBottom = (cardPiles && [...cardPiles.libraryBottom]) || [];
-    this.libraryBottomRandom = (cardPiles && [...cardPiles.libraryBottomRandom]) || [];
-    this.sourceZone = (cardPiles && cardPiles.sourceZone) || "";
-  }
-
-  setSourceZone(pileName, cards) {
-    this[pileName] = [...cards];
-    this.sourceZone = pileName;
-    return this;
-  }
-}
 
 export const SearchZone = ({ 
   gameState, 
@@ -52,7 +32,6 @@ export const SearchZone = ({
     if (!searchString.trim()) {
       filteredCards = [...cardPiles[sourceZone]];
     } else {
-      // Filter cardList based on searchString
       filteredCards = {
         ...cardPiles[sourceZone],
         cards: cardPiles[sourceZone].filter((card) =>
@@ -60,18 +39,14 @@ export const SearchZone = ({
         ),
       };
       filteredCards = filteredCards.cards;
-      console.log(filteredCards);
+      console.log(filteredCards); 
     }
   
     setFilteredCardList(filteredCards);
   }, [searchString, cardPiles, sourceZone]);
 
-  const closeAndShuffle = () => {
-    gameState.shuffleDeck();
-    handleCloseCardOpenZone();
-  };
-
-  const closeModal = () => {
+  const closeSearchZone = () => {
+    gameState.cardsFromZone(cardPiles, usingCloseAndShuffle);
     handleCloseCardOpenZone();
   };
 
@@ -168,9 +143,7 @@ export const SearchZone = ({
       <div className="sc-form-box">
         <div className="titleHideBtn">
           { 
-            usingCloseAndShuffle ?
-              <button onClick={closeAndShuffle}>Close & Shuffle</button> :
-              <button onClick={closeModal}>Close</button>
+            <button onClick={closeSearchZone}>{usingCloseAndShuffle ? "Close & Shuffle" : "Close"}</button>
           }
           <label><center>Search</center></label>
           <input type="text" value={searchString} onChange={ (e) => setSearchString(e.target.value) } />

@@ -38,8 +38,7 @@ function App() {
     setGameState(newGameState);
   };
 
-  const handleCloseCardOpenZone = (cardPiles) => {
-    gameStateController.closeSearchCardsAndMoveCards(cardPiles);
+  const handleCloseCardOpenZone = () => {
     setGameState("game");
   };
 

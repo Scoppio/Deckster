@@ -2,37 +2,44 @@ import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
-const Zone = ({ zoneName, player, ariaLabel }) => (
-  <>
-  <div
-    aria-label={ariaLabel}
-    style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '3px' }}
-  >
-    <Dropdown autoClose="outside">
-      <Dropdown.Toggle
-        variant="secondary"
-        id="dropdown-autoclose-outside"
-        size="sm"
+const Zone = ({ zoneName, player, ariaLabel, gameState }) =>{ 
+  
+  const openZone = () => {
+    gameState.viewZone(player, zoneName);
+  };
+
+  return (
+    <>
+      <div
+        aria-label={ariaLabel}
+        style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '3px' }}
       >
-        <span>{zoneName === 'commander_zone' ? 'commander' : zoneName}</span>
-      </Dropdown.Toggle>
-      <DropdownMenuPortal>
-        {(zoneName !== "faceDown" || zoneName !== "library") && (<Dropdown.Item href="#/action-1">View all cards</Dropdown.Item>)}
-        <Dropdown.Item>({player.library_size})</Dropdown.Item>
-      </DropdownMenuPortal>
-    </Dropdown>
-    <span>({player[zoneName].length})</span>
-    
-  </div>
-  {zoneName === "commander_zone" && (
-    <p>
-      Cmd Tax: {player.commander_extra_casting_cost}
-    </p>
-  )}
-  {zoneName === "library" && player.reveal_top_of_library && (
-         <p style={{ fontSize: '10px' ,overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{player.library_size > 0 && player.library[0].name}</p>)}
-  </>
-);
+        <Dropdown autoClose="outside">
+          <Dropdown.Toggle
+            variant="secondary"
+            id="dropdown-autoclose-outside"
+            size="sm"
+          >
+            <span>{zoneName === 'commander_zone' ? 'commander' : zoneName}</span>
+          </Dropdown.Toggle>
+          <DropdownMenuPortal>
+            {(zoneName !== "faceDown" || zoneName !== "library") && (<Dropdown.Item onClick={openZone}>View all cards</Dropdown.Item>)}
+            <Dropdown.Item>({player.library_size})</Dropdown.Item>
+          </DropdownMenuPortal>
+        </Dropdown>
+        <span>({player[zoneName].length})</span>
+        
+      </div>
+      {zoneName === "commander_zone" && (
+        <p>
+          Cmd Tax: {player.commander_extra_casting_cost}
+        </p>
+      )}
+      {zoneName === "library" && player.reveal_top_of_library && (
+            <p style={{ fontSize: '10px' ,overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{player.library_size > 0 && player.library[0].name}</p>)}
+    </>
+  );
+};
 
 export const OppLibrary = ({ player, tabIndex }) => (
   <Zone zoneName="library" player={player} ariaLabel={player.name + "'s library has " + player["library"].length + " cards" + (player.reveal_top_of_library ? ", the top card is " + player["library"][0].name : "")} />

@@ -244,6 +244,10 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("add_cards_to_battlefield", { cards });
   }
 
+  cardsFromZone(card_piles, shuffle = false, shuffle_card_pile = false, bottom_of_pile = false) {
+    this.sendEvent("cards_from_zone", { card_piles , shuffle, shuffle_card_pile, bottom_of_pile });
+  }
+
   untapAll() {
     this.sendEvent("untap_all");
   }
@@ -349,13 +353,13 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
-  viewZone(zone) {
+  viewZone(player, zone) {
     this.announce(`Viewing ${zone}`);
     this.searchZoneConfig["usingCloseAndShuffle"] = false;
     this.searchZoneConfig["sourceZone"] = zone;
     const targetZones = ["hand", "battlefield", "graveyard", "exile", "faceDown"].filter((targetZone) => targetZone !== zone);
     this.searchZoneConfig["targetZones"] = targetZones;
-    this.open_zone = { zone: zone, cards: this.player[zone] };
+    this.open_zone = { zone: zone, cards: player[zone] };
     this.changed();
   }
 
@@ -370,9 +374,6 @@ class RequestGameActions extends BaseGameStateController {
     this.changed();
   }
 
-  closeSearchCardsAndMoveCards(cardPiles) {
-    console.log("Closing search cards and moving cards");
-  }
 
   moveCardTo(source, destination, card = null) {
     const sourceZone = source.droppableId;
