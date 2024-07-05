@@ -143,7 +143,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
         <GameArenaTable {...{gameState, handleChangeGameState, player1References, player2References, player3References, player4References, player5References, player6References}} />
       </section>
       <section className="main-right">
-        <GameStateBoard gameState={gameState} playerRef={player1References} />
+        <GameStateBoard gameState={gameState} focusCard={gameState.focus_card} playerRef={player1References} />
       </section>
     </div>
   );

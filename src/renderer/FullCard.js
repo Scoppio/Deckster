@@ -101,6 +101,7 @@ export const ImgCard = ({
   };
 
   const onMouseLeave = () => {
+    console.log("mouseLeave " + card.name);
     gameState.removeFocusOnCard(card);
   };
 

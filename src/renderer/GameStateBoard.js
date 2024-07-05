@@ -1,17 +1,17 @@
 import PropTypes from "prop-types";
 import { LogFrame, AnnouncementFrame } from "./LogFrame";
 import emptyCard from "../resources/cards/empty_card.png";
-import { useState, useEffect } from "react";
-
+// import { useState, useEffect } from "react";
 import "./gameStateBoard.css";
 
-export const GameStateBoard = ({ gameState, playerRef }) => {
+export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
 
-  const [focusCard, setFocusCard] = useState(gameState.focus_card);
-
-  useEffect(() => {
-    setFocusCard(gameState.focus_card);
-  }, [gameState.focus_card]);
+  // const [focusOnCard, setFocusCard] = useState(gameState.focus_card);
+  // console.log("GameStateBoard:: Loading " + focusCard?.name + " card");
+  // useEffect(() => {
+  //   console.log("GameStateBoard:useEffect:: " + focusCard?.name + " card");
+  //   setFocusCard(gameState.focus_card);
+  // }, [gameState.focus_card]);
 
   const game_phase_name = {
     0: "Main Phase",
@@ -34,29 +34,29 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
       <p><b>{gameState.active_player?.name} :: {game_phase_name[gameState.game_phase]}</b></p>
       </div>
       <div style={{height: '69vh'}} tabIndex={20001}>
-        {focusCard ? (
-          <>
-              <h2
-                style={{
-                  fontSize: "16px",
-                  textOverflow: "ellipsis",
-                  overflowWrap: "break-word",
-                  wordWrap: "break-word",
-                }}
-              >
-                {focusCard.card_name}{" "}
-                {focusCard.card_mana_cost}
-              </h2>
-              <img
-                src={focusCard.card_image_uris?.normal ?? emptyCard}
-                alt={focusCard.card_image_description || focusCard.card_name}
-                style={{maxWidth: "220px"}}
-              />
-              <p style={{fontSize: "12px"}}><b>{focusCard.card_type_line}</b></p>
-              <p style={{fontSize: "12px"}}>{focusCard.card_read_oracle_text}</p>
-              <p>{focusCard.power_toughness}</p>
-          </>
-        ) : " "}
+      { !!focusCard?.card_name && 
+        <>
+            <h2
+              style={{
+                fontSize: "16px",
+                textOverflow: "ellipsis",
+                overflowWrap: "break-word",
+                wordWrap: "break-word",
+              }}
+            >
+              {focusCard.card_name}{" "}
+              {focusCard.card_mana_cost}
+            </h2>
+            { !!focusCard.card_image_uris && <img
+              src={focusCard.card_image_uris?.normal ?? emptyCard}
+              alt={focusCard.card_image_description || focusCard.card_name}
+              style={{maxWidth: "220px"}}
+            />}
+            <p style={{fontSize: "12px"}}><b>{focusCard.card_type_line}</b></p>
+            <p style={{fontSize: "12px"}}>{focusCard.card_read_oracle_text}</p>
+            <p>{focusCard.power_toughness}</p>
+        </>
+      }
       </div>
       <div style={{height: '25vh'}} tabIndex={20002}>
         <AnnouncementFrame gameState={gameState} />
@@ -68,5 +68,6 @@ export const GameStateBoard = ({ gameState, playerRef }) => {
 
 GameStateBoard.propTypes = {
   gameState: PropTypes.object.isRequired,
+  focusCard: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
 };

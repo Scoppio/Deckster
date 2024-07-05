@@ -109,28 +109,28 @@ class BaseGameStateController extends EventEmitter {
 
   // Local actions
   focusOnCard(card) {
-    console.log("Focusing on " + (card !== null ? card.name : "null"));
-    if (this.focus_card !== null && card !== null){ 
-      if (this.focus_card._uid !== card._uid) {
-        this.focus_card = card;
-        console.log("Focused on " + card.name);
-        this.changed();
-      }
+    if (!card) {
+      console.log("Card cant be focused, it is null");
+      card = {};
     }
-    else {
-      this.focus_card = card;
-      console.log("Focused on " + (card !== null ? card.name : "null"));
-      this.changed();
-    }
-    console.log("Conclused with focus on " + (card !== null ? card.name : "null"));
+    console.log("Focus on card " + card.name);
+    this.focus_card = card;
+    this.changed();
   }
 
   removeFocusOnCard(card) {
     if (this.focus_card !== null && card !== null) {
+      console.log("Trying to remove focus on " + card.name + " card " + this.focus_card?.name);
       if (this.focus_card._uid === card._uid) {
-        this.focus_card = null;
+        
+        console.log("Card removed from focus");
+        this.focus_card = {};
         this.changed();
+      } else {
+        console.log("Card not removed from focus");
       }
+    } else {
+      console.log("Focus card is already null");
     }
   }
 
