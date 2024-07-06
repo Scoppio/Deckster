@@ -97,11 +97,6 @@ function App() {
         gameState.authorization = authorization;
         gameState.registerWebSocketClient(webSocket);
         gameState.addPlayer(playerA);
-        gameState.addPlayer(Player.emptyPlayer("Ana"));
-        gameState.addPlayer(Player.emptyPlayer("Barbara"));
-        gameState.addPlayer(Player.emptyPlayer("Carla"));
-        gameState.addPlayer(Player.emptyPlayer("Dani"));
-        gameState.addPlayer(Player.emptyPlayer("Eva"));
         gameState.game_state_handler.push({ func: handleChangeGameState });
         setGameStateController(gameState);
         setGameState("game");

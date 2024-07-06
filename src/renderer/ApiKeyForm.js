@@ -11,6 +11,11 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [authorization, setAuthorization] = useState(null);
   const [enableEnter, setEnableEnter] = useState(false);
+  const [serverIsUp, setServerIsUp] = useState(false);
+
+  useEffect(() => {
+    setServerIsUp(checkServer());
+  }, []);
 
   useEffect(() => {
     const previousRememberMe = window.localStorage.getItem("rememberMe");
@@ -45,6 +50,15 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
       setEnableEnter(false);
     }
   }, [game, password, username, authorization]);
+
+  const checkServer = async () => {
+    const response = await fetch(`${Urls.api_url}/up/`);
+    if (!response.ok) {
+      console.error("Error:", response);
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -134,6 +148,7 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
           </div>
           <button type="submit" className="btn-submit" disabled={!enableEnter}>Enter</button>
         </form>
+        {serverIsUp && <p>Server is UP!</p> }
       </div>
     </div>
   );
