@@ -41,9 +41,9 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [x] Implement card-view for exile
 - [x] Deploy server
 - [x] Verify aria-label is present in all new settings
-- [ ] Implement action "Move all cards to the battlefield"
+- [x] Implement action "Move all cards to the battlefield" from zommandzone
 - [ ] Implement reveal cards in hand
 - [ ] Implement peek cards
 - [ ] Test two players
-- [ ] Implement scry
+- [ ] Implement scry ???
 - [ ] Test join game
