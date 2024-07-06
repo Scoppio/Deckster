@@ -438,12 +438,52 @@ class RequestGameActions extends BaseGameStateController {
         return `${hotkeys.altKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
       })
       .join("\n");
+    
+    const cardCommandList = `t: tap or untap card,
+    a: declare card attacker.
+    s: declare card blocker.
+    l: flip card to the backside.
+    g: send to graveyard.
+    e: send to exile.
+    1: put card on the top of library.
+    2: put card as the second from the top of library.
+    3: put card as the third from the top of library.
+    4: put card as the fourth from the top of library.
+    5: put card as the fifth from the top of library.
+    6: put card as the sixth from the top of library.
+    7: put card as the seventh from the top of library.
+    0: put card on the bottom of library.
+    h: put card on hand.
+    o: add +1/+1 counter.
+    k: add -1/-1 counter.
+    i: add counter.
+    j: remove counter.
+    y: clone card.
+    z: put on the command zone.
+    v: place card on face down zone.`;
 
-    const msg = `Available commands:
+    const cardInHandCommandList = `l: flipCard.
+    g: put card on graveyard.
+    e: put card on exile.
+    t: put card on top of library.
+    b: put card on bottom of library.
+    f: put card on face down zone.`;
+
+    const msg = `Available commands: 
+All commands are case sensitive!
+    
+Card on the battlefield commands:
+${cardCommandList}
+
+Card in hand commands:
+${cardInHandCommandList}
+
+Other commands
 ${keyCommandsList}
 ${ctrlKeyCommandsList}
 ${ctrlShiftKeyCommandsList}
-${altKeyCommandsList}`;
+${altKeyCommandsList}
+`;
 
     let reverse_log = msg.split("\n").reverse();
     // remove all empty lines

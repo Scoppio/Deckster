@@ -216,7 +216,7 @@ export class Card {
   }
 
   get power_toughness() {
-    if (this.hidden) return null;
+
     if (!this.is_power_and_thoughness_modified) {
       if (
         this.current_face.power === null ||
@@ -227,11 +227,21 @@ export class Card {
         return null;
       }
     }
-    const p = this.current_face.power === "*" ? "0" : this.current_face.power;
-    const t = this.current_face.toughness === "*" ? "0" : this.current_face.toughness;
 
+    let p = this.current_face.power === "*" ? "0" : this.current_face.power;
+    let t = this.current_face.toughness === "*" ? "0" : this.current_face.toughness;
+
+    if (this.hidden) {
+      p = "0";
+      t = "0";
+    }
+    
     const _power = String(Number(p || 0) + Number(this.power_modifier || 0) + Number(this.power_toughness_counters || 0));
     const _toughness = String(Number(t || 0) + Number(this.toughness_modifier || 0) + Number(this.power_toughness_counters || 0));
+
+    if (_toughness === "0" && _power === "0") {
+      return null;
+    }
 
     return _power + "/" + _toughness;
   }

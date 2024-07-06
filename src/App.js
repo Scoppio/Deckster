@@ -22,7 +22,7 @@ function App() {
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
-
+  
   const handleAuthorizationChange = (auth) => {
     setAuthorization(auth);
     setWebSocket(new WebSocketClient(auth));

@@ -403,6 +403,7 @@ export const ImgCardHand = ({
               borderRadius: "8px",
             }}
           />
+          
         </SlimContainer>
       )}
     </Draggable>
@@ -603,6 +604,20 @@ export const StaticImgCard = ({
           transform: card.is_tapped ? "rotate(90deg)" : "none",
         }}
       />
+      {
+        card.counters !== 0 ?
+          <Counter>
+            {card.counters}
+          </Counter>
+        : null
+      }
+      {
+        card.is_power_and_thoughness_modified ? 
+        <BlackBelt>
+          {card.power_toughness}
+        </BlackBelt>
+        : null
+      }
     </SlimContainer>
   );
 };

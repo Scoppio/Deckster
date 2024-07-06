@@ -34,9 +34,10 @@ export function GameArenaTable({ gameState, handleChangeGameState,  player1Refer
   };
 
   function determineLayoutClass(playerCount) {
-    if (playerCount === 1) return "single-row";
-    if (playerCount <= 4) return "two-rows";
-    return "three-rows";
+    if (playerCount === 1) return "one-rows-one-column";
+    if (playerCount === 2) return "two-rows-one-column";
+    if (playerCount <= 4) return "two-rows-two-columns";
+    return "three-rows-two-columns";
   }
   
   function getPlayerReference(playerId, index, playersSequence) {

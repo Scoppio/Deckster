@@ -1,18 +1,25 @@
 /* Single row layout */
-.main-arena.single-row {
+.main-arena.one-rows-one-column {
   display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 100%;
+}
+
+.main-arena.two-rows-one-column {
+  display: grid;
+  grid-template-columns: 1fr;
   grid-template-rows: 50% 50%;
 }
 
 /* Two rows, two columns layout */
-.main-arena.two-rows {
+.main-arena.two-rows-two-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 50% 50%; /* Fixed height for three rows */
 }
 
 /* Three rows, two columns layout */
-.main-arena.three-rows {
+.main-arena.three-rows-two-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows:  33.3%  33.3%  33.4%;
