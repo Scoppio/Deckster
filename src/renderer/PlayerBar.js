@@ -55,10 +55,16 @@ const PlayerHealthBox = style.div`
 `;
 
 export const GenericCounter = ({ value, color, aria_description, onClick, onContextMenu }) => {
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    setCounter(value);
+  }, [value]);
+
   return (
     <div>
       <CounterSphere color={color} aria-describedby={aria_description} onClick={onClick} onContextMenu={onContextMenu}>
-        {value}
+        {counter}
       </CounterSphere>
     </div>
   );
@@ -84,7 +90,22 @@ export const PlayerBar = ({
   
   const handleChangeCounters = (counterName, value) => {
     if (player.id === gameState.player.id) {
+      if (player.counters[counterName] === undefined) {
+        player.counters[counterName] = 0;
+      }
+      
       player.counters[counterName] += value;
+
+      if (counterName === "poison") {
+        setPoisonCounter(player.counters[counterName]);
+      }
+      if (counterName === "energy") {
+        setEnergyCounter(player.counters[counterName]);
+      }
+      if (counterName === "other") {
+        setOtherCounter(player.counters[counterName]);
+      }
+
       const selectedSound = value > 0 ? "ADD_COUNTER_SOUND" : "REMOVE_COUNTER_SOUND";
       gameState.updatePlayer(selectedSound);
     }
@@ -204,23 +225,23 @@ ${player.faceDown.length} face down.`}
           <PlayerAvatarImg src={player.avatar} alt={player.name} />
           <Row>
             <GenericCounter
-              value={poisonCounters}
+              value={player.counters?.["poison"] ?? 0}
               color={"green"}
-              aria_description={`${poisonCounters} poison`}
+              aria_description={`${player.counters?.["poison"] ?? 0} poison`}
             />
           </Row>
           <Row>
             <GenericCounter
-              value={energyCounters}
+              value={player.counters?.["energy"] ?? 0}
               color={"blue"}
-              aria_description={`${energyCounters} energy`}
+              aria_description={`${player.counters?.["energy"] ?? 0} energy`}
             />
           </Row>
           <Row>
             <GenericCounter
-              value={otherCounters}
+              value={player.counters?.["other"] ?? 0}
               color={"grey"}
-              aria_description={`${otherCounters} other`}
+              aria_description={`${player.counters?.["other"] ?? 0} other`}
             />
           </Row>
         </div>

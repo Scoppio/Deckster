@@ -35,7 +35,7 @@ export function GameArenaTable({ gameState, handleChangeGameState,  player1Refer
 
   function determineLayoutClass(playerCount) {
     if (playerCount === 1) return "single-row";
-    if (playerCount <= 3) return "two-rows";
+    if (playerCount <= 4) return "two-rows";
     return "three-rows";
   }
   
@@ -50,7 +50,7 @@ export function GameArenaTable({ gameState, handleChangeGameState,  player1Refer
   }
 
   return (
-    <div className={`main-arena  ${determineLayoutClass(gameState.players_sequence.length - 1)}`}>
+    <div className={`main-arena  ${determineLayoutClass(gameState.players_sequence.length)}`}>
       {gameState.players_sequence.map((player, index) => {
         const playerRef = getPlayerReference(player.id, index, gameState.players_sequence);
         

@@ -19,7 +19,7 @@ export const SettingsScreen = ({ gameState, handleChangeGameState }) => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-        if (event.key === "Escape") {
+        if (event.key === "p") {
           event.preventDefault();
           handleChangeGameState("game");
         }
@@ -46,6 +46,7 @@ export const SettingsScreen = ({ gameState, handleChangeGameState }) => {
     <div className="form-container">
       <div className="form-box">
         <h2>Settings</h2>
+        <h3>Game: {gameState.game_name}</h3>
         <div className="form-group">
           {gameState.players_sequence.map((player, index) => ({
             player,

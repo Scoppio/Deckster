@@ -16,11 +16,25 @@ export const TabIndices = {
   card_list_zone: 10000,
 };
 
+const NoTabIndice = {
+  playerStats: -1,
+  front_battlefield: -1,
+  back_battlefield: -1,
+  land_zone_battlefield: -1,
+  hand: -1,
+  library: -1,
+  graveyard: -1,
+  exile: -1,
+  faceDown: -1,
+  commander_zone: -1,
+};
+
 export class Player {
   constructor(user, library, health, tabIndices, isLocal = false) {
     this._uid = Utils.random_id_str;
     this.id = user.id;
     this.name = user.username;
+    this.deck_id = library.id;
     this.health = health;
     this.counters = {};
     this.library = library.deck;
@@ -44,10 +58,10 @@ export class Player {
     this.reveal_top_of_library = false;
   }
 
-  static emptyPlayer(name="") {
+  static emptyPlayer(name) {
     const player = new Player(
       {"id": Utils.hash(name), "username": name},
-      { deck: [], commanders: [] },
+      { id: -1, deck: [], commanders: [] },
       0,
       {
         playerStats: -1,
@@ -66,6 +80,18 @@ export class Player {
     player._is_empty = true;
     return player;
   }
+  
+  static remote(player_hash) {
+    const player = new Player(
+      { id: player_hash.id, username: player_hash.name},
+      { id: -1, deck: [], commanders: [] },
+      player_hash.health,
+      NoTabIndice,
+      false,
+    );
+    player.updateFromPayload(player_hash);
+    return player;
+  }
 
   createCardInstances(cardArray) {
     return cardArray.map((card) => new Card(card));
@@ -73,6 +99,7 @@ export class Player {
 
   updateFromPayload(payload) {
     this.hand = this.createCardInstances(payload.hand);
+    this.deck_id = payload.deck_id;
     this.front_battlefield = this.createCardInstances(
       payload.front_battlefield,
     );
@@ -103,6 +130,3 @@ export class Player {
     return this.remote_hand_size;
   }
 }
-
-
-export const EMPTY_PLAYER = Player.emptyPlayer();

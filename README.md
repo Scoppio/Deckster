@@ -47,3 +47,6 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [ ] Test two players
 - [ ] Implement scry ???
 - [ ] Test join game
+- [ ] Login into game is not adding the player to the gamestate of other players
+- [ ] changing the deck before rejoining the game has no effect
+- [ ] There is no information on which is the game name for the current game

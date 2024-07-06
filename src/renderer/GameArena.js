@@ -89,7 +89,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   );
 
   hotkeys.registerKeyCommand("F1", () => gameState.listCommands(hotkeys), "List all commands.");
-  hotkeys.registerCtrlKeyCommand("P", () => handleChangeGameState("settings"), "Opens Settings");
+  hotkeys.registerCtrlKeyCommand("p", () => handleChangeGameState("settings"), "Opens Settings");
   hotkeys.registerCtrlKeyCommand("1", () => hotkeys.playerRefs[1].playerStats.current.focus(), "Player 1 (Your) stats.");
   hotkeys.registerCtrlKeyCommand("2", () => hotkeys.playerRefs[2]?.playerStats?.current?.focus(), "Player 2 stats.");
   hotkeys.registerCtrlKeyCommand("3", () => hotkeys.playerRefs[3]?.playerStats?.current?.focus(), "Player 3 stats.");

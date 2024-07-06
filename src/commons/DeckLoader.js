@@ -205,14 +205,15 @@ export const convertTextToDeck = (text) => {
   return { deck, commanders };
 };
 
-export const fetchDeck = async (deck_id, authorization) => {
+export const fetchDeck = async (id, authorization) => {
   try {
-    const response = await fetch(`${Urls.api_url}/deck/${deck_id}/json?format=json`, {
+    const response = await fetch(`${Urls.api_url}/deck/${id}/json?format=json`, {
       headers: {
         'Authorization': `token ${authorization.token}`,
         'Content-Type': 'application/json'
       },
     });
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -231,7 +232,8 @@ export const fetchDeck = async (deck_id, authorization) => {
         deck.push(new Card(card_quantity.card));
       }
     }
-    return { deck, commanders };
+
+    return { id, deck, commanders };
   } catch (error) {
     console.error("Error:", error);
   }
@@ -253,5 +255,5 @@ export const loadDeck = (deck_id) => {
       deck.push(new Card(card_quantity.card));
     }
   }
-  return { deck, commanders };
+  return { id: deck_id, deck, commanders };
 };

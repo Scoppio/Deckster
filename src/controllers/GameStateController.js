@@ -2,6 +2,7 @@ import AriaHelper from "./AriaHelper";
 import { EventEmitter } from "events";
 import Sounds from "./Sounds";
 import { Card } from "../commons/Card";
+import { Player } from "../commons/Player";
 
 import { Utils } from "../commons/Utils";
 
@@ -62,6 +63,10 @@ class BaseGameStateController extends EventEmitter {
     this.sounds = previousState.sounds;
     this.announcement_message = previousState.announcement_message;
     this.open_zone = previousState.open_zone;
+  }
+
+  get game_name () {
+    return this.authorization?.gameName;
   }
 
   get game_phase_name () {
@@ -477,10 +482,8 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   pass_turn(event) {
-    // FIXME: IMPLEMENT pass turn
     const new_active_player = event.payload.active_player;
     this.active_player_id = new_active_player.id;
-    // {"active_player": {"id": active_player_id, "name": active_player["name"]}}
   }
 
   change_game_phase(event) {
@@ -489,8 +492,13 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   update_opp_table(event) {
-    if (this.player_number !== event.sender.idx) {
-      this.players[event.sender.idx].updateFromPayload(event.payload);
+    const opp_player = event.payload;
+    if (this.player_number !== opp_player.id) {
+      if (!(opp_player.id in this.players)) {
+        this.players[opp_player.id] = Player.remote(opp_player);
+      } else {
+        this.players[opp_player.id].updateFromPayload(opp_player);
+      }
       this.changed();
     }
   }

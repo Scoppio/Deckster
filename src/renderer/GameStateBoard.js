@@ -6,13 +6,6 @@ import "./gameStateBoard.css";
 
 export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
 
-  // const [focusOnCard, setFocusCard] = useState(gameState.focus_card);
-  // console.log("GameStateBoard:: Loading " + focusCard?.name + " card");
-  // useEffect(() => {
-  //   console.log("GameStateBoard:useEffect:: " + focusCard?.name + " card");
-  //   setFocusCard(gameState.focus_card);
-  // }, [gameState.focus_card]);
-
   const game_phase_name = {
     0: "Main Phase",
     1: "Combat Phase",
@@ -68,6 +61,6 @@ export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
 
 GameStateBoard.propTypes = {
   gameState: PropTypes.object.isRequired,
-  focusCard: PropTypes.object.isRequired,
+  focusCard: PropTypes.object,
   playerRef: PropTypes.object.isRequired,
 };
