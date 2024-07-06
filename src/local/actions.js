@@ -565,6 +565,7 @@ const ACTION_CONFIG = {
   i_do_not_pay,
   no_response,
   response,
+  
 };
 
 class ActionFactory {

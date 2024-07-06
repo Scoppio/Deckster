@@ -262,16 +262,19 @@ class RequestGameActions extends BaseGameStateController {
 
   updatePlayer(sound, volume = 1.0) {
     this.sendEvent("update_player", { ...this.player, sound, volume });
+    this.changed();
   }
 
   increaseLife(health_points = 1) {
     this.player.health += health_points;
     this.updatePlayer("ADD_COUNTER_SOUND");
+    this.changed();
   }
 
   decreaseLife(health_points = 1) {
     this.player.health -= health_points;
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
+    this.changed();
   }
 
   moveCardToZonePosition(sourceZone, sourceIndex, destinationZone, card = null, position = 0) {
@@ -353,13 +356,14 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
-  viewZone(player, zone) {
+  viewZone(player, zone, noTargetZone = false) {
     this.announce(`Viewing ${zone}`);
     this.searchZoneConfig["usingCloseAndShuffle"] = false;
     this.searchZoneConfig["sourceZone"] = zone;
     const targetZones = ["hand", "battlefield", "graveyard", "exile", "faceDown"].filter((targetZone) => targetZone !== zone);
-    this.searchZoneConfig["targetZones"] = targetZones;
+    this.searchZoneConfig["targetZones"] = noTargetZone ? [] : targetZones;
     this.open_zone = { zone: zone, cards: player[zone] };
+    this.changeAppState("view_zone");
     this.changed();
   }
 

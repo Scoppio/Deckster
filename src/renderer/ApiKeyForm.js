@@ -33,15 +33,18 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
         setEnableEnter(true);
       }
     }
-    
-    
   }, [onAuthorizationChange]);
 
   useEffect(() => {
-    if (game && password && username) {
+    if (Boolean(game) && Boolean(password) && Boolean(username)) {
       setEnableEnter(true);
     }
-  }, [game, password, username]);
+    else if (Boolean(game) && Boolean(authorization)) {
+      setEnableEnter(true);
+    } else if (Boolean(game) === false) {
+      setEnableEnter(false);
+    }
+  }, [game, password, username, authorization]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,6 +86,10 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     onAuthorizationChange(auth);
   };
   
+  useEffect(() => {
+    window.localStorage.setItem("rememberMe", rememberMe);
+    }, [rememberMe]);
+
   return (
     <div className="form-container">
       <div className="form-box">

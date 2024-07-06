@@ -26,7 +26,7 @@ const Zone = ({ gameState, zoneName, player, playerRef }) => {
   const zone_name = zoneName;
   const viewZone = () => {
     console.log("viewing commander zone");
-    gameState.viewZone(zone_name);
+    gameState.viewZone(player, zone_name);
   };
 
   const moveAllCardsFromTo = (fromZone, toZone, shuffle_pile = false, bottom_pile = false) => {
@@ -141,13 +141,12 @@ const TheCommanderZone = ({
   playerRef,
   playerNumber,
 }) => {
+
   const viewZone = () => {
-    console.log("viewing commander zone");
-    gameState.viewZone("commander_zone");
+    gameState.viewZone(player, zoneName);
   };
 
   const changeCmdrTax = (value) => {
-    console.log("changing commander tax by " + value);
     gameState.player.commander_extra_casting_cost += value;
     gameState.updatePlayer("CHANGE_COMMANDER_TAX");
   };
@@ -226,8 +225,7 @@ export const CommanderZone = ({
   
 }) => (
   <TheCommanderZone
-    zoneName="commander_zone"
-    {...{ gameState, player, playerRef, playerNumber }}
+    {...{ zoneName: "commander_zone", gameState, player, playerRef, playerNumber }}
   />
 );
 

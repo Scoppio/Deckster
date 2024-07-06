@@ -289,7 +289,6 @@ export const NorthTable = ({
   player,
   isActivePlayer,
   barSide,
-  handleChangeGameState,
 }) => {
   return (
     <div
@@ -302,6 +301,7 @@ export const NorthTable = ({
         playerRef={playerRef}
         isActivePlayer={isActivePlayer}
         playerNumber={playerNumber}
+        gameState={gameState}
       />
       <div className="player-table-arena-north" style={{
         flex: "1",
@@ -328,5 +328,4 @@ NorthTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   barSide: PropTypes.string.isRequired,
-  handleChangeGameState: PropTypes.func.isRequired,
 };

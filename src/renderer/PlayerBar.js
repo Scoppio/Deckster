@@ -92,18 +92,17 @@ export const PlayerBar = ({
 
   return (
     <PlayerContainer
-      aria-label={`${player.name} ${isActivePlayer ? "active player" : ""} / ${
-        player.health
-      } life, 
-        ${poisonCounters > 0 ? poisonCounters + " poison, " : ""}
-        ${energyCounters > 0 ? energyCounters + " energy, " : ""}
-        ${otherCounters > 0 ? otherCounters + " other counter, " : ""}
-        ${player.hand.length} in hand,
-        ${player.graveyard.length} in graveyard,
-        ${player.library.length} in library,
-        ${player.commander_zone.length} in command,
-        ${player.exile.length} in exile,
-        ${player.faceDown.length} face down.`}
+      aria-label={
+`${player.name} ${isActivePlayer ? "active player" : ""} / ${player.health} life, 
+${poisonCounters > 0 ? poisonCounters + " poison, " : ""}
+${energyCounters > 0 ? energyCounters + " energy, " : ""}
+${otherCounters > 0 ? otherCounters + " other counter, " : ""}
+${player.hand.length} in hand,
+${player.graveyard.length} in graveyard,
+${player.library.length} in library,
+${player.commander_zone.length} in command,
+${player.exile.length} in exile,
+${player.faceDown.length} face down.`}
       tabIndex={player.tabIndices.playerStats}
       ref={playerRef.playerStats}
     >
@@ -171,6 +170,7 @@ export const OpponentBar = ({
   playerRef,
   isActivePlayer,
   playerNumber,
+  gameState,
 }) => {
   const [poisonCounters, setPoisonCounter] = useState(player.counters?.["poison"] ?? 0);
   const [energyCounters, setEnergyCounter] = useState(player.counters?.["energy"] ?? 0);
@@ -229,12 +229,12 @@ ${player.faceDown.length} face down.`}
           <PlayerName>{player.name}</PlayerName>
           <PlayerHealthBox>{player.health}</PlayerHealthBox>
           <br />
-          <OppPlayerHandZone {...{player, tabIndex: 100000 * playerNumber + 11}} />
-          <OppLibrary {...{player, tabIndex: 100000 * playerNumber + 12}} />
-          <OppGraveyard {...{player, tabIndex: 100000 * playerNumber + 13}} />
-          <OppExile {...{player, tabIndex: 100000 * playerNumber + 14}} />
-          <OppFaceDown {...{player, tabIndex: 100000 * playerNumber + 15}} />
-          <OppCommanderZone {...{player, tabIndex: 100000 * playerNumber + 16}} />
+          <OppPlayerHandZone {...{player, tabIndex: 100000 * playerNumber + 11, gameState}} />
+          <OppLibrary {...{player, tabIndex: 100000 * playerNumber + 12, gameState}} />
+          <OppGraveyard {...{player, tabIndex: 100000 * playerNumber + 13, gameState}} />
+          <OppExile {...{player, tabIndex: 100000 * playerNumber + 14, gameState}} />
+          <OppFaceDown {...{player, tabIndex: 100000 * playerNumber + 15, gameState}} />
+          <OppCommanderZone {...{player, tabIndex: 100000 * playerNumber + 16, gameState}} />
         </div>
       </div>
     </PlayerContainer>
@@ -246,4 +246,5 @@ OpponentBar.propTypes = {
   playerRef: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   playerNumber: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 };
