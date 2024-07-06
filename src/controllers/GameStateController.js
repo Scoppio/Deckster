@@ -219,6 +219,10 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("i_do_not_pay");
   }
 
+  updateGameState() {
+    this.sendEvent("update_game_state");
+  }
+
   exitGame() {
     this.sendEvent("player_quit", {
       player_id: this.player.id,
@@ -531,6 +535,19 @@ class ExecuteGameActions extends RequestGameActions {
     this.changed();
   }
 
+  update_game_state(event) {
+    const players = event.payload.players;
+    players.forEach((player) => {
+      if (!(player.id in this.players)) {
+        this.players[player.id] = Player.remote(player);
+      } else {
+        this.players[player.id].updateFromPayload(player);
+      }
+    });
+
+    this.internalUpdatePlayerSequence(event.payload.players_sequence);
+  }
+
   update_opp_table(event) {
     const opp_player = event.payload;
     if (this.player_number !== opp_player.id) {
@@ -569,13 +586,18 @@ class ExecuteGameActions extends RequestGameActions {
     this.player.updateFromPayload(event.payload);
   }
 
-  update_player_sequence(event) {
-    const players_sequence_ids = event.payload.players_sequence_ids;
-    this.active_player_id = event.payload.active_player_id;
+  internalUpdatePlayerSequence(playerSequence) {
+    const players_sequence_ids = playerSequence.players_sequence_ids;
+    this.active_player_id = playerSequence.active_player_id;
     
     this.players_sequence = players_sequence_ids
       .map(player_id => this.players[player_id])
       .filter(player => player !== null && player !== undefined);
+    this.changed();
+  }
+
+  update_player_sequence(event) {
+    this.internalUpdatePlayerSequence(event.payload);
     this.changed();
   }
 

@@ -99,6 +99,7 @@ function App() {
         gameState.addPlayer(playerA);
         gameState.game_state_handler.push({ func: handleChangeGameState });
         setGameStateController(gameState);
+        gameState.updateGameState();
         setGameState("game");
       }
     }
