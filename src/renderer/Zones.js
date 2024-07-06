@@ -151,6 +151,12 @@ const TheCommanderZone = ({
     gameState.updatePlayer("CHANGE_COMMANDER_TAX");
   };
 
+  const moveAllCardsFromTo = (fromZone, toZone, shuffle_pile = false, bottom_pile = false) => {
+    let cardPiles = new CardPiles().setSourceZone(fromZone, []);
+    cardPiles[toZone] = player[fromZone];
+    gameState.cardsFromZone(cardPiles, false, shuffle_pile, bottom_pile);
+  };
+
   return (
     <div
       className={zoneName}
@@ -185,7 +191,7 @@ const TheCommanderZone = ({
                   return null;
                 }
                 return (
-                  <Dropdown.Item href={"#/" + gameZone} key={index}>
+                  <Dropdown.Item onClick={() => moveAllCardsFromTo(zoneName, gameZone)} key={index}>
                     Move all cards to {gamezoneNames[index]}
                   </Dropdown.Item>
                 );

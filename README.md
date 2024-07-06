@@ -33,15 +33,17 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [x] Test kick player
 - [x] Play with top card revealed (on deck)
 - [x] Implement card-view for library
-- [ ] Implement card-view for graveyard
-- [ ] Implement card-view for commander
-- [ ] Implement card-view for facedown 
-- [ ] Implement send cards from facedown to bottom shuffled
-- [ ] Implement send cards from facedown to top shuffled
-- [ ] Implement card-view for exile
-- [ ] Verify aria-label is present in all new settings
+- [x] Implement card-view for graveyard
+- [x] Implement card-view for commander
+- [x] Implement card-view for facedown 
+- [x] Implement send cards from facedown to bottom shuffled
+- [x] Implement send cards from facedown to top shuffled
+- [x] Implement card-view for exile
+- [x] Deploy server
+- [x] Verify aria-label is present in all new settings
+- [ ] Implement action "Move all cards to the battlefield"
 - [ ] Implement reveal cards in hand
+- [ ] Implement peek cards
 - [ ] Test two players
 - [ ] Implement scry
-- [x] Deploy server
 - [ ] Test join game
