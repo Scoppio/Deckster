@@ -67,8 +67,7 @@ class move_card extends action {
     return (
       zone === "library" ||
       zone === "hand" ||
-      zone === "faceDown" ||
-      zone === "face_down"
+      zone === "faceDown"
     );
   }
 

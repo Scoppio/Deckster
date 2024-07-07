@@ -9,7 +9,7 @@ const gameZones = [
   "library",
   "graveyard",
   "exile",
-  "faceDown",
+  "face_down",
   "commander_zone",
 ];
 const gamezoneNames = [
@@ -100,8 +100,8 @@ const Zone = ({ gameState, zoneName, player, playerRef }) => {
               })
               .filter(Boolean)
           }
-          {zoneName === 'faceDown' && <Dropdown.Divider />}
-          { zoneName === "faceDown" ? (
+          {zoneName === 'face_down' && <Dropdown.Divider />}
+          { zoneName === "face_down" ? (
               gameZones.map((gameZone, index) => {
                   if (gameZone === zoneName) {
                     return null;
@@ -218,7 +218,7 @@ export const Exile = ({ gameState, player, playerRef, playerNumber }) => (
 
 export const FaceDown = ({ gameState, player, playerRef, playerNumber }) => (
   <Zone
-    zoneName="faceDown"
+    zoneName="face_down"
     {...{ gameState, player, playerRef, playerNumber }}
   />
 );

@@ -28,7 +28,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
       exile: player1ExileRef,
       battlefield: player1BattlefieldRef,
       library: player1LibraryRef,
-      faceDown: player1FaceDownRef,
+      face_down: player1FaceDownRef,
       commander_zone: player1commanderZoneRef,
       sideboard: player1SideboardRef,
       log: player1LogRef,
@@ -104,7 +104,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlKeyCommand("d", () => hotkeys.playerRefs[1].library.current.focus(), "Your library.");
   hotkeys.registerCtrlKeyCommand("f", () => hotkeys.playerRefs[1].graveyard.current.focus(), "Your graveyard.");
   hotkeys.registerCtrlKeyCommand("q", () => hotkeys.playerRefs[1].exile.current.focus(), "Your exile.");
-  hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].faceDown.current.focus(), "Your face down cards.");
+  hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].face_down.current.focus(), "Your face down cards.");
   hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone.current.focus(), "Your commander zone.");
   hotkeys.registerCtrlKeyCommand("z", () => hotkeys.playerRefs[1].sideboard.current.focus(), "Your sideboard.");
   hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log.current.focus(), "Game log.");

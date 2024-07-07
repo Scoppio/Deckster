@@ -11,7 +11,7 @@ export const TabIndices = {
   library: 6000,
   graveyard: 7000,
   exile: 8000,
-  faceDown: 9000,
+  face_down: 9000,
   commander_zone: 9900,
   card_list_zone: 10000,
 };
@@ -25,7 +25,7 @@ const NoTabIndice = {
   library: -1,
   graveyard: -1,
   exile: -1,
-  faceDown: -1,
+  face_down: -1,
   commander_zone: -1,
 };
 
@@ -47,7 +47,7 @@ export class Player {
     this.land_zone_battlefield = [];
     this.graveyard = [];
     this.exile = [];
-    this.faceDown = [];
+    this.face_down = [];
     this.commander_zone = library.commanders;
     this.commander_extra_casting_cost = 0;
     this.selected_cards = [];
@@ -72,7 +72,7 @@ export class Player {
         library: -1,
         graveyard: -1,
         exile: -1,
-        faceDown: -1,
+        face_down: -1,
         commander_zone: -1,
       },
       true,
@@ -109,7 +109,7 @@ export class Player {
     );
     this.graveyard = this.createCardInstances(payload.graveyard);
     this.exile = this.createCardInstances(payload.exile);
-    this.faceDown = this.createCardInstances(payload.faceDown);
+    this.face_down = this.createCardInstances(payload.face_down);
     this.commander_zone = this.createCardInstances(
       payload.commander_zone ?? [],
     );

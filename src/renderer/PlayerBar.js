@@ -123,7 +123,7 @@ ${player.graveyard.length} in graveyard,
 ${player.library.length} in library,
 ${player.commander_zone.length} in command,
 ${player.exile.length} in exile,
-${player.faceDown.length} face down.`}
+${player.face_down.length} face down.`}
       tabIndex={player.tabIndices.playerStats}
       ref={playerRef.playerStats}
     >
@@ -214,7 +214,7 @@ ${player.graveyard.length} in graveyard,
 ${player.library.length} in library,
 ${player.commander_zone.length} in command,
 ${player.exile.length} in exile,
-${player.faceDown.length} face down.`}
+${player.face_down.length} face down.`}
       // tabIndex={100000 * playerNumber + 1}
       ref={playerRef.playerStats}
       tabIndex={player.tabIndices.playerStats}

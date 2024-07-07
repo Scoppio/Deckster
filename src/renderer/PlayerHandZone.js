@@ -2,7 +2,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import PropTypes from "prop-types";
 import DropdownMenuPortal from "../commons/DropdownMenuPortal";
 
-const gameZones = ["library", "graveyard", "exile", "faceDown"];
+const gameZones = ["library", "graveyard", "exile", "face_down"];
 const gamezoneNames = ["Library", "Graveyard", "Exile", "Face Down"];
 
 const TheHandZone = ({

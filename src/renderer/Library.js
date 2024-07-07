@@ -55,7 +55,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
   };
 
   const handleDrawMultipleCardsFaceDown = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "faceDown");
+    gameState.drawCard(number_of_cards, "library", "face_down");
   };
 
   const openLibrary = () => {
@@ -91,7 +91,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             onConfirm={handleDrawMultipleCardsToHand}
             text={"Hand"}
             placeholder={"Hand, type the number of cards to draw to hand..."}
-            aria-labelledby={
+            ariaLabel={
               "Hand, type the number of cards to draw to hand, hit enter to confirm"
             }
           />
@@ -102,7 +102,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             placeholder={
               "Battlefield, type the number of cards put in the battlefield..."
             }
-            aria-labelledby={
+            ariaLabel={
               "Battlefield, type the number of cards put in the battlefield, hit enter to confirm"
             }
           />
@@ -111,19 +111,19 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             onConfirm={handleDrawMultipleCardsToExile}
             text={"Exile"}
             placeholder={"Exile, type the number of cards to exile..."}
-            aria-labelledby={
+            ariaLabel={
               "Exile, type the number of cards to exile, hit enter to confirm"
             }
           />
           <Dropdown.Item
             as={CustomItem}
             onConfirm={handleDrawMultipleCardsFaceDown}
-            text={"Facedown"}
+            text={"Face_down"}
             placeholder={
-              "Facedown, type the number of cards to set facedown..."
+              "Face down, type the number of cards to set face down..."
             }
-            aria-labelledby={
-              "Facedown, type the number of cards to set facedown, hit enter to confirm"
+            ariaLabel={
+              "Face down, type the number of cards to set face down, hit enter to confirm"
             }
           />
           <Dropdown.Item
@@ -131,7 +131,7 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
             onConfirm={viewTopXCards}
             text={"View Top X"}
             placeholder={"View top X amount of cards..."}
-            aria-labelledby={"View top X amount of cards, hit enter to confirm"}
+            ariaLabel={"View top X amount of cards, hit enter to confirm"}
           />
           <Dropdown.Divider />
           <Dropdown.Item>
@@ -197,7 +197,7 @@ const CustomItem = React.forwardRef(
       className,
       text,
       placeholder,
-      "aria-labelledby": labelledBy,
+      ariaLabel: label,
     },
     ref
   ) => {
@@ -209,7 +209,7 @@ const CustomItem = React.forwardRef(
         ref={ref}
         style={style}
         className={className}
-        aria-labelledby={labelledBy}
+        aria-label={label}
       >
         <Row
           className="justify-content-md-center"
@@ -232,7 +232,7 @@ const CustomItem = React.forwardRef(
                 }
               }}
               value={value}
-              aria-labelledby={labelledBy}
+              aria-label={label}
             />
           </Col>
         </Row>

@@ -146,7 +146,7 @@ export const ImgCard = ({
   };
 
   const sendToFaceDown = () => {
-    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "faceDown", card);
+    gameState.moveCardToZonePosition(cardCurrentRegion, positionIdx, "face_down", card);
   };
 
   const declareAttacker = () => {
@@ -319,7 +319,7 @@ export const ImgCardHand = ({
   };
 
   const sendToFaceDown = () => {
-    gameState.moveCardToZonePosition("hand", positionIdx, "faceDown", card);
+    gameState.moveCardToZonePosition("hand", positionIdx, "face_down", card);
   };
 
   const sendToLibraryTop = () => {
@@ -459,7 +459,7 @@ export const ImgCardSearch = ({
   };
 
   const sendToFaceDown = () => {
-    // gameState.moveCardToZonePosition("hand", positionIdx, "faceDown", card);
+    // gameState.moveCardToZonePosition("hand", positionIdx, "face_down", card);
   };
 
   const sendToLibraryTop = () => {

@@ -19,7 +19,7 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
 
   useEffect(() => {
     const previousRememberMe = window.localStorage.getItem("rememberMe");
-    let gameName = null;
+    let gameName = '';
     setRememberMe(previousRememberMe === "true");
 
     if (previousRememberMe === false) {
@@ -30,7 +30,7 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
       gameName = window.localStorage.getItem("gameName");
       const token = window.localStorage.getItem("token");
       const userString = window.localStorage.getItem("user");
-      setGame(gameName);
+      setGame(gameName || '');
 
       if (gameName && token && userString) {
         const user = JSON.parse(userString);

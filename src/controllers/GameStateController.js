@@ -335,7 +335,7 @@ class RequestGameActions extends BaseGameStateController {
   }
 
   drawCardToFaceDown(number_of_cards = 1) {
-    this.drawCard(number_of_cards, "library", "faceDown");
+    this.drawCard(number_of_cards, "library", "face_down");
   }
 
   shuffleDeck() {
@@ -353,7 +353,7 @@ class RequestGameActions extends BaseGameStateController {
   viewLibrary() {
     this.searchZoneConfig["usingCloseAndShuffle"] = true;
     this.searchZoneConfig["sourceZone"] = "library";
-    this.searchZoneConfig["targetZones"] = ["hand", "battlefield", "graveyard", "exile", "faceDown"];
+    this.searchZoneConfig["targetZones"] = ["hand", "battlefield", "graveyard", "exile", "face_down"];
     
     this.sendEvent("view_library");
   }
@@ -361,7 +361,7 @@ class RequestGameActions extends BaseGameStateController {
   viewTopXCards(number_of_cards) {
     this.searchZoneConfig["usingCloseAndShuffle"] = false;
     this.searchZoneConfig["sourceZone"] = "library";
-    this.searchZoneConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "faceDown"];
+    this.searchZoneConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "face_down"];
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
@@ -369,7 +369,7 @@ class RequestGameActions extends BaseGameStateController {
     this.announce(`Viewing ${zone}`);
     this.searchZoneConfig["usingCloseAndShuffle"] = false;
     this.searchZoneConfig["sourceZone"] = zone;
-    const targetZones = ["hand", "battlefield", "graveyard", "exile", "faceDown"].filter((targetZone) => targetZone !== zone);
+    const targetZones = ["hand", "battlefield", "graveyard", "exile", "face_down"].filter((targetZone) => targetZone !== zone);
     this.searchZoneConfig["targetZones"] = noTargetZone ? [] : targetZones;
     this.open_zone = { zone: zone, cards: player[zone] };
     this.changeAppState("view_zone");
