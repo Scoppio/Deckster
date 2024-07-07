@@ -542,7 +542,7 @@ ImgCardSearch.propTypes = {
   card: PropTypes.object.isRequired,
   size: PropTypes.string.isRequired,
   tabIndex: PropTypes.number.isRequired,
-  cardHeight: PropTypes.number.isRequired,
+  cardHeight: PropTypes.string.isRequired,
   gameState: PropTypes.object.isRequired,
 };
 
