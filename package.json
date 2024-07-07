@@ -6,6 +6,7 @@
   "version": "0.25.0",
   "private": true,
   "main": "public/electron.js",
+  "favicon": "public/favicon2.ico",
   "dependencies": {
     "@electron/remote": "^2.1.0",
     "antd": "^5.15.1",

@@ -537,7 +537,9 @@ class ExecuteGameActions extends RequestGameActions {
 
   update_game_state(event) {
     const players = event.payload.players;
-    players.forEach((player) => {
+    Object.keys(players).forEach((key) => {
+      const player = players[key];
+
       if (!(player.id in this.players)) {
         this.players[player.id] = Player.remote(player);
       } else {
