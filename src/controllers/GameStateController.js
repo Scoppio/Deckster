@@ -547,7 +547,7 @@ class ExecuteGameActions extends RequestGameActions {
       }
     });
 
-    this.internalUpdatePlayerSequence(event.payload.players_sequence);
+    this.internalUpdatePlayerSequence(event.payload.player_sequence);
   }
 
   update_opp_table(event) {
