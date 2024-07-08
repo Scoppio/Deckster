@@ -13,7 +13,7 @@ const HiddenText = style.div`
   border: 0;
 `;
 
-export const LogFrame = ({ gameState, height, playerRef }) => {
+export const LogFrame = ({ gameState, playerRef }) => {
   const inputRef = useRef(null);
 
   useEffect(() => {

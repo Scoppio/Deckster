@@ -23,7 +23,7 @@ const Zone = ({ zoneName, player, tabIndex, ariaLabel, gameState }) =>{
             <span>{zoneName === 'commander_zone' ? 'commander' : zoneName}</span>
           </Dropdown.Toggle>
           <DropdownMenuPortal>
-            {(zoneName !== "faceDown" || zoneName !== "library") && (<Dropdown.Item onClick={openZone}>View all cards</Dropdown.Item>)}
+            {(zoneName !== "face_down" || zoneName !== "library") && (<Dropdown.Item onClick={openZone}>View all cards</Dropdown.Item>)}
             <Dropdown.Item>({player.library_size})</Dropdown.Item>
           </DropdownMenuPortal>
         </Dropdown>
@@ -53,7 +53,7 @@ export const OppExile = ({ player, tabIndex, gameState }) => (
 );
 
 export const OppFaceDown = ({ player, tabIndex, gameState }) => (
-  <Zone zoneName="faceDown" player={player} tabIndex={tabIndex} gameState={gameState} ariaLabel={player.name + "'s face down zone has " + player["faceDown"].length + " cards"} />
+  <Zone zoneName="face_down" player={player} tabIndex={tabIndex} gameState={gameState} ariaLabel={player.name + "'s face down zone has " + player["face_down"].length + " cards"} />
 );
 
 export const OppCommanderZone = ({ player, tabIndex, gameState }) => (

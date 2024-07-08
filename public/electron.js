@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require('path');
 const isDev = app.isPackaged ? false : require('electron-is-dev');
 
+
 let mainWindow;
 
 function createWindow() {
@@ -24,16 +25,30 @@ function createWindow() {
 const template = [
   {
     label: 'Deckster',
-    submenu: [{
-      role: 'help',
-      accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
-      click: () => { console.log('Electron rocks!'); }
-    },
-    {
-      role: 'Quit',
-      accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Alt+F4',
-      click: () => { app.quit(); }
-    }],
+    submenu: [
+      {
+        label: 'Back to Login/Reload',
+        accelerator: 'CmdOrCtrl+R',
+        click (item, focusedWindow) {
+          if (focusedWindow) focusedWindow.reload();
+        }
+      },
+      {
+        role: 'help',
+        accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
+        click (item, focusedWindow) {
+          if (focusedWindow) focusedWindow.reload();
+        }
+      },
+      {
+        role: 'Quit',
+        accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Alt+F4',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('quit-game');
+        }
+      }
+    ],
   },
   {
     label: 'Debug',
@@ -55,14 +70,38 @@ const template = [
     ]
   },
   {
-    label: 'Cards',
+    label: 'Actions',
     submenu: [
       {
         label: 'Search Cards',
-        accelerator: 'CmdOrCtrl+T',
+        accelerator: 'CmdOrCtrl+M',
         click: () => {
           const win = BrowserWindow.getFocusedWindow();
           win.webContents.send('search-cards');
+        }
+      },
+      {
+        label: 'No response.',
+        accelerator: 'CmdOrCtrl+R',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('no-response');
+        }
+      },
+      {
+        label: 'Response!',
+        accelerator: 'CmdOrCtrl+T',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('response');
+        }
+      },
+      {
+        label: 'I do not pay!',
+        accelerator: 'CmdOrCtrl+W',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('i-do-not-pay');
         }
       },
     ]

@@ -1,8 +1,8 @@
-const ADDR = "abstractobserver.studio";
-const PORT = "";
+// const ADDR = "abstractobserver.studio";
+// const PORT = "";
 
-// const ADDR = "localhost";
-// const PORT = ":8000";
+const ADDR = "localhost";
+const PORT = ":8000";
 
 export class Urls {
 

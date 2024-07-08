@@ -32,7 +32,6 @@ export function GameArena({ gameState, handleChangeGameState }) {
       commander_zone: player1commanderZoneRef,
       sideboard: player1SideboardRef,
       log: player1LogRef,
-      card_list_zone: player1CardListZone,
     }),
     []
   );
@@ -99,16 +98,16 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlKeyCommand("5", () => hotkeys.playerRefs[5]?.playerStats?.current?.focus(), "Player 5 stats.");
   hotkeys.registerCtrlKeyCommand("6", () => hotkeys.playerRefs[6]?.playerStats?.current?.focus(), "Player 6 stats.");
 
-  hotkeys.registerCtrlKeyCommand("e", () => hotkeys.playerRefs[1].hand.current.focus(), "Your hand.");
-  hotkeys.registerCtrlKeyCommand("s", () => hotkeys.playerRefs[1].battlefield.current.focus(), "Your battlefield.");
-  hotkeys.registerCtrlKeyCommand("d", () => hotkeys.playerRefs[1].library.current.focus(), "Your library.");
-  hotkeys.registerCtrlKeyCommand("f", () => hotkeys.playerRefs[1].graveyard.current.focus(), "Your graveyard.");
-  hotkeys.registerCtrlKeyCommand("q", () => hotkeys.playerRefs[1].exile.current.focus(), "Your exile.");
-  hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].face_down.current.focus(), "Your face down cards.");
-  hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone.current.focus(), "Your commander zone.");
-  hotkeys.registerCtrlKeyCommand("z", () => hotkeys.playerRefs[1].sideboard.current.focus(), "Your sideboard.");
-  hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log.current.focus(), "Game log.");
-  hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current?.focus(), "Card list zone.");
+  hotkeys.registerCtrlKeyCommand("e", () => hotkeys.playerRefs[1].hand?.current.focus(), "Your hand.");
+  hotkeys.registerCtrlKeyCommand("s", () => hotkeys.playerRefs[1].battlefield?.current.focus(), "Your battlefield.");
+  hotkeys.registerCtrlKeyCommand("d", () => hotkeys.playerRefs[1].library?.current.focus(), "Your library.");
+  hotkeys.registerCtrlKeyCommand("f", () => hotkeys.playerRefs[1].graveyard?.current.focus(), "Your graveyard.");
+  hotkeys.registerCtrlKeyCommand("q", () => hotkeys.playerRefs[1].exile?.current.focus(), "Your exile.");
+  hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].face_down?.current.focus(), "Your face down cards.");
+  hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone?.current.focus(), "Your commander zone.");
+  hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log?.current.focus(), "Game log.");
+  // hotkeys.registerCtrlKeyCommand("z", () => hotkeys.playerRefs[1].sideboard?.current.focus(), "Your sideboard.");
+  // hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current?.focus(), "Card list zone.");
 
   hotkeys.registerCtrlShiftKeyCommand("J", () => gameState.tapUntapSelected(), "Tap/Untap selected cards.");
   hotkeys.registerCtrlShiftKeyCommand("L", () => gameState.declareAttacking(), "Declare attacking with selected cards.");

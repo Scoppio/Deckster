@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { LogFrame, AnnouncementFrame } from "./LogFrame";
 import emptyCard from "../resources/cards/empty_card.png";
-// import { useState, useEffect } from "react";
+
 import "./gameStateBoard.css";
 
 export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
@@ -53,7 +53,7 @@ export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
       </div>
       <div style={{height: '25vh'}} tabIndex={20002}>
         <AnnouncementFrame gameState={gameState} />
-        <LogFrame gameState={gameState} playerRef={playerRef.log} height={30}/>
+        <LogFrame gameState={gameState} playerRef={playerRef} />
       </div>
     </div>
   );

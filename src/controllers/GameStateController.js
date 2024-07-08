@@ -127,7 +127,6 @@ class BaseGameStateController extends EventEmitter {
     if (this.focus_card !== null && card !== null) {
       console.log("Trying to remove focus on " + card.name + " card " + this.focus_card?.name);
       if (this.focus_card._uid === card._uid) {
-        
         console.log("Card removed from focus");
         this.focus_card = {};
         this.changed();

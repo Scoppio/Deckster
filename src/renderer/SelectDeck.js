@@ -2,27 +2,27 @@ import { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { Urls } from "../commons/Urls";
 import { fetchDeck } from "../commons/DeckLoader";
+import { useQuery } from '@tanstack/react-query';
 
 import './selectDeck.css';
 
 export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
-  const [decks, setDecks] = useState([]);
+
   const [selectedDeck, setSelectedDeck] = useState(null);
 
-  useEffect(() => {
-    fetch(`${Urls.api_url}/decks/json?format=json`, {
+  const fetchDecks = async () => {
+    const response = await fetch(`${Urls.api_url}/decks/json?format=json`, {
       headers: {
         'Authorization': `token ${authorization.token}`,
         'Content-Type': 'application/json'
       },
-    })
-      .then(response => response.json())
-      .then(data => setDecks(data.results))
-      .catch(error => {
-        console.error('There was an error fetching the decks!', error);
-      });
-  }, [setDecks, authorization]);
-  
+    });
+    const data = await response.json();
+    return data.results;
+  };
+
+  const { data, isLoading, isError } = useQuery({ queryKey: ['decks'], queryFn: fetchDecks });
+
   useEffect(() => {
     if (selectedDeck) {
       fetchDeck(selectedDeck.id, authorization)
@@ -36,8 +36,8 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
     }
     return null;
   };
-
-  if (decks.length === 0) {
+  
+  if (isLoading) {
     return (
       <div className="form-container">
         <div className="form-box">
@@ -46,39 +46,48 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
       </div>
     );
   }
-  else 
-  {
+
+  if (isError) {
     return (
-      <div className="sd-container">
-      <div className="sd-box">
-        <h1>Decks</h1>
-        <div className="deck-mosaic">
-          {decks.map((deck, index) => (
-            <div 
-              key={index} 
-              className="deck" 
-              tabIndex={index + 1}
-              aria-label={`${deck.name} - ${deck.description}`}
-              onClick={() => setSelectedDeck(deck)}
-              onKeyPress={(event) => {
-                if (event.key === 'Enter') {
-                  setSelectedDeck(deck);
-                }
-              }}
-            >
-              <h2>{deck.name}</h2>
-              <img 
-                src={deckThumbnail(deck)} 
-                alt={`${deck.name} commander`} 
-                className="deck-thumbnail"
-              />
-            </div>
-          ))}
+      <div className="form-container">
+        <div className="form-box">
+          <h2>Error loading decks...</h2>
         </div>
       </div>
-    </div>
     );
   }
+
+  return (
+    <div className="sd-container">
+    <div className="sd-box">
+      <h1>Decks</h1>
+      <div className="deck-mosaic">
+        {data.map((deck) => (
+          <div 
+            key={deck.id} 
+            className="deck" 
+            tabIndex={"1"}
+            aria-label={`${deck.name} - ${deck.description}`}
+            onClick={() => setSelectedDeck(deck)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                setSelectedDeck(deck);
+              }
+            }}
+          >
+            <h2>{deck.name}</h2>
+            <img 
+              src={deckThumbnail(deck)} 
+              alt={`${deck.name} commander`} 
+              className="deck-thumbnail"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+  );
+  
 };
 
 

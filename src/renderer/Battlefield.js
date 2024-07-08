@@ -44,7 +44,7 @@ export const StaticBattlefield = ({
             key={index}
             size={"small"}
             tabIndex={index + player.tabIndices.front_battlefield}
-            cardHeight={100}
+            cardHeight={"100"}
           />
         ))}
       </CardHolder>
@@ -55,7 +55,7 @@ export const StaticBattlefield = ({
             key={index}
             size={"small"}
             tabIndex={index + player.tabIndices.back_battlefield}
-            cardHeight={100}
+            cardHeight={"100"}
           />
         ))}
       </CardHolder>
@@ -67,7 +67,7 @@ export const StaticBattlefield = ({
             key={index}
             size={"small"}
             tabIndex={index + player.tabIndices.land_zone_battlefield}
-            cardHeight={100}
+            cardHeight={"100"}
           />
         ))}
       </CardHolder>
@@ -113,7 +113,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
                 idx={idx}
                 card={card}
                 tabIndex={idx + player.tabIndices.front_battlefield}
-                cardHeight={100}
+                cardHeight={"100"}
               />
             ))}
             {provided.placeholder}
@@ -143,7 +143,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
                 idx={idx}
                 card={card}
                 tabIndex={idx + player.tabIndices.back_battlefield}
-                cardHeight={100}
+                cardHeight={"100"}
               />
             ))}
             {provided.placeholder}
@@ -173,7 +173,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
                 idx={idx}
                 card={card}
                 tabIndex={idx + player.tabIndices.land_zone_battlefield}
-                cardHeight={100}
+                cardHeight={"100"}
               />
             ))}
             {provided.placeholder}

@@ -35,9 +35,9 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [x] Implement card-view for library
 - [x] Implement card-view for graveyard
 - [x] Implement card-view for commander
-- [x] Implement card-view for facedown 
-- [x] Implement send cards from facedown to bottom shuffled
-- [x] Implement send cards from facedown to top shuffled
+- [x] Implement card-view for face_down 
+- [x] Implement send cards from face_down to bottom shuffled
+- [x] Implement send cards from face_down to top shuffled
 - [x] Implement card-view for exile
 - [x] Deploy server
 - [x] Verify aria-label is present in all new settings

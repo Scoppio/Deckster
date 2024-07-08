@@ -36,7 +36,7 @@ Ctrl+S: Meu battlefield
 Ctrl+D: Minha Library
 Ctrl+F: Meu Graveyard
 Ctrl+Q: Minha Exiled Pile
-Ctrl+W: Minha Exiled Facedown Pile
+Ctrl+W: Minha Exiled face_down Pile
 Ctrl+E: Minha Command Zone
 Ctrl+R: Alguma área que eu tenha esquecido mas que surja depois.
 *

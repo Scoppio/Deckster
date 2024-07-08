@@ -8,6 +8,7 @@ import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
 import { Player, TabIndices } from "./commons/Player";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
+import { useQuery } from '@tanstack/react-query';
 
 import GameStateController from "./controllers/GameStateController";
 import { WebSocketClient } from "./controllers/WebSocketClient";
@@ -15,6 +16,22 @@ import { WebSocketClient } from "./controllers/WebSocketClient";
 import "./App.css";
 import "mana-font/css/mana.css";
 
+class GameStateRef {
+
+  constructor() {
+    this.gameStateController = null;
+  }
+
+  setGameStateController(gameStateController) {
+    this.gameStateController = gameStateController;
+  }
+
+  getGameStateController() {
+    return this.gameStateController;
+  }
+}
+
+const gameStateRef = new GameStateRef();
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
@@ -23,6 +40,10 @@ function App() {
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
   
+  useEffect(() => {
+    gameStateRef.setGameStateController(gameStateController);
+  }, [gameStateController]);
+
   const handleAuthorizationChange = (auth) => {
     setAuthorization(auth);
     setWebSocket(new WebSocketClient(auth));
@@ -42,12 +63,33 @@ function App() {
     setGameState("game");
   };
 
-  useEffect(() => {
+  const setupIpcRendererActions = () => {
     window.electron?.ipcRenderer?.on('search-cards', () => {
-      setGameState("tokens");
-    });
-  }, []);
-
+        setGameState("tokens");
+      });
+    window.electron?.ipcRenderer?.on('i-do-not-pay', () => {
+        gameStateRef.getGameStateController()?.iDoNotPay();
+      });
+    window.electron?.ipcRenderer?.on('response', () => {
+        gameStateRef.getGameStateController()?.response();
+      });
+    window.electron?.ipcRenderer?.on('no-response', () => {
+        gameStateRef.getGameStateController()?.noResponse();
+      });
+    window.electron?.ipcRenderer?.on('quit-game', () => {
+        const userConfirmed = window.confirm("Are you sure you want to quit the game?");
+        if (userConfirmed) {
+          gameStateRef.getGameStateController()?.exitGame();
+          
+          setTimeout(() => {
+            window.close();
+          }, 300); // 300ms delay before closing the window
+        }
+      });
+  };
+  
+  useQuery({ queryKey: ['setupActions'], queryFn: setupIpcRendererActions });
+      
   useEffect(() => {
     if (gameStateController) {
       const handleStateChange = (newState) => {

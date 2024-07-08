@@ -236,6 +236,7 @@ export const ImgCard = ({
             alt={card.card_face_name_with_mana_cost}
             style={{
               height: `${cardHeight}%`,
+              maxHeight: "150px",
               display: "block",
               objectFit: 'contain',
               borderRadius: "8px",
