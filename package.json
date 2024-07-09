@@ -7,6 +7,10 @@
   "private": true,
   "main": "public/electron.js",
   "favicon": "public/favicon2.ico",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Scoppio/Deckster.git"
+  },
   "dependencies": {
     "@electron/remote": "^2.1.0",
     "@sentry/react": "^8.15.0",

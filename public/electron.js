@@ -1,8 +1,8 @@
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require('path');
 const isDev = app.isPackaged ? false : require('electron-is-dev');
-
-require('update-electron-app')();
+const { updateElectronApp } = require('update-electron-app');
+updateElectronApp();
 
 let mainWindow;
 
