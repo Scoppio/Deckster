@@ -105,6 +105,7 @@ export class HotKeys {
   constructor(gameController, playerRefs) {
     this.gameController = gameController;
     this.playerRefs = {};
+    this.isLocked = false;
 
     playerRefs.forEach((p, idx) => {
       this.playerRefs[idx + 1] = p;
@@ -172,7 +173,16 @@ export class HotKeys {
     return "alt";
   }
 
+  lock() {
+    this.isLocked = true;
+  }
+
+  unlock() {
+    this.isLocked = false;
+  }
+
   registerKeyCommand = (key, func, description, os) => {
+    if (this.isLocked) return;
     if (os === "mac") {
       this.macKeyCommand.push({ key, func, description });
     } else {
@@ -181,6 +191,7 @@ export class HotKeys {
   };
 
   registerCtrlKeyCommand = (key, func, description, os) => {
+    if (this.isLocked) return;
     if (os === "mac") {
       this.macCtrlKeyCommand.push({ key, func, description });
     } else {
@@ -189,6 +200,7 @@ export class HotKeys {
   };
 
   registerCtrlShiftKeyCommand = (key, func, description, os) => {
+    if (this.isLocked) return;
     if (os === "mac") {
       this.macCtrlShiftKeyCommand.push({ key, func, description });
     } else {
@@ -197,6 +209,7 @@ export class HotKeys {
   };
 
   registerAltKeyCommand = (key, func, description, os) => {
+    if (this.isLocked) return;
     if (os === "mac") {
       this.macAltKeyCommand.push({ key, func, description });
     } else {

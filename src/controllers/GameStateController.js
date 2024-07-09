@@ -471,8 +471,8 @@ class RequestGameActions extends BaseGameStateController {
     t: put card on top of library.
     b: put card on bottom of library.
     f: put card on face down zone.`;
-
-    const msg = `Available commands: 
+    
+    const old_msg = `Available commands: 
 All commands are case sensitive!
     
 Card on the battlefield commands:
@@ -487,20 +487,76 @@ ${ctrlKeyCommandsList}
 ${ctrlShiftKeyCommandsList}
 ${altKeyCommandsList}
 `;
+    const msg = `Available Commands:
+All commands are case sensitive!
 
-    let reverse_log = msg.split("\n").reverse();
-    // remove all empty lines
-    reverse_log = reverse_log.filter((line) => line.trim() !== "");
-    reverse_log.forEach((line) => {
-      this.game_log.unshift(line.trim());
-    });
-    if (this.game_log.length > 100) {
-      this.game_log = this.game_log.slice(0, 100);
-    }
+Card on the Battlefield Commands:
+t - Tap or untap card.
+a - Declare card attacker.
+s - Declare card blocker.
+l - Flip card to the backside.
+g - Send to graveyard.
+e - Send to exile.
+1-7 - Put card at specified position on library.
+0 - Put card on bottom of library.
+h - Put card on hand.
+o - Add +1/+1 counter.
+k - Add -1/-1 counter.
+i - Add counter.
+j - Remove counter.
+y - Clone card.
+z - Put on the command zone.
+v - Place card on face down zone.
+
+Card in Hand Commands:
+l - Flip card.
+g - Put card on graveyard.
+e - Put card on exile.
+t - Put card on top of library.
+b - Put card on bottom of library.
+f - Put card on face down zone.
+
+Other Commands:
+F1 - List all commands.
+F2 - Force resync of game state.
+F3 - Open card search.
+x/< - Untap all permanents.
+>/c - Draw a card.
+(-) - Decrease life total.
+=/* - Increase life total.
+e - Pass turn.
+n - Pass phase.
+_ - Decrease poison counters.
++ - Increase poison counters.
+ctrl p - Open Settings.
+ctrl 1-6 - View player stats.
+ctrl e - View your hand.
+ctrl s - View your battlefield.
+ctrl d - View your library.
+ctrl f - View your graveyard.
+ctrl q - View your exile.
+ctrl h - View your face down cards.
+ctrl b - View your commander zone.
+ctrl l - View game log.`;
+
+    // let reverse_log = msg.split("\n").reverse();
+    
+    // reverse_log.forEach((line) => {
+    //   this.game_log.unshift(line.trim());
+    // });
+    // if (this.game_log.length > 100) {
+    //   this.game_log = this.game_log.slice(0, 100);
+    // }
+    // window.confirm(msg);
+    
+    // this.log_event({payload: msg});
+
     this.playSound("PLACEHOLDER_SOUND", 1.0);
-    this.changed();
+    // this.changed();
+    return msg;
   }
 }
+
 
 class ExecuteGameActions extends RequestGameActions {
   constructor(state = null, updateState) {

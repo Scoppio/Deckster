@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { HotKeys } from "../controllers/Hotkeys";
 import { GameStateBoard } from "./GameStateBoard";
 
@@ -18,7 +18,16 @@ export function GameArena({ gameState, handleChangeGameState }) {
   const player1commanderZoneRef = useRef(null);
   const player1SideboardRef = useRef(null);
   const player1LogRef = useRef(null);
-  const player1CardListZone = useRef(null);
+  const dialogRef = useRef(null);
+  
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogText, setDialogText] = useState("");
+  const [formattedDialogText, setFormattedDialogText] = useState([]);
+
+  useEffect(() => {
+    setFormattedDialogText(dialogText.split("\n"));
+    dialogRef?.current?.focus();
+  }, [dialogText, dialogRef]);
 
   const player1References = useMemo(
     () => ({
@@ -32,6 +41,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
       commander_zone: player1commanderZoneRef,
       sideboard: player1SideboardRef,
       log: player1LogRef,
+      dialog: dialogRef,
     }),
     []
   );
@@ -87,7 +97,12 @@ export function GameArena({ gameState, handleChangeGameState }) {
     ]
   );
 
-  hotkeys.registerKeyCommand("F1", () => gameState.listCommands(hotkeys), "List all commands.");
+  const handleRequestCommandList = () => {
+    setDialogText(gameState.listCommands(hotkeys));
+    setDialogOpen(true);
+  };
+  
+  hotkeys.registerKeyCommand("F1", () => handleRequestCommandList(), "List all commands.");
   hotkeys.registerKeyCommand("F2", () => gameState.updateGameState(), "Force resync of game state.");
   hotkeys.registerKeyCommand("F3", () => gameState.requestListOfTokens(), "Open card search.");
   hotkeys.registerCtrlKeyCommand("p", () => handleChangeGameState("settings"), "Opens Settings");
@@ -106,13 +121,8 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].face_down?.current.focus(), "Your face down cards.");
   hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone?.current.focus(), "Your commander zone.");
   hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log?.current.focus(), "Game log.");
-  // hotkeys.registerCtrlKeyCommand("z", () => hotkeys.playerRefs[1].sideboard?.current.focus(), "Your sideboard.");
-  // hotkeys.registerCtrlKeyCommand("c", () => hotkeys.playerRefs[1].card_list_zone?.current?.focus(), "Card list zone.");
-
-  hotkeys.registerCtrlShiftKeyCommand("J", () => gameState.tapUntapSelected(), "Tap/Untap selected cards.");
-  hotkeys.registerCtrlShiftKeyCommand("L", () => gameState.declareAttacking(), "Declare attacking with selected cards.");
-  hotkeys.registerCtrlShiftKeyCommand("U", () => gameState.declareBlocking(), "Declare blocking with selected cards.");
-
+  hotkeys.registerCtrlKeyCommand("o", () => hotkeys.playerRefs[1].dialog?.current.focus(), "Focus on open dialog.");
+  
   hotkeys.registerKeyCommand("x", () => gameState.untapAll(), "Untap all your permanents.");
   hotkeys.registerKeyCommand("<", () => gameState.untapAll(), "Untap all your permanents.");
   hotkeys.registerKeyCommand(">", () => gameState.drawCard(), "Draw a card.");
@@ -126,6 +136,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
 
   hotkeys.registerKeyCommand("_", () => gameState.decreaseLife(), "Decrease your poison counters total.");
   hotkeys.registerKeyCommand("+", () => gameState.increaseLife(), "Increase your poiton counters total.");
+  hotkeys.lock();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -140,12 +151,24 @@ export function GameArena({ gameState, handleChangeGameState }) {
   
   return (
     <div className="main">
+      <dialog open={dialogOpen} onClose={() => setDialogOpen(false)} style={{fontSize: "10px", zIndex: 100}}>
+        <div tabIndex="0" ref={dialogRef}>
+          {formattedDialogText.map((line, index) => (
+            <p key={index} style={{margin: 0}}>{line}</p>
+          ))}
+        </div>
+        <form method="dialog">
+          <button>OK</button>
+        </form>
+      </dialog>
+
       <section className="main-left">
         <GameArenaTable {...{gameState, handleChangeGameState, player1References, player2References, player3References, player4References, player5References, player6References}} />
       </section>
       <section className="main-right">
         <GameStateBoard gameState={gameState} focusCard={gameState.focus_card} playerRef={player1References} />
       </section>
+      
     </div>
   );
 }

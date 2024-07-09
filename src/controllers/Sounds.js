@@ -49,6 +49,7 @@ export default class Sounds {
     const cloned_node = sound.cloneNode(true);
     cloned_node.volume = volume;
     cloned_node.play();
+    sound.cloneNode(true).volume = volume;
     this.sounds[sound_name] = sound;
   }
 }

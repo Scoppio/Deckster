@@ -39,7 +39,8 @@ function App() {
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
-  
+  const [isSetupDone, setIsSetupDone] = useState(false);
+
   useEffect(() => {
     gameStateRef.setGameStateController(gameStateController);
   }, [gameStateController]);
@@ -64,6 +65,7 @@ function App() {
   };
 
   const setupIpcRendererActions = () => {
+    if (isSetupDone) return;
     window.electron?.ipcRenderer?.on('search-cards', () => {
         setGameState("tokens");
       });
@@ -86,6 +88,7 @@ function App() {
           }, 300); // 300ms delay before closing the window
         }
       });
+    setIsSetupDone(true);
     return true;
   };
   
