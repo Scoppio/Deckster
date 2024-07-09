@@ -24,3 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 pass
 scratch
+upload_build.sh
+foo.txt
