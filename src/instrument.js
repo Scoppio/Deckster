@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/react";
 
 
 Sentry.init({
-  dsn: "https://a4fef9c3930e6d7d3473f12eb6eaabe3@o4507558154338304.ingest.us.sentry.io/4507558157484032",
+  dsn: process.env.REACT_APP_SENTRY_DSN, // ops, i leaked the previous one :)
   integrations: [
     // See docs for support of different versions of variation of react router
     // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
@@ -12,6 +12,10 @@ Sentry.init({
     // }),
     Sentry.replayIntegration(),
   ],
+  // Set release to the version of the aplication as defined in package.json in the "version" field
+  release: process.env.REACT_APP_VERSION,
+  attachStacktrace: true,
+  
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for tracing.
