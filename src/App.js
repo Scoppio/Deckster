@@ -86,9 +86,10 @@ function App() {
           }, 300); // 300ms delay before closing the window
         }
       });
+    return true;
   };
   
-  useQuery({ queryKey: ['setupActions'], queryFn: setupIpcRendererActions });
+  const { data, isLoading, error } = useQuery({ queryKey: ['setupActions'], queryFn: setupIpcRendererActions }); 
       
   useEffect(() => {
     if (gameStateController) {
