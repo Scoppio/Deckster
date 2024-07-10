@@ -73,8 +73,10 @@ export const ImgCard = ({
   }, [card.tapped]);
 
   const flipCard = () => {
+    const current_face_name = card.card_name;
     card.changeFace();
     setCardFace(card.card_face);
+    gameState.sendChatMessage("Flipping " +current_face_name + " to " + card.card_name);
     gameState.updatePlayer("FLIP_SOUND");
     gameState.focusOnCard(card);
   };
