@@ -12,6 +12,7 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [authorization, setAuthorization] = useState(null);
   const [enableEnter, setEnableEnter] = useState(false);
   const [serverIsUp, setServerIsUp] = useState(false);
+  const version = process.env.REACT_APP_VERSION;
 
   useEffect(() => {
     setServerIsUp(checkServer());
@@ -105,50 +106,55 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     }, [rememberMe]);
 
   return (
-    <div className="form-container">
-      <div className="form-box">
-        <h2>Mesão da Massa</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="Game Name"
-              aria-label="Game Name"
-              value={game}
-              onChange={(e) => setGame(e.target.value)}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="Username"
-              aria-label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="form-control"
-            />
-          </div><div className="form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              aria-label="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="form-control"
-            />
-          </div><div className="form-group">
-            <input
-              type="checkbox"
-              id="rememberMe"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
-            <label htmlFor="rememberMe">Remember Me</label>
-          </div>
-          <button type="submit" className="btn-submit" disabled={!enableEnter}>Enter</button>
-        </form>
-        {serverIsUp && <p>Server is UP!</p> }
+    <div>
+      <div className="form-container">
+        <div className="form-box">
+          <h2>Mesão da Massa</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Game Name"
+                aria-label="Game Name"
+                value={game}
+                onChange={(e) => setGame(e.target.value)}
+                className="form-control"
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="Username"
+                aria-label="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="form-control"
+              />
+            </div><div className="form-group">
+              <input
+                type="password"
+                placeholder="Password"
+                aria-label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-control"
+              />
+            </div><div className="form-group">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label htmlFor="rememberMe">Remember Me</label>
+            </div>
+            <button type="submit" className="btn-submit" disabled={!enableEnter}>Enter</button>
+          </form>
+          {serverIsUp && <p tabIndex={0}>Server is UP!</p> }
+        </div>
+        <br/>
+        <br/>
+        <p tabIndex={0}>Made with ❤️ by Scoppio - <a href="https://github.com/Scoppio/Deckster/releases" rel="noopener" target="_blank">Deckster VTT version { version }</a></p>
       </div>
     </div>
   );
