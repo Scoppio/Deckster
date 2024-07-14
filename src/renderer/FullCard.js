@@ -93,8 +93,8 @@ export const ImgCard = ({
   };
 
   const onBlur = () => {
-    console.log("onBlur " + card.name);
-    gameState.removeFocusOnCard(card);
+  //   console.log("onBlur " + card.name);
+  //   gameState.removeFocusOnCard(card);
   };
 
   const onMouseOver = (event) => {
@@ -103,8 +103,8 @@ export const ImgCard = ({
   };
 
   const onMouseLeave = () => {
-    console.log("mouseLeave " + card.name);
-    gameState.removeFocusOnCard(card);
+  //   console.log("mouseLeave " + card.name);
+  //   gameState.removeFocusOnCard(card);
   };
 
   const sendToGraveyard = () => {
@@ -310,7 +310,7 @@ export const ImgCardHand = ({
   };
 
   const onMouseLeave = () => {
-    gameState.removeFocusOnCard(card);
+  //   gameState.removeFocusOnCard(card);
   };
   
   const sendToGraveyard = () => {
@@ -339,8 +339,8 @@ export const ImgCardHand = ({
   };
 
   const onBlur = () => {
-    gameState.removeFocusOnCard(card);
-    console.log("onBlur " + card.name);
+  //   gameState.removeFocusOnCard(card);
+  //   console.log("onBlur " + card.name);
   };
 
   const commands = {
@@ -450,7 +450,7 @@ export const ImgCardSearch = ({
   };
 
   const onMouseLeave = () => {
-    gameState?.removeFocusOnCard(card);
+    // gameState?.removeFocusOnCard(card);
   };
   
   const sendToGraveyard = () => {
@@ -567,11 +567,11 @@ export const StaticImgCard = ({
   };
 
   const onBlur = () => {
-    gameState?.removeFocusOnCard(card);
+    // gameState?.removeFocusOnCard(card);
   };
 
   const onMouseLeave = () => {
-    gameState?.removeFocusOnCard(card);
+    // gameState?.removeFocusOnCard(card);
   };
 
   return (
