@@ -51,6 +51,7 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player.back_battlefield.map((card, index) => (
           <StaticImgCard
+            gameState={gameState}
             card={card}
             key={index}
             size={"small"}
