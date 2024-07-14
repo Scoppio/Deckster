@@ -63,6 +63,11 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    window.localStorage.setItem("rememberMe", rememberMe);
+
+    window.localStorage.removeItem("gameName");
+    window.localStorage.setItem("gameName", game);
 
     if (authorization && password === "" && username === "") {
       onAuthorizationChange(authorization);
@@ -85,11 +90,6 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     const user = {id: data.id, username: data.username, avatar: data.avatar};
     const auth = new Authorization(game, apiKey, user);
 
-    window.localStorage.setItem("rememberMe", rememberMe);
-
-    window.localStorage.removeItem("gameName");
-    window.localStorage.setItem("gameName", game);
-
     if (rememberMe) {
       window.localStorage.setItem("token", apiKey);
       window.localStorage.setItem("user", JSON.stringify(user));
@@ -101,10 +101,6 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     onAuthorizationChange(auth);
   };
   
-  useEffect(() => {
-    window.localStorage.setItem("rememberMe", rememberMe);
-    }, [rememberMe]);
-
   return (
     <div>
       <div className="form-container">

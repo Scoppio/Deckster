@@ -15,7 +15,7 @@ const HiddenText = style.div`
 
 export const LogFrame = ({ gameState, playerRef }) => {
   const inputRef = useRef(null);
-
+  
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === ";") {
@@ -50,7 +50,8 @@ export const LogFrame = ({ gameState, playerRef }) => {
 
   return (
     <div
-    aria-label={gameState.log[0]}
+    className="chatbox"
+    aria-label="Chatbox"
     style={{
       width: "100%",
       height: "100%",
@@ -61,7 +62,8 @@ export const LogFrame = ({ gameState, playerRef }) => {
       fontSize: "12px",
       margin: "1px"
     }}
-    >
+    ref={playerRef.log}
+    tabIndex={0}>
       <input
         type="text"
         ref={inputRef}
@@ -69,12 +71,12 @@ export const LogFrame = ({ gameState, playerRef }) => {
         style={{ width: "100%", marginBottom: "10px" }}
       />
       {gameState.log.length > 0 && (
-        <span aria-live="assertive" aria-atomic="true" ref={playerRef.log}>
-          <p style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>{gameState.log[0]}</p>
+        <span aria-live="assertive" aria-atomic="true">
+          <p tabIndex={0} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>{gameState.log[0]}</p>
         </span>
       )}
       {gameState.log.slice(1).map((logEntry, idx) => (
-        <p key={idx + 1} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>
+        <p tabIndex={0} key={idx + 1} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>
           {logEntry}
         </p>
       ))}

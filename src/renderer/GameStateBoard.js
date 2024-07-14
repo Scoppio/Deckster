@@ -7,26 +7,34 @@ import "./gameStateBoard.css";
 export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
 
   const game_phase_name = {
-    0: "Main Phase",
-    1: "Combat Phase",
-    2: "Second Main Phase",
-    3: "End Phase",
+    0: "Untap Step",
+    1: "Upkeep Step",
+    2: "Draw Step",
+    3: "Main Phase",
+    4: "Beggining of Combat Step",
+    5: "Declare Attackers Step",
+    6: "Declare Blockers Step",
+    7: "Combat Damage Step",
+    8: "End of Combat Step",
+    9: "Second Main Phase",
+    10: "End Step",
+    11: "Cleanup Step",
   };
 
   return (
     <div className="game-state-board">
       <div className="inner" 
         role="region"
-        style={{ height: '4vh', display: 'flex', flexWrap: 'wrap', alignContent: 'center' }} tabIndex={20000}
+        style={{ height: '4vh', display: 'flex', flexWrap: 'wrap', alignContent: 'center' }} tabIndex={2000000000}
         aria-label={`Turn sequence: ${gameState.players_sequence.map((player, idx) => ((idx + 1) + "-" + player.name)).join(", ")}`} >
         {gameState.players_sequence.map((player, index) => (
             <div key={player.id} className="player-box">{`${index + 1} - ${player.name}`}</div>
         ))}
       </div>
-      <div  style={{height: '2vh'}} tabIndex={20001}>
+      <div  style={{height: '2vh'}} tabIndex={2000000000}>
       <p><b>{gameState.active_player?.name} :: {game_phase_name[gameState.game_phase]}</b></p>
       </div>
-      <div style={{height: '69vh'}} tabIndex={20001}>
+      <div style={{height: '69vh'}} tabIndex={2000000001}>
       { !!focusCard?.card_name && 
         <>
             <h2
@@ -48,10 +56,12 @@ export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
             <p style={{fontSize: "12px"}}><b>{focusCard.card_type_line}</b></p>
             <p style={{fontSize: "12px"}}>{focusCard.card_read_oracle_text}</p>
             <p>{focusCard.power_toughness}</p>
+            <hr/>
+            <p style={{fontSize: "12px"}}>{focusCard.art_description}</p>
         </>
       }
       </div>
-      <div style={{height: '25vh'}} tabIndex={20002}>
+      <div style={{height: '25vh'}} tabIndex={2000000002}>
         <AnnouncementFrame gameState={gameState} />
         <LogFrame gameState={gameState} playerRef={playerRef} />
       </div>

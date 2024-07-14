@@ -4,7 +4,6 @@ import { ApiKeyForm } from "./renderer/ApiKeyForm";
 import { SelectDeck } from "./renderer/SelectDeck";
 import { SearchZone } from "./renderer/SearchZone";
 import { SearchCard } from "./renderer/SearchCard";
-import { loadDeck } from "./commons/DeckLoader";
 import { useState, useEffect } from "react";
 import { Player, TabIndices } from "./commons/Player";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
@@ -14,7 +13,6 @@ import GameStateController from "./controllers/GameStateController";
 import { WebSocketClient } from "./controllers/WebSocketClient";
 
 import "./App.css";
-import "mana-font/css/mana.css";
 
 class GameStateRef {
 
@@ -35,7 +33,7 @@ const gameStateRef = new GameStateRef();
 
 function App() {
   const [gameStateController, setGameStateController] = useState(null);
-  const [gameState, setGameState] = useState("login"); // bypassLogin | login | selectDeck | loadGame | game | search_card | tokens // login is the "first screen"
+  const [gameState, setGameState] = useState("login"); //  login | selectDeck | loadGame | game | search_card | tokens
   const [authorization, setAuthorization] = useState(null);
   const [deck, setDeck] = useState(null);
   const [webSocket, setWebSocket] = useState(null);
@@ -108,30 +106,7 @@ function App() {
         gameStateController.off("stateChanged", handleStateChange);
       };
     } else {
-
-      if (gameState === "bypassLogin") {
-        
-        const deckA = loadDeck(46); 
-        const playerA = new Player({id: 2, username: "Luana"}, deckA, 40, TabIndices, true);
-        const gameState = new GameStateController(
-          undefined,
-          setGameStateController
-        );
-
-        gameState.authorization = {gameName: 'mesa', token: 'token'};
-        gameState.registerWebSocketClient(new WebSocketClient(gameState.authorization));
-        gameState.addPlayer(playerA);
-        gameState.addPlayer(Player.emptyPlayer("Ana"));
-        gameState.addPlayer(Player.emptyPlayer("Barbara"));
-        gameState.addPlayer(Player.emptyPlayer("Carla"));
-        gameState.addPlayer(Player.emptyPlayer("Dani"));
-        gameState.addPlayer(Player.emptyPlayer("Eva"));
-        gameState.game_state_handler.push({ func: handleChangeGameState });
-        setGameStateController(gameState);
-        setGameState("game");
-        
-      } else if (gameState === "loadGame" && webSocket && authorization && deck) {
-        
+      if (gameState === "loadGame" && webSocket && authorization && deck) {
         const deckA = deck;
         const user = authorization.user;
         const playerA = new Player(user, deckA, 40, TabIndices, true);

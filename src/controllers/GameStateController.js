@@ -631,8 +631,8 @@ class ExecuteGameActions extends RequestGameActions {
   view_top_x_cards(event) {
     this.announce(`Viewing top ${event.payload.number_of_cards} cards`);
     this.open_zone = { zone: "library", cards: this.createCardInstances(event.payload) };
+    this.changeAppState("view_zone");
     this.changed();
-    this.gameStateHandler("view_zone");
   }
 
   update_player(event) {

@@ -98,7 +98,57 @@ export function GameArena({ gameState, handleChangeGameState }) {
   );
 
   const handleRequestCommandList = () => {
-    setDialogText(gameState.listCommands(hotkeys));
+    setDialogText(`Available Commands:
+All commands are case sensitive!
+
+Card on the Battlefield Commands:
+t - Tap or untap card.
+a - Declare card attacker.
+s - Declare card blocker.
+l - Flip card to the backside.
+g - Send to graveyard.
+e - Send to exile.
+1-7 - Put card at specified position on library.
+0 - Put card on bottom of library.
+h - Put card on hand.
+o - Add +1/+1 counter.
+k - Add -1/-1 counter.
+i - Add counter.
+j - Remove counter.
+y - Clone card.
+z - Put on the command zone.
+v - Place card on face down zone.
+
+Card in Hand Commands:
+l - Flip card.
+g - Put card on graveyard.
+e - Put card on exile.
+t - Put card on top of library.
+b - Put card on bottom of library.
+f - Put card on face down zone.
+
+Other Commands:
+F1 - List all commands.
+F2 - Force resync of game state.
+F3 - Open card search.
+x/< - Untap all permanents.
+>/c - Draw a card.
+(-) - Decrease life total.
+=/* - Increase life total.
+e - Pass turn.
+n - Pass phase.
+_ - Decrease poison counters.
++ - Increase poison counters.
+ctrl p - Open Settings.
+ctrl 1-6 - View player stats.
+ctrl e - View your hand.
+ctrl s - View your battlefield.
+ctrl d - View your library.
+ctrl f - View your graveyard.
+ctrl q - View your exile.
+ctrl h - View your face down cards.
+ctrl b - View your commander zone.
+ctrl l - View game log.`);
     setDialogOpen(true);
   };
   
@@ -119,8 +169,8 @@ export function GameArena({ gameState, handleChangeGameState }) {
   hotkeys.registerCtrlKeyCommand("f", () => hotkeys.playerRefs[1].graveyard?.current.focus(), "Your graveyard.");
   hotkeys.registerCtrlKeyCommand("q", () => hotkeys.playerRefs[1].exile?.current.focus(), "Your exile.");
   hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].face_down?.current.focus(), "Your face down cards.");
-  hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone?.current.focus(), "Your commander zone.");
-  hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log?.current.focus(), "Game log.");
+  hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].commander_zone?.current.focus(), "Your commander zone.");
+  hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].log?.current.focus(), "Game log.");
   hotkeys.registerCtrlKeyCommand("o", () => hotkeys.playerRefs[1].dialog?.current.focus(), "Focus on open dialog.");
   
   hotkeys.registerKeyCommand("x", () => gameState.untapAll(), "Untap all your permanents.");
@@ -154,7 +204,7 @@ export function GameArena({ gameState, handleChangeGameState }) {
       <dialog open={dialogOpen} onClose={() => setDialogOpen(false)} style={{fontSize: "10px", zIndex: 100}}>
         <div tabIndex="0" ref={dialogRef}>
           {formattedDialogText.map((line, index) => (
-            <p key={index} style={{margin: 0}}>{line}</p>
+            <p key={index} style={{margin: 2}} tabIndex={0}>{line}</p>
           ))}
         </div>
         <form method="dialog">

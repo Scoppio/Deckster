@@ -15,6 +15,9 @@ In the project directory, you can run:
 
 https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=design&node-id=0-1&mode=design&t=BfxKDup3KRG9rxFL-0
 
+## MANA FONT
+http://mana.andrewgioia.com/index.html
+
 ## TODO
 
 - [x] Add empty seat
@@ -50,3 +53,51 @@ https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=
 - [ ] Login into game is not adding the player to the gamestate of other players
 - [ ] changing the deck before rejoining the game has no effect
 - [ ] There is no information on which is the game name for the current game
+
+Problemas:
+
+F1 help:
+ - precisa poder acessar linhas individualmente
+ - faltando o ;
+ - adicionar padding interno
+
+Library:
+ - Não ta permitingo navegar com botões pra cima e pra baixo se abrir com enter
+ - view top x amount está tomando o foco
+
+Selection:
+ - espaço não deu feedback
+
+Shortcuts:
+ - ctrl+l: não funcionando para selecionar a area de log
+ - ctrl+e: não funcionando, e sendo capturado e passando turno, e/ou mandando card pro exile
+ 
+StaticBattlefield:
+ - lane back battlefield não é focado
+
+Lifebar:
+ - Não aparece no log que minha vida mudou
+
+Search Cards:
+ - Não da pra selecionar card ou sair da tela!!! ✨ 
+
+Library card search:
+ - Faltando aria no search edit
+ - colocar em ordem alfabética
+
+Commander:
+ - Commander casting cost não aparece 
+
+Game phases:
+ - Implementar todas as fases ✨ 
+ - Upkeep reminder!  ✨ 
+
+Rolagem de dados:
+ - Não tem. ✨ 
+
+Peek card in hand:
+ - Não tem. ✨ 
+
+ Chatbox:
+ - Ta deslocado entre dois cards meus (back lane, card 1 e card 2)
+  - teclas para navegar entre linhas do chat/log ✨ 

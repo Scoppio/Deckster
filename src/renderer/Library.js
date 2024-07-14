@@ -22,10 +22,6 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
     gameState.drawCard();
   };
 
-  const handleDrawMultipleCardsToHand = (number_of_cards) => {
-    gameState.drawCard(number_of_cards);
-  };
-
   const handleDrawCardToBattlefield = () => {
     gameState.drawCardToBattlefield();
   };
@@ -44,18 +40,6 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
 
   const handleShuffleDeck = () => {
     gameState.shuffleDeck();
-  };
-
-  const handleDrawMultipleCardsToBattlefield = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "back_battlefield");
-  };
-
-  const handleDrawMultipleCardsToExile = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "exile");
-  };
-
-  const handleDrawMultipleCardsFaceDown = (number_of_cards) => {
-    gameState.drawCard(number_of_cards, "library", "face_down");
   };
 
   const openLibrary = () => {
@@ -86,53 +70,24 @@ const TheLibrary = ({ player, playerRef, playerNumber, gameState }) => {
           <span id={playerNumber + "-library-label"}>Library</span>
         </Dropdown.Toggle>
         <DropdownMenuPortal>
-          <Dropdown.Item
-            as={CustomItem}
-            onConfirm={handleDrawMultipleCardsToHand}
-            text={"Hand"}
-            placeholder={"Hand, type the number of cards to draw to hand..."}
-            ariaLabel={
-              "Hand, type the number of cards to draw to hand, hit enter to confirm"
-            }
-          />
-          <Dropdown.Item
-            as={CustomItem}
-            onConfirm={handleDrawMultipleCardsToBattlefield}
-            text={"Battlefield"}
-            placeholder={
-              "Battlefield, type the number of cards put in the battlefield..."
-            }
-            ariaLabel={
-              "Battlefield, type the number of cards put in the battlefield, hit enter to confirm"
-            }
-          />
-          <Dropdown.Item
-            as={CustomItem}
-            onConfirm={handleDrawMultipleCardsToExile}
-            text={"Exile"}
-            placeholder={"Exile, type the number of cards to exile..."}
-            ariaLabel={
-              "Exile, type the number of cards to exile, hit enter to confirm"
-            }
-          />
-          <Dropdown.Item
-            as={CustomItem}
-            onConfirm={handleDrawMultipleCardsFaceDown}
-            text={"Face_down"}
-            placeholder={
-              "Face down, type the number of cards to set face down..."
-            }
-            ariaLabel={
-              "Face down, type the number of cards to set face down, hit enter to confirm"
-            }
-          />
-          <Dropdown.Item
-            as={CustomItem}
-            onConfirm={viewTopXCards}
-            text={"View Top X"}
-            placeholder={"View top X amount of cards..."}
-            ariaLabel={"View top X amount of cards, hit enter to confirm"}
-          />
+          <Dropdown.Item onClick={() => viewTopXCards(1)}>
+            View top 1 card
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => viewTopXCards(2)}>
+            View top 2 cards
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => viewTopXCards(3)}>
+            View top 3 cards
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => viewTopXCards(4)}>
+            View top 4 cards
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => viewTopXCards(5)}>
+            View top 5 cards
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => viewTopXCards(6)}>
+            View top 6 cards
+          </Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item>
             Library size: {player.library_size}

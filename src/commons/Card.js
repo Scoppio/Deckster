@@ -39,6 +39,8 @@ export class Card {
     this.is_dragged = card.is_dragged || false;
     this.revealed = card.revealed || false;
     this.revealed_to = card.revealed_to || [];
+    this.illustation_id = card.illustation_id || null;
+    this.art_description = card.art_description || 'no description';
   }
 
   changeFace() {
@@ -272,6 +274,12 @@ export class Card {
       (this.card_mana_cost !== null ? ` (${this.card_mana_cost})` : "")
     );
   }
+
+  get card_face_name() {
+    if (this.hidden) return "Hidden Card";
+    return this.current_face.name;
+  }
+
 
   get card_name_with_mana_cost() {
     if (this.hidden) return "Hidden Card";

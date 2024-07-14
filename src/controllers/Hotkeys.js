@@ -33,7 +33,7 @@ Outras funções de jogo como Tap/Untap, Declare as Attacking/Blocking, Scry, Ro
 
 class MacKeys {
   isKey = (event, key, func) => {
-    if (event.key === key) {
+    if (!event.metaKey && !event.shiftKey && event.key === key) {
       event.preventDefault();
       func();
     }
@@ -62,7 +62,7 @@ class MacKeys {
 
 class WindowsKeys {
   isKey = (event, key, func) => {
-    if (event.key === key) {
+    if (!event.ctrlKey && !event.shiftKey && event.key === key) {
       event.preventDefault();
       func();
     }
