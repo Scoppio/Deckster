@@ -49,12 +49,20 @@ export const LogFrame = ({ gameState, playerRef }) => {
   };
 
   return (
+    <>
+    <input
+        type="text"
+        ref={inputRef}
+        onKeyDown={handleKeyDown}
+        style={{ width: "100%", marginBottom: "10px" }}
+      />
     <div
     className="chatbox"
     aria-label="Chatbox"
+    role="region"
     style={{
       width: "100%",
-      height: "100%",
+      height: "80%",
       background: "#f0f0f0bb",
       overflowY: "auto",
       overflowX: "hidden",
@@ -64,23 +72,19 @@ export const LogFrame = ({ gameState, playerRef }) => {
     }}
     ref={playerRef.log}
     tabIndex={0}>
-      <input
-        type="text"
-        ref={inputRef}
-        onKeyDown={handleKeyDown}
-        style={{ width: "100%", marginBottom: "10px" }}
-      />
+      
       {gameState.log.length > 0 && (
         <span aria-live="assertive" aria-atomic="true">
-          <p tabIndex={0} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>{gameState.log[0]}</p>
+          <p style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>{gameState.log[0]}</p>
         </span>
       )}
       {gameState.log.slice(1).map((logEntry, idx) => (
-        <p tabIndex={0} key={idx + 1} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>
+        <p key={idx + 1} style={{ margin: "0", wordWrap: "break-word", overflowWrap: "break-word" }}>
           {logEntry}
         </p>
       ))}
     </div>
+    </>
   );
 };
 

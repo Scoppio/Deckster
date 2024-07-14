@@ -150,7 +150,7 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
         </div>
         <br/>
         <br/>
-        <p tabIndex={0}>Made with ❤️ by Scoppio - <a href="https://github.com/Scoppio/Deckster/releases" rel="noopener" target="_blank">Deckster VTT version { version }</a></p>
+        <p tabIndex={0}>Made with ❤️ by Scoppio - Deckster VTT version { version }</p>
       </div>
     </div>
   );

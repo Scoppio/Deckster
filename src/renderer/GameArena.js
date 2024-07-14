@@ -155,7 +155,9 @@ ctrl l - View game log.`);
   hotkeys.registerKeyCommand("F1", () => handleRequestCommandList(), "List all commands.");
   hotkeys.registerKeyCommand("F2", () => gameState.updateGameState(), "Force resync of game state.");
   hotkeys.registerKeyCommand("F3", () => gameState.requestListOfTokens(), "Open card search.");
+
   hotkeys.registerCtrlKeyCommand("p", () => handleChangeGameState("settings"), "Opens Settings");
+
   hotkeys.registerCtrlKeyCommand("1", () => hotkeys.playerRefs[1].playerStats.current.focus(), "Player 1 (Your) stats.");
   hotkeys.registerCtrlKeyCommand("2", () => hotkeys.playerRefs[2]?.playerStats?.current?.focus(), "Player 2 stats.");
   hotkeys.registerCtrlKeyCommand("3", () => hotkeys.playerRefs[3]?.playerStats?.current?.focus(), "Player 3 stats.");
@@ -169,8 +171,8 @@ ctrl l - View game log.`);
   hotkeys.registerCtrlKeyCommand("f", () => hotkeys.playerRefs[1].graveyard?.current.focus(), "Your graveyard.");
   hotkeys.registerCtrlKeyCommand("q", () => hotkeys.playerRefs[1].exile?.current.focus(), "Your exile.");
   hotkeys.registerCtrlKeyCommand("h", () => hotkeys.playerRefs[1].face_down?.current.focus(), "Your face down cards.");
-  hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].commander_zone?.current.focus(), "Your commander zone.");
-  hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].log?.current.focus(), "Game log.");
+  hotkeys.registerCtrlKeyCommand("b", () => hotkeys.playerRefs[1].commander_zone?.current.focus(), "Your commander zone.");
+  hotkeys.registerCtrlKeyCommand("l", () => hotkeys.playerRefs[1].log?.current.focus(), "Game log.");
   hotkeys.registerCtrlKeyCommand("o", () => hotkeys.playerRefs[1].dialog?.current.focus(), "Focus on open dialog.");
   
   hotkeys.registerKeyCommand("x", () => gameState.untapAll(), "Untap all your permanents.");
@@ -182,7 +184,6 @@ ctrl l - View game log.`);
   hotkeys.registerKeyCommand("*", () => gameState.increaseLife(), "Increase your life total.");
   hotkeys.registerKeyCommand("e", () => gameState.passTurn(), "Pass the turn.");
   hotkeys.registerKeyCommand("n", () => gameState.changeGamePhase(), "Pass the phase.");
-
 
   hotkeys.registerKeyCommand("_", () => gameState.decreaseLife(), "Decrease your poison counters total.");
   hotkeys.registerKeyCommand("+", () => gameState.increaseLife(), "Increase your poiton counters total.");

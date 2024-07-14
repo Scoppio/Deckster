@@ -106,7 +106,68 @@ const template = [
         }
       },
     ]
-  }
+  },
+  {
+    label: 'Roll Dice',
+    submenu: [
+      {
+        label: 'Roll 1d2',
+        // accelerator: 'CmdOrCtrl+1',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-2');
+        }
+      },
+      {
+        label: 'Roll 1d4',
+        // accelerator: 'CmdOrCtrl+4',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-4');
+        }
+      },
+      {
+        label: 'Roll 1d6',
+        // accelerator: 'CmdOrCtrl+6',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-6');
+        }
+      },
+      {
+        label: 'Roll 1d8',
+        // accelerator: 'CmdOrCtrl+8',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-8');
+        }
+      },
+      {
+        label: 'Roll 1d10',
+        // accelerator: 'CmdOrCtrl+0',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-10');
+        }
+      },
+      {
+        label: 'Roll 1d12',
+        // accelerator: 'CmdOrCtrl+Shift+0',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-12');
+        }
+      },
+      {
+        label: 'Roll 1d20',
+        // accelerator: 'CmdOrCtrl+Shift+8',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-20');
+        }
+      },
+    ]
+  },
 ];
 
 const menu = Menu.buildFromTemplate(template);

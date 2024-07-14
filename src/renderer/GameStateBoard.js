@@ -25,16 +25,16 @@ export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
     <div className="game-state-board">
       <div className="inner" 
         role="region"
-        style={{ height: '4vh', display: 'flex', flexWrap: 'wrap', alignContent: 'center' }} tabIndex={2000000000}
+        style={{ height: '4vh', display: 'flex', flexWrap: 'wrap', alignContent: 'center' }} tabIndex={0}
         aria-label={`Turn sequence: ${gameState.players_sequence.map((player, idx) => ((idx + 1) + "-" + player.name)).join(", ")}`} >
         {gameState.players_sequence.map((player, index) => (
             <div key={player.id} className="player-box">{`${index + 1} - ${player.name}`}</div>
         ))}
       </div>
-      <div  style={{height: '2vh'}} tabIndex={2000000000}>
+      <div  style={{height: '2vh'}} tabIndex={0}>
       <p><b>{gameState.active_player?.name} :: {game_phase_name[gameState.game_phase]}</b></p>
       </div>
-      <div style={{height: '69vh'}} tabIndex={2000000001}>
+      <div style={{height: '69vh'}} tabIndex={0}>
       { !!focusCard?.card_name && 
         <>
             <h2
@@ -61,7 +61,7 @@ export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
         </>
       }
       </div>
-      <div style={{height: '25vh'}} tabIndex={2000000002}>
+      <div style={{height: '25vh'}}>
         <AnnouncementFrame gameState={gameState} />
         <LogFrame gameState={gameState} playerRef={playerRef} />
       </div>

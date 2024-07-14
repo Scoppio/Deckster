@@ -67,6 +67,28 @@ function App() {
     window.electron?.ipcRenderer?.on('search-cards', () => {
         setGameState("tokens");
       });
+    window.electron?.ipcRenderer?.on('roll-dice-2', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d2");
+      });
+    window.electron?.ipcRenderer?.on('roll-dice-4', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d4");
+      });
+    window.electron?.ipcRenderer?.on('roll-dice-6', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d6");
+      });
+    window.electron?.ipcRenderer?.on('roll-dice-8', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d8");
+      });
+    window.electron?.ipcRenderer?.on('roll-dice-10', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d10");
+      });
+    window.electron?.ipcRenderer?.on('roll-dice-12', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d12");
+      });
+    window.electron?.ipcRenderer?.on('roll-dice-20', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d20");
+      });
+
     window.electron?.ipcRenderer?.on('i-do-not-pay', () => {
         gameStateRef.getGameStateController()?.iDoNotPay();
       });
