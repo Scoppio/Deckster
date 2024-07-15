@@ -39,7 +39,7 @@ export class Card {
     this.is_dragged = card.is_dragged || false;
     this.revealed = card.revealed || false;
     this.revealed_to = card.revealed_to || [];
-    this.illustation_id = card.illustation_id || null;
+    this.illustration_id = card.illustration_id || null;
     this.art_description = card.art_description || 'no description';
   }
 

@@ -131,6 +131,7 @@ Other Commands:
 F1 - List all commands.
 F2 - Force resync of game state.
 F3 - Open card search.
+; - Focus on chatbox.
 x/< - Untap all permanents.
 >/c - Draw a card.
 (-) - Decrease life total.
@@ -140,7 +141,8 @@ n - Pass phase.
 _ - Decrease poison counters.
 + - Increase poison counters.
 ctrl p - Open Settings.
-ctrl 1-6 - View player stats.
+ctrl 1 - View your stats.
+ctrl 2-6 - View other players stats in turn order.
 ctrl e - View your hand.
 ctrl s - View your battlefield.
 ctrl d - View your library.
@@ -202,7 +204,7 @@ ctrl l - View game log.`);
   
   return (
     <div className="main">
-      <dialog open={dialogOpen} onClose={() => setDialogOpen(false)} style={{fontSize: "10px", zIndex: 100}}>
+      <dialog open={dialogOpen} onClose={() => setDialogOpen(false)} style={{fontSize: "10px", zIndex: 100, width: "50vw", height: "50vh"}}>
         <div tabIndex="0" ref={dialogRef}>
           {formattedDialogText.map((line, index) => (
             <p key={index} style={{margin: 2}} tabIndex={0}>{line}</p>
