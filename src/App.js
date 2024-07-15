@@ -67,6 +67,10 @@ function App() {
     window.electron?.ipcRenderer?.on('search-cards', () => {
         setGameState("tokens");
       });
+    window.electron?.ipcRenderer?.on('upkeep-reminder', () => {
+        gameStateRef.getGameStateController()?.changeUpkeepReminder();
+      });
+      
     window.electron?.ipcRenderer?.on('roll-dice-2', () => {
         gameStateRef.getGameStateController()?.requestDiceRoll("d2");
       });
@@ -89,6 +93,32 @@ function App() {
         gameStateRef.getGameStateController()?.requestDiceRoll("d20");
       });
 
+    window.electron?.ipcRenderer?.on('gain-1-health', () => {
+        gameStateRef.getGameStateController()?.increaseLife(1);
+      });
+    window.electron?.ipcRenderer?.on('gain-5-health', () => {
+        gameStateRef.getGameStateController()?.increaseLife(5);
+      });
+    window.electron?.ipcRenderer?.on('gain-10-health', () => {
+        gameStateRef.getGameStateController()?.increaseLife(10);
+      });
+    window.electron?.ipcRenderer?.on('gain-20-health', () => {
+        gameStateRef.getGameStateController()?.increaseLife(20);
+      });
+
+    window.electron?.ipcRenderer?.on('lose-1-health', () => {
+        gameStateRef.getGameStateController()?.decreaseLife(1);
+      });
+    window.electron?.ipcRenderer?.on('lose-5-health', () => {
+        gameStateRef.getGameStateController()?.decreaseLife(5);
+      });
+    window.electron?.ipcRenderer?.on('lose-10-health', () => {
+        gameStateRef.getGameStateController()?.decreaseLife(10);
+      });
+    window.electron?.ipcRenderer?.on('lose-20-health', () => {
+        gameStateRef.getGameStateController()?.decreaseLife(20);
+      });
+
     window.electron?.ipcRenderer?.on('i-do-not-pay', () => {
         gameStateRef.getGameStateController()?.iDoNotPay();
       });
@@ -102,17 +132,14 @@ function App() {
         const userConfirmed = window.confirm("Are you sure you want to quit the game?");
         if (userConfirmed) {
           gameStateRef.getGameStateController()?.exitGame();
-          
-          setTimeout(() => {
-            window.close();
-          }, 300); // 300ms delay before closing the window
+          window.close();
         }
       });
     setIsSetupDone(true);
     return true;
   };
   
-  const { data, isLoading, error } = useQuery({ queryKey: ['setupActions'], queryFn: setupIpcRendererActions }); 
+  const { data, isLoading, error } = useQuery({ queryKey: ['setupActions'], queryFn: setupIpcRendererActions }); // eslint-disable-line
       
   useEffect(() => {
     if (gameStateController) {

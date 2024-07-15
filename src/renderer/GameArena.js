@@ -27,8 +27,24 @@ export function GameArena({ gameState, handleChangeGameState }) {
   useEffect(() => {
     setFormattedDialogText(dialogText.split("\n"));
     dialogRef?.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setDialogOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+
   }, [dialogText, dialogRef]);
 
+
+
+
+  
   const player1References = useMemo(
     () => ({
       playerStats: player1StatsRef,
@@ -152,6 +168,7 @@ ctrl h - View your face down cards.
 ctrl b - View your commander zone.
 ctrl l - View game log.`);
     setDialogOpen(true);
+    gameState.announce("Opened help dialog, press ctrl+o to focus on it, or press esc to close it.");
   };
   
   hotkeys.registerKeyCommand("F1", () => handleRequestCommandList(), "List all commands.");
@@ -204,7 +221,7 @@ ctrl l - View game log.`);
   
   return (
     <div className="main">
-      <dialog open={dialogOpen} onClose={() => setDialogOpen(false)} style={{fontSize: "10px", zIndex: 100, width: "50vw", height: "50vh"}}>
+      <dialog open={dialogOpen} onClose={() => setDialogOpen(false)} style={{fontSize: "10px", zIndex: 100, width: "30vw"}}>  
         <div tabIndex="0" ref={dialogRef}>
           {formattedDialogText.map((line, index) => (
             <p key={index} style={{margin: 2}} tabIndex={0}>{line}</p>

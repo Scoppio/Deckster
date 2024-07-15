@@ -121,6 +121,7 @@ export class Player {
     this.library_size = payload.library_size;
     this.counters = payload.counters;
     this.reveal_top_of_library = payload.reveal_top_of_library;
+    this.commander_extra_casting_cost = payload.commander_extra_casting_cost;
   }
 
   get cards_in_hand() {

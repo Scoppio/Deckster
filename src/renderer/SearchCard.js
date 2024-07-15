@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import PropTypes from "prop-types";
 import { Urls } from '../commons/Urls';
+// import { useQuery } from '@tanstack/react-query';
 
 import './searchCard.css';
 
@@ -8,7 +9,6 @@ import './searchCard.css';
 export const SearchCard = ({ 
   gameState
 }) => {
-  
   
   const [query, setQuery] = useState('');
   const [cards, setCards] = useState([]);
@@ -51,22 +51,33 @@ export const SearchCard = ({
     gameState.changeAppState("game");
   };
 
+  const closeSearchScreen = () => {
+    gameState.changeAppState("game");
+  };
+
   return (
     <div>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for cards"
-        aria-label="Card Search"
-      />
-      <div>
-        <button onClick={() => setTokenFilter(!tokenFilter)}>
-          {tokenFilter ? 'Remove Token Filter' : 'Add Token Filter'}
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+        <div>
+          <label style={{ marginRight: '20px' }}>Search for card:</label>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search for cards"
+            aria-label="Input card name to search for"
+            style={{ marginRight: '20px' }}
+          />
+          <button onClick={() => setTokenFilter(!tokenFilter)} style={{ marginRight: '20px' }}>
+            {tokenFilter ? 'Remove Token Filter' : 'Add Token Filter'}
+          </button>
+          <button onClick={closeSearchScreen}>
+            Close
+          </button>
+          </div>
+        <p>{cards.length} Cards found</p>
       </div>
-      <p>{cards.length} Cards found</p>
-      <div style={{ maxHeight: '400px', overflowY: 'scroll', marginTop: '10px' }}>
+      <div style={{ maxHeight: 'auto', overflowY: 'scroll', marginTop: '10px' }}>
         {cards.map((card, index) => (
           <div
             key={card.id}

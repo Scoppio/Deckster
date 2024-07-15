@@ -63,6 +63,7 @@ class BaseGameStateController extends EventEmitter {
     this.sounds = previousState.sounds;
     this.announcement_message = previousState.announcement_message;
     this.open_zone = previousState.open_zone;
+    this.upkeep_reminder = previousState.upkeep_reminder;
   }
 
   get game_name () {
@@ -273,14 +274,22 @@ class RequestGameActions extends BaseGameStateController {
     this.changed();
   }
 
+  changeCommanderTax(value) {
+    this.player.commander_extra_casting_cost += value;
+    this.sendEvent("chat_message", { message: `changed commander tax to ${this.player.commander_extra_casting_cost}` });
+    this.updatePlayer("CHANGE_COMMANDER_TAX");
+  }
+
   increaseLife(health_points = 1) {
     this.player.health += health_points;
+    this.sendEvent("chat_message", { message: `gained ${health_points} health, now my total is ${this.player.health}` });
     this.updatePlayer("ADD_COUNTER_SOUND");
     this.changed();
   }
 
   decreaseLife(health_points = 1) {
     this.player.health -= health_points;
+    this.sendEvent("chat_message", { message: `lost ${health_points} health, now my total is ${this.player.health}` });
     this.updatePlayer("ADD_COUNTER_SOUND", 1.0);
     this.changed();
   }
@@ -341,6 +350,10 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("shuffle_library");
   }
 
+  changeUpkeepReminder() {
+    this.upkeep_reminder = !this.upkeep_reminder;
+  }
+
   passTurn() {
     this.sendEvent("pass_turn");
   }
@@ -360,7 +373,7 @@ class RequestGameActions extends BaseGameStateController {
   viewTopXCards(number_of_cards) {
     this.searchZoneConfig["usingCloseAndShuffle"] = false;
     this.searchZoneConfig["sourceZone"] = "library";
-    this.searchZoneConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "face_down"];
+    this.searchZoneConfig["targetZones"] =  ["hand", "battlefield", "graveyard", "exile", "face_down", "bottom_of_library"];
     this.sendEvent("view_top_x_cards", { number_of_cards });
   }
 
@@ -420,141 +433,6 @@ class RequestGameActions extends BaseGameStateController {
     });
   }
 
-  listCommands(hotkeys) {
-    const keyCommandsList = hotkeys.keyCommands
-      .map((cmd) => {
-        return `${cmd.key} - ${cmd.description}`;
-      })
-      .join("\n");
-    const ctrlKeyCommandsList = hotkeys.ctrlKeyCommands
-      .map((cmd) => {
-        return `${hotkeys.ctrlKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
-      })
-      .join("\n");
-    const ctrlShiftKeyCommandsList = hotkeys.ctrlShiftKeyCommands
-      .map((cmd) => {
-        return `${hotkeys.ctrlShiftKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
-      })
-      .join("\n");
-    const altKeyCommandsList = hotkeys.altKeyCommands
-      .map((cmd) => {
-        return `${hotkeys.altKeyCommandModifier} ${cmd.key} - ${cmd.description}`;
-      })
-      .join("\n");
-    
-    const cardCommandList = `t: tap or untap card,
-    a: declare card attacker.
-    s: declare card blocker.
-    l: flip card to the backside.
-    g: send to graveyard.
-    e: send to exile.
-    1: put card on the top of library.
-    2: put card as the second from the top of library.
-    3: put card as the third from the top of library.
-    4: put card as the fourth from the top of library.
-    5: put card as the fifth from the top of library.
-    6: put card as the sixth from the top of library.
-    7: put card as the seventh from the top of library.
-    0: put card on the bottom of library.
-    h: put card on hand.
-    o: add +1/+1 counter.
-    k: add -1/-1 counter.
-    i: add counter.
-    j: remove counter.
-    y: clone card.
-    z: put on the command zone.
-    v: place card on face down zone.`;
-
-    const cardInHandCommandList = `l: flipCard.
-    g: put card on graveyard.
-    e: put card on exile.
-    t: put card on top of library.
-    b: put card on bottom of library.
-    f: put card on face down zone.`;
-    
-    const old_msg = `Available commands: 
-All commands are case sensitive!
-    
-Card on the battlefield commands:
-${cardCommandList}
-
-Card in hand commands:
-${cardInHandCommandList}
-
-Other commands
-${keyCommandsList}
-${ctrlKeyCommandsList}
-${ctrlShiftKeyCommandsList}
-${altKeyCommandsList}
-`;
-    const msg = `Available Commands:
-All commands are case sensitive!
-
-Card on the Battlefield Commands:
-t - Tap or untap card.
-a - Declare card attacker.
-s - Declare card blocker.
-l - Flip card to the backside.
-g - Send to graveyard.
-e - Send to exile.
-1-7 - Put card at specified position on library.
-0 - Put card on bottom of library.
-h - Put card on hand.
-o - Add +1/+1 counter.
-k - Add -1/-1 counter.
-i - Add counter.
-j - Remove counter.
-y - Clone card.
-z - Put on the command zone.
-v - Place card on face down zone.
-
-Card in Hand Commands:
-l - Flip card.
-g - Put card on graveyard.
-e - Put card on exile.
-t - Put card on top of library.
-b - Put card on bottom of library.
-f - Put card on face down zone.
-
-Other Commands:
-F1 - List all commands.
-F2 - Force resync of game state.
-F3 - Open card search.
-x/< - Untap all permanents.
->/c - Draw a card.
-(-) - Decrease life total.
-=/* - Increase life total.
-e - Pass turn.
-n - Pass phase.
-_ - Decrease poison counters.
-+ - Increase poison counters.
-ctrl p - Open Settings.
-ctrl 1-6 - View player stats.
-ctrl e - View your hand.
-ctrl s - View your battlefield.
-ctrl d - View your library.
-ctrl f - View your graveyard.
-ctrl q - View your exile.
-ctrl h - View your face down cards.
-ctrl b - View your commander zone.
-ctrl l - View game log.`;
-
-    // let reverse_log = msg.split("\n").reverse();
-    
-    // reverse_log.forEach((line) => {
-    //   this.game_log.unshift(line.trim());
-    // });
-    // if (this.game_log.length > 100) {
-    //   this.game_log = this.game_log.slice(0, 100);
-    // }
-    // window.confirm(msg);
-    
-    // this.log_event({payload: msg});
-
-    this.playSound("PLACEHOLDER_SOUND", 1.0);
-    // this.changed();
-    return msg;
-  }
 }
 
 
@@ -586,6 +464,11 @@ class ExecuteGameActions extends RequestGameActions {
   }
 
   change_game_phase(event) {
+    console.log("Changing game phase to " + event.payload.phase);
+    if (this.upkeep_reminder && this.player.id === this.active_player_id) {
+      this.announce("This is your upkeep reminder");
+      this.playSound("UPKEEP_REMINDER");
+    }
     this.game_phase = event.payload.phase;
     this.changed();
   }

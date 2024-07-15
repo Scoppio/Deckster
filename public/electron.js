@@ -168,6 +168,68 @@ const template = [
       },
     ]
   },
+  {
+    label: 'Life Management',
+    submenu: [
+      {
+        label: 'Gain 1 Health',
+        // accelerator: 'CmdOrCtrl+1',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('gain-1-health');
+        }
+      },
+      {
+        label: 'Gain 5 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('gain-5-health');
+        }
+      },
+      {
+        label: 'Gain 10 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('gain-10-health');
+        }
+      },
+      {
+        label: 'Gain 20 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('gain-20-health');
+        }
+      },
+      {
+        label: 'Lose 1 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('lose-1-health');
+        }
+      },
+      {
+        label: 'Lose 5 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('lose-5-health');
+        }
+      },
+      {
+        label: 'Lose 10 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('lose-10-health');
+        }
+      },
+      {
+        label: 'Lose 20 Health',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('lose-20-health');
+        }
+      },
+    ]
+  },
 ];
 
 const menu = Menu.buildFromTemplate(template);

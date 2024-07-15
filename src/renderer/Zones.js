@@ -147,8 +147,7 @@ const TheCommanderZone = ({
   };
 
   const changeCmdrTax = (value) => {
-    gameState.player.commander_extra_casting_cost += value;
-    gameState.updatePlayer("CHANGE_COMMANDER_TAX");
+    gameState.changeCommanderTax(value);
   };
 
   const moveAllCardsFromTo = (fromZone, toZone, shuffle_pile = false, bottom_pile = false) => {

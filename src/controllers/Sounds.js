@@ -33,6 +33,8 @@ const SoundTable = {
   GAME_START_SOUND: game_start_sound,
   ADD_COUNTER_SOUND: add_marker_sound,
   REMOVE_COUNTER_SOUND: remove_marker_sound,
+  UPKEEP_REMINDER: placeholder_sound,
+  MULLIGAN_SOUND: placeholder_sound,
 };
 
 export default class Sounds {

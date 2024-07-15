@@ -8,15 +8,8 @@ In the project directory, you can run:
 
 ### `yarn electron:build`
 
-### `yarn electron:servelocal`
+### `yarn electron:serve`
 
-
-## UI Design
-
-https://www.figma.com/file/kaHRgV2BM6XKDEMVm4CCej/Game-UI---2-to-6-players?type=design&node-id=0-1&mode=design&t=BfxKDup3KRG9rxFL-0
-
-## MANA FONT
-http://mana.andrewgioia.com/index.html
 
 ## TODO
 
@@ -45,59 +38,29 @@ http://mana.andrewgioia.com/index.html
 - [x] Deploy server
 - [x] Verify aria-label is present in all new settings
 - [x] Implement action "Move all cards to the battlefield" from zommandzone
+- [x] Test two players
+- [x] Test join game
+- [x] Login into game is not adding the player to the gamestate of other players
+- [x] changing the deck before rejoining the game to play as other deck
+- [x] There is no information on which is the game name for the current game
+- [x] Implement a way to close the dialog box
+- [x] navigate through the chatbox
+- [x] navigate the help dialog
+- [x] add the ; command to the help dialog
+- [x] add internal padding to the help dialog
+- [x] can access and navigate the library button
+- [x] implement scry
+- [x] fix ctrl+l shortcurt
+- [x] fix ctrl+e shortcut
+- [x] fixed all ctrl/shift shortcuts (no modifier shortcut was ignoraing the modifiers)
+- [x] lane back battlefield doest not take focus
+- [x] anounce life change
+- [x] select card
+- [x] sort cards in search zone by name
+- [x] implement all game phases
+- [x] add upkeep reminder
+- [x] implement dice roll
 - [ ] Implement reveal cards in hand
 - [ ] Implement peek cards
-- [ ] Test two players
-- [ ] Implement scry ???
-- [ ] Test join game
-- [ ] Login into game is not adding the player to the gamestate of other players
-- [ ] changing the deck before rejoining the game has no effect
-- [ ] There is no information on which is the game name for the current game
-
-Problemas:
-
-F1 help:
- - precisa poder acessar linhas individualmente
- - faltando o ;
- - adicionar padding interno
-
-Library:
- - Não ta permitingo navegar com botões pra cima e pra baixo se abrir com enter
- - view top x amount está tomando o foco
-
-Selection:
- - espaço não deu feedback
-
-Shortcuts:
- - ctrl+l: não funcionando para selecionar a area de log
- - ctrl+e: não funcionando, e sendo capturado e passando turno, e/ou mandando card pro exile
- 
-StaticBattlefield:
- - lane back battlefield não é focado
-
-Lifebar:
- - Não aparece no log que minha vida mudou
-
-Search Cards:
- - Não da pra selecionar card ou sair da tela!!! ✨ 
-
-Library card search:
- - Faltando aria no search edit
- - colocar em ordem alfabética
-
-Commander:
- - Commander casting cost não aparece 
-
-Game phases:
- - Implementar todas as fases ✨ 
- - Upkeep reminder!  ✨ 
-
-Rolagem de dados:
- - Não tem. ✨ 
-
-Peek card in hand:
- - Não tem. ✨ 
-
- Chatbox:
- - Ta deslocado entre dois cards meus (back lane, card 1 e card 2)
-  - teclas para navegar entre linhas do chat/log ✨ 
+- [ ] Target card in the opponent table
+- [ ] reveal top card in library

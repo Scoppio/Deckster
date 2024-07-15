@@ -24,7 +24,8 @@ export const SearchZone = ({
 
   const [searchString, setSearchString] = useState("");
   const [cardPiles, setCardPiles] = useState(new CardPiles().setSourceZone(sourceZone, gameState.open_zone.cards));
-  const [filteredCardList, setFilteredCardList] = useState([...gameState.open_zone.cards]);
+  // order the cards by name
+  const [filteredCardList, setFilteredCardList] = useState([...gameState.open_zone.cards].sort((a, b) => a.name.localeCompare(b.name)));
   const [cardBeingDragged, setCardBeingDragged] = useState(null);
 
   useEffect(() => {
@@ -41,8 +42,7 @@ export const SearchZone = ({
       filteredCards = filteredCards.cards;
       console.log(filteredCards); 
     }
-  
-    setFilteredCardList(filteredCards);
+    setFilteredCardList([...filteredCards].sort((a, b) => a.name.localeCompare(b.name)));
   }, [searchString, cardPiles, sourceZone]);
 
   const closeSearchZone = () => {
