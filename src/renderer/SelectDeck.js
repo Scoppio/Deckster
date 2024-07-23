@@ -30,13 +30,6 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
     }
   }, [selectedDeck, authorization, handleDeckSelectionChange]);
 
-  const deckThumbnail = ( deck ) => {
-    if (deck.commanders.length > 0) {
-      return deck.commanders[0].card.image_uris.art_crop;
-    }
-    return null;
-  };
-  
   if (isLoading) {
     return (
       <div className="form-container">
@@ -77,7 +70,7 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
           >
             <h2>{deck.name}</h2>
             <img 
-              src={deckThumbnail(deck)} 
+              src={deck.face_commander.image_uris.art_crop}
               alt={`${deck.name} commander`} 
               className="deck-thumbnail"
             />

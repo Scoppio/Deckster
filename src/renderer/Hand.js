@@ -19,7 +19,7 @@ const CardBackImg = ({ scale }) => {
   );
 };
 
-export const HiddenHand = ({ player, playerNumber }) => {
+export const HiddenHand = ({ player, playerNumber, gameState }) => {
   return (
     <div
       className="hand"
@@ -28,8 +28,17 @@ export const HiddenHand = ({ player, playerNumber }) => {
       aria-label={player.name + " hand"}
     >
       <div style={{ height: "100px", backgroundColor: "#DDDA" }}>
-        {player.hand.map((card) => (
-          <CardBackImg key={card._uid} scale={100} />
+        {player.hand.map((card, idx) => (
+          <ImgCardHand
+            ownerId={player.id}
+            key={card._uid}
+            gameState={gameState}
+            idx={idx}
+            size="small"
+            card={card}
+            tabIndex={idx + 100000 * playerNumber + 1}
+            cardHeight={100}
+          />
         ))}
       </div>
     </div>
@@ -39,6 +48,7 @@ export const HiddenHand = ({ player, playerNumber }) => {
 HiddenHand.propTypes = {
   player: PropTypes.object.isRequired,
   playerNumber: PropTypes.number.isRequired,
+  gameState: PropTypes.object.isRequired,
 };
 
 export const Hand = ({ gameState, player }) => {
@@ -73,6 +83,7 @@ export const ShownHand = ({ cards, gameState, tabIndex }) => {
           >
             {cards.map((card, idx) => (
               <ImgCardHand
+                ownerId={gameState.current_player_id}
                 key={card._uid}
                 gameState={gameState}
                 idx={idx}

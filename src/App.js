@@ -64,6 +64,9 @@ function App() {
 
   const setupIpcRendererActions = () => {
     if (isSetupDone) return;
+    window.electron?.ipcRenderer?.on('force-sync', () => {
+        gameStateRef.getGameStateController()?.updateGameState();
+      });
     window.electron?.ipcRenderer?.on('search-cards', () => {
         setGameState("tokens");
       });
@@ -210,7 +213,6 @@ function App() {
     return (
       <div role="application" className="app">
         <SearchCard gameState={gameStateController} handleChangeGameState={handleChangeGameState}/>
-        <RemoveScrollBar />
       </div>
     );
   }
@@ -218,7 +220,6 @@ function App() {
     return (
       <div role="application" className="app">
         <SearchZone gameState={gameStateController} handleCloseCardOpenZone={handleCloseCardOpenZone} />
-        {/* <RemoveScrollBar /> */}
       </div>
     );
   }

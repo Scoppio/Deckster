@@ -78,6 +78,14 @@ class BaseGameStateController extends EventEmitter {
     return this.players[this.player_number];
   }
 
+  get current_player() {
+    return this.players[this.player_number];
+  }
+
+  get current_player_id() {
+    return this.player_number;
+  }
+
   get active_player() {
     return this.players[this.active_player_id];
   }

@@ -1,3 +1,7 @@
+* {
+  min-width: 0;
+}
+
 .app {
   height: 100dvh;
   overflow: hidden;

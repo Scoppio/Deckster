@@ -42,7 +42,17 @@ const BlackBelt = style.div`
   color: white;
 `;
 
-
+const overlayStyle = {
+  content: '""',
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgba(173, 216, 230, 0.5)", // Light blue color with 50% opacity
+  borderRadius: "8px",
+  pointerEvents: "none", // Ensure the overlay does not interfere with mouse events
+};
 
 export const ImgCard = ({
   region,
@@ -53,7 +63,6 @@ export const ImgCard = ({
   tabIndex,
   cardHeight,
 }) => {
-  
   const [cardBeingDragged, setCardBeingDragged] = useState(card.is_dragged);
   useEffect(() => {
     setCardBeingDragged(card.is_dragged);
@@ -64,7 +73,7 @@ export const ImgCard = ({
   const cardCurrentRegion = region;
   const positionIdx = idx;
   const cardRef = useRef(null);
-
+  const isRevealed = card.revealed_to.includes(gameState.current_player_id);
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
   
@@ -189,7 +198,6 @@ export const ImgCard = ({
       {(provided) => (
         <SlimContainer
           className={`${region} ImgCard`}
-          // uniqueid={card._uid}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={(el) => {provided.innerRef(el); cardRef.current = el;} }
@@ -231,7 +239,7 @@ export const ImgCard = ({
           </HiddenText>
           <img
             src={
-              card.hidden
+              (card.hidden && !isRevealed)
                 ? FuckedCardBack
                 : card.card_image_uris?.[size] ?? emptyCard
             }
@@ -260,6 +268,9 @@ export const ImgCard = ({
             </BlackBelt>
             : null
           }
+          {
+            card.hidden && <div style={overlayStyle}></div>
+          }
         </SlimContainer>
       )}
     </Draggable>
@@ -277,6 +288,7 @@ ImgCard.propTypes = {
 };
 
 export const ImgCardHand = ({
+  ownerId,
   idx,
   gameState,
   card,
@@ -288,6 +300,7 @@ export const ImgCardHand = ({
   const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
   const positionIdx = idx;
+  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id;
   
   const [cardBeingDragged, setCardBeingDragged] = useState(card.is_dragged);
   useEffect(() => {
@@ -394,9 +407,9 @@ export const ImgCardHand = ({
           </HiddenText>
           <img
             src={
-              card.hidden
-                ? FuckedCardBack
-                : card.card_image_uris?.[size] ?? emptyCard
+              isRevealed
+              ? card.card_image_uris?.[size] ?? emptyCard
+              : FuckedCardBack
             }
             alt={card.name}
             style={{
@@ -406,7 +419,9 @@ export const ImgCardHand = ({
               borderRadius: "8px",
             }}
           />
-          
+          {
+            (isRevealed && ownerId !== gameState.current_player_id) && <div style={overlayStyle}></div>
+          }
         </SlimContainer>
       )}
     </Draggable>
@@ -414,6 +429,7 @@ export const ImgCardHand = ({
 };
 
 ImgCardHand.propTypes = {
+  ownerId: PropTypes.number.isRequired,
   idx: PropTypes.number.isRequired,
   card: PropTypes.object.isRequired,
   size: PropTypes.string.isRequired,
@@ -550,6 +566,7 @@ ImgCardSearch.propTypes = {
 };
 
 export const StaticImgCard = ({
+  ownerId,
   card,
   gameState,
   size,
@@ -557,6 +574,7 @@ export const StaticImgCard = ({
   cardHeight,
 }) => {
   const cardRef = useRef(null);
+  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id;
   const onMouseOver = (event) => {
     gameState?.focusOnCard(card);
     cardRef.current.focus();
@@ -595,7 +613,7 @@ export const StaticImgCard = ({
       </HiddenText>
       <img
         src={
-          card.hidden
+          (card.hidden && !isRevealed)
             ? FuckedCardBack
             : card.card_image_uris?.[size] ?? emptyCard
         }
@@ -608,24 +626,26 @@ export const StaticImgCard = ({
         }}
       />
       {
-        card.counters !== 0 ?
+        card.counters !== 0 &&
           <Counter>
             {card.counters}
           </Counter>
-        : null
       }
       {
-        card.is_power_and_thoughness_modified ? 
+        card.is_power_and_thoughness_modified && 
         <BlackBelt>
           {card.power_toughness}
         </BlackBelt>
-        : null
+      }
+      {
+        (isRevealed && card.hidden) && <div style={overlayStyle}></div>
       }
     </SlimContainer>
   );
 };
 
 StaticImgCard.propTypes = {
+  ownerId: PropTypes.number.isRequired,
   card: PropTypes.object.isRequired,
   size: PropTypes.string.isRequired,
   tabIndex: PropTypes.number.isRequired,

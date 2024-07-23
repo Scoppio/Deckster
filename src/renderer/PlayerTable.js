@@ -309,7 +309,7 @@ export const NorthTable = ({
         gridTemplateRows: "100px minmax(0, 1fr)",
         boxShadow: isActivePlayer ? "inset 0px 3px 30px 10px orangered" : "none"
       }}>
-        <HiddenHand player={player} playerNumber={playerNumber} />
+        <HiddenHand player={player} playerNumber={playerNumber} gameState={gameState} />
         <StaticBattlefield
           gameState={gameState}
           playerRef={playerRef}

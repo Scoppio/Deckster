@@ -28,8 +28,8 @@ const template = [
     label: 'Deckster',
     submenu: [
       {
-        label: 'Back to Login/Reload',
-        accelerator: 'CmdOrCtrl+R',
+        label: 'Home',
+        accelerator: 'CmdOrCtrl+Shift+N',
         click (item, focusedWindow) {
           if (focusedWindow) focusedWindow.reload();
         }
@@ -55,17 +55,18 @@ const template = [
     label: 'Debug',
     submenu: [
       {
-        label: 'Reload',
-        accelerator: 'CmdOrCtrl+R',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.reload();
-        }
-      },
-      {
         label: 'Toggle Developer Tools',
         accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
         click (item, focusedWindow) {
           if (focusedWindow) focusedWindow.webContents.toggleDevTools();
+        }
+      },
+      {
+        label: 'Resync',
+        accelerator: 'CmdOrCtrl+R',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('force-sync');
         }
       },
     ]
@@ -73,6 +74,17 @@ const template = [
   {
     label: 'Actions',
     submenu: [
+      {
+        label: 'Upkeep Reminder',
+        // accelerator: 'CmdOrCtrl+???',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('upkeep-reminder');
+        }
+      },
+      {
+        type: 'separator',
+      },
       {
         label: 'Search Cards',
         accelerator: 'CmdOrCtrl+M',

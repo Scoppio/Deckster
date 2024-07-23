@@ -39,6 +39,7 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player["land_zone_battlefield"].map((card, index) => (
           <StaticImgCard
+            owner_id={player.id}
             gameState={gameState}
             card={card}
             key={index}
@@ -51,6 +52,7 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player.back_battlefield.map((card, index) => (
           <StaticImgCard
+            owner_id={player.id}
             gameState={gameState}
             card={card}
             key={index}
@@ -63,6 +65,7 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player["front_battlefield"].map((card, index) => (
           <StaticImgCard
+            owner_id={player.id}
             gameState={gameState}
             card={card}
             key={index}
@@ -114,7 +117,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
                 idx={idx}
                 card={card}
                 tabIndex={idx + player.tabIndices.front_battlefield}
-                cardHeight={"100"}
+                cardHeight={100}
               />
             ))}
             {provided.placeholder}
@@ -144,7 +147,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
                 idx={idx}
                 card={card}
                 tabIndex={idx + player.tabIndices.back_battlefield}
-                cardHeight={"100"}
+                cardHeight={100}
               />
             ))}
             {provided.placeholder}
@@ -174,7 +177,7 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
                 idx={idx}
                 card={card}
                 tabIndex={idx + player.tabIndices.land_zone_battlefield}
-                cardHeight={"100"}
+                cardHeight={100}
               />
             ))}
             {provided.placeholder}
