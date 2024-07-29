@@ -4,7 +4,7 @@ import { Urls } from "./Urls";
 
 export const fetchDeck = async (id, authorization) => {
   try {
-    const response = await fetch(`${Urls.api_url}/deck/${id}/json?format=json`, {
+    const response = await fetch(`${Urls.api_url}/vtt/deck/${id}/json?format=json`, {
       headers: {
         'Authorization': `token ${authorization.token}`,
         'Content-Type': 'application/json'
