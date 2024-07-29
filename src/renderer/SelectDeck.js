@@ -9,19 +9,22 @@ import './selectDeck.css';
 export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
 
   const [selectedDeck, setSelectedDeck] = useState(null);
+  const [tab, setTab] = useState('user');
+
+  const tabs = ['user', 'public', 'precon'];
 
   const fetchDecks = async () => {
-    const response = await fetch(`${Urls.api_url}/decks/json?format=json`, {
+    const response = await fetch(`${Urls.api_url}/vtt/decks`, {
       headers: {
         'Authorization': `token ${authorization.token}`,
         'Content-Type': 'application/json'
       },
     });
     const data = await response.json();
-    return data.results;
+    return data.decks;
   };
 
-  const { data, isLoading, isError } = useQuery({ queryKey: ['decks'], queryFn: fetchDecks });
+  const { data, isLoading, isError } = useQuery({ queryKey: ['deck'], queryFn: fetchDecks });
 
   useEffect(() => {
     if (selectedDeck) {
@@ -50,16 +53,39 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
     );
   }
 
+  const getDeckArtCrop = (deck) => {
+      if (deck.face_commander.image_uris)
+        return deck.face_commander.image_uris.art_crop;
+      return deck.face_commander.card_faces[0].image_uris.art_crop;
+  };
+
   return (
     <div className="sd-container">
     <div className="sd-box">
       <h1>Decks</h1>
+      <div className="tabs" style={{display: 'flex', justifyContent: 'space-around'}}>
+        {tabs.map((_tab) => (
+          <div 
+            key={_tab} 
+            className={`tab ${_tab === tab ? 'active' : ''}`} 
+            tabIndex={"0"}
+            onClick={() => setTab(_tab)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                setTab(_tab);
+              }
+            }}  
+          >
+            {_tab}
+          </div>
+        ))}
+      </div>
       <div className="deck-mosaic">
-        {data.map((deck) => (
+        {data[tab].map((deck) => (
           <div 
             key={deck.id} 
             className="deck" 
-            tabIndex={"1"}
+            tabIndex={"0"}
             aria-label={`${deck.name} - ${deck.description}`}
             onClick={() => setSelectedDeck(deck)}
             onKeyDown={(event) => {
@@ -70,7 +96,7 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
           >
             <h2>{deck.name}</h2>
             <img 
-              src={deck.face_commander.image_uris.art_crop}
+              src={getDeckArtCrop(deck)}
               alt={`${deck.name} commander`} 
               className="deck-thumbnail"
             />
