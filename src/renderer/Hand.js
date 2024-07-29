@@ -1,6 +1,6 @@
 import { ImgCardHand } from "./FullCard";
 import { Droppable } from "react-beautiful-dnd";
-import FuckedCardBack from "../resources/cards/mtgcardback.png";
+// import FuckedCardBack from "../resources/cards/mtgcardback.png";
 import style from "styled-components";
 import PropTypes from "prop-types";
 
@@ -13,11 +13,11 @@ const CardHolder = style.div`
   width: 100%;
 `;
 
-const CardBackImg = ({ scale }) => {
-  return (
-    <img src={FuckedCardBack} alt="card back" style={{ height: `${scale}%` }} />
-  );
-};
+// const CardBackImg = ({ scale }) => {
+//   return (
+//     <img src={FuckedCardBack} alt="card back" style={{ height: `${scale}%` }} />
+//   );
+// };
 
 export const HiddenHand = ({ player, playerNumber, gameState }) => {
   return (
