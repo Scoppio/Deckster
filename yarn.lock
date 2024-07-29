@@ -3432,6 +3432,13 @@ arraybuffer.prototype.slice@^1.0.2:
     is-array-buffer "^3.0.2"
     is-shared-array-buffer "^1.0.2"
 
+arrows-svg@^1.4.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/arrows-svg/-/arrows-svg-1.8.1.tgz#0da3cda121b164b48d83426d70e27fc3d26eb770"
+  integrity sha512-KA/J4VtpWzTqQKZJlpSFHcxYpES/offYS7hSfayQYbEXKdmigk2BIWiljEH8XiHE1Yvpnp2quArfRdC6/WSrsw==
+  dependencies:
+    preact "^10.5.7"
+
 asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
@@ -9131,6 +9138,11 @@ postcss@^8.3.5, postcss@^8.4.21, postcss@^8.4.23, postcss@^8.4.4:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+preact@^10.5.7:
+  version "10.22.1"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.22.1.tgz#6a3589973fe0c6e53211091607d31f4b7b27334d"
+  integrity sha512-jRYbDDgMpIb5LHq3hkI0bbl+l/TQ9UnkdQ0ww+lp+4MMOdqaUYdFc5qeyP+IV8FAd/2Em7drVPeKdQxsiWCf/A==
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
@@ -9701,6 +9713,13 @@ react-app-polyfill@^3.0.0:
     raf "^3.4.1"
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
+
+react-arrows@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-arrows/-/react-arrows-1.2.0.tgz#e2139ed1d1fd7d6f17827e1d61f81b29a02c0642"
+  integrity sha512-jiuOAWAZ+Qka0fvM4MCC5w/nKnyPooBgEMzGTI8cBA0shD7t7NlSkNCStLENFOuYtcR1ERUmIK6KiMvcoRnI9Q==
+  dependencies:
+    arrows-svg "^1.4.1"
 
 react-beautiful-dnd@^13.1.1:
   version "13.1.1"
