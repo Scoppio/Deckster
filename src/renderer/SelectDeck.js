@@ -12,6 +12,8 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
   const [tab, setTab] = useState('user');
 
   const tabs = ['user', 'public', 'precon'];
+  const [page, setPage] = useState(0);
+  const pageSize = 15;
 
   const fetchDecks = async () => {
     const response = await fetch(`${Urls.api_url}/vtt/decks`, {
@@ -69,7 +71,12 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
             key={_tab} 
             className={`tab ${_tab === tab ? 'active' : ''}`} 
             tabIndex={"0"}
-            onClick={() => setTab(_tab)}
+            aria-label={`${_tab} decks`}
+            style={{cursor: 'pointer', textDecoration: _tab === tab ? 'none' : 'underline', color: _tab === tab ? '#000000' : '#007bff'}}
+            onClick={() => {
+              setPage(0);
+              setTab(_tab);
+            }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 setTab(_tab);
@@ -81,7 +88,7 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
         ))}
       </div>
       <div className="deck-mosaic">
-        {data[tab].map((deck) => (
+        {data[tab].slice(page * pageSize, (page + 1) * pageSize).map((deck) => (
           <div 
             key={deck.id} 
             className="deck" 
@@ -97,12 +104,35 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
             <h2>{deck.name}</h2>
             <img 
               src={getDeckArtCrop(deck)}
-              alt={`${deck.name} commander`} 
+              alt={`${deck.face_commander.name}: ${deck.face_commander.art_description}`}
               className="deck-thumbnail"
             />
           </div>
         ))}
+        
       </div>
+      
+      {data[tab].length > pageSize && (
+          <div className="deck-pagination" style={{display: 'flex', justifyContent: 'space-around'}}>
+            {page > 0 ? (
+              <button 
+                tabIndex={"0"}
+                className="deck-pagination-button" 
+                onClick={() => setPage(page - 1)}>
+                <i className="fa-solid fa-chevron-left"></i>Previous Page
+              </button>
+            ) : <p>No previous page</p>}
+            <p>Page {page + 1} of {Math.ceil(data[tab].length / pageSize)}</p>
+            {page < Math.ceil(data[tab].length / pageSize) - 1 ? (
+              <button 
+                tabIndex={"0"}
+                className="deck-pagination-button" 
+                onClick={() => setPage(page + 1)}>
+                <i className="fa-solid fa-chevron-right"></i>Next Page
+              </button>
+            ) : <p>No more pages</p>}
+          </div>
+        )}
     </div>
   </div>
   );
