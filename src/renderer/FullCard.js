@@ -572,6 +572,7 @@ export const StaticImgCard = ({
   size,
   tabIndex,
   cardHeight,
+  inHand=false,
 }) => {
   const cardRef = useRef(null);
   const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id;
@@ -613,7 +614,7 @@ export const StaticImgCard = ({
       </HiddenText>
       <img
         src={
-          (card.hidden && !isRevealed)
+          (card.hidden && !isRevealed && !inHand)
             ? FuckedCardBack
             : card.card_image_uris?.[size] ?? emptyCard
         }

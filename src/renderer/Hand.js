@@ -1,4 +1,4 @@
-import { ImgCardHand } from "./FullCard";
+import { StaticImgCard, ImgCardHand } from "./FullCard";
 import { Droppable } from "react-beautiful-dnd";
 // import FuckedCardBack from "../resources/cards/mtgcardback.png";
 import style from "styled-components";
@@ -29,7 +29,8 @@ export const HiddenHand = ({ player, playerNumber, gameState }) => {
     >
       <div style={{ height: "100px", backgroundColor: "#DDDA" }}>
         {player.hand.map((card, idx) => (
-          <ImgCardHand
+          <StaticImgCard
+            inHand={true}
             ownerId={player.id}
             key={card._uid}
             gameState={gameState}
