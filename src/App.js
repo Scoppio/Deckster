@@ -68,7 +68,9 @@ function App() {
         gameStateRef.getGameStateController()?.updateGameState();
       });
     window.electron?.ipcRenderer?.on('search-cards', () => {
-        setGameState("tokens");
+        if (gameStateRef.getGameStateController()) {
+          setGameState("tokens");
+        }
       });
     window.electron?.ipcRenderer?.on('upkeep-reminder', () => {
         gameStateRef.getGameStateController()?.changeUpkeepReminder();
@@ -95,7 +97,12 @@ function App() {
     window.electron?.ipcRenderer?.on('roll-dice-20', () => {
         gameStateRef.getGameStateController()?.requestDiceRoll("d20");
       });
-
+    window.electron?.ipcRenderer?.on('roll-dice-100', () => {
+        gameStateRef.getGameStateController()?.requestDiceRoll("d100");
+      });
+    window.electron?.ipcRenderer?.on('change-deck', () => {
+        setGameState("selectDeck");
+      });
     window.electron?.ipcRenderer?.on('gain-1-health', () => {
         gameStateRef.getGameStateController()?.increaseLife(1);
       });
@@ -151,7 +158,13 @@ function App() {
           new GameStateController(newState, setGameStateController)
         );
       };
-
+      if (gameState === "loadGame" && deck) {
+        const user = authorization.user;
+        const player = new Player(user, deck, 40, TabIndices, true);
+        gameStateController.addPlayer(player);
+        gameStateController.updateGameState();
+        setGameState("game");
+      }
       gameStateController.on("stateChanged", handleStateChange);
       return () => {
         // Clean up the listener when the component unmounts
@@ -162,17 +175,17 @@ function App() {
         const deckA = deck;
         const user = authorization.user;
         const playerA = new Player(user, deckA, 40, TabIndices, true);
-        const gameState = new GameStateController(
+        const gameStateC = new GameStateController(
           undefined,
           setGameStateController
         );
 
-        gameState.authorization = authorization;
-        gameState.registerWebSocketClient(webSocket);
-        gameState.addPlayer(playerA);
-        gameState.game_state_handler.push({ func: handleChangeGameState });
-        setGameStateController(gameState);
-        gameState.updateGameState();
+        gameStateC.authorization = authorization;
+        gameStateC.registerWebSocketClient(webSocket);
+        gameStateC.addPlayer(playerA);
+        gameStateC.game_state_handler.push({ func: handleChangeGameState });
+        setGameStateController(gameStateC);
+        gameStateC.updateGameState();
         setGameState("game");
       }
     }

@@ -35,6 +35,13 @@ const template = [
         }
       },
       {
+        label: 'Change Deck',
+        accelerator: 'CmdOrCtrl+Shift+C',
+        click (item, focusedWindow) {
+          if (focusedWindow) focusedWindow.webContents.send('change-deck');
+        }
+      },
+      {
         role: 'help',
         accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
         click (item, focusedWindow) {
@@ -176,6 +183,14 @@ const template = [
         click: () => {
           const win = BrowserWindow.getFocusedWindow();
           win.webContents.send('roll-dice-20');
+        }
+      },
+      {
+        label: 'Roll 1d100',
+        // accelerator: 'CmdOrCtrl+Shift+8',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('roll-dice-100');
         }
       },
     ]

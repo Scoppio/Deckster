@@ -60,7 +60,7 @@ In the project directory, you can run:
 - [x] implement all game phases
 - [x] add upkeep reminder
 - [x] implement dice roll
-- [ ] Implement reveal cards in hand
-- [ ] Implement peek cards
-- [ ] Target card in the opponent table
-- [ ] reveal top card in library
+- [x] Implement reveal cards in hand
+- [x] Implement peek cards
+- [x] Target card in the opponent table
+- [x] reveal top card in library

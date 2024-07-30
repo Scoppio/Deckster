@@ -49,6 +49,13 @@ export const SearchZone = ({
     gameState.cardsFromZone(cardPiles, usingCloseAndShuffle);
     handleCloseCardOpenZone();
   };
+  
+  const justCloseSearchZone = () => {
+    if (usingCloseAndShuffle) {
+      gameState.shuffleDeck();
+    }
+    handleCloseCardOpenZone();
+  };
 
   const onDragEnd = (result, provided) => {
     const { source, destination } = result;
@@ -142,11 +149,14 @@ export const SearchZone = ({
     <div className="sc-form-container">
       <div className="sc-form-box">
         <div className="titleHideBtn">
-          { 
-            <button onClick={closeSearchZone}>{usingCloseAndShuffle ? "Close & Shuffle" : "Close"}</button>
-          }
+          <button onClick={justCloseSearchZone} aria-label={usingCloseAndShuffle ? "Cancel & Shuffle" : "Cancel"}>
+            {usingCloseAndShuffle ? "Cancel & Shuffle" : "Cancel"}
+          </button>
           <label><center>Search</center></label>
           <input type="text" value={searchString} onChange={ (e) => setSearchString(e.target.value) } />
+          <button onClick={closeSearchZone} aria-label={usingCloseAndShuffle ? "Finalize & Shuffle" : "Finalize"}>
+            {usingCloseAndShuffle ? "Finalize & Shuffle" : "Finalize"}
+          </button>
         </div>
         <div className="body">
           <DragDropContext

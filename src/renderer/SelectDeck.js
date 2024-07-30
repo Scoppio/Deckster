@@ -14,6 +14,7 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
   const tabs = ['user', 'public', 'precon'];
   const [page, setPage] = useState(0);
   const pageSize = 15;
+  const [previousDeck, setPreviousDeck] = useState(window.localStorage.getItem("previousDeck", null));
 
   const fetchDecks = async () => {
     const response = await fetch(`${Urls.api_url}/vtt/decks`, {
@@ -30,6 +31,8 @@ export const SelectDeck = ({ authorization, handleDeckSelectionChange }) => {
 
   useEffect(() => {
     if (selectedDeck) {
+      window.localStorage.setItem("previousDeck", selectedDeck);
+      setPreviousDeck(selectedDeck);
       fetchDeck(selectedDeck.id, authorization)
         .then(deck => handleDeckSelectionChange(deck));
     }

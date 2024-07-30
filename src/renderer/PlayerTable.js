@@ -22,7 +22,9 @@ export const SouthTable = ({
   const onDragStart = (start, provided) => {
     const { source } = start;
     const card = gameState.getCardFrom(source);
-    card.is_dragged = true;
+    if (card){
+      card.is_dragged = true;
+    }
     const sourceZone = source.droppableId;
     let sourceName = sourceZone.split("-")[1] || sourceZone;
     setEnableKeyboardNavigation(false);
@@ -59,6 +61,9 @@ export const SouthTable = ({
       
       const destinationZone = destination.droppableId;
       const card = gameState.moveCardTo(source, destination);
+      if (card) {
+        card.is_dragged = false;
+      }
       provided.announce(
         "Moved " +
           card.name +
