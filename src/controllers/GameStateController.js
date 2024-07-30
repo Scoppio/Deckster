@@ -273,8 +273,14 @@ class RequestGameActions extends BaseGameStateController {
     this.sendEvent("request_duplication_of_card", { cards: [card] });
   }
 
-  revealTopOfLibrary(variation="reveal") { // can be reveal, play revealed, hide
-    this.sendEvent("reveal_top_card", { variation });
+  revealTopOfLibrary(variation="once") { // can be: [once, always, hide]
+    if (variation in ["once", "always", "hide"]) {
+      this.sendEvent("reveal_top_card", { variation });
+    }
+  }
+
+  callAttentionToCard(owner_id, region, position_idx) {
+    this.sendEvent("call_attention_to_card", { owner_id, region, position_idx });
   }
 
   updatePlayer(sound, volume = 1.0) {

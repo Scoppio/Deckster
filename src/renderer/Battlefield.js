@@ -25,7 +25,6 @@ const StaticBattlefieldDiv = style.div`
 export const StaticBattlefield = ({
   gameState,
   playerRef,
-  playerNumber,
   player,
 }) => {
   return (
@@ -39,6 +38,8 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player["land_zone_battlefield"].map((card, index) => (
           <StaticImgCard
+            positionIdx={index}
+            region="land_zone_battlefield"
             owner_id={player.id}
             gameState={gameState}
             card={card}
@@ -52,6 +53,8 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player.back_battlefield.map((card, index) => (
           <StaticImgCard
+            positionIdx={index}
+            region="back_battlefield"
             owner_id={player.id}
             gameState={gameState}
             card={card}
@@ -65,6 +68,8 @@ export const StaticBattlefield = ({
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
         {player["front_battlefield"].map((card, index) => (
           <StaticImgCard
+            positionIdx={index}
+            region="front_battlefield"
             owner_id={player.id}
             gameState={gameState}
             card={card}
@@ -82,7 +87,6 @@ export const StaticBattlefield = ({
 StaticBattlefield.propTypes = {
   gameState: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
-  playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
 };
 
@@ -191,6 +195,5 @@ export const Battlefield = ({ gameState, playerRef, player }) => {
 Battlefield.propTypes = {
   gameState: PropTypes.object.isRequired,
   playerRef: PropTypes.object.isRequired,
-  playerNumber: PropTypes.number.isRequired,
   player: PropTypes.object.isRequired,
 };

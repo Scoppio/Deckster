@@ -40,6 +40,7 @@ export class Card {
     this.revealed = card.revealed || false;
     this.revealed_to = card.revealed_to || [];
     this.illustration_id = card.illustration_id || null;
+    this.call_attention = card.call_attention || null;
     this.art_description = card.art_description || 'no description';
   }
 

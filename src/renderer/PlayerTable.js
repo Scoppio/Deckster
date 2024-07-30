@@ -257,7 +257,6 @@ export const SouthTable = ({
           <Battlefield
             gameState={gameState}
             playerRef={playerRef}
-            playerNumber={playerNumber}
             player={player}
           />
 
@@ -313,7 +312,6 @@ export const NorthTable = ({
         <StaticBattlefield
           gameState={gameState}
           playerRef={playerRef}
-          playerNumber={playerNumber}
           player={player}
         />
       </div>

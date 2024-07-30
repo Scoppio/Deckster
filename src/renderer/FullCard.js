@@ -49,7 +49,21 @@ const overlayStyle = {
   left: 0,
   width: "100%",
   height: "100%",
-  backgroundColor: "rgba(173, 216, 230, 0.5)", // Light blue color with 50% opacity
+   // Light blue color with 40% opacity
+  backgroundColor: "rgba(173, 216, 230, 0.4)",
+  borderRadius: "8px",
+  pointerEvents: "none", // Ensure the overlay does not interfere with mouse events
+};
+
+const overlayAttentionStyle = {
+  content: '""',
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  // Light yellow color with 40% opacity
+  backgroundColor: "rgba(255, 255, 0, 0.4)",
   borderRadius: "8px",
   pointerEvents: "none", // Ensure the overlay does not interfere with mouse events
 };
@@ -578,22 +592,44 @@ export const StaticImgCard = ({
   size,
   tabIndex,
   cardHeight,
+  positionIdx,
+  region,
   inHand=false,
 }) => {
   const cardRef = useRef(null);
-  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id || card.revealed;
+  const isHidden = !!card.hidden;
+  const isYours = ownerId === gameState.current_player_id;
+  const isRevealedToYou = card.revealed_to.includes(gameState.current_player_id);
+  const isRevealedToAll = !!card.revealed;
+  const isInHand = !!inHand;
+  const isRevealed = (isRevealedToYou || isRevealedToAll) && (!isInHand || !isHidden);
+  const callAttentionTo = card.call_attention;
   
-  const cardFaceIsVisible = isRevealed || !inHand;
+  const canBeSeen = () => {
+    if (isYours) {
+      return true;
+    }
+    if (isRevealedToYou || isRevealedToAll) {
+      return true;
+    }
+    if (isInHand) {
+      return false;
+    }
+    if (isHidden) {
+      return false;
+    }
+    return true;
+  };
 
   const onMouseOver = (event) => {
-    if (cardFaceIsVisible) {
+    if (canBeSeen()) {
       gameState?.focusOnCard(card);
       cardRef.current.focus();
     }
   };
 
   const onFocus = () => {
-    if (cardFaceIsVisible) {
+    if (canBeSeen()) {
       gameState?.focusOnCard(card);
     }
   };
@@ -606,6 +642,13 @@ export const StaticImgCard = ({
     // gameState?.removeFocusOnCard(card);
   };
 
+  const callAttentionToThisCard = () => {
+    gameState.callAttentionToCard(ownerId, region, positionIdx);
+  };
+
+  const commands = {
+    a: callAttentionToThisCard,
+  };
 
   return (
     <SlimContainer
@@ -615,9 +658,20 @@ export const StaticImgCard = ({
       onFocus={onFocus}
       onBlur={onBlur}
       ref={cardRef}
+      onKeyDown={(event) => {
+        if (
+          commands[event.key.toLowerCase()] &&
+          !event.ctrlKey &&
+          !event.altKey &&
+          !event.shiftKey
+        ) {
+          event.preventDefault();
+          commands[event.key.toLowerCase()]();
+        }
+      }}
     >
       { 
-      (cardFaceIsVisible) ?
+      (canBeSeen()) ?
       <>
       <HiddenText>
         <div>
@@ -638,7 +692,7 @@ export const StaticImgCard = ({
       }
       <img
         src={
-          (cardFaceIsVisible)
+          (canBeSeen())
             ? card.card_image_uris?.[size] ?? emptyCard 
             : FuckedCardBack
         }
@@ -664,7 +718,10 @@ export const StaticImgCard = ({
         </BlackBelt>
       }
       {
-        (isRevealed && card.hidden) && <div style={overlayStyle}></div>
+        isRevealed && <div style={overlayStyle}></div>
+      }
+      {
+        callAttentionTo && <div style={overlayAttentionStyle}></div>
       }
     </SlimContainer>
   );
@@ -677,4 +734,6 @@ StaticImgCard.propTypes = {
   tabIndex: PropTypes.number.isRequired,
   scale: PropTypes.number.isRequired,
   gameState: PropTypes.object.isRequired,
+  positionIdx: PropTypes.number.isRequired,
+  region: PropTypes.string.isRequired,
 };
