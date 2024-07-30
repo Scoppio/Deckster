@@ -325,9 +325,8 @@ class RequestGameActions extends BaseGameStateController {
     console.log("TODO");
   }
 
-  revealCardsInHand() {
-    // FIXME: Implement reveal cards in hand
-    console.log("TODO");
+  switchRevealCardToAll(postitionIdx) {
+    this.sendEvent("reveal_card_in_hand", { position_idx: postitionIdx});
   }
 
   drawHand(number_of_cards = 7) {

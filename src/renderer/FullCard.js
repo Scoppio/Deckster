@@ -300,7 +300,7 @@ export const ImgCardHand = ({
   const cardRef = useRef(null);
   cardFace !== card.card_face && setCardFace(card.card_face);
   const positionIdx = idx;
-  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id;
+  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id || card.revealed;
   
   const [cardBeingDragged, setCardBeingDragged] = useState(card.is_dragged);
   useEffect(() => {
@@ -347,6 +347,10 @@ export const ImgCardHand = ({
     gameState.moveCardToZonePosition("hand", positionIdx, "library", card, lastIdx);
   };
 
+  const revealCardToAll = () => {
+    gameState.switchRevealCardToAll(positionIdx);
+  };
+
   const onFocus = () => {
     gameState.focusOnCard(card);
   };
@@ -363,7 +367,9 @@ export const ImgCardHand = ({
     t: sendToLibraryTop,
     b: sendToLibraryBottom,
     f: sendToFaceDown,
+    r: revealCardToAll,
   };
+
 
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
@@ -420,7 +426,7 @@ export const ImgCardHand = ({
             }}
           />
           {
-            (isRevealed && ownerId !== gameState.current_player_id) && <div style={overlayStyle}></div>
+            ((isRevealed && ownerId !== gameState.current_player_id) || card.revealed) && <div style={overlayStyle}></div>
           }
         </SlimContainer>
       )}
@@ -575,14 +581,21 @@ export const StaticImgCard = ({
   inHand=false,
 }) => {
   const cardRef = useRef(null);
-  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id;
+  const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id || card.revealed;
+  
+  const cardFaceIsVisible = isRevealed || !inHand;
+
   const onMouseOver = (event) => {
-    gameState?.focusOnCard(card);
-    cardRef.current.focus();
+    if (cardFaceIsVisible) {
+      gameState?.focusOnCard(card);
+      cardRef.current.focus();
+    }
   };
 
   const onFocus = () => {
-    gameState?.focusOnCard(card);
+    if (cardFaceIsVisible) {
+      gameState?.focusOnCard(card);
+    }
   };
 
   const onBlur = () => {
@@ -593,6 +606,7 @@ export const StaticImgCard = ({
     // gameState?.removeFocusOnCard(card);
   };
 
+
   return (
     <SlimContainer
       tabIndex={tabIndex}
@@ -602,6 +616,9 @@ export const StaticImgCard = ({
       onBlur={onBlur}
       ref={cardRef}
     >
+      { 
+      (cardFaceIsVisible) ?
+      <>
       <HiddenText>
         <div>
           {card.is_tapped ? "tapped " : ""}
@@ -612,18 +629,26 @@ export const StaticImgCard = ({
         <div>{card.card_type_line + ", "}</div>
         <div>{card.card_read_oracle_text}</div>
       </HiddenText>
+      </>
+      : <>
+      <HiddenText>
+        <div>Hidden card</div>
+      </HiddenText>
+      </>
+      }
       <img
         src={
-          (card.hidden && !isRevealed && !inHand)
-            ? FuckedCardBack
-            : card.card_image_uris?.[size] ?? emptyCard
+          (cardFaceIsVisible)
+            ? card.card_image_uris?.[size] ?? emptyCard 
+            : FuckedCardBack
         }
         alt={card.card_name_with_mana_cost}
         style={{
-          height: `${cardHeight}%`,
+          height: (inHand ? "100px" : `${cardHeight}%`),
           objectFit: 'contain',
           borderRadius: "8px",
           transform: card.is_tapped ? "rotate(90deg)" : "none",
+          verticalAlign: "top",
         }}
       />
       {
