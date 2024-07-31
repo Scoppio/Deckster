@@ -331,6 +331,10 @@ class RequestGameActions extends BaseGameStateController {
     console.log("TODO");
   }
 
+  switchRevealAllCardsInHand() {
+    this.sendEvent("reveal_all_cards_in_hand");
+  }
+
   switchRevealCardToAll(postitionIdx) {
     this.sendEvent("reveal_card_in_hand", { position_idx: postitionIdx});
   }

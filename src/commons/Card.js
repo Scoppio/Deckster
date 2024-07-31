@@ -251,6 +251,10 @@ export class Card {
 
   get card_image_uris() {
     if (this.hidden) return { small: FuckedCardBack, normal: FuckedCardBack };
+    if (this.image_uris) {
+      return this.image_uris;
+    }
+    
     if (!this.is_two_sided) {
       if (this.card_face === 1)
         return { small: FuckedCardBack, normal: FuckedCardBack };

@@ -207,6 +207,15 @@ export const ImgCard = ({
     v: sendToFaceDown,
   };
 
+  const cardImage = () => {
+    const card_image_uris = card.card_image_uris;
+    if (card_image_uris) {
+      return card_image_uris[size];
+    }
+
+    return emptyCard;
+  };
+
   return (
     <Draggable draggableId={card._uid} index={idx} key={card._uid}>
       {(provided) => (
@@ -255,7 +264,7 @@ export const ImgCard = ({
             src={
               (card.hidden && !isRevealed)
                 ? FuckedCardBack
-                : card.card_image_uris?.[size] ?? emptyCard
+                : cardImage()
             }
             alt={card.card_face_name_with_mana_cost}
             style={{
