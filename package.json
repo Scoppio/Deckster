@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@electron/remote": "^2.1.0",
-    "@sentry/react": "^8.15.0",
     "@tanstack/react-query": "^5.50.1",
     "antd": "^5.15.1",
     "assert": "^2.1.0",
@@ -56,15 +55,15 @@
     "asar": true
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "env-cmd -f ./.prod.env react-scripts start",
+    "startlocal": "env-cmd -f ./.env react-scripts start",
+    "build": "env-cmd -f ./.prod.env react-scripts build",
     "prebuild": "npm version minor",
-    "electron:servelocal": "concurrently -k \"nodemon src/local/server.js\" \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
-    "electron:serve": "concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
-    "electron:build": "electron-builder build -w",
-    "electron:start": "wait-on tcp:3010 && electron ."
+    "electron:servelocal": "env-cmd -f ./.env concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn startlocal\" \"yarn electron:startlocal\"",
+    "electron:serve": "env-cmd -f ./.prod.env concurrently -k \"cross-env NODE_OPTIONS=--openssl-legacy-provider BROWSER=none PORT=3010 yarn start\" \"yarn electron:start\"",
+    "electron:build": "env-cmd -f ./.prod.env electron-builder build -w",
+    "electron:startlocal": "env-cmd -f ./.prod.env wait-on tcp:3010 && electron .",
+    "electron:start": "env-cmd -f ./.prod.env wait-on tcp:3010 && electron ."
   },
   "eslintConfig": {
     "extends": [
@@ -96,6 +95,7 @@
     "electron": "^28.1.0",
     "electron-builder": "^24.9.1",
     "electron-is-dev": "^2.0.0",
+    "env-cmd": "^10.1.0",
     "nodemon": "^3.1.0",
     "prettier": "^3.1.0",
     "wait-on": "^7.2.0"

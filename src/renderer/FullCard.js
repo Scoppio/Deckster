@@ -494,38 +494,8 @@ export const ImgCardSearch = ({
     cardRef.current.focus();
   };
 
-  const onMouseLeave = () => {
-    // gameState?.removeFocusOnCard(card);
-  };
-  
-  const sendToGraveyard = () => {
-    // gameState.moveCardToZonePosition("hand", positionIdx, "graveyard", card);
-  };
-
-  const sendToExile = () => {
-    // gameState.moveCardToZonePosition("hand", positionIdx, "exile", card);
-  };
-
-  const sendToFaceDown = () => {
-    // gameState.moveCardToZonePosition("hand", positionIdx, "face_down", card);
-  };
-
-  const sendToLibraryTop = () => {
-    // gameState.moveCardToZonePosition("hand", positionIdx, "library", card, 0);
-  };
-
-  const sendToLibraryBottom = () => {
-    // const lastIdx = gameState.player.library.length;
-    // gameState.moveCardToZonePosition("hand", positionIdx, "library", card, lastIdx);
-  };
-
   const commands = {
     l: flipCard,
-    g: sendToGraveyard,
-    e: sendToExile,
-    t: sendToLibraryTop,
-    b: sendToLibraryBottom,
-    f: sendToFaceDown,
   };
 
   return (
@@ -538,7 +508,6 @@ export const ImgCardSearch = ({
           ref={(el) => {provided.innerRef(el); cardRef.current = el;}}
           tabIndex={tabIndex}
           onMouseOver={onMouseOver}
-          onMouseLeave={onMouseLeave}
           onContextMenu={flipCard}
           onKeyDown={(event) => {
             if (
@@ -682,21 +651,22 @@ export const StaticImgCard = ({
       { 
       (canBeSeen()) ?
       <>
-      <HiddenText>
-        <div>
-          {card.is_tapped ? "tapped " : ""}
-          {card.aria_description}
-        </div>
-      </HiddenText>
-      <HiddenText>
-        <div>{card.card_type_line + ", "}</div>
-        <div>{card.card_read_oracle_text}</div>
-      </HiddenText>
+        <HiddenText>
+          <div>
+            {card.is_tapped ? "tapped " : ""}
+            {card.aria_description}
+          </div>
+        </HiddenText>
+        <HiddenText>
+          <div>{card.card_type_line + ", "}</div>
+          <div>{card.card_read_oracle_text}</div>
+        </HiddenText>
       </>
-      : <>
-      <HiddenText>
-        <div>Hidden card</div>
-      </HiddenText>
+      : 
+      <>
+        <HiddenText>
+          <div>Hidden card</div>
+        </HiddenText>
       </>
       }
       <img
@@ -705,7 +675,7 @@ export const StaticImgCard = ({
             ? card.card_image_uris?.[size] ?? emptyCard 
             : FuckedCardBack
         }
-        alt={card.card_name_with_mana_cost}
+        alt={canBeSeen() ? card.card_name_with_mana_cost : "Card back."}
         style={{
           height: (inHand ? "100px" : `${cardHeight}%`),
           objectFit: 'contain',

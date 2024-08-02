@@ -20,6 +20,12 @@ class GameStateRef {
     this.gameStateController = null;
   }
 
+  exec(method_call, ...args) {
+    if (this.gameStateController) {
+      this.gameStateController[method_call](...args);
+    }
+  }
+
   setGameStateController(gameStateController) {
     this.gameStateController = gameStateController;
   }
@@ -64,87 +70,188 @@ function App() {
 
   const setupIpcRendererActions = () => {
     if (isSetupDone) return;
-    window.electron?.ipcRenderer?.on('force-sync', () => {
-        gameStateRef.getGameStateController()?.updateGameState();
-      });
-    window.electron?.ipcRenderer?.on('search-cards', () => {
-        if (gameStateRef.getGameStateController()) {
-          setGameState("tokens");
-        }
-      });
-    window.electron?.ipcRenderer?.on('upkeep-reminder', () => {
-        gameStateRef.getGameStateController()?.changeUpkeepReminder();
-      });
-      
-    window.electron?.ipcRenderer?.on('roll-dice-2', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d2");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-4', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d4");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-6', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d6");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-8', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d8");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-10', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d10");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-12', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d12");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-20', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d20");
-      });
-    window.electron?.ipcRenderer?.on('roll-dice-100', () => {
-        gameStateRef.getGameStateController()?.requestDiceRoll("d100");
-      });
-    window.electron?.ipcRenderer?.on('change-deck', () => {
-        setGameState("selectDeck");
-      });
-    window.electron?.ipcRenderer?.on('gain-1-health', () => {
-        gameStateRef.getGameStateController()?.increaseLife(1);
-      });
-    window.electron?.ipcRenderer?.on('gain-5-health', () => {
-        gameStateRef.getGameStateController()?.increaseLife(5);
-      });
-    window.electron?.ipcRenderer?.on('gain-10-health', () => {
-        gameStateRef.getGameStateController()?.increaseLife(10);
-      });
-    window.electron?.ipcRenderer?.on('gain-20-health', () => {
-        gameStateRef.getGameStateController()?.increaseLife(20);
-      });
+    
+    window.electron?.ipcRenderer?.on('untap-all', () => {
+      gameStateRef.exec('untapAll');
+    });
+    window.electron?.ipcRenderer?.on('draw-card', () => {
+      gameStateRef.exec('drawCard');
+    });
+    window.electron?.ipcRenderer?.on('draw-hand', () => {
+      gameStateRef.exec('drawHand');
+    });
+    window.electron?.ipcRenderer?.on('mulligan', () => {
+      gameStateRef.exec('mulliganHand');
+    });
+    window.electron?.ipcRenderer?.on('pass-turn', () => {
+      gameStateRef.exec('passTurn');
+    });
+    window.electron?.ipcRenderer?.on('next-step', () => {
+      gameStateRef.exec('changeGamePhase');
+    });
+    window.electron?.ipcRenderer?.on('previous-step', () => {
+      gameStateRef.exec('changeGamePhase', "previous");
+    });
+    window.electron?.ipcRenderer?.on('main-phase', () => {
+      gameStateRef.exec('changeGamePhase' , 'first-main');
+    });
+    window.electron?.ipcRenderer?.on('combat-phase', () => {
+      gameStateRef.exec('changeGamePhase' , 'combat');
+    });
+    window.electron?.ipcRenderer?.on('second-main-phase', () => {
+      gameStateRef.exec('changeGamePhase' , 'second-main');
+    });
+    window.electron?.ipcRenderer?.on('end-phase', () => {
+      gameStateRef.exec('changeGamePhase' , 'end');
+    });
 
+    window.electron?.ipcRenderer?.on('force-sync', () => {
+      gameStateRef.exec('updateGameState');
+    });
+
+    window.electron?.ipcRenderer?.on('search-cards', () => {
+      if (gameStateRef.getGameStateController()) {
+        setGameState("tokens");
+      }
+    });
+    window.electron?.ipcRenderer?.on('upkeep-reminder', () => {
+      gameStateRef.exec('changeUpkeepReminder');
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-2', () => {
+      gameStateRef.exec('requestDiceRoll', "d2");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-4', () => {
+      gameStateRef.exec('requestDiceRoll', "d4");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-6', () => {
+      gameStateRef.exec('requestDiceRoll', "d6");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-8', () => {
+      gameStateRef.exec('requestDiceRoll', "d8");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-10', () => {
+      gameStateRef.exec('requestDiceRoll', "d10");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-12', () => {
+      gameStateRef.exec('requestDiceRoll', "d12");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-20', () => {
+      gameStateRef.exec('requestDiceRoll', "d20");
+    });
+    window.electron?.ipcRenderer?.on('roll-dice-100', () => {
+      gameStateRef.exec('requestDiceRoll', "d100");
+    });
+    window.electron?.ipcRenderer?.on('change-deck', () => {
+      if (gameStateRef.getGameStateController()) {
+        setGameState("selectDeck");
+      }
+    });
+    window.electron?.ipcRenderer?.on('gain-1-health', () => {
+      gameStateRef.exec('increaseLife', 1);
+    });
+    window.electron?.ipcRenderer?.on('gain-5-health', () => {
+      gameStateRef.exec('increaseLife', 5);
+    });
+    window.electron?.ipcRenderer?.on('gain-10-health', () => {
+      gameStateRef.exec('increaseLife', 10);
+    });
+    window.electron?.ipcRenderer?.on('gain-20-health', () => {
+      gameStateRef.exec('increaseLife', 20);
+    });
     window.electron?.ipcRenderer?.on('lose-1-health', () => {
-        gameStateRef.getGameStateController()?.decreaseLife(1);
-      });
+      gameStateRef.exec('decreaseLife', 1);
+    });
     window.electron?.ipcRenderer?.on('lose-5-health', () => {
-        gameStateRef.getGameStateController()?.decreaseLife(5);
-      });
+      gameStateRef.exec('decreaseLife', 5);
+    });
     window.electron?.ipcRenderer?.on('lose-10-health', () => {
-        gameStateRef.getGameStateController()?.decreaseLife(10);
-      });
+      gameStateRef.exec('decreaseLife', 10);
+    });
     window.electron?.ipcRenderer?.on('lose-20-health', () => {
-        gameStateRef.getGameStateController()?.decreaseLife(20);
-      });
+      gameStateRef.exec('decreaseLife', 20);
+    });
+    window.electron?.ipcRenderer?.on('gain-1-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", 1);
+    });
+    window.electron?.ipcRenderer?.on('gain-3-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", 3);
+    });
+    window.electron?.ipcRenderer?.on('gain-5-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", 5);
+    });
+    window.electron?.ipcRenderer?.on('remove-1-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", -1);
+    });
+    window.electron?.ipcRenderer?.on('remove-3-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", -3);
+    });
+    window.electron?.ipcRenderer?.on('remove-5-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", -5);
+    });
+    window.electron?.ipcRenderer?.on('remove-all-energy-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "energy", -10000000);
+    });
+    window.electron?.ipcRenderer?.on('gain-1-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", 1);
+    });
+    window.electron?.ipcRenderer?.on('gain-3-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", 3);
+    });
+    window.electron?.ipcRenderer?.on('gain-5-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", 5);
+    });
+    window.electron?.ipcRenderer?.on('remove-1-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", -1);
+    });
+    window.electron?.ipcRenderer?.on('remove-3-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", -3);
+    });
+    window.electron?.ipcRenderer?.on('remove-5-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", -5);
+    });
+    window.electron?.ipcRenderer?.on('remove-all-poison-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "poison", -10000000);
+    });
+    window.electron?.ipcRenderer?.on('add-1-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", 1);
+    });
+    window.electron?.ipcRenderer?.on('add-5-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", 5);
+    });
+    window.electron?.ipcRenderer?.on('add-10-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", 10);
+    });
+    window.electron?.ipcRenderer?.on('remove-1-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", -1);
+    });
+    window.electron?.ipcRenderer?.on('remove-5-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", -5);
+    });
+    window.electron?.ipcRenderer?.on('remove-10-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", -10);
+    });
+    window.electron?.ipcRenderer?.on('remove-all-counter', () => {
+      gameStateRef.exec('changePlayerCounters', "other", -10000000);
+    });
+
 
     window.electron?.ipcRenderer?.on('i-do-not-pay', () => {
-        gameStateRef.getGameStateController()?.iDoNotPay();
-      });
+      gameStateRef.exec('iDoNotPay');
+    });
     window.electron?.ipcRenderer?.on('response', () => {
-        gameStateRef.getGameStateController()?.response();
-      });
+      gameStateRef.exec('response');
+    });
     window.electron?.ipcRenderer?.on('no-response', () => {
-        gameStateRef.getGameStateController()?.noResponse();
-      });
+      gameStateRef.exec('noResponse');
+    });
     window.electron?.ipcRenderer?.on('quit-game', () => {
-        const userConfirmed = window.confirm("Are you sure you want to quit the game?");
-        if (userConfirmed) {
-          gameStateRef.getGameStateController()?.exitGame();
-          window.close();
-        }
-      });
+      const userConfirmed = window.confirm("Are you sure you want to quit the game?");
+      if (userConfirmed) {
+        gameStateRef.getGameStateController()?.exitGame();
+        window.close();
+      }
+    });
+
     setIsSetupDone(true);
     return true;
   };

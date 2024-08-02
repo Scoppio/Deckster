@@ -16,7 +16,7 @@ export class Card {
     this.colors = card.colors;
     this.color_identity = card.color_identity;
     this.image_uris = card.image_uris;
-    this.set = card.tset;
+    this.tset = card.tset;
     this.flavor_text = card.flavor_text;
     this.rarity = card.rarity;
     this.artist = card.artist;
@@ -242,10 +242,6 @@ export class Card {
     const _power = String(Number(p || 0) + Number(this.power_modifier || 0) + Number(this.power_toughness_counters || 0));
     const _toughness = String(Number(t || 0) + Number(this.toughness_modifier || 0) + Number(this.power_toughness_counters || 0));
 
-    if (_toughness === "0" && _power === "0") {
-      return null;
-    }
-
     return _power + "/" + _toughness;
   }
 
@@ -254,7 +250,7 @@ export class Card {
     if (this.image_uris) {
       return this.image_uris;
     }
-    
+
     if (!this.is_two_sided) {
       if (this.card_face === 1)
         return { small: FuckedCardBack, normal: FuckedCardBack };

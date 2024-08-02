@@ -294,6 +294,24 @@ class RequestGameActions extends BaseGameStateController {
     this.updatePlayer("CHANGE_COMMANDER_TAX");
   }
 
+  changePlayerCounters(counterName, value) {
+    if (undefined === this.player.counters[counterName]) {
+      this.player.counters[counterName] = 0;
+    }
+    this.player.counters[counterName] += value;
+    if (this.player.counters[counterName] < 0) {
+      this.player.counters[counterName] = 0;
+    }
+    if (value > 0) {
+      this.sendEvent("chat_message", { message: `gained ${value} ${counterName} counters.` });
+      this.updatePlayer("ADD_COUNTER_SOUND");
+    } else {
+      this.sendEvent("chat_message", { message: `lost ${value * -1} ${counterName} counters.` });
+      this.updatePlayer("REMOVE_COUNTER_SOUND");
+    }
+    this.changed();
+  }
+
   increaseLife(health_points = 1) {
     this.player.health += health_points;
     this.sendEvent("chat_message", { message: `gained ${health_points} health, now my total is ${this.player.health}` });
@@ -369,6 +387,7 @@ class RequestGameActions extends BaseGameStateController {
 
   changeUpkeepReminder() {
     this.upkeep_reminder = !this.upkeep_reminder;
+    this.sendChatMessage(`My upkeep Reminder is ${this.upkeep_reminder ? "on" : "off"}`);
   }
 
   passTurn() {
@@ -482,9 +501,14 @@ class ExecuteGameActions extends RequestGameActions {
 
   change_game_phase(event) {
     console.log("Changing game phase to " + event.payload.phase);
-    if (this.upkeep_reminder && this.player.id === this.active_player_id) {
-      this.announce("This is your upkeep reminder");
-      this.playSound("UPKEEP_REMINDER");
+    if (event.payload.phase === 1) {
+      if (this.upkeep_reminder && this.player.id === this.active_player_id) {
+        this.announce("This is your upkeep reminder!");
+        setTimeout(() => {
+          this.playSound("UPKEEP_REMINDER");
+        }, 100);
+        
+      }
     }
     this.game_phase = event.payload.phase;
     this.changed();

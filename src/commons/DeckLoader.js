@@ -15,14 +15,11 @@ export const fetchDeck = async (id, authorization) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    
-    const art_descriptions = data["art_descriptions"] || {};
 
     const commanders = [];
     for (const card_quantity of data["commanders"]) {
       for (let i = 0; i < card_quantity.quantity; i++) {
         const card = new Card(card_quantity.card);
-        card.art_description = art_descriptions[card.illustration_id] || 'no description';
         commanders.push(card);
       }
     }
@@ -31,12 +28,19 @@ export const fetchDeck = async (id, authorization) => {
     for (const card_quantity of data["mainboard"]) {
       for (let i = 0; i < card_quantity.quantity; i++) {
         const card = new Card(card_quantity.card);
-        card.art_description = art_descriptions[card.illustration_id] || 'no description';
         deck.push(card);
       }
     }
 
-    return { id, deck, commanders };
+    const sideboard = [];
+    for (const card_quantity of data["sideboard"]) {
+      for (let i = 0; i < card_quantity.quantity; i++) {
+        const card = new Card(card_quantity.card);
+        sideboard.push(card);
+      }
+    }
+
+    return { id, deck, commanders, sideboard };
   } catch (error) {
     console.error("Error:", error);
   }

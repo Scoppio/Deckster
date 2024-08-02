@@ -116,57 +116,57 @@ export function GameArena({ gameState, handleChangeGameState }) {
   const handleRequestCommandList = () => {
     setDialogText(`Available Commands:
 All commands are case sensitive!
-
+--------------
 Card on the Battlefield Commands:
-t - Tap or untap card.
-a - Declare card attacker.
-s - Declare card blocker.
-l - Flip card to the backside.
-g - Send to graveyard.
-e - Send to exile.
-1-7 - Put card at specified position on library.
-0 - Put card on bottom of library.
-h - Put card on hand.
-o - Add +1/+1 counter.
-k - Add -1/-1 counter.
-i - Add counter.
-j - Remove counter.
-y - Clone card.
-z - Put on the command zone.
-v - Place card on face down zone.
-
+\tt - Tap or untap card.
+\ta - Declare card attacker.
+\ts - Declare card blocker.
+\tl - Flip card to the backside.
+\tg - Send to graveyard.
+\te - Send to exile.
+\t1-7 - Put card at specified position on library.
+\t0 - Put card on bottom of library.
+\th - Put card on hand.
+\to - Add +1/+1 counter.
+\tk - Add -1/-1 counter.
+\ti - Add counter.
+\tj - Remove counter.
+\ty - Clone card.
+\tz - Put on the command zone.
+\tv - Place card on face down zone.
+--------------
 Card in Hand Commands:
-l - Flip card.
-g - Put card on graveyard.
-e - Put card on exile.
-t - Put card on top of library.
-b - Put card on bottom of library.
-f - Put card on face down zone.
-
+\tl - Flip card.
+\tg - Put card on graveyard.
+\te - Put card on exile.
+\tt - Put card on top of library.
+\tb - Put card on bottom of library.
+\tf - Put card on face down zone.
+--------------
 Other Commands:
-F1 - List all commands.
-F2 - Force resync of game state.
-F3 - Open card search.
-; - Focus on chatbox.
-x/< - Untap all permanents.
->/c - Draw a card.
-(-) - Decrease life total.
-=/* - Increase life total.
-e - Pass turn.
-n - Pass phase.
-_ - Decrease poison counters.
-+ - Increase poison counters.
-ctrl p - Open Settings.
-ctrl 1 - View your stats.
-ctrl 2-6 - View other players stats in turn order.
-ctrl e - View your hand.
-ctrl s - View your battlefield.
-ctrl d - View your library.
-ctrl f - View your graveyard.
-ctrl q - View your exile.
-ctrl h - View your face down cards.
-ctrl b - View your commander zone.
-ctrl l - View game log.`);
+\tF1 - List all commands.
+\tF2 - Force resync of game state.
+\tF3 - Open card search.
+\t; - Focus on chatbox.
+\tx/< - Untap all permanents.
+\t>/c - Draw a card.
+\t(-) - Decrease life total.
+\t=/* - Increase life total.
+\te - Pass turn.
+\tn - Pass phase.
+\t_ - Decrease poison counters.
+\t+ - Increase poison counters.
+\tctrl p - Open Settings.
+\tctrl 1 - View your stats.
+\tctrl 2-6 - View other players stats in turn order.
+\tctrl e - View your hand.
+\tctrl s - View your battlefield.
+\tctrl d - View your library.
+\tctrl f - View your graveyard.
+\tctrl q - View your exile.
+\tctrl h - View your face down cards.
+\tctrl b - View your commander zone.
+\tctrl l - View game log.`);
     setDialogOpen(true);
     gameState.announce("Opened help dialog, press ctrl+o to focus on it, or press esc to close it.");
   };

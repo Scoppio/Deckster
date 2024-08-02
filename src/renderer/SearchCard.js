@@ -90,7 +90,7 @@ export const SearchCard = ({
             }}
             style={{ padding: '5px', borderBottom: '1px solid #ccc', cursor: 'pointer' }}
           >
-            {card.name} - {card.tset}
+            <p>{card.name} {card.mana_cost}, {card.type_line}, {card.set_name}, {card.power_toughness}</p>
           </div>
         ))}
       </div>

@@ -39,7 +39,7 @@ export class Player {
     this.counters = {};
     this.library = library.deck;
     this.library_size = library.deck.length;
-    this.sideboard = [];
+    this.sideboard = library.sideboard;
     this.hand = [];
     this.remote_hand_size = 0;
     this.front_battlefield = [];
@@ -61,7 +61,7 @@ export class Player {
   static emptyPlayer(name) {
     const player = new Player(
       {"id": Utils.hash(name), "username": name},
-      { id: -1, deck: [], commanders: [] },
+      { id: -1, deck: [], commanders: [], sideboard: [] },
       0,
       {
         playerStats: -1,
@@ -84,7 +84,7 @@ export class Player {
   static remote(player_hash) {
     const player = new Player(
       { id: player_hash.id, username: player_hash.name},
-      { id: -1, deck: [], commanders: [] },
+      { id: -1, deck: [], commanders: [], sideboard: [] },
       player_hash.health,
       NoTabIndice,
       false,
@@ -99,6 +99,7 @@ export class Player {
 
   updateFromPayload(payload) {
     this.hand = this.createCardInstances(payload.hand);
+    this.health = payload.health;
     this.deck_id = payload.deck_id;
     this.front_battlefield = this.createCardInstances(
       payload.front_battlefield,
@@ -117,9 +118,9 @@ export class Player {
       payload.selected_cards ?? [],
     );
     this.library = this.createCardInstances(payload.library ?? []);
-    this.sideboard = this.createCardInstances(payload.sideboard);
+    this.sideboard = this.createCardInstances(payload.sideboard ?? []);
     this.library_size = payload.library_size;
-    this.counters = payload.counters;
+    this.counters = payload.counters ?? {};
     this.reveal_top_of_library = payload.reveal_top_of_library;
     this.commander_extra_casting_cost = payload.commander_extra_casting_cost;
   }

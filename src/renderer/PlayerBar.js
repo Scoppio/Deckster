@@ -86,7 +86,7 @@ export const PlayerBar = ({
     setPoisonCounter(player.counters?.["poison"] ?? 0);
     setEnergyCounter(player.counters?.["energy"] ?? 0);
     setOtherCounter(player.counters?.["other"] ?? 0);
-  }, [player]);
+  }, [player.counters]);
   
   const handleChangeCounters = (counterName, value) => {
     if (player.id === gameState.player.id) {

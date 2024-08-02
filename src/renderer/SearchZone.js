@@ -215,10 +215,10 @@ const CardDroppable = ({ cardPiles, sourceZone }) => {
               <ImgCardSearch
                 idx={idx}
                 gameState={null}
-                size="small"
+                size="normal"
                 card={card}
                 tabIndex={1000}
-                cardHeight={"100px"}
+                cardHeight={"200px"}
                 key={card._uid}
               />
             ))}

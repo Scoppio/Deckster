@@ -64,3 +64,57 @@ In the project directory, you can run:
 - [x] Implement peek cards
 - [x] Target card in the opponent table
 - [x] reveal top card in library
+- [x] battlefield not selectable
+- [x] cards sem descrição
+- [x] Vida dos oponentes não atualizam
+- [x] cleanup step pode ser removida
+- [x] Shift + n (voltar a fase)
+- [x] go to end step
+- [ ] alguma ação não captura o evento de apertar o botão?
+- [ ] hidden-card aparecendo do lado do nome da carta no aria!!!
+- [ ] call attention to card not working
+- [ ] falta botão pra adicionar ou remover poison, energy, etc.
+- [ ] Search card FALTA MAIS INFORMAÇÃO DO CARD
+- [ ] Não da pra passar o turno por ação no menu
+- [ ] aumentar tamanho dos cards no search zone para tamanho normal ao invés de small
+- [ ] repetir ações entre botões diferentes é foda... C pra comprar e mandar pra command zone?
+- [ ] atalho pra shuffle library
+- [ ] deu bug colocar 0/0 ou negativo no card (changed the special value of {} to {}) - linguagem ta horrivel
+- [ ] power and toughness until the end of the turn -> precisa
+- [ ] ações que afetam a carta em foco/selecionada
+- [ ] hidden-card ta hidden pra mim tb
+- [ ] player bar is too thick!
+
+- npx @sentry/wizard@latest -i sourcemaps
+https://docs.sentry.io/platforms/javascript/sourcemaps/troubleshooting_js/artifact-bundles/
+
+It looks like the original source code for this stack frame couldn't be determined when this error was captured. To get the original code for this stack frame, Sentry needs source maps to be configured.
+
+The easiest way to get started with source maps is by running the Sentry Source Map Wizard in the terminal inside your project:
+
+npx @sentry/wizard@latest -i sourcemaps
+
+There are multiple ways to configure source maps. The checklists below will help you set them up correctly. Choose one of the following processes:
+
+Debug IDs (recommended)
+
+    Releases
+
+Debug IDs
+
+are a way of matching your source files to source maps. Follow all of the steps below to get a readable stack trace:
+
+Installed SDK supports Debug IDs
+
+Stack frame doesn't have Debug IDs
+No Debug ID Tooling Used
+
+This event doesn't contain any Debug IDs. Read the Sentry Source Maps Documentation
+
+to learn how to inject Debug IDs into your build artifacts and how to upload them to Sentry.
+
+Source file with a matching Debug ID was uploaded
+
+    Uploaded source map with a matching Debug ID
+
+Once you changed your configuration, redeploy your app and capture a new event to verify your changes!

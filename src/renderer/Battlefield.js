@@ -30,7 +30,7 @@ export const StaticBattlefield = ({
   return (
     <StaticBattlefieldDiv
       ref={playerRef.battlefield}
-      tabIndex={-1}
+      tabIndex={0}
       role="region"
       aria-label={player.name + " Battlefield"}
       aria-describedby={gameState.ariaHelper.cardsOnTheTable(player.id)}
