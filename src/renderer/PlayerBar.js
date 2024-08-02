@@ -160,7 +160,7 @@ ${player.face_down.length} face down.`}
         </div>
         <div className="player-actions">
           <PlayerName>{player.name}</PlayerName>
-          <PlayerHealthBox>{player.health}</PlayerHealthBox>
+          <PlayerHealthBox tabIndex={0} aria-label={`${player.name} health: ${player.health}`}>{player.health}</PlayerHealthBox>
           <br />
           <PlayerHandZone {...{ player, playerRef, playerNumber, gameState }} />
           <Library {...{ player, playerRef, playerNumber, gameState, handleChangeGameState }} />
@@ -250,12 +250,12 @@ ${player.face_down.length} face down.`}
           <PlayerName>{player.name}</PlayerName>
           <PlayerHealthBox>{player.health}</PlayerHealthBox>
           <br />
-          <OppPlayerHandZone {...{player, tabIndex: 100000 * playerNumber + 11, gameState}} />
-          <OppLibrary {...{player, tabIndex: 100000 * playerNumber + 12, gameState}} />
-          <OppGraveyard {...{player, tabIndex: 100000 * playerNumber + 13, gameState}} />
-          <OppExile {...{player, tabIndex: 100000 * playerNumber + 14, gameState}} />
-          <OppFaceDown {...{player, tabIndex: 100000 * playerNumber + 15, gameState}} />
-          <OppCommanderZone {...{player, tabIndex: 100000 * playerNumber + 16, gameState}} />
+          <OppPlayerHandZone {...{player, gameState}} />
+          <OppLibrary {...{player, gameState}} />
+          <OppGraveyard {...{player, gameState}} />
+          <OppExile {...{player, gameState}} />
+          <OppFaceDown {...{player, gameState}} />
+          <OppCommanderZone {...{player, gameState}} />
         </div>
       </div>
     </PlayerContainer>

@@ -78,6 +78,7 @@ export function GameArenaTable({ gameState, handleChangeGameState,  player1Refer
               player={player}
               isActivePlayer={player.id === gameState.active_player_id}
               key={player.id}
+              reversed={true}
             />
           );
         }

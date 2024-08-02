@@ -26,6 +26,7 @@ export const StaticBattlefield = ({
   gameState,
   playerRef,
   player,
+  reversed,
 }) => {
   return (
     <StaticBattlefieldDiv
@@ -36,16 +37,16 @@ export const StaticBattlefield = ({
       aria-describedby={gameState.ariaHelper.cardsOnTheTable(player.id)}
     >
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
-        {player["land_zone_battlefield"].map((card, index) => (
+        {player[reversed ? "front_battlefield" : "land_zone_battlefield"].map((card, index) => (
           <StaticImgCard
+            ownerId={player.id}
             positionIdx={index}
-            region="land_zone_battlefield"
-            owner_id={player.id}
+            region={reversed ? "front_battlefield" : "land_zone_battlefield"}
             gameState={gameState}
             card={card}
             key={index}
             size={"small"}
-            tabIndex={index + player.tabIndices.front_battlefield}
+            tabIndex={0}
             cardHeight={"100"}
           />
         ))}
@@ -55,27 +56,27 @@ export const StaticBattlefield = ({
           <StaticImgCard
             positionIdx={index}
             region="back_battlefield"
-            owner_id={player.id}
+            ownerId={player.id}
             gameState={gameState}
             card={card}
             key={index}
             size={"small"}
-            tabIndex={index + player.tabIndices.back_battlefield}
+            tabIndex={0}
             cardHeight={"100"}
           />
         ))}
       </CardHolder>
       <CardHolder style={{ height: "33.33%", padding: "2px" }}>
-        {player["front_battlefield"].map((card, index) => (
+        {player[reversed ? "land_zone_battlefield" : "front_battlefield"].map((card, index) => (
           <StaticImgCard
             positionIdx={index}
-            region="front_battlefield"
-            owner_id={player.id}
+            region={reversed ? "land_zone_battlefield" : "front_battlefield"}
+            ownerId={player.id}
             gameState={gameState}
             card={card}
             key={index}
             size={"small"}
-            tabIndex={index + player.tabIndices.land_zone_battlefield}
+            tabIndex={0}
             cardHeight={"100"}
           />
         ))}

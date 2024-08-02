@@ -293,6 +293,7 @@ export const NorthTable = ({
   player,
   isActivePlayer,
   barSide,
+  reversed
 }) => {
   return (
     <div
@@ -310,15 +311,17 @@ export const NorthTable = ({
       <div className="player-table-arena-north" style={{
         flex: "1",
         display: "grid",
-        gridTemplateRows: "100px minmax(0, 1fr)",
+        gridTemplateRows: !reversed ? "100px minmax(0, 1fr)" : "minmax(0, 1fr) 100px",
         boxShadow: isActivePlayer ? "inset 0px 3px 30px 10px orangered" : "none"
       }}>
-        <HiddenHand player={player} playerNumber={playerNumber} gameState={gameState} />
+        { !reversed && <HiddenHand player={player} playerNumber={playerNumber} gameState={gameState} />}
         <StaticBattlefield
           gameState={gameState}
           playerRef={playerRef}
           player={player}
+          reversed={reversed}
         />
+        { reversed && <HiddenHand player={player} playerNumber={playerNumber} gameState={gameState} />}
       </div>
     </div>
   );
@@ -331,4 +334,5 @@ NorthTable.propTypes = {
   player: PropTypes.object.isRequired,
   isActivePlayer: PropTypes.bool.isRequired,
   barSide: PropTypes.string.isRequired,
+  reversed: PropTypes.bool.isRequired,
 };
