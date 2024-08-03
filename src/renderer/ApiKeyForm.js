@@ -28,7 +28,13 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     return data.games_available;
   };
 
-  const { data, isLoading, isError } = useQuery({ queryKey: ['games'], queryFn: fetchGames });
+  const { data, isLoading, isError } = useQuery(
+    { queryKey: ['games'], 
+      queryFn: fetchGames, 
+      refetchInterval: 1000,
+      refetchIntervalInBackground: true 
+    }
+  );
 
   useEffect(() => {
     setServerIsUp(checkServer());
