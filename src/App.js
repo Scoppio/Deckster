@@ -117,6 +117,12 @@ function App() {
     window.electron?.ipcRenderer?.on('upkeep-reminder', () => {
       gameStateRef.exec('changeUpkeepReminder');
     });
+    window.electron?.ipcRenderer?.on('shuffle-library', () => {
+      gameStateRef.exec('shuffleDeck');
+    });
+    window.electron?.ipcRenderer?.on('untap-draw-main', () => {
+      gameStateRef.exec('untapDrawMain');
+    });
     window.electron?.ipcRenderer?.on('roll-dice-2', () => {
       gameStateRef.exec('requestDiceRoll', "d2");
     });

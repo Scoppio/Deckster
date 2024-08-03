@@ -381,6 +381,14 @@ class RequestGameActions extends BaseGameStateController {
     this.drawCard(number_of_cards, "library", "face_down");
   }
 
+  untapDrawMain() {
+    if (this.isActivePlayer) {
+      this.untapAll();
+      this.drawCard();
+      this.changeGamePhase("first-main");
+    }
+  }
+
   shuffleDeck() {
     this.sendEvent("shuffle_library");
   }

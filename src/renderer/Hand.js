@@ -30,6 +30,7 @@ export const HiddenHand = ({ player, playerNumber, gameState }) => {
       <div style={{ height: "100px", backgroundColor: "#DDDA" }}>
         {player.hand.map((card, idx) => (
           <StaticImgCard
+            region="hand"
             inHand={true}
             ownerId={player.id}
             key={card._uid}

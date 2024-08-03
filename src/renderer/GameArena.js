@@ -41,10 +41,6 @@ export function GameArena({ gameState, handleChangeGameState }) {
 
   }, [dialogText, dialogRef]);
 
-
-
-
-  
   const player1References = useMemo(
     () => ({
       playerStats: player1StatsRef,

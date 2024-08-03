@@ -285,6 +285,14 @@ const template = [
         type: 'separator',
       },
       {
+        label: 'Untap, Draw, Main Phase',
+        accelerator: 'CmdOrCtrl+S',
+        click: () => {
+          const win = BrowserWindow.getFocusedWindow();
+          win.webContents.send('untap-draw-main');
+        }
+      },
+      {
         label: 'Draw hand',
         // accelerator: 'CmdOrCtrl+W',
         click: () => {
@@ -301,13 +309,13 @@ const template = [
         }
       },
       {
-        label: 'Pass turn',
-        // accelerator: 'CmdOrCtrl+W',
+        label: 'Shuffle Library',
+        // accelerator: 'CmdOrCtrl+Shift+M',
         click: () => {
           const win = BrowserWindow.getFocusedWindow();
-          win.webContents.send('pass-turn');
+          win.webContents.send('shuffle-library');
         }
-      },
+      }
     ]
   },
   {
