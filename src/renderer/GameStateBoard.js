@@ -18,7 +18,6 @@ export const GameStateBoard = ({ gameState, focusCard, playerRef }) => {
     8: "End of Combat Step",
     9: "Second Main Phase",
     10: "End Step",
-    11: "Cleanup Step",
   };
 
   return (

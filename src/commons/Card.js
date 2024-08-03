@@ -245,6 +245,18 @@ export class Card {
     return _power + "/" + _toughness;
   }
 
+  get card_image_uris_self() {
+    if (this.image_uris) {
+      return this.image_uris;
+    }
+
+    if (!this.is_two_sided) {
+      if (this.card_face === 1)
+        return { small: FuckedCardBack, normal: FuckedCardBack };
+    }
+    return this.current_face.image_uris;
+  }
+
   get card_image_uris() {
     if (this.hidden) return { small: FuckedCardBack, normal: FuckedCardBack };
     if (this.image_uris) {

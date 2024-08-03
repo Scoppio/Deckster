@@ -87,10 +87,33 @@ export const ImgCard = ({
   const cardCurrentRegion = region;
   const positionIdx = idx;
   const cardRef = useRef(null);
-  const isRevealed = card.revealed_to.includes(gameState.current_player_id);
+
   isTapped !== card.is_tapped && setIsTapped(card.is_tapped);
   cardFace !== card.card_face && setCardFace(card.card_face);
-  
+  const callAttentionTo = card.call_attention;
+  const isHidden = !!card.hidden;
+  const isYours = true;
+  const isRevealedToYou = isHidden && isYours;
+  const isRevealedToAll = !!card.revealed;
+  const isInHand = false;
+  const isRevealed = isRevealedToYou;
+
+  const canBeSeen = () => {
+    if (isYours) {
+      return true;
+    }
+    if (isRevealedToYou || isRevealedToAll) {
+      return true;
+    }
+    if (isInHand) {
+      return false;
+    }
+    if (isHidden) {
+      return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
     setIsTapped(!!card.tapped);
   }, [card.tapped]);
@@ -208,7 +231,7 @@ export const ImgCard = ({
   };
 
   const cardImage = () => {
-    const card_image_uris = card.card_image_uris;
+    const card_image_uris = card.card_image_uris_self;
     if (card_image_uris) {
       return card_image_uris[size];
     }
@@ -261,12 +284,8 @@ export const ImgCard = ({
             </div>
           </HiddenText>
           <img
-            src={
-              (card.hidden && !isRevealed)
-                ? FuckedCardBack
-                : cardImage()
-            }
-            alt={card.card_face_name_with_mana_cost}
+            src={ cardImage() }
+            alt={card.card_face_name_with_mana_cost + ' ' + (isHidden ? "(hidden)" : "")}
             style={{
               height: `${cardHeight}%`,
               maxHeight: "150px",
@@ -278,21 +297,22 @@ export const ImgCard = ({
             }}
           />
           {
-            card.counters !== 0 ?
+            card.counters !== 0 &&
               <Counter>
                 {card.counters}
               </Counter>
-            : null
           }
           {
-            card.is_power_and_thoughness_modified ? 
+            card.is_power_and_thoughness_modified &&
             <BlackBelt>
               {card.power_toughness}
             </BlackBelt>
-            : null
           }
           {
-            card.hidden && <div style={overlayStyle}></div>
+            isRevealed && <div style={overlayStyle}></div>
+          }
+          {
+            callAttentionTo && <div style={overlayAttentionStyle}></div>
           }
         </SlimContainer>
       )}
@@ -324,7 +344,8 @@ export const ImgCardHand = ({
   cardFace !== card.card_face && setCardFace(card.card_face);
   const positionIdx = idx;
   const isRevealed = card.revealed_to.includes(gameState.current_player_id) || ownerId === gameState.current_player_id || card.revealed;
-  
+  const callAttentionTo = card.call_attention;
+
   const [cardBeingDragged, setCardBeingDragged] = useState(card.is_dragged);
   useEffect(() => {
     setCardBeingDragged(card.is_dragged);
@@ -451,6 +472,10 @@ export const ImgCardHand = ({
           {
             ((isRevealed && ownerId !== gameState.current_player_id) || card.revealed) && <div style={overlayStyle}></div>
           }
+          {
+            callAttentionTo && <div style={overlayAttentionStyle}></div>
+          }
+          
         </SlimContainer>
       )}
     </Draggable>
@@ -628,6 +653,15 @@ export const StaticImgCard = ({
     a: callAttentionToThisCard,
   };
 
+  const cardImage = () => {
+    const card_image_uris = card.card_image_uris;
+    if (card_image_uris) {
+      return card_image_uris[size];
+    }
+
+    return emptyCard;
+  };
+
   return (
     <SlimContainer
       tabIndex={tabIndex}
@@ -672,7 +706,7 @@ export const StaticImgCard = ({
       <img
         src={
           (canBeSeen())
-            ? card.card_image_uris?.[size] ?? emptyCard 
+            ? cardImage() 
             : FuckedCardBack
         }
         alt={canBeSeen() ? card.card_name_with_mana_cost : "Card back."}

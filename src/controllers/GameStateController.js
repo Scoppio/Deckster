@@ -385,7 +385,15 @@ class RequestGameActions extends BaseGameStateController {
     if (this.isActivePlayer) {
       this.untapAll();
       this.drawCard();
-      this.changeGamePhase("first-main");
+      if (this.upkeep_reminder) {
+        this.announce("This is your upkeep reminder!");
+        setTimeout(() => {
+          this.playSound("UPKEEP_REMINDER");
+        }, 100);
+      }
+      else {
+        this.changeGamePhase("first-main");
+      }
     }
   }
 

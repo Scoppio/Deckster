@@ -76,11 +76,12 @@ In the project directory, you can run:
 - [x] falta botão pra adicionar ou remover poison, energy, etc.
 - [x] Search card FALTA MAIS INFORMAÇÃO DO CARD
 - [x] Não da pra passar o turno por ação no menu
-- [ ] aumentar tamanho dos cards no search zone para tamanho normal ao invés de small
+- [x] aumentar tamanho dos cards no search zone para tamanho normal ao invés de small
 - [ ] repetir ações entre botões diferentes é foda... C pra comprar e mandar pra command zone?
-- [ ] atalho pra shuffle library
-- [ ] deu bug colocar 0/0 ou negativo no card (changed the special value of {} to {}) - linguagem ta horrivel
+- [x] atalho pra shuffle library
+- [x] deu bug colocar 0/0 ou negativo no card (changed the special value of {} to {}) - linguagem ta horrivel
 - [ ] power and toughness until the end of the turn -> precisa
 - [ ] ações que afetam a carta em foco/selecionada
 - [ ] hidden-card ta hidden pra mim tb
-- [ ] player bar is too thick!
+- [ ] Hidden card, how it show, when, to whom, and what it is in the side game board... still needs work
+- [x] player bar is too thick! 
