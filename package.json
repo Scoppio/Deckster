@@ -3,7 +3,7 @@
   "productName": "Deckster",
   "author": "Luana Coppi Coppio",
   "description": "A VTT built for blind and hard of sight players, can be played with keyboard and screenreader",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
   "main": "public/electron.js",
   "favicon": "public/favicon2.ico",
