@@ -9,9 +9,7 @@ export class WebSocketClient {
 
     this.client = new W3CWebSocket(
       Urls.ws_url +
-        "/ws/vtt/game/" +
-        this.gameName +
-        "/?token=" + this.token
+        "/ws/vtt/g/?game_name=" + encodeURI(this.gameName) + "&token=" + this.token
     );
 
     this.client.onclose = (e) => {

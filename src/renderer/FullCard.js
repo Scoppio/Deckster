@@ -94,25 +94,7 @@ export const ImgCard = ({
   const isHidden = !!card.hidden;
   const isYours = true;
   const isRevealedToYou = isHidden && isYours;
-  const isRevealedToAll = !!card.revealed;
-  const isInHand = false;
   const isRevealed = isRevealedToYou;
-
-  const canBeSeen = () => {
-    if (isYours) {
-      return true;
-    }
-    if (isRevealedToYou || isRevealedToAll) {
-      return true;
-    }
-    if (isInHand) {
-      return false;
-    }
-    if (isHidden) {
-      return false;
-    }
-    return true;
-  };
 
   useEffect(() => {
     setIsTapped(!!card.tapped);

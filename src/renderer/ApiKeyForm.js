@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { Urls } from "../commons/Urls";
 import { Authorization } from "../controllers/Authorization";
+import { useQuery } from '@tanstack/react-query';
 import './apiKeyForm.css';
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownMenuPortal from "../commons/DropdownMenuPortal";
+
 
 export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [game, setGame] = useState('');
@@ -13,6 +17,18 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
   const [enableEnter, setEnableEnter] = useState(false);
   const [serverIsUp, setServerIsUp] = useState(false);
   const version = process.env.REACT_APP_VERSION;
+
+  const fetchGames = async () => {
+    const response = await fetch(`${Urls.api_url}/games/`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    const data = await response.json();
+    return data.games_available;
+  };
+
+  const { data, isLoading, isError } = useQuery({ queryKey: ['games'], queryFn: fetchGames });
 
   useEffect(() => {
     setServerIsUp(checkServer());
@@ -101,6 +117,26 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
     onAuthorizationChange(auth);
   };
   
+  if (isLoading) {
+    return (
+      <div className="form-container">
+        <div className="form-box">
+          <h2>Loading games...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="form-container">
+        <div className="form-box">
+          <h2>Error loading games...</h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="form-container">
@@ -108,6 +144,20 @@ export const ApiKeyForm = ({ onAuthorizationChange }) => {
           <h2>Mesão da Massa</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
+              <Dropdown drop="up" style={{ maxHeight: "100px", fontSize: "12px" }} autoClose="outside">
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {game}
+                </Dropdown.Toggle>
+                <DropdownMenuPortal>
+                  {data.map((gameItem) => (
+                    <Dropdown.Item 
+                      key={gameItem.name} 
+                      onClick={() => setGame(gameItem.name)}>
+                      {gameItem.name}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownMenuPortal>
+              </Dropdown>
               <input
                 type="text"
                 placeholder="Game Name"
